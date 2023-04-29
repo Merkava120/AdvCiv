@@ -1,0 +1,243 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<Civ4GameText xmlns="http://www.firaxis.com">
+	<TEXT>
+		<Tag>TXT_KEY_EVENT_INFO_FUGITIVE_4</Tag>
+		<English>Our gesture of goodwill toward the %s1_civ_adjective Empire has angered %s6_player.</English>
+		<French>Notre geste de bonne volonté vers l'empire% S1_CIV_ADJECTIVE a mis en colère% s6_player.</French>
+		<German>Unsere Geste des guten Willens zum %S1_CIV_ADJECTIVE Empire hat den %s6_player verärgert.</German>
+		<Italian>Il nostro gesto di buona volontà verso il %s1_civ_adjective impero ha fatto arrabbiare %s6_player.</Italian>
+		<Spanish>Nuestro gesto de buena voluntad hacia el imperio %s1_civ_adjective ha enojado %s6_player.</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_EVENTTRIGGER_FAUX_PAS2</Tag>
+		<English>The %s4_civ_adjective ambassador has met mysterious death while returning from %s1_civ_adjective Capital.</English>
+		<French>L'ambassadeur% S4_CIV_ADADE a rencontré la mort mystérieuse tout en revenant du capital% S1_CIV_ADJECTIVE.</French>
+		<German>Der %s4_civ_adjective Botschafter hat einen mysteriösen Tod erfüllt, als er von %s1_civ_adjective Capital zurückgekehrt ist.</German>
+		<Italian>%S4_CIV_ADIETTIVE Ambassador ha incontrato la morte misteriosa mentre tornava dal capitale %S1_CIV_ADIETTIVE.</Italian>
+		<Spanish>El embajador %s4_civ_adjective se ha encontrado con la muerte misteriosa mientras regresa de %s1_civ_adjective capital.</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_EVENT_TRIGGER_FAUX_PAS_2</Tag>
+		<English>The %s1_civ_adjective ambassador got killed while returning to homeland!</English>
+		<French>L'ambassadeur% S1_CIV_ADADE a été tué à retourner à la patrie!</French>
+		<German>Der %s1_civ_adjective Botschafter wurde bei der Rückkehr nach Heimat getötet!</German>
+		<Italian>L'ambasciatore %s1_civ_adjective è stato ucciso mentre tornava in patria!</Italian>
+		<Spanish>¡El embajador %s1_civ_adjective fue asesinado mientras regresaba a Homeland!</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_EVENT_FAUX_PAS_2</Tag>
+		<English>This accident has adversely affected our relations.</English>
+		<French>Cet accident a nui à nos relations.</French>
+		<German>Dieser Unfall hat unsere Beziehungen nachteilig beeinflusst.</German>
+		<Italian>Questo incidente ha influenzato negativamente le nostre relazioni.</Italian>
+		<Spanish>Este accidente ha afectado negativamente nuestras relaciones.</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_EVENT_FAUX_PAS_OTHER_2</Tag>
+		<English>The %s1_civ_adjective ambassador had mysterious death after finishing its mission. This unfortunate accident has adversely affected our relations with his country.</English>
+		<French>L'ambassadeur% S1_CIV_ADADE a eu une mort mystérieuse après avoir terminé sa mission.Ce malheureux accident a nui à nos relations avec son pays.</French>
+		<German>Der %s1_civ_adjective Botschafter hatte nach Abschluss seiner Mission einen mysteriösen Tod.Dieser unglückliche Unfall hat unsere Beziehungen zu seinem Land nachteilig beeinflusst.</German>
+		<Italian>L'ambasciatore %S1_CIV_ADJECTIVE ha avuto la morte misteriosa dopo aver terminato la sua missione.Questo sfortunato incidente ha influenzato negativamente le nostre relazioni con il suo paese.</Italian>
+		<Spanish>El embajador %s1_civ_adjective tuvo una muerte misteriosa después de terminar su misión.Este desafortunado accidente ha afectado negativamente nuestras relaciones con su país.</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_EVENTTRIGGER_POTATOKING</Tag>
+		<English>%s1_civ_adjective King introduced new crops to their country.</English>
+		<French>% s1_civ_adjective King a introduit de nouvelles cultures dans leur pays.</French>
+		<German>%s1_civ_adjective King hat ihrem Land neue Ernten eingeleitet.</German>
+		<Italian>%s1_civ_adjective King ha introdotto nuove colture nel loro paese.</Italian>
+		<Spanish>%s1_civ_adjective king introdujo nuevos cultivos en su país.</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_EVENT_TRIGGER_POTATOKING_1</Tag>
+		<English>Our King ordered its farmers to grow Potatoes in %s2_city on a large scale.</English>
+		<French>Notre roi a ordonné à ses agriculteurs de cultiver des pommes de terre en% S2_City à grande échelle.</French>
+		<German>Unser König befahl seinen Landwirten, in großem Maßstab Kartoffeln in %S2_City zu züchten.</German>
+		<Italian>Il nostro re ordinò ai suoi agricoltori di coltivare patate in %s2_city su larga scala.</Italian>
+		<Spanish>Nuestro rey ordenó a sus agricultores que cultiven papas en %s2_city a gran escala.</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_EVENT_POTATOKING_1</Tag>
+		<English>Hurray for the King!</English>
+		<French>Hourra pour le roi!</French>
+		<German>Hurra für den König!</German>
+		<Italian>Evviva il re!</Italian>
+		<Spanish>¡Hurra por el rey!</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_EVENT_POTATOKING_2</Tag>
+		<English>Commit our government to harvesting this new resource immediately.</English>
+		<French>Engagez notre gouvernement à récolter cette nouvelle ressource immédiatement.</French>
+		<German>Verpflichten Sie unsere Regierung, diese neue Ressource sofort zu ernten.</German>
+		<Italian>Impegna il nostro governo a raccogliere immediatamente questa nuova risorsa.</Italian>
+		<Spanish>Comprometer a nuestro gobierno a cosechar este nuevo recurso de inmediato.</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_EVENTTRIGGER_FREEDOMRELIGION</Tag>
+		<English>After an oppresive action to the religion, a number of believers left there country for the religious freedom.</English>
+		<French>Après une action oppressive à la religion, un certain nombre de croyants ont laissé leur pays pour la liberté religieuse.</French>
+		<German>Nach einer Unterdrückung der Religion verließen einige Gläubige dort ein Land für die Religionsfreiheit.</German>
+		<Italian>Dopo un'azione opprimente alla religione, un certo numero di credenti ha lasciato lì il paese per la libertà religiosa.</Italian>
+		<Spanish>Después de una acción opresiva a la religión, varios creyentes salieron de su país por la libertad religiosa.</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_EVENT_TRIGGER_FREEDOMRELIGION_1</Tag>
+		<English>A number of believers from other nation have gathered in %s2_city to avoid the harsh oppresion of its gorvernment.</English>
+		<French>Un certain nombre de croyants d'une autre nation se sont réunis en% S2_City pour éviter la dure opposition de son gorvernment.</French>
+		<German>Eine Reihe von Gläubigen aus einer anderen Nation hat sich in %S2_City versammelt, um die harte Unterdrückung seiner Gorvernment zu vermeiden.</German>
+		<Italian>Numerosi credenti di altre nazioni si sono riuniti in %S2_City per evitare la dura opposizione del suo gorvernment.</Italian>
+		<Spanish>Varios creyentes de otras naciones se han reunido en %s2_city para evitar la dura opresión de su gorvernment.</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_EVENT_FREEDOMRELIGION_1</Tag>
+		<English>It is a good news! Give a welcome to them!</English>
+		<French>C'est une bonne nouvelle!Accordez-leur un bienvenu!</French>
+		<German>Es ist eine gute Nachricht!Geben Sie ihnen willkommen!</German>
+		<Italian>È una buona notizia!Dai un benvenuto a loro!</Italian>
+		<Spanish>¡Es una buena noticia!¡Dale una bienvenida a ellos!</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_EVENT_FREEDOMRELIGION_2</Tag>
+		<English>Build houses for them and adopt their advanced technology.</English>
+		<French>Construisez des maisons pour eux et adoptez leur technologie de pointe.</French>
+		<German>Bauen Sie Häuser für sie und übernehmen Sie ihre fortschrittliche Technologie.</German>
+		<Italian>Costruisci case per loro e adotta la loro tecnologia avanzata.</Italian>
+		<Spanish>Construya casas para ellos y adopta su tecnología avanzada.</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_EVENTTRIGGER_SMOKELESS_POWDER_1A</Tag>
+		<English>%s1_civ_adjective weaponsmiths have invented smokeless powder, giving their Musketman a significant advantage.</English>
+		<French>% S1_CIV_ADACTIVE Lesmises d'armes ont inventé de la poudre sans fumée, donnant à leur musquet un avantage significatif.</French>
+		<German>%s1_civ_adjective Weaponsmiths haben rauchfreies Pulver erfunden und ihrem Musketman einen erheblichen Vorteil verschaffen.</German>
+		<Italian>%s1_civ_adiective armimiti hanno inventato polvere senza fumo, dando al proprio muschio un vantaggio significativo.</Italian>
+		<Spanish>%S1_CIV_Adjective Armasmiths han inventado polvo sin humo, dando a su mosquetero una ventaja significativa.</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_EVENT_TRIGGER_SMOKELESS_POWDER_1A</Tag>
+		<English>The invention of smokeless powder has improved the effectiveness of our muskets on the battlefield.</English>
+		<French>L'invention de la poudre sans fumée a amélioré l'efficacité de nos mousquets sur le champ de bataille.</French>
+		<German>Die Erfindung von rauchloses Pulver hat die Effektivität unserer Musketen auf dem Schlachtfeld verbessert.</German>
+		<Italian>L'invenzione della polvere senza fumo ha migliorato l'efficacia dei nostri moschetti sul campo di battaglia.</Italian>
+		<Spanish>La invención del polvo sin humo ha mejorado la efectividad de nuestros mosquetes en el campo de batalla.</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_EVENT_SMOKELESS_POWDER_1A</Tag>
+		<English>Convert our Arquebusier to the new gunpowder.</English>
+		<French>Convertissez notre arquebusier en nouvelle poudre à canon.</French>
+		<German>Konvertieren Sie unseren Arquebusier in die neue Schießpulver.</German>
+		<Italian>Converti il nostro arquebusier nella nuova polvere da sparo.</Italian>
+		<Spanish>Convierta nuestro ardubusier en la nueva pólvora.</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_EVENTTRIGGER_SMOKELESS_POWDER_1</Tag>
+		<English>%s1_civ_adjective weaponsmiths have invented smokeless powder, giving their Line Infantries a significant advantage.</English>
+		<French>% S1_CIV_ADACTIVE Lesmises d'armes ont inventé de la poudre sans fumée, donnant à leurs infanteries de ligne un avantage significatif.</French>
+		<German>%s1_civ_adjective Weaponsmiths haben rauchfreies Pulver erfunden, was ihren Linien -Infantraten einen erheblichen Vorteil verleiht.</German>
+		<Italian>%S1_CIV_ADIETTIVE ARME SITHS hanno inventato una polvere senza fumo, dando al loro fuoristrada una linea un vantaggio significativo.</Italian>
+		<Spanish>%S1_CIV_Adjective Armasmiths han inventado polvo sin humo, dando a sus infanterías de línea una ventaja significativa.</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_EVENT_SMOKELESS_POWDER_1</Tag>
+		<English>Convert our Line Infantries to the new gunpowder.</English>
+		<French>Convertissez nos infanteries de ligne en la nouvelle poudre à canon.</French>
+		<German>Konvertieren Sie unsere Linieninfan.</German>
+		<Italian>Converti le nostre fante di linea nella nuova polvere da sparo.</Italian>
+		<Spanish>Convierta nuestras infantrías de línea a la nueva pólvora.</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_EVENTTRIGGER_NEW_MILITARY_SYSTEM_1</Tag>
+		<English>%s1_civ_adjective governer has decided to introduce new military system.</English>
+		<French>% S1_CIV_ADECTIVE Le gouverneur a décidé d'introduire un nouveau système militaire.</French>
+		<German>%s1_civ_adjective Governer hat beschlossen, ein neues Militärsystem einzuführen.</German>
+		<Italian>%S1_CIV_ADIETTIVE GOVERNER ha deciso di introdurre un nuovo sistema militare.</Italian>
+		<Spanish>%S1_CIV_Adjective Governer ha decidido introducir un nuevo sistema militar.</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_EVENT_TRIGGER_NEW_MILITARY_SYSTEM_1</Tag>
+		<English>The newly introduced military system has greatly improved the quality of military training.</English>
+		<French>Le système militaire nouvellement introduit a considérablement amélioré la qualité de la formation militaire.</French>
+		<German>Das neu eingeführte Militärsystem hat die Qualität der militärischen Ausbildung erheblich verbessert.</German>
+		<Italian>Il sistema militare appena introdotto ha notevolmente migliorato la qualità dell'addestramento militare.</Italian>
+		<Spanish>El sistema militar recientemente introducido ha mejorado enormemente la calidad del entrenamiento militar.</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_EVENT_NEW_MILITARY_SYSTEM_1</Tag>
+		<English>Introduce new system to train more competent officers.</English>
+		<French>Présentez un nouveau système pour former des officiers plus compétents.</French>
+		<German>Stellen Sie ein neues System ein, um mehr kompetente Offiziere auszubilden.</German>
+		<Italian>Introdurre un nuovo sistema per addestrare funzionari più competenti.</Italian>
+		<Spanish>Introducir un nuevo sistema para capacitar a los oficiales más competentes.</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_EVENT_NEW_MILITARY_SYSTEM_2</Tag>
+		<English>We do not want to spend the money for a mere military purpose. Invest the money to other places.</English>
+		<French>Nous ne voulons pas dépenser l'argent à un simple usage militaire.Investissez l'argent dans d'autres endroits.</French>
+		<German>Wir wollen das Geld nicht für einen bloßen militärischen Zweck ausgeben.Investieren Sie das Geld an andere Orte.</German>
+		<Italian>Non vogliamo spendere i soldi per un semplice scopo militare.Investi i soldi in altri luoghi.</Italian>
+		<Spanish>No queremos gastar el dinero para un mero propósito militar.Invierte el dinero en otros lugares.</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_EVENTTRIGGER_FREDERICK_THE_GREAT_1</Tag>
+		<English>%s1_civ_adjective king has trained soldiers strictly, giving his Musketman better combat skill.</English>
+		<French>% s1_civ_adjective King a entraîné des soldats strictement, ce qui donne à son musquet une meilleure compétence de combat.</French>
+		<German>%s1_civ_adjective King hat Soldaten streng ausgebildet und seinem Musketman bessere Kampfkompetenz verleiht.</German>
+		<Italian>%s1_civ_adjective King ha addestrato i soldati rigorosamente, dando al suo Musketman una migliore abilità di combattimento.</Italian>
+		<Spanish>%s1_civ_adjective King ha entrenado a soldados estrictamente, dando a su mosquetero una mejor habilidad de combate.</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_EVENT_TRIGGER_FREDERICK_THE_GREAT_1</Tag>
+		<English>The strict training by the king has improved combat skill of our Musketman.</English>
+		<French>La formation stricte du roi a amélioré les compétences de combat de notre mousquenlet.</French>
+		<German>Das strenge Training des Königs hat die Kampfkompetenz unseres Musketmanns verbessert.</German>
+		<Italian>L'allenamento rigoroso del re ha migliorato l'abilità di combattimento del nostro Musketman.</Italian>
+		<Spanish>El entrenamiento estricto del rey ha mejorado la habilidad de combate de nuestro mosquetero.</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_EVENT_FREDERICK_THE_GREAT_1</Tag>
+		<English>Our soldiers are the best in the world!</English>
+		<French>Nos soldats sont les meilleurs au monde!</French>
+		<German>Unsere Soldaten sind die besten der Welt!</German>
+		<Italian>I nostri soldati sono i migliori al mondo!</Italian>
+		<Spanish>¡Nuestros soldados son los mejores del mundo!</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_EVENTTRIGGER_THE_SEA_PEOPLES</Tag>
+		<English>A massive barbarian uprising is occurring. The unidentified Sea Peoples emerged along the coastline.</English>
+		<French>Un soulèvement barbare massif se produit.Les peuples de la mer non identifiés ont émergé le long du littoral.</French>
+		<German>Ein massiver barbarischer Aufstand tritt auf.Die nicht identifizierten Meeresvölker tauchten entlang der Küste auf.</German>
+		<Italian>Si sta verificando una massiccia rivolta barbaro.I popoli del mare non identificati emersero lungo la costa.</Italian>
+		<Spanish>Se está produciendo un levantamiento masivo bárbaro.Los pueblos marinos no identificados surgieron a lo largo de la costa.</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_EVENT_THE_SEA_PEOPLES_HELP_1</Tag>
+		<English>[ICON_BULLET]A dangerous number of barbarian [COLOR_UNIT_TEXT]Galley[COLOR_REVERT] units have spawned near our coastline.</English>
+		<French>[ICON_BULLET]Un nombre dangereux de barbare[COLOR_UNIT_TEXT]Galère[COLOR_REVERT]Les unités se sont engendrées près de notre littoral.</French>
+		<German>[ICON_BULLET]Eine gefährliche Anzahl von Barbaren[COLOR_UNIT_TEXT]Galeere[COLOR_REVERT]Einheiten haben in der Nähe unserer Küste hervorgegangen.</German>
+		<Italian>[ICON_BULLET]Un numero pericoloso di barbaro[COLOR_UNIT_TEXT]Cambusa[COLOR_REVERT]Le unità si sono generate vicino alla nostra costa.</Italian>
+		<Spanish>[ICON_BULLET]Un número peligroso de bárbaro[COLOR_UNIT_TEXT]Galera[COLOR_REVERT]Las unidades han generado cerca de nuestra costa.</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_EVENTTRIGGER_GREED_DONE</Tag>
+		<English>The %s1_civ_adjective army, in a purely greedy bid for strategic resources, have attacked the %s3:2_civ_adjective and seized control of resources they lacked within their own borders.</English>
+		<French>L'armée% s1_civ_adjective, dans une offre purement gourmand pour les ressources stratégiques, a attaqué le% S3: 2_CIV_ADADE et a pris le contrôle des ressources qui leur manquaient à l'intérieur de leurs propres frontières.</French>
+		<German>Die %s1_civ_adjective Armee hat in einem rein gierigen Angebot für strategische Ressourcen den %s3: 2_civ_adjective und beschlagnahmten die Kontrolle über Ressourcen, denen sie an ihren eigenen Grenzen fehlten, angegriffen.</German>
+		<Italian>L'esercito %s1_civ_adjective, in un'offerta puramente avida per le risorse strategiche, ha attaccato il %S3: 2_civ_adjective e sequestrato il controllo delle risorse che mancavano all'interno dei propri confini.</Italian>
+		<Spanish>El ejército %s1_civ_adjective, en una oferta puramente codiciosa por los recursos estratégicos, ha atacado el %S3: 2_civ_adjective y confiscó el control de los recursos que carecían dentro de sus propias fronteras.</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_EVENT_GUNS_BUTTER_HELP_1</Tag>
+		<English>[PARAGRAPH:1]To complete this quest, you must train %d1 [COLOR_UNIT_TEXT]Musketman[COLOR_REVERT] units.[PARAGRAPH:1]An additional reward option will be available if your civilization is operating in the [COLOR_HIGHLIGHT_TEXT]Vassalage[COLOR_REVERT] civic.[PARAGRAPH:1]An additional reward option will be available if your civilization controls [COLOR_BUILDING_TEXT]%s2_building[COLOR_REVERT].[PARAGRAPH:1]You will fail this quest if a rival civilization completes it first, or if you discover advanced firearms ([COLOR_TECH_TEXT]Rifling[COLOR_REVERT] or [COLOR_TECH_TEXT]Railroad[COLOR_REVERT] technologies) without having met the conditions.</English>
+		<French>[PARAGRAPH:1]Pour terminer cette quête, vous devez entraîner% d1[COLOR_UNIT_TEXT]Mousquet[COLOR_REVERT]unités.[PARAGRAPH:1]Une option de récompense supplémentaire sera disponible si votre civilisation fonctionne dans le[COLOR_HIGHLIGHT_TEXT]Vassalité[COLOR_REVERT]civique.[PARAGRAPH:1]Une option de récompense supplémentaire sera disponible si votre civilisation contrôle[COLOR_BUILDING_TEXT]% s2_building[COLOR_REVERT].[PARAGRAPH:1]Vous échouerez à cette quête si une civilisation rivale la termine d'abord, ou si vous découvrez des armes à feu avancées ([COLOR_TECH_TEXT]Fascinant[COLOR_REVERT]ou[COLOR_TECH_TEXT]Chemin de fer[COLOR_REVERT]Technologies) sans avoir rempli les conditions.</French>
+		<German>[PARAGRAPH:1]Um diese Quest abzuschließen, müssen Sie %d1 trainieren[COLOR_UNIT_TEXT]Musketman[COLOR_REVERT]Einheiten.[PARAGRAPH:1]Eine zusätzliche Belohnungsoption ist verfügbar, wenn Ihre Zivilisation in der operiert wird[COLOR_HIGHLIGHT_TEXT]Vasallität[COLOR_REVERT]Bürger.[PARAGRAPH:1]Eine zusätzliche Belohnungsoption ist verfügbar, wenn Ihre Zivilisation kontrolliert[COLOR_BUILDING_TEXT]%s2_building[COLOR_REVERT].[PARAGRAPH:1]Sie werden diese Quest nicht bestehen, wenn eine rivalisierende Zivilisation sie zuerst vervollständigt oder wenn Sie erweiterte Schusswaffen entdecken ([COLOR_TECH_TEXT]Gewehr[COLOR_REVERT]oder[COLOR_TECH_TEXT]Eisenbahn[COLOR_REVERT]Technologien) ohne die Bedingungen erfüllt zu haben.</German>
+		<Italian>[PARAGRAPH:1]Per completare questa missione, devi allenarti %D1[COLOR_UNIT_TEXT]Musketman[COLOR_REVERT]unità.[PARAGRAPH:1]Un'opzione di ricompensa aggiuntiva sarà disponibile se la civiltà opera in[COLOR_HIGHLIGHT_TEXT]Vassallaggio[COLOR_REVERT]civico.[PARAGRAPH:1]Un'opzione di ricompensa aggiuntiva sarà disponibile se i controlli della civiltà[COLOR_BUILDING_TEXT]%s2_building[COLOR_REVERT].[PARAGRAPH:1]Fallirai questa missione se una civiltà rivale lo completa per prima o se scopri armi da fuoco avanzate ([COLOR_TECH_TEXT]Rigatura[COLOR_REVERT]O[COLOR_TECH_TEXT]Ferrovia[COLOR_REVERT]tecnologie) senza aver incontrato le condizioni.</Italian>
+		<Spanish>[PARAGRAPH:1]Para completar esta búsqueda, debes entrenar %d1[COLOR_UNIT_TEXT]Mosquetero[COLOR_REVERT]unidades.[PARAGRAPH:1]Habrá una opción de recompensa adicional disponible si su civilización está operando en el[COLOR_HIGHLIGHT_TEXT]Vasallaje[COLOR_REVERT]cívico.[PARAGRAPH:1]Habrá una opción de recompensa adicional disponible si su civilización controla[COLOR_BUILDING_TEXT]%s2_building[COLOR_REVERT].[PARAGRAPH:1]Fallará esta búsqueda si una civilización rival la completa primero, o si descubre armas de fuego avanzadas ([COLOR_TECH_TEXT]Estriado[COLOR_REVERT]o[COLOR_TECH_TEXT]Ferrocarril[COLOR_REVERT]tecnologías) sin haber cumplido las condiciones.</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_EVENT_GUNS_BUTTER_DONE_1</Tag>
+		<English>With such a large force of Musketman working together, additional training for these units can be achieved.</English>
+		<French>Avec une force aussi importante de mousquet travaillant ensemble, une formation supplémentaire pour ces unités peut être obtenue.</French>
+		<German>Wenn eine so große Kraft von Musketman zusammenarbeitet, können zusätzliches Training für diese Einheiten erreicht werden.</German>
+		<Italian>Con una così grande forza di Musketman che lavora insieme, è possibile ottenere un addestramento aggiuntivo per queste unità.</Italian>
+		<Spanish>Con una fuerza tan grande de mosquetero trabajando juntos, se puede lograr un entrenamiento adicional para estas unidades.</Spanish>
+	</TEXT>
+</Civ4GameText>

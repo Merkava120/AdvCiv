@@ -1,0 +1,28 @@
+BEGIN ANCHOR [CIV4ArtDefines_Unit.xml]
+			<fScale>0.5</fScale>
+			<fInterfaceScale>1.0</fInterfaceScale>
+			<bActAsLand>0</bActAsLand>
+			<bActAsAir>0</bActAsAir>
+	<NIF>PATCH_TO_MODEL/F9F.nif</NIF>
+	<KFM></KFM>
+	<SHADERNIF>PATCH_TO_MODEL/F9F.nif</SHADERNIF>
+			<ShadowDef>
+			<ShadowNIF>Art/Units/01_UnitShadows/JetFighterShadow.nif</ShadowNIF>
+				<ShadowAttachNode>BIP Pelvis</ShadowAttachNode>
+				<fShadowScale>0.75</fShadowScale>
+			</ShadowDef>
+			<iDamageStates>4</iDamageStates>
+			<fBattleDistance>0.35</fBattleDistance>
+			<fRangedDeathTime>0.31</fRangedDeathTime>
+			<bSmoothMove>1</bSmoothMove>
+			<fBankRate>0.35</fBankRate>
+			<bActAsRanged>0</bActAsRanged>
+			<TrainSound>AS2D_UNIT_BUILD_UNIT</TrainSound>
+			<AudioRunSounds>
+				<AudioRunTypeLoop/>
+				<AudioRunTypeEnd/>
+			</AudioRunSounds>
+			<PatrolSound>AS3D_UN_JET_PATROL</PatrolSound>
+			<SelectionSound>AS3D_UN_JET_COMMAND_PATROL</SelectionSound>
+			<ActionSound>AS3D_UN_JET_COMMAND_PATROL</ActionSound>
+END ANCHOR [CIV4ArtDefines_Unit.xml]

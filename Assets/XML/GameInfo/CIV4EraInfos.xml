@@ -132,6 +132,14 @@
 				<EraInfoSoundtrack>AS2D_SONG_DIP_GR_EARLY_PEACE</EraInfoSoundtrack>
 				<EraInfoSoundtrack>AS2D_SONG_BARBARIAN</EraInfoSoundtrack>
 				<EraInfoSoundtrack>AS2D_SONG_DIP_GR_EARLY_WAR</EraInfoSoundtrack>
+				<EraInfoSoundtrack>AS2D_SONG_CIV_III_ANC_AMERICA</EraInfoSoundtrack>
+				<EraInfoSoundtrack>AS2D_SONG_CIV_III_ANC_MID_EAST</EraInfoSoundtrack>
+				<EraInfoSoundtrack>AS2D_SONG_CIV_III_ANC_MID_ORIENTAL</EraInfoSoundtrack>
+				<EraInfoSoundtrack>AS2D_CREDITS1</EraInfoSoundtrack>
+				<EraInfoSoundtrack>AS2D_SONG_CIV_III_MID_AFRICA</EraInfoSoundtrack>
+				<EraInfoSoundtrack>AS2D_SONG_CIV_III_MID_AMERICAN</EraInfoSoundtrack>
+				<EraInfoSoundtrack>AS2D_SONG_CIV_III_MID_ASIAN</EraInfoSoundtrack>
+				<EraInfoSoundtrack>AS2D_RIPPLES</EraInfoSoundtrack>
 			</EraInfoSoundtracks>
 			<CitySoundscapes>
 				<CitySoundscape>
@@ -215,6 +223,12 @@
 				<EraInfoSoundtrack>AS2D_PRAETORIUS_BRANSLE</EraInfoSoundtrack>
 				<EraInfoSoundtrack>AS2D_PRAETORIUS_VOLTE</EraInfoSoundtrack>
 				<EraInfoSoundtrack>AS2D_SHEPPARD_MEDIA_VITA</EraInfoSoundtrack>
+				<EraInfoSoundtrack>AS2D_SONG_CHINESE_ADAM</EraInfoSoundtrack>
+				<EraInfoSoundtrack>AS2D_CREDITS2</EraInfoSoundtrack>
+				<EraInfoSoundtrack>AS2D_SONG_GENGHIS_KHAN</EraInfoSoundtrack>
+				<EraInfoSoundtrack>AS2D_SFLOWER</EraInfoSoundtrack>
+				<EraInfoSoundtrack>AS2D_FINDING</EraInfoSoundtrack>
+				<EraInfoSoundtrack>AS2D_ISHIKARI</EraInfoSoundtrack>
 			</EraInfoSoundtracks>
 			<CitySoundscapes>
 				<CitySoundscape>
@@ -292,6 +306,22 @@
 				<EraInfoSoundtrack>AS2D_BACH_LARGO</EraInfoSoundtrack>
 				<EraInfoSoundtrack>AS2D_BACH_MENUET</EraInfoSoundtrack>
 				<EraInfoSoundtrack>AS2D_BACH_SARABANDE</EraInfoSoundtrack>
+				<EraInfoSoundtrack>AS2D_FriedrichA1</EraInfoSoundtrack>
+				<EraInfoSoundtrack>AS2D_FriedrichA2</EraInfoSoundtrack>
+				<EraInfoSoundtrack>AS2D_FriedrichC1</EraInfoSoundtrack>
+				<EraInfoSoundtrack>AS2D_FriedrichC2</EraInfoSoundtrack>
+				<EraInfoSoundtrack>AS2D_FriedrichC3</EraInfoSoundtrack>
+				<EraInfoSoundtrack>AS2D_FriedrichE1</EraInfoSoundtrack>
+				<EraInfoSoundtrack>AS2D_FriedrichE2</EraInfoSoundtrack>
+				<EraInfoSoundtrack>AS2D_FriedrichE3</EraInfoSoundtrack>
+				<EraInfoSoundtrack>AS2D_FriedrichG1</EraInfoSoundtrack>
+				<EraInfoSoundtrack>AS2D_FriedrichG2</EraInfoSoundtrack>
+				<EraInfoSoundtrack>AS2D_FriedrichF1</EraInfoSoundtrack>
+				<EraInfoSoundtrack>AS2D_FriedrichF3</EraInfoSoundtrack>
+				<EraInfoSoundtrack>AS2D_FriedrichF4</EraInfoSoundtrack>
+				<EraInfoSoundtrack>AS2D_FriedrichF5</EraInfoSoundtrack>
+				<EraInfoSoundtrack>AS2D_FriedrichF6</EraInfoSoundtrack>
+				<EraInfoSoundtrack>AS2D_FriedrichF7</EraInfoSoundtrack>
 				<EraInfoSoundtrack>AS2D_BEETHOVEN_ALLEGRETTO</EraInfoSoundtrack>
 				<EraInfoSoundtrack>AS2D_BEETHOVEN_ANDANTE</EraInfoSoundtrack>
 				<EraInfoSoundtrack>AS2D_BEETHOVEN_ROMANCE_1</EraInfoSoundtrack>

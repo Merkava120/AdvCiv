@@ -98,8 +98,6 @@
 		</UnitClassInfo>
 		<UnitClassInfo>
 			<Type>UNITCLASS_EXECUTIVE_2</Type>
-			<!-- advc.001: Was CHANGED_TXT_KEY_UNIT_EXECUTIVE_2, which doesn't
-				 exist. (Only used for debugging anyway I think.) -->
 			<Description>TXT_KEY_UNIT_EXECUTIVE_2</Description>
 			<iMaxGlobalInstances>-1</iMaxGlobalInstances>
 			<iMaxTeamInstances>-1</iMaxTeamInstances>
@@ -244,7 +242,7 @@
 		</UnitClassInfo>
 		<UnitClassInfo>
 			<Type>UNITCLASS_MACEMAN</Type>
-			<Description>TXT_KEY_UNIT_MACEMAN</Description>
+			<Description>TXT_KEY_UNIT_HEAVY_SWORDSMAN</Description>
 			<iMaxGlobalInstances>-1</iMaxGlobalInstances>
 			<iMaxTeamInstances>-1</iMaxTeamInstances>
 			<iMaxPlayerInstances>-1</iMaxPlayerInstances>
@@ -268,6 +266,15 @@
 			<iMaxPlayerInstances>-1</iMaxPlayerInstances>
 			<iInstanceCostModifier>0</iInstanceCostModifier>
 			<DefaultUnit>UNIT_PIKEMAN</DefaultUnit>
+		</UnitClassInfo>
+		<UnitClassInfo>
+			<Type>UNITCLASS_ARQUEBUSIER</Type>
+			<Description>TXT_KEY_UNIT_ARQUEBUSIER</Description>
+			<iMaxGlobalInstances>-1</iMaxGlobalInstances>
+			<iMaxTeamInstances>-1</iMaxTeamInstances>
+			<iMaxPlayerInstances>-1</iMaxPlayerInstances>
+			<iInstanceCostModifier>0</iInstanceCostModifier>
+			<DefaultUnit>UNIT_ARQUEBUSIER</DefaultUnit>
 		</UnitClassInfo>
 		<UnitClassInfo>
 			<Type>UNITCLASS_MUSKETMAN</Type>
@@ -486,6 +493,15 @@
 			<DefaultUnit>UNIT_TREBUCHET</DefaultUnit>
 		</UnitClassInfo>
 		<UnitClassInfo>
+			<Type>UNITCLASS_EARLY_CANNON</Type>
+			<Description>TXT_KEY_UNIT_EARLY_CANNON</Description>
+			<iMaxGlobalInstances>-1</iMaxGlobalInstances>
+			<iMaxTeamInstances>-1</iMaxTeamInstances>
+			<iMaxPlayerInstances>-1</iMaxPlayerInstances>
+			<iInstanceCostModifier>0</iInstanceCostModifier>
+			<DefaultUnit>UNIT_EARLY_CANNON</DefaultUnit>
+		</UnitClassInfo>
+		<UnitClassInfo>
 			<Type>UNITCLASS_CANNON</Type>
 			<Description>TXT_KEY_UNIT_CANNON</Description>
 			<iMaxGlobalInstances>-1</iMaxGlobalInstances>
@@ -571,7 +587,7 @@
 			<Description>TXT_KEY_UNIT_PRIVATEER</Description>
 			<iMaxGlobalInstances>-1</iMaxGlobalInstances>
 			<iMaxTeamInstances>-1</iMaxTeamInstances>
-			<iMaxPlayerInstances>-1</iMaxPlayerInstances>
+			<iMaxPlayerInstances>3</iMaxPlayerInstances>
 			<iInstanceCostModifier>0</iInstanceCostModifier>
 			<DefaultUnit>UNIT_PRIVATEER</DefaultUnit>
 		</UnitClassInfo>
@@ -586,7 +602,6 @@
 		</UnitClassInfo>
 		<UnitClassInfo>
 			<Type>UNITCLASS_SHIP_OF_THE_LINE</Type>
-			<!-- BBAI: _UNIT_ was missing -->
 			<Description>TXT_KEY_UNIT_SHIP_OF_THE_LINE</Description>
 			<iMaxGlobalInstances>-1</iMaxGlobalInstances>
 			<iMaxTeamInstances>-1</iMaxTeamInstances>
@@ -649,16 +664,6 @@
 			<DefaultUnit>UNIT_MISSILE_CRUISER</DefaultUnit>
 		</UnitClassInfo>
 		<UnitClassInfo>
-			<Type>UNITCLASS_ATTACK_SUBMARINE</Type>
-			<Description>TXT_KEY_UNIT_ATTACK_SUBMARINE</Description>
-			<iMaxGlobalInstances>-1</iMaxGlobalInstances>
-			<iMaxTeamInstances>-1</iMaxTeamInstances>
-			<iMaxPlayerInstances>-1</iMaxPlayerInstances>
-			<iInstanceCostModifier>0</iInstanceCostModifier>
-			<DefaultUnit>UNIT_ATTACK_SUBMARINE</DefaultUnit>
-		</UnitClassInfo>
-		<!-- advc.906: Position switched with ATTACK_SUBMARINE -->
-		<UnitClassInfo>
 			<Type>UNITCLASS_SUBMARINE</Type>
 			<Description>TXT_KEY_UNIT_SUBMARINE</Description>
 			<iMaxGlobalInstances>-1</iMaxGlobalInstances>
@@ -666,6 +671,15 @@
 			<iMaxPlayerInstances>-1</iMaxPlayerInstances>
 			<iInstanceCostModifier>0</iInstanceCostModifier>
 			<DefaultUnit>UNIT_SUBMARINE</DefaultUnit>
+		</UnitClassInfo>
+		<UnitClassInfo>
+			<Type>UNITCLASS_ATTACK_SUBMARINE</Type>
+			<Description>TXT_KEY_UNIT_ATTACK_SUBMARINE</Description>
+			<iMaxGlobalInstances>-1</iMaxGlobalInstances>
+			<iMaxTeamInstances>-1</iMaxTeamInstances>
+			<iMaxPlayerInstances>-1</iMaxPlayerInstances>
+			<iInstanceCostModifier>0</iInstanceCostModifier>
+			<DefaultUnit>UNIT_ATTACK_SUBMARINE</DefaultUnit>
 		</UnitClassInfo>
 		<UnitClassInfo>
 			<Type>UNITCLASS_CARRIER</Type>
@@ -775,10 +789,9 @@
 			<iInstanceCostModifier>0</iInstanceCostModifier>
 			<DefaultUnit>UNIT_SCIENTIST</DefaultUnit>
 		</UnitClassInfo>
-		<!-- advc.001: was TXT_KEY_UNIT_GREAT_TYCOON -->
 		<UnitClassInfo>
 			<Type>UNITCLASS_MERCHANT</Type>
-			<Description>TXT_KEY_UNIT_GREAT_MERCHANT</Description>
+			<Description>TXT_KEY_UNIT_GREAT_TYCOON</Description>
 			<iMaxGlobalInstances>-1</iMaxGlobalInstances>
 			<iMaxTeamInstances>-1</iMaxTeamInstances>
 			<iMaxPlayerInstances>-1</iMaxPlayerInstances>
@@ -811,6 +824,24 @@
 			<iMaxPlayerInstances>-1</iMaxPlayerInstances>
 			<iInstanceCostModifier>0</iInstanceCostModifier>
 			<DefaultUnit>UNIT_GREAT_SPY</DefaultUnit>
+		</UnitClassInfo>
+		<UnitClassInfo>
+			<Type>UNITCLASS_CYBORG</Type>
+			<Description>TXT_KEY_UNIT_CYBORG</Description>
+			<iMaxGlobalInstances>-1</iMaxGlobalInstances>
+			<iMaxTeamInstances>-1</iMaxTeamInstances>
+			<iMaxPlayerInstances>-1</iMaxPlayerInstances>
+			<iInstanceCostModifier>0</iInstanceCostModifier>
+			<DefaultUnit>UNIT_CYBORG</DefaultUnit>
+		</UnitClassInfo>
+		<UnitClassInfo>
+			<Type>UNITCLASS_ASSAULT_MECH</Type>
+			<Description>TXT_KEY_UNIT_ASSAULT_MECH</Description>
+			<iMaxGlobalInstances>-1</iMaxGlobalInstances>
+			<iMaxTeamInstances>-1</iMaxTeamInstances>
+			<iMaxPlayerInstances>-1</iMaxPlayerInstances>
+			<iInstanceCostModifier>0</iInstanceCostModifier>
+			<DefaultUnit>UNIT_ASSAULT_MECH</DefaultUnit>
 		</UnitClassInfo>
 	</UnitClassInfos>
 </Civ4UnitClassInfos>

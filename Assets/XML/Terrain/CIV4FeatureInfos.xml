@@ -130,9 +130,9 @@
 			<iSeeThrough>1</iSeeThrough>
 			<iHealthPercent>-25</iHealthPercent>
 			<!-- advc.012: was 50 -->
-			<iDefense>0</iDefense>
+			<iDefense>25</iDefense>
 			<!-- advc.012 -->
-			<iRivalDefense>25</iRivalDefense>
+			<iRivalDefense>0</iRivalDefense>
 			<iAppearance>0</iAppearance>
 			<iDisappearance>0</iDisappearance>
 			<iGrowth>16</iGrowth>
@@ -485,9 +485,9 @@
 			<iSeeThrough>1</iSeeThrough>
 			<iHealthPercent>50</iHealthPercent>
 			<!-- advc.012: was 50 -->
-			<iDefense>0</iDefense>
+			<iDefense>25</iDefense>
 			<!-- advc.012 -->
-			<iRivalDefense>25</iRivalDefense>
+			<iRivalDefense>0</iRivalDefense>
 			<iAppearance>0</iAppearance>
 			<iDisappearance>0</iDisappearance>
 			<iGrowth>8</iGrowth>

@@ -1,0 +1,3091 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<Civ4GameText xmlns="http://www.firaxis.com">
+	<TEXT>
+		<Tag>TXT_KEY_UNIT_HOLY_ROMAN_LANDSKNECHT1</Tag>
+		<English>Templar</English>
+		<French>
+			<Text>Temple</Text>
+			<Gender>Male</Gender>
+			<Plural>0:1</Plural>
+		</French>
+		<German>
+			<Text>Templer</Text>
+			<Gender>Male</Gender>
+			<Plural>0</Plural>
+		</German>
+		<Italian>
+			<Text>templare</Text>
+			<Gender>Male</Gender>
+			<Plural>0:1</Plural>
+		</Italian>
+		<Spanish>
+			<Text>Templario</Text>
+			<Gender>Male</Gender>
+			<Plural>0:1</Plural>
+		</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_UNIT_ATLATL</Tag>
+		<English>Atlatlist</English>
+		<French>
+			<Text>Atlatlist</Text>
+			<Gender>Male</Gender>
+			<Plural>0:1</Plural>
+		</French>
+		<German>
+			<Text>Atlatlist</Text>
+			<Gender>Male</Gender>
+			<Plural>0</Plural>
+		</German>
+		<Italian>
+			<Text>Atlatlist</Text>
+			<Gender>Male</Gender>
+			<Plural>0:1</Plural>
+		</Italian>
+		<Spanish>
+			<Text>Atlatlista</Text>
+			<Gender>Male</Gender>
+			<Plural>0:1</Plural>
+		</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_LEADER_SEJONG</Tag>
+		<English>Sejong</English>
+		<French>
+			<Text>Sejong</Text>
+			<Gender>Male</Gender>
+			<Plural>0</Plural>
+		</French>
+		<German>
+			<Text>Sejong</Text>
+			<Gender>Male</Gender>
+			<Plural>0</Plural>
+		</German>
+		<Italian>
+			<Text>Sejong</Text>
+			<Gender>Male</Gender>
+			<Plural>0</Plural>
+		</Italian>
+		<Spanish>
+			<Text>Sejong</Text>
+			<Gender>Male</Gender>
+			<Plural>0</Plural>
+		</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_UNIT_VOI_CHIEN</Tag>
+		<English>Voi Chien</English>
+		<French>
+			<Text>Can Chien</Text>
+			<Gender>Male</Gender>
+			<Plural>0:1</Plural>
+		</French>
+		<German>
+			<Text>Kann Chien</Text>
+			<Gender>Male</Gender>
+			<Plural>0</Plural>
+		</German>
+		<Italian>
+			<Text>Può Chien</Text>
+			<Gender>Male</Gender>
+			<Plural>0:1</Plural>
+		</Italian>
+		<Spanish>
+			<Text>Can Chien</Text>
+			<Gender>Male</Gender>
+			<Plural>0:1</Plural>
+		</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_UNIT_BALLISTA</Tag>
+		<English>Ballista</English>
+		<French>
+			<Text>Baliste</Text>
+			<Gender>Male</Gender>
+			<Plural>0:1</Plural>
+		</French>
+		<German>
+			<Text>Ballista</Text>
+			<Gender>Male</Gender>
+			<Plural>0</Plural>
+		</German>
+		<Italian>
+			<Text>Balista</Text>
+			<Gender>Male</Gender>
+			<Plural>0:1</Plural>
+		</Italian>
+		<Spanish>
+			<Text>Balista</Text>
+			<Gender>Male</Gender>
+			<Plural>0:1</Plural>
+		</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_UNIT_TRIPLANE</Tag>
+		<English>Triplane</English>
+		<French>
+			<Text>Triplan</Text>
+			<Gender>Male</Gender>
+			<Plural>0:1</Plural>
+		</French>
+		<German>
+			<Text>Triplane</Text>
+			<Gender>Neuter</Gender>
+			<Plural>0</Plural>
+		</German>
+		<Italian>
+			<Text>Triplani</Text>
+			<Gender>Male</Gender>
+			<Plural>0:1</Plural>
+		</Italian>
+		<Spanish>
+			<Text>Triplano</Text>
+			<Gender>Male</Gender>
+			<Plural>0:1</Plural>
+		</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_UNIT_CYBORG</Tag>
+		<English>XCOM Squad</English>
+		<French>
+			<Text>Squad XCOM</Text>
+			<Gender>Male</Gender>
+			<Plural>0</Plural>
+		</French>
+		<German>
+			<Text>Xcom -Kader</Text>
+			<Gender>Male</Gender>
+			<Plural>0</Plural>
+		</German>
+		<Italian>
+			<Text>XCOM Squad</Text>
+			<Gender>Male</Gender>
+			<Plural>0:1</Plural>
+		</Italian>
+		<Spanish>
+			<Text>Escuadrón de XCOM</Text>
+			<Gender>Male</Gender>
+			<Plural>0:1</Plural>
+		</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_UNIT_ASSAULT_MECH</Tag>
+		<English>Death Robot</English>
+		<French>
+			<Text>Robot de la mort</Text>
+			<Gender>Male</Gender>
+			<Plural>1</Plural>
+		</French>
+		<German>
+			<Text>Todesroboter</Text>
+			<Gender>Male</Gender>
+			<Plural>0</Plural>
+		</German>
+		<Italian>
+			<Text>Robot di morte</Text>
+			<Gender>Female</Gender>
+			<Plural>0:1</Plural>
+		</Italian>
+		<Spanish>
+			<Text>Robot de la muerte</Text>
+			<Gender>Female</Gender>
+			<Plural>0:1</Plural>
+		</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_BUILDING_CANAL</Tag>
+		<English>Canal</English>
+		<French>Canal</French>
+		<German>Kanal</German>
+		<Italian>Canale</Italian>
+		<Spanish>Canal</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_BUILDING_VENETIAN_ARSENAL</Tag>
+		<English>Arsenal</English>
+		<French>Arsenal</French>
+		<German>Arsenal</German>
+		<Italian>Arsenale</Italian>
+		<Spanish>Arsenal</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_BUILDING_SEWER</Tag>
+		<English>Sewer</English>
+		<French>Égout</French>
+		<German>Kanal</German>
+		<Italian>Fogna</Italian>
+		<Spanish>Alcantarillado</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_BUILDING_GUARDPOST</Tag>
+		<English>Outpost</English>
+		<French>Avant-poste</French>
+		<German>Vorposten</German>
+		<Italian>Avamposto</Italian>
+		<Spanish>Avanzada</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_BUILDING_TOMB</Tag>
+		<English>Burial Tomb</English>
+		<French>Funéraire</French>
+		<German>Grabgrab</German>
+		<Italian>Tomba di sepoltura</Italian>
+		<Spanish>Tumba de entierro</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_BUILDING_PRISON</Tag>
+		<English>Constabulary</English>
+		<French>Police</French>
+		<German>Polizei</German>
+		<Italian>Costabolario</Italian>
+		<Spanish>Policía</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_BUILDING_MUSEUM</Tag>
+		<English>Museum</English>
+		<French>Musée</French>
+		<German>Museum</German>
+		<Italian>Museo</Italian>
+		<Spanish>Museo</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_BUILDING_RESORT</Tag>
+		<English>Resort</English>
+		<French>Station balnéaire</French>
+		<German>Resort</German>
+		<Italian>Ricorrere</Italian>
+		<Spanish>Complejo</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_BUILDING_BRANDENBURG_GATE</Tag>
+		<English>Brandenburg Gate</English>
+		<French>Porte de Brandebourg</French>
+		<German>Brandenburger Tor</German>
+		<Italian>Porta di Brandenburg</Italian>
+		<Spanish>Puerta de Brandenburgo</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_BUILDING_PETRA</Tag>
+		<English>Petra</English>
+		<French>Petra</French>
+		<German>Petra</German>
+		<Italian>Petra</Italian>
+		<Spanish>Petra</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_BUILDING_NEUSCHWANSTEIN</Tag>
+		<English>Neuschwanstein Castle</English>
+		<French>Le château de Neuschwanstein</French>
+		<German>Schloss Neuschwanstein</German>
+		<Italian>Castello di Neuschwanstein</Italian>
+		<Spanish>Castillo de Neuschwanstein</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_BUILDING_PORCELAIN_TOWER</Tag>
+		<English>Porcelain Tower</English>
+		<French>Tour en porcelaine</French>
+		<German>Porzellanturm</German>
+		<Italian>Torre di porcellana</Italian>
+		<Spanish>Torre de porcelana</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_BUILDING_LEONARDO</Tag>
+		<English>Leonardo's Workshop</English>
+		<French>Atelier de Leonardo</French>
+		<German>Leonardos Workshop</German>
+		<Italian>Workshop di Leonardo</Italian>
+		<Spanish>Taller de Leonardo</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_BUILDING_HUBBLE_SPACE_TELESCOPE</Tag>
+		<English>Hubble Space Telescope</English>
+		<French>Le télescope spatial Hubble</French>
+		<German>Hubble -Weltraumteleskop</German>
+		<Italian>Telescopio spaziale Hubble</Italian>
+		<Spanish>telescopio espacial Hubble</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_BUILDING_SPHINX</Tag>
+		<English>The Sphinx</English>
+		<French>Le Sphinx</French>
+		<German>Die Sphinx</German>
+		<Italian>La Sfinge</Italian>
+		<Spanish>La Esfinge</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_BUILDING_HWANGNYONGSA</Tag>
+		<English>Pagoda of Hwangnyongsa</English>
+		<French>Pagode de Hwangnyongsa</French>
+		<German>Pagode von Hwangnyongsa</German>
+		<Italian>Pagoda di Hwannyongsa</Italian>
+		<Spanish>Pagoda de Hwangnyongsa</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_BUILDING_BIG_BEN</Tag>
+		<English>Big Ben</English>
+		<French>Big Ben</French>
+		<German>Big Ben</German>
+		<Italian>Grande ben</Italian>
+		<Spanish>Gran Ben</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_BUILDING_HIMEJI_CASTLE</Tag>
+		<English>Himeji Castle</English>
+		<French>Himeji St!</French>
+		<German>Himeji St!</German>
+		<Italian>Himeji St!</Italian>
+		<Spanish>HIMEJI ST!</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_BUILDING_BABEL</Tag>
+		<English>Tower of Babel</English>
+		<French>Tour de Babel</French>
+		<German>Turm von Babylon</German>
+		<Italian>Torre di Babele</Italian>
+		<Spanish>Torre de Babel</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_BUILDING_ISHTAR</Tag>
+		<English>Ishtar Gate</English>
+		<French>Porte Ishtar</French>
+		<German>Ishtar -Tor</German>
+		<Italian>Ishtar Gate</Italian>
+		<Spanish>Puerta de Ishtar</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_BUILDING_BABYLONIAN_ISHTAR_WALLS</Tag>
+		<English>Walls of Babylon</English>
+		<French>Murs de babylone</French>
+		<German>Wände von Babylon</German>
+		<Italian>Pareti di Babilonia</Italian>
+		<Spanish>Paredes de Babilonia</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_CIV_BRAZIL_DESC</Tag>
+		<English>Brazilian Empire</English>
+		<French>Empire brésilien</French>
+		<German>Brasilianisches Reich</German>
+		<Italian>Impero brasiliano</Italian>
+		<Spanish>Imperio brasileño</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_CIV_BRAZIL_SHORT_DESC</Tag>
+		<English>Brazil</English>
+		<French>Brésil</French>
+		<German>Brasilien</German>
+		<Italian>Brasile</Italian>
+		<Spanish>Brasil</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_CIV_BRAZIL_ADJECTIVE</Tag>
+		<English>Brazilian</English>
+		<French>Brésilien</French>
+		<German>Brasilianer</German>
+		<Italian>Brasiliano</Italian>
+		<Spanish>Brasileño</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_CIV_AUSTRALIA_DESC</Tag>
+		<English>Australian Empire</English>
+		<French>Empire australien</French>
+		<German>Australisches Reich</German>
+		<Italian>Impero australiano</Italian>
+		<Spanish>Imperio australiano</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_CIV_AUSTRALIA_SHORT_DESC</Tag>
+		<English>Australia</English>
+		<French>Australie</French>
+		<German>Australien</German>
+		<Italian>Australia</Italian>
+		<Spanish>Australia</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_CIV_AUSTRALIA_ADJECTIVE</Tag>
+		<English>Australian</English>
+		<French>Australien</French>
+		<German>australisch</German>
+		<Italian>Australiano</Italian>
+		<Spanish>Australiano</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_CIV_KONGO</Tag>
+		<English>Kongolese Empire</English>
+		<French>Empire congolais</French>
+		<German>Kongolesisches Reich</German>
+		<Italian>Impero congolese</Italian>
+		<Spanish>Imperio congoleño</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_CIV_SHORT_KONGO</Tag>
+		<English>Kongo</English>
+		<French>Kongo</French>
+		<German>Kongo</German>
+		<Italian>Kongo</Italian>
+		<Spanish>Kongo</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_CIV_ADJECTIVE_KONGO</Tag>
+		<English>Kongolese</English>
+		<French>Congolais</French>
+		<German>Kongolesisch</German>
+		<Italian>Congolese</Italian>
+		<Spanish>Congoleño</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_LEADER_AFONSO</Tag>
+		<English>Afonso</English>
+		<French>Afonso</French>
+		<German>Afonso</German>
+		<Italian>Afonso</Italian>
+		<Spanish>Afonso</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_LEADER_ANA_NZINGA</Tag>
+		<English>Ana Nzinga</English>
+		<French>Ana Nzinga</French>
+		<German>Ana Nzinga</German>
+		<Italian>Ana Nzinga</Italian>
+		<Spanish>Ana Nzinga</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_UNIT_KONGO_POMBOS</Tag>
+		<English>Pombos</English>
+		<French>Pigeon</French>
+		<German>Taube</German>
+		<Italian>Piccione</Italian>
+		<Spanish>Paloma</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_BUILDING_CANIBAL</Tag>
+		<English>Cannibal</English>
+		<French>Cannibale</French>
+		<German>Kannibale</German>
+		<Italian>Cannibale</Italian>
+		<Spanish>Caníbal</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_BUILDING_SUKIENNICE</Tag>
+		<English>Sukiennice</English>
+		<French>Entrée</French>
+		<German>Saal</German>
+		<Italian>Sala</Italian>
+		<Spanish>Sala</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_BUILDING_CARNIVAL</Tag>
+		<English>Street Carnival</English>
+		<French>Carnaval de rue</French>
+		<German>Straßenkarneval</German>
+		<Italian>Carnevale di strada</Italian>
+		<Spanish>Carnaval</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_UNIT_YURUPARI</Tag>
+		<English>Yurupari</English>
+		<French>Europeari</French>
+		<German>European</German>
+		<Italian>Europeari</Italian>
+		<Spanish>Europeari</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_UNIT_YURUYANI</Tag>
+		<English>Yuruyani</English>
+		<French>Dans une boutique lâche</French>
+		<German>In einem losen Laden</German>
+		<Italian>In un negozio sciolto</Italian>
+		<Spanish>En una tienda suelta</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_UNIT_KOBUKSON</Tag>
+		<English>Kobukson</English>
+		<French>Kobukson</French>
+		<German>Kobukson</German>
+		<Italian>Kobukson</Italian>
+		<Spanish>Kobukson</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_CIV_MAGYAR_DESC</Tag>
+		<English>Hungary Empire</English>
+		<French>Empire de Hongrie</French>
+		<German>Ungarisches Reich</German>
+		<Italian>Impero Ungheria</Italian>
+		<Spanish>Hungría imperio</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_CIV_MAGYAR_SHORT_DESC</Tag>
+		<English>Hungary</English>
+		<French>Hongrie</French>
+		<German>Ungarn</German>
+		<Italian>Ungheria</Italian>
+		<Spanish>Hungría</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_CIV_MAGYAR_ADJECTIVE</Tag>
+		<English>Hungarian</English>
+		<French>Hongrois</French>
+		<German>ungarisch</German>
+		<Italian>ungherese</Italian>
+		<Spanish>Húngaro</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_LEADER_MAGYAR_MATYAS</Tag>
+		<English>Matthias I</English>
+		<French>Matthias I</French>
+		<German>Matthias I</German>
+		<Italian>Matthias I</Italian>
+		<Spanish>Matthias I</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_BUILDING_MAGYAR_JURTA</Tag>
+		<English>Jurta</English>
+		<French>Usine</French>
+		<German>Anlage</German>
+		<Italian>Pianta</Italian>
+		<Spanish>Planta</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_UNIT_MAGYAR_HUSSAR</Tag>
+		<English>Hussar</English>
+		<French>Hussard</French>
+		<German>Husar</German>
+		<Italian>Ussaro</Italian>
+		<Spanish>Húsar</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_CIV_POLAND_DESC</Tag>
+		<English>Polish Empire</English>
+		<French>
+			<Text>Empire polonais</Text>
+			<Gender>Male</Gender>
+			<Plural>1</Plural>
+		</French>
+		<German>
+			<Text>Polnisches Reich</Text>
+			<Gender>Neuter</Gender>
+			<Plural>1</Plural>
+		</German>
+		<Italian>
+			<Text>Impero polacco</Text>
+			<Gender>Male</Gender>
+			<Plural>1</Plural>
+		</Italian>
+		<Spanish>
+			<Text>Imperio polaco</Text>
+			<Gender>Male</Gender>
+			<Plural>1</Plural>
+		</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_CIV_POLAND_SHORT_DESC</Tag>
+		<English>Poland</English>
+		<French>
+			<Text>Pologne</Text>
+			<Gender>Male</Gender>
+			<Plural>1</Plural>
+		</French>
+		<German>
+			<Text>Polen</Text>
+			<Gender>Neuter</Gender>
+			<Plural>1</Plural>
+		</German>
+		<Italian>
+			<Text>Polonia</Text>
+			<Gender>Male</Gender>
+			<Plural>1</Plural>
+		</Italian>
+		<Spanish>
+			<Text>Polonia</Text>
+			<Gender>Male</Gender>
+			<Plural>1</Plural>
+		</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_CIV_POLAND_ADJECTIVE</Tag>
+		<English>Polish</English>
+		<French>
+			<Text>polonais</Text>
+			<Gender>Male</Gender>
+			<Plural>1</Plural>
+		</French>
+		<German>
+			<Text>Polieren</Text>
+			<Gender>Neuter</Gender>
+			<Plural>1</Plural>
+		</German>
+		<Italian>
+			<Text>Polacco</Text>
+			<Gender>Male</Gender>
+			<Plural>1</Plural>
+		</Italian>
+		<Spanish>
+			<Text>Polaco</Text>
+			<Gender>Male</Gender>
+			<Plural>1</Plural>
+		</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_LEADER_CASIMIR</Tag>
+		<English>Casimir</English>
+		<French>
+			<Text>Casimir</Text>
+			<Gender>Male</Gender>
+			<Plural>1</Plural>
+		</French>
+		<German>
+			<Text>Casimir</Text>
+			<Gender>Neuter</Gender>
+			<Plural>1</Plural>
+		</German>
+		<Italian>
+			<Text>Casimir</Text>
+			<Gender>Male</Gender>
+			<Plural>1</Plural>
+		</Italian>
+		<Spanish>
+			<Text>Casimir</Text>
+			<Gender>Male</Gender>
+			<Plural>1</Plural>
+		</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_UNIT_WINGED_HUSSAR</Tag>
+		<English>Winged Hussar</English>
+		<French>
+			<Text>Hussar ailé</Text>
+			<Gender>Male</Gender>
+			<Plural>1</Plural>
+		</French>
+		<German>
+			<Text>Geflügelter Husar</Text>
+			<Gender>Neuter</Gender>
+			<Plural>1</Plural>
+		</German>
+		<Italian>
+			<Text>Hussar alato</Text>
+			<Gender>Male</Gender>
+			<Plural>1</Plural>
+		</Italian>
+		<Spanish>
+			<Text>Hussar alado</Text>
+			<Gender>Male</Gender>
+			<Plural>1</Plural>
+		</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_BUILDING_POLAND_SEJMIK</Tag>
+		<English>Sejmik</English>
+		<French>
+			<Text>Parlement</Text>
+			<Gender>Male</Gender>
+			<Plural>1</Plural>
+		</French>
+		<German>
+			<Text>Parlament</Text>
+			<Gender>Neuter</Gender>
+			<Plural>1</Plural>
+		</German>
+		<Italian>
+			<Text>Parlamento</Text>
+			<Gender>Male</Gender>
+			<Plural>1</Plural>
+		</Italian>
+		<Spanish>
+			<Text>Parlamento</Text>
+			<Gender>Male</Gender>
+			<Plural>1</Plural>
+		</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_LEADER_ADOLF_HITLER</Tag>
+		<English>Adolf Hitler</English>
+		<French>
+			<Text>Adolf Hitler</Text>
+			<Gender>Male</Gender>
+			<Plural>0</Plural>
+		</French>
+		<German>
+			<Text>Adolf Hitler</Text>
+			<Gender>Male</Gender>
+			<Plural>0</Plural>
+		</German>
+		<Italian>
+			<Text>Adolf Hitler</Text>
+			<Gender>Male</Gender>
+			<Plural>0</Plural>
+		</Italian>
+		<Spanish>
+			<Text>Adolf Hitler</Text>
+			<Gender>Male</Gender>
+			<Plural>0</Plural>
+		</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_CIV_AUSTRIA_DESC</Tag>
+		<English>Austrian Empire</English>
+		<French>Empire autrichien</French>
+		<German>Österreichisches Reich</German>
+		<Italian>Impero austriaco</Italian>
+		<Spanish>Imperio austriaco</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_CIV_AUSTRIA_SHORT_DESC</Tag>
+		<English>Austria</English>
+		<French>L'Autriche</French>
+		<German>Österreich</German>
+		<Italian>Austria</Italian>
+		<Spanish>Austria</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_CIV_AUSTRIA_ADJECTIVE</Tag>
+		<English>Austrian</English>
+		<French>Autrichien</French>
+		<German>österreichisch</German>
+		<Italian>Austriaco</Italian>
+		<Spanish>Austriaco</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_LEADER_MARIA_THERESA</Tag>
+		<English>Maria Theresia</English>
+		<French>Maria Theresia</French>
+		<German>Maria Theresia</German>
+		<Italian>Maria Theresia</Italian>
+		<Spanish>Maria Theresia</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_BUILDING_AUSTRIA_OPERA</Tag>
+		<English>Opera House</English>
+		<French>Opéra</French>
+		<German>Opernhaus</German>
+		<Italian>Teatro dell'opera</Italian>
+		<Spanish>teatro de la Ópera</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_UNIT_AUSTRIA_KUKINFANTRIE</Tag>
+		<English>Grenzer</English>
+		<French>Limite</French>
+		<German>Grenzer</German>
+		<Italian>Borderline</Italian>
+		<Spanish>Límite</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_CIV_GOKTURK_DESC</Tag>
+		<English>Gokturk Empire</English>
+		<French>Empire de Gokturk</French>
+		<German>Gokturk Empire</German>
+		<Italian>Impero di Gokturk</Italian>
+		<Spanish>Imperio Gokturk</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_CIV_GOKTURK_SHORT_DESC</Tag>
+		<English>Gokturks</English>
+		<French>Gocket</French>
+		<German>Gockket</German>
+		<Italian>Gocce</Italian>
+		<Spanish>Timbal</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_CIV_GOKTURK_ADJECTIVE</Tag>
+		<English>Gokturk</English>
+		<French>Gokturk</French>
+		<German>Gokturk</German>
+		<Italian>Gokturk</Italian>
+		<Spanish>Gokturk</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_LEADER_BILGE</Tag>
+		<English>Bilge Khan</English>
+		<French>Bilge Khan</French>
+		<German>Bilge Khan</German>
+		<Italian>Bilge Khan</Italian>
+		<Spanish>Bilge Khan</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_UNIT_GOKTURK_TURKISH_WARRIOR</Tag>
+		<English>Turkish Warrior</English>
+		<French>Guerrier turc</French>
+		<German>Türkischer Krieger</German>
+		<Italian>Guerriero turco</Italian>
+		<Spanish>Guerrero turco</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_BUILDING_GOKTURK_ORKHON_INSCRIPTION</Tag>
+		<English>Orkhon Inscription</English>
+		<French>Orkhon Inscription</French>
+		<German>Orkhon -Registrierung</German>
+		<Italian>Registrazione di Orkhon</Italian>
+		<Spanish>Registro de Orkhon</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_CIV_INDONESIA_DESC</Tag>
+		<English>Indonesian Empire</English>
+		<French>Empire indonésien</French>
+		<German>Indonesischer Reich</German>
+		<Italian>Impero indonesiano</Italian>
+		<Spanish>Imperio indonesio</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_CIV_INDONESIA_SHORT_DESC</Tag>
+		<English>Indonesia</English>
+		<French>Indonésie</French>
+		<German>Indonesien</German>
+		<Italian>Indonesia</Italian>
+		<Spanish>Indonesia</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_CIV_INDONESIA_ADJECTIVE</Tag>
+		<English>Indonesian</English>
+		<French>Indonésien</French>
+		<German>Indonesisch</German>
+		<Italian>Indonesiano</Italian>
+		<Spanish>Indonesio</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_LEADER_DHARMASETU</Tag>
+		<English>Dharmasetu</English>
+		<French>Dharmasetu</French>
+		<German>Dharmasetu</German>
+		<Italian>Dharmasetu</Italian>
+		<Spanish>Dharmasetu</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_BUILDING_INDONESIAN_CANDI</Tag>
+		<English>Candi</English>
+		<French>Candi</French>
+		<German>Candi</German>
+		<Italian>Candi</Italian>
+		<Spanish>Candi</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_UNIT_KERIS</Tag>
+		<English>Kris Swordsman</English>
+		<French>Kris Swordsman</French>
+		<German>Kris Swordsman</German>
+		<Italian>Kris Swordsman</Italian>
+		<Spanish>Kris Swordsman</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_LEADER_PHILIP</Tag>
+		<English>Philip II</English>
+		<French>Philip II</French>
+		<German>Philip II</German>
+		<Italian>Philip II</Italian>
+		<Spanish>Philip II</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_UNIT_DOROBANT</Tag>
+		<English>Dorobant</English>
+		<French>Dorobant</French>
+		<German>Dorobant</German>
+		<Italian>Dorobant</Italian>
+		<Spanish>Dorobant</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_CIV_KAZAKHSTAN_DESC</Tag>
+		<English>Kazakh Empire</English>
+		<French>Empire kazakh</French>
+		<German>Kasachisches Reich</German>
+		<Italian>Impero kazakh</Italian>
+		<Spanish>Imperio kazajo</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_CIV_KAZAKHSTAN_SHORT_DESC</Tag>
+		<English>Kazakhstan</English>
+		<French>Kazakhstan</French>
+		<German>Kasachstan</German>
+		<Italian>Kazakistan</Italian>
+		<Spanish>Kazajstán</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_CIV_KAZAKHSTAN_ADJECTIVE</Tag>
+		<English>Kazakh</English>
+		<French>Kazakh</French>
+		<German>Kasachisch</German>
+		<Italian>Kazakh</Italian>
+		<Spanish>Kazajo</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_BUILDING_HORSE_FARM</Tag>
+		<English>Horse Farm</English>
+		<French>Ferme de chevaux</French>
+		<German>Pferdefarm</German>
+		<Italian>Fattoria di cavalli</Italian>
+		<Spanish>Granja de caballos</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_UNIT_BATYR</Tag>
+		<English>Batyr</English>
+		<French>Braver</French>
+		<German>Mutig</German>
+		<Italian>Coraggioso</Italian>
+		<Spanish>Corajudo</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_CIV_GEORGIA_DESC</Tag>
+		<English>Georgian Empire</English>
+		<French>Empire géorgien</French>
+		<German>Georgisches Reich</German>
+		<Italian>Impero georgiano</Italian>
+		<Spanish>Imperio georgiano</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_CIV_GEORGIA_SHORT_DESC</Tag>
+		<English>Georgia</English>
+		<French>Géorgie</French>
+		<German>Georgia</German>
+		<Italian>Georgia</Italian>
+		<Spanish>Georgia</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_CIV_GEORGIA_ADJECTIVE</Tag>
+		<English>Georgian</English>
+		<French>Géorgien</French>
+		<German>georgisch</German>
+		<Italian>Georgiano</Italian>
+		<Spanish>Georgiano</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_LEADER_TAMAR</Tag>
+		<English>Tamar</English>
+		<French>Tamar</French>
+		<German>Tamar</German>
+		<Italian>Tamar</Italian>
+		<Spanish>Tamar</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_UNIT_AZATAVREAR</Tag>
+		<English>Azatavrear</English>
+		<French>Azatavrear</French>
+		<German>Azatavrear</German>
+		<Italian>Azatavrear</Italian>
+		<Spanish>Azatavrob</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_UNIT_KHEVSUR_WARRIOR</Tag>
+		<English>Khevsur Warrior</English>
+		<French>Guerrier khevsur</French>
+		<German>Khevsur Warrior</German>
+		<Italian>Khevsur Warrior</Italian>
+		<Spanish>Guerrero de Khevsur</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_BUILDING_SVANETI</Tag>
+		<English>Svan Tower</English>
+		<French>Tour de cygne</French>
+		<German>Schwanenturm</German>
+		<Italian>Torre del cigno</Italian>
+		<Spanish>Torre de cisne</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_LEADER_MEIJI</Tag>
+		<English>Meiji</English>
+		<French>Meiji</French>
+		<German>Meiji</German>
+		<Italian>Meiji</Italian>
+		<Spanish>Meiji</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_LEADER_PEDRO</Tag>
+		<English>Pedro II</English>
+		<French>Pedro II</French>
+		<German>Pedro II</German>
+		<Italian>Pedro II</Italian>
+		<Spanish>Pedro II</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_CIV_ITALY_DESC</Tag>
+		<English>Italian Empire</English>
+		<French>Empire italien</French>
+		<German>Italienisches Reich</German>
+		<Italian>Impero italiano</Italian>
+		<Spanish>Imperio italiano</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_CIV_ITALY_SHORT_DESC</Tag>
+		<English>Italy</English>
+		<French>Italie</French>
+		<German>Italien</German>
+		<Italian>Italia</Italian>
+		<Spanish>Italia</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_CIV_ITALY_ADJECTIVE</Tag>
+		<English>Italian</English>
+		<French>Italien</French>
+		<German>Italienisch</German>
+		<Italian>Italiano</Italian>
+		<Spanish>Italiano</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_LEADER_LORENZO</Tag>
+		<English>Lorenzo</English>
+		<French>Lorenzo</French>
+		<German>Lorenzo</German>
+		<Italian>Lorenzo</Italian>
+		<Spanish>Lorenzo</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_LEADER_DANDOLO</Tag>
+		<English>Dandolo</English>
+		<French>Dandolo</French>
+		<German>Dandolo</German>
+		<Italian>Dandolo</Italian>
+		<Spanish>Dandolo</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_LEADER_HERMANN</Tag>
+		<English>Hermann</English>
+		<French>Hermann</French>
+		<German>Hermann</German>
+		<Italian>Hermann</Italian>
+		<Spanish>Hermann</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_CIV_HITTITES_DESC</Tag>
+		<English>Hittite Empire</English>
+		<French>Hittite Empire</French>
+		<German>Hethitischer Reich</German>
+		<Italian>Ittita Empire</Italian>
+		<Spanish>Imperio hitita</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_CIV_HITTITES_SHORT_DESC</Tag>
+		<English>Hittites</English>
+		<French>Hittites</French>
+		<German>Hethiter</German>
+		<Italian>Ittiti</Italian>
+		<Spanish>Hititas</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_CIV_HITTITES_ADJECTIVE</Tag>
+		<English>Hatti</English>
+		<French>File d'attente</French>
+		<German>Warteschlange</German>
+		<Italian>Coda</Italian>
+		<Spanish>Cola</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_CIV_ASSYRIA_DESC</Tag>
+		<English>Assyrian Empire</English>
+		<French>Empire assyrien</French>
+		<German>Assyrische Reich</German>
+		<Italian>Impero assiro</Italian>
+		<Spanish>Imperio asirio</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_CIV_ASSYRIA_SHORT_DESC</Tag>
+		<English>Assyria</English>
+		<French>Assyrie</French>
+		<German>Assyrien</German>
+		<Italian>Assiria</Italian>
+		<Spanish>Asirio</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_CIV_ASSYRIA_ADJECTIVE</Tag>
+		<English>Assyrian</English>
+		<French>Assyrien</French>
+		<German>Assyrer</German>
+		<Italian>Assiro</Italian>
+		<Spanish>Asirio</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_LEADER_SUPPI</Tag>
+		<English>Suppiluliuma</English>
+		<French>Suppiluliuma</French>
+		<German>Suppiluliuma</German>
+		<Italian>Suppiluliuma</Italian>
+		<Spanish>Suppiluliuma</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_LEADER_ASHURBANIPAL</Tag>
+		<English>Ashurbanipal</English>
+		<French>Ashurbanipal</French>
+		<German>Ashurbanipal</German>
+		<Italian>Ashurbanipal</Italian>
+		<Spanish>Ashurbanipal</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_UNIT_ITALIAN_MERCHANT</Tag>
+		<English>Italian Merchant</English>
+		<French>Marchand italien</French>
+		<German>Italienischer Kaufmann</German>
+		<Italian>Mercante italiano</Italian>
+		<Spanish>Comerciante italiano</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_UNIT_GENOA_CROSSBOWMAN</Tag>
+		<English>Genoa Crossbowman</English>
+		<French>Arbalète de Gênes</French>
+		<German>Genua Armbruster</German>
+		<Italian>Genova Crossbowman</Italian>
+		<Spanish>Génova Crossbowman</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_UNIT_MINUTEMAN</Tag>
+		<English>Minuteman</English>
+		<French>Minuteman</French>
+		<German>Minuteman</German>
+		<Italian>Minuteman</Italian>
+		<Spanish>Minutero</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_UNIT_COWBOY</Tag>
+		<English>Rough Rider</English>
+		<French>Cavalier</French>
+		<German>Rough Rider</German>
+		<Italian>Rider rough</Italian>
+		<Spanish>Jinete áspero</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_UNIT_GALLEAS</Tag>
+		<English>Galleas</English>
+		<French>Galops</French>
+		<German>Galeas</German>
+		<Italian>Galheas</Italian>
+		<Spanish>Galleas</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_BUILDING_GRAND_CANAL</Tag>
+		<English>Grand Canal</English>
+		<French>Grand canal</French>
+		<German>Grandkanal</German>
+		<Italian>Canal Grande</Italian>
+		<Spanish>canal Grande</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_LEADER_KANGXI</Tag>
+		<English>Kangxi</English>
+		<French>Kangxi</French>
+		<German>Kangxi</German>
+		<Italian>Kangxi</Italian>
+		<Spanish>Kangxi</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_CIV_KHITAN_DESC</Tag>
+		<English>Manchurian Empire</English>
+		<French>Empire du Mandchouriste</French>
+		<German>Manchurian Empire</German>
+		<Italian>Impero manchuriano</Italian>
+		<Spanish>Imperio manchurio</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_CIV_KHITAN_SHORT_DESC</Tag>
+		<English>Manchu</English>
+		<French>Manchu</French>
+		<German>MANCHU</German>
+		<Italian>Manchu</Italian>
+		<Spanish>Manchu</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_CIV_KHITAN_ADJECTIVE</Tag>
+		<English>Manchurian</English>
+		<French>Mandchourien</French>
+		<German>MANCHURIAN</German>
+		<Italian>Manciurian</Italian>
+		<Spanish>manchuriano</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_UNIT_KHITAN_CAVALRY</Tag>
+		<English>Mingan</English>
+		<French>Conduire</French>
+		<German>Fahrt</German>
+		<Italian>Passeggiata</Italian>
+		<Spanish>Conducir</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_BUILDING_WRESTLING_ARENA</Tag>
+		<English>Wrestling Arena</English>
+		<French>Arène de lutte</French>
+		<German>Wrestling Arena</German>
+		<Italian>Arena di wrestling</Italian>
+		<Spanish>Arena de la lucha libre</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_BUILDING_OPIUM_DEN</Tag>
+		<English>Opium Den</English>
+		<French>Fumerie d'opium</French>
+		<German>Opiumhöhle</German>
+		<Italian>Oppio den</Italian>
+		<Spanish>Opium Den</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_LEADER_NEBUCHADREZZAR</Tag>
+		<English>Nebuchadrezzar II</English>
+		<French>Nebuchadrezzar II</French>
+		<German>Nebuchadrezzar II</German>
+		<Italian>Nebuchadrezzar II</Italian>
+		<Spanish>Nebuchadrezzar II</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_BUILDING_COFFEE_HOUSE</Tag>
+		<English>Coffee House</English>
+		<French>Café</French>
+		<German>Kaffeehaus</German>
+		<Italian>Caffè</Italian>
+		<Spanish>Cafetería</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_BUILDING_MEDICI_BANK</Tag>
+		<English>Medici Bank</English>
+		<French>Banque de médecine</French>
+		<German>Medici Bank</German>
+		<Italian>Medici Bank</Italian>
+		<Spanish>Banco Medici</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_BUILDING_WAR_COLLEGE</Tag>
+		<English>Junker Academy</English>
+		<French>Junker Academy</French>
+		<German>Junker Academy</German>
+		<Italian>Junker Academy</Italian>
+		<Spanish>Academia Junker</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_BUILDING_BAZAAR</Tag>
+		<English>Bazaar</English>
+		<French>Bazar</French>
+		<German>Basar</German>
+		<Italian>Bazar</Italian>
+		<Spanish>Bazar</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_BUILDING_MERCENARY_CAMP</Tag>
+		<English>Mercenary Camp</English>
+		<French>Camp de mercenaires</French>
+		<German>Söldnerlager</German>
+		<Italian>Campo mercenario</Italian>
+		<Spanish>Campamento mercenario</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_BUILDING_SILK_ROAD</Tag>
+		<English>Silk Road</English>
+		<French>Route de la soie</French>
+		<German>Seidenstraße</German>
+		<Italian>Via della Seta</Italian>
+		<Spanish>Ruta de la Seda</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_BUILDING_WAT</Tag>
+		<English>Prasat</English>
+		<French>Cochon</French>
+		<German>Schwein</German>
+		<Italian>Maiale</Italian>
+		<Spanish>Cerdo</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_BUILDING_SACRED_GROVE</Tag>
+		<English>Sacred Grove</English>
+		<French>Bosquet sacré</French>
+		<German>Heiliger Hain</German>
+		<Italian>Sacro Grove</Italian>
+		<Spanish>Arboleda sagrada</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_BUILDING_SATRAP</Tag>
+		<English>Satrap's Court</English>
+		<French>La cour de Satrap</French>
+		<German>Satraps Gericht</German>
+		<Italian>Satrap's Court</Italian>
+		<Spanish>Tribunal de Satrap</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_BUILDING_ZULU_HUT</Tag>
+		<English>Warlord's Hut</English>
+		<French>Hut du seigneur de guerre</French>
+		<German>Warlords Hütte</German>
+		<Italian>La capanna di Warlord</Italian>
+		<Spanish>La cabaña del señor de la guerra</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_BUILDING_TOCHKA</Tag>
+		<English>Krepost</English>
+		<French>Vertu</French>
+		<German>Tugend</German>
+		<Italian>Virtù</Italian>
+		<Spanish>Virtud</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_LEADER_ABYLAY</Tag>
+		<English>Ablay Khan</English>
+		<French>Ablay Khan</French>
+		<German>Ablay Khan</German>
+		<Italian>Ablay Khan</Italian>
+		<Spanish>Ablay Khan</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_UNIT_THROWING_AXEMAN</Tag>
+		<English>Throwing Axeman</English>
+		<French>Jeter Axeman</French>
+		<German>Axeman werfen</German>
+		<Italian>Lanciando Axeman</Italian>
+		<Spanish>Arrozando a Axeman</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_UNIT_STRELTSY</Tag>
+		<English>Streltsy</English>
+		<French>Streltsy</French>
+		<German>Streelty</German>
+		<Italian>Streamoso</Italian>
+		<Spanish>Streltsy</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_UNIT_TIBETAN_KNIGHT</Tag>
+		<English>Himalayan Cavalry</English>
+		<French>Cavalerie himalayenne</French>
+		<German>Himalaya -Kavallerie</German>
+		<Italian>Cavalleria dell'Himalaya</Italian>
+		<Spanish>Caballería del Himalaya</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_UNIT_SOFA</Tag>
+		<English>Sofa</English>
+		<French>Canapé</French>
+		<German>Sofa</German>
+		<Italian>Divano</Italian>
+		<Spanish>Sofá</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_UNIT_BLACK_ARMY</Tag>
+		<English>Black Army</English>
+		<French>Armée noire</French>
+		<German>Schwarze Armee</German>
+		<Italian>Esercito nero</Italian>
+		<Spanish>Ejército Negro</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_UNIT_EIGHT_BANNERS</Tag>
+		<English>Bannersman</English>
+		<French>Bannière</French>
+		<German>Bannersman</German>
+		<Italian>Bannersman</Italian>
+		<Spanish>Pancarro</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_UNIT_COMANCHE_RIDER</Tag>
+		<English>Sioux Rider</English>
+		<French>Cavalier sioux</French>
+		<German>Sioux Rider</German>
+		<Italian>Sioux Rider</Italian>
+		<Spanish>Piloto de sioux</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_UNIT_REITER</Tag>
+		<English>Reiter</English>
+		<French>Reiter</French>
+		<German>Reiter</German>
+		<Italian>Reiter</Italian>
+		<Spanish>Reitero</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_GODS_UNIT_INQUISITOR</Tag>
+		<English>Inquisitor</English>
+		<French>Inquisiteur</French>
+		<German>Inquisitor</German>
+		<Italian>Inquisitore</Italian>
+		<Spanish>Inquisidor</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_UNIT_ATOMIC</Tag>
+		<English>Atomic Bomber</English>
+		<French>Bombardier atomique</French>
+		<German>Atombomber</German>
+		<Italian>Bombardiere atomico</Italian>
+		<Spanish>Bombardero atómico</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_UNIT_MEHAL_SEFARI</Tag>
+		<English>Mehal Sefari</English>
+		<French>Safari du palais</French>
+		<German>Palastsafari</German>
+		<Italian>Palace Safari</Italian>
+		<Spanish>Safari del palacio</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_UNIT_MAORI_WARRIOR</Tag>
+		<English>Maori Warrior</English>
+		<French>Guerrier maori</French>
+		<German>Maori Warrior</German>
+		<Italian>Maori Warrior</Italian>
+		<Spanish>Guerrero maorí</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_UNIT_BOGOMIL</Tag>
+		<English>Bogomil</English>
+		<French>Bogomil</French>
+		<German>Bogomil</German>
+		<Italian>Bogomil</Italian>
+		<Spanish>Pesadilla</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_UNIT_BASTNIK</Tag>
+		<English>Bashtinik</English>
+		<French>Père</French>
+		<German>Vater</German>
+		<Italian>Padre</Italian>
+		<Spanish>Padre</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_UNIT_MONGOLIAN_RAIDER</Tag>
+		<English>Bataar</English>
+		<French>Batar</French>
+		<German>Batar</German>
+		<Italian>Batar</Italian>
+		<Spanish>Batar</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_UNIT_ENKIDU_WARRIOR</Tag>
+		<English>Enkidu Warrior</English>
+		<French>Guerrier enkidu</French>
+		<German>Enkidu -Krieger</German>
+		<Italian>Enkidu Warrior</Italian>
+		<Spanish>Enkidu guerrero</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_UNIT_NOMAD</Tag>
+		<English>Nomad</English>
+		<French>Nomade</French>
+		<German>Nomade</German>
+		<Italian>Nomade</Italian>
+		<Spanish>Nómada</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_UNIT_NOMADIC_WARRIOR</Tag>
+		<English>Nomadic Warrior</English>
+		<French>Guerrier nomade</French>
+		<German>Nomadenkrieger</German>
+		<Italian>Guerriero nomade</Italian>
+		<Spanish>Guerrero</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_UNIT_SEA_BEGGAR</Tag>
+		<English>Sea Beggar</English>
+		<French>La mer commence</French>
+		<German>Meer beginnt</German>
+		<Italian>Il mare inizia</Italian>
+		<Spanish>Comienza el mar</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_UNIT_FALXMAN</Tag>
+		<English>Falxman</English>
+		<French>Falxman</French>
+		<German>Falxman</German>
+		<Italian>Falxman</Italian>
+		<Spanish>Falxman</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_UNIT_WAR_CART</Tag>
+		<English>War Cart</English>
+		<French>Chariot de guerre</French>
+		<German>Kriegswagen</German>
+		<Italian>Carrello di guerra</Italian>
+		<Spanish>Carro de guerra</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_UNIT_VIETCONG</Tag>
+		<English>Vietcong</English>
+		<French>Vietcong</French>
+		<German>Vietcong</German>
+		<Italian>Vietcong</Italian>
+		<Spanish>Vietcong</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_UNIT_PELTAST</Tag>
+		<English>Peltast</English>
+		<French>Peltast</French>
+		<German>Peltast</German>
+		<Italian>Peltast</Italian>
+		<Spanish>Pelabro</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_UNIT_ASSYRIA_RAM</Tag>
+		<English>Battering Ram</English>
+		<French>Bélier</French>
+		<German>Rammbock</German>
+		<Italian>Ariete di maltrattamento</Italian>
+		<Spanish>Ariete</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_UNIT_ASSYRIAN_REDU</Tag>
+		<English>Redu</English>
+		<French>Commande</French>
+		<German>Befehl</German>
+		<Italian>Ordine</Italian>
+		<Spanish>Orden</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_UNIT_HEAVY_CHARIOT</Tag>
+		<English>Heavy Chariot</English>
+		<French>Char lourd</French>
+		<German>Schwerer Streitwagen</German>
+		<Italian>Carrio pesante</Italian>
+		<Spanish>Carro pesado</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_BUILDING_HILMON</Tag>
+		<English>Fortified Monastery</English>
+		<French>Monastère fortifié</French>
+		<German>Befestigtes Kloster</German>
+		<Italian>Monastero fortificato</Italian>
+		<Spanish>Monasterio fortificado</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_BUILDING_HILTOWN</Tag>
+		<English>Fortified Town</English>
+		<French>Ville fortifiée</French>
+		<German>Befestigte Stadt</German>
+		<Italian>Città fortificata</Italian>
+		<Spanish>Ciudad fortificada</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_BUILDING_ROYAL_LIBRARY</Tag>
+		<English>Royal Library</English>
+		<French>Bibliothèque royale</French>
+		<German>Royal Library</German>
+		<Italian>Biblioteca reale</Italian>
+		<Spanish>Biblioteca real</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_BUILDING_LIONSGATE</Tag>
+		<English>Yazilikaya</English>
+		<French>Affectation</French>
+		<German>Posting</German>
+		<Italian>Pubblicazione</Italian>
+		<Spanish>Destino</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_BUILDING_BOAT_MAKER</Tag>
+		<English>Trading Post</English>
+		<French>Comptoir commercial</French>
+		<German>Handelsposten</German>
+		<Italian>Posta di trading</Italian>
+		<Spanish>Puesto comercial</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_BUILDING_RAFIA_MILL</Tag>
+		<English>Raffia Mill</English>
+		<French>Moulin à raffie</French>
+		<German>Raffia Mill</German>
+		<Italian>Rafia mulino</Italian>
+		<Spanish>Fábrica de rafia</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_BUILDING_KONGO_WENE</Tag>
+		<English>Wene</English>
+		<French>Mourir</French>
+		<German>Wene</German>
+		<Italian>Ne abbiamo</Italian>
+		<Spanish>De Wene</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_BUILDING_CRYPT</Tag>
+		<English>Vampire Crypt</English>
+		<French>Crypte de vampire</French>
+		<German>Vampirkrypta</German>
+		<Italian>Vampire Crypt</Italian>
+		<Spanish>Cripta de vampiros</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_BUILDING_STECAK</Tag>
+		<English>Stecak</English>
+		<French>Stecak</French>
+		<German>Stecak</German>
+		<Italian>Stecak</Italian>
+		<Spanish>Estecak</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_BUILDING_OLIVE_GROVE</Tag>
+		<English>Olive Grove</English>
+		<French>Oliveraie</French>
+		<German>Olivenhain</German>
+		<Italian>Uliveto</Italian>
+		<Spanish>Surco de olivos</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_BUILDING_CATTLE_RANCH</Tag>
+		<English>Outback Station</English>
+		<French>Gare d'Outback</French>
+		<German>Outback Station</German>
+		<Italian>Stazione di outback</Italian>
+		<Spanish>Estación de fondo</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_UNIT_DIGGER</Tag>
+		<English>Digger</English>
+		<French>Excavateur</French>
+		<German>Bagger</German>
+		<Italian>Digger</Italian>
+		<Spanish>Cavador</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_UNIT_PIONEER</Tag>
+		<English>Pioneer</English>
+		<French>Pionnier</French>
+		<German>Pionier</German>
+		<Italian>Pioniere</Italian>
+		<Spanish>Pionero</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_LEADER_CURTIN</Tag>
+		<English>Curtin</English>
+		<French>Curtin</French>
+		<German>Curtin</German>
+		<Italian>Curtin</Italian>
+		<Spanish>Curtin</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_LEADER_DUSAN</Tag>
+		<English>Dusan</English>
+		<French>Dusan</French>
+		<German>Dusan</German>
+		<Italian>Dusan</Italian>
+		<Spanish>Dusan</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_LEADER_HOCHIMINH</Tag>
+		<English>Ho Chi Minh</English>
+		<French>Ho Chi Minh</French>
+		<German>Ho Chi Minh</German>
+		<Italian>Ho Chi Minh</Italian>
+		<Spanish>Ho Chi Minh</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_CIV_SERBIA_DESC</Tag>
+		<English>Serbian Empire</English>
+		<French>Empire serbe</French>
+		<German>Serbisches Reich</German>
+		<Italian>Impero serbo</Italian>
+		<Spanish>Imperio serbio</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_CIV_SERBIA_SHORT_DESC</Tag>
+		<English>Serbia</English>
+		<French>Serbie</French>
+		<German>Serbien</German>
+		<Italian>Serbia</Italian>
+		<Spanish>Serbia</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_CIV_SERBIA_ADJECTIVE</Tag>
+		<English>Serbian</English>
+		<French>serbe</French>
+		<German>serbisch</German>
+		<Italian>Serbo</Italian>
+		<Spanish>Serbio</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_BUILDING_BERBER_FOGGARA</Tag>
+		<English>Foggara</English>
+		<French>Dents</French>
+		<German>Zähne</German>
+		<Italian>Denti</Italian>
+		<Spanish>Dientes</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_BUILDING_FARMA_SVINJA</Tag>
+		<English>Farma Svinja</English>
+		<French>Ferme porcine</French>
+		<German>Schweinefarm</German>
+		<Italian>Allevamento di maiali</Italian>
+		<Spanish>Granja de cerdos</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_BUILDING_BRAZILIAN_FAZENDA</Tag>
+		<English>Fazenda</English>
+		<French>Cultiver</French>
+		<German>Bauernhof</German>
+		<Italian>Azienda agricola</Italian>
+		<Spanish>Granja</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_BUILDING_RFORGE</Tag>
+		<English>Blommery</English>
+		<French>Fleur</French>
+		<German>Blume</German>
+		<Italian>Fiore</Italian>
+		<Spanish>Flor</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_CIV_TIBET_DESC</Tag>
+		<English>Tibetan Empire</English>
+		<French>Empire tibétain</French>
+		<German>Tibetisches Reich</German>
+		<Italian>Impero tibetano</Italian>
+		<Spanish>Imperio tibetano</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_CIV_TIBET_SHORT_DESC</Tag>
+		<English>Tibet</English>
+		<French>Tibet</French>
+		<German>Tibet</German>
+		<Italian>Tibet</Italian>
+		<Spanish>Tíbet</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_CIV_TIBET_ADJECTIVE</Tag>
+		<English>Tibetan</English>
+		<French>Tibétain</French>
+		<German>Tibetaner</German>
+		<Italian>Tibetano</Italian>
+		<Spanish>Tibetano</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_LEADER_SONGTSEN_GAMPO</Tag>
+		<English>Songtsen Gampo</English>
+		<French>Songtsen Gampo</French>
+		<German>Songtsen Gampo</German>
+		<Italian>Songtsen Gampo</Italian>
+		<Spanish>Songtsen Gampo</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_BUILDING_TIBET_GOMPA</Tag>
+		<English>Kumbum</English>
+		<French>À l'ombum</French>
+		<German>Zum Umbum</German>
+		<Italian>All'umbum</Italian>
+		<Spanish>Al umbum</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_BUILDING_TIBET_TEMPLE</Tag>
+		<English>Gelug</English>
+		<French>Voix</French>
+		<German>Stimme</German>
+		<Italian>Voce</Italian>
+		<Spanish>Voz</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_UNIT_TIBET_WARRIORMONK</Tag>
+		<English>Dob Dob</English>
+		<French>Âge</French>
+		<German>Alter</German>
+		<Spanish>Edad</Spanish>
+		<Italian>Età</Italian>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_CIV_DACIA_DESC</Tag>
+		<English>Romanian Empire</English>
+		<French>Empire roumain</French>
+		<German>Rumänisches Reich</German>
+		<Italian>Impero rumeno</Italian>
+		<Spanish>Imperio rumano</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_CIV_DACIA_SHORT_DESC</Tag>
+		<English>Romania</English>
+		<French>Roumanie</French>
+		<German>Rumänien</German>
+		<Italian>Romania</Italian>
+		<Spanish>Rumania</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_CIV_DACIA_ADJECTIVE</Tag>
+		<English>Romanian</English>
+		<French>Roumain</French>
+		<German>rumänisch</German>
+		<Italian>Rumeno</Italian>
+		<Spanish>Rumano</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_LEADER_DECEBALUS</Tag>
+		<English>Decebalus</English>
+		<French>Decebalus</French>
+		<German>Decebalus</German>
+		<Italian>Decebalus</Italian>
+		<Spanish>Decebalus</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_LEADER_VLAD</Tag>
+		<English>Vlad III</English>
+		<French>Vlad III</French>
+		<German>Vlad III</German>
+		<Italian>Vlad III</Italian>
+		<Spanish>Vlad III</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_LEADER_ADENAUER</Tag>
+		<English>Adenauer</English>
+		<French>Adenauer</French>
+		<German>Adenauer</German>
+		<Italian>Adenauer</Italian>
+		<Spanish>Adenauer</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_UNIT_INCAN_SLINGER</Tag>
+		<English>Slinger</English>
+		<French>Slinger</French>
+		<German>Singer</German>
+		<Italian>Slinger</Italian>
+		<Spanish>Linger</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_INDONESIAN_SILAT</Tag>
+		<English>Pencak Silat</English>
+		<French>Arts martiaux</French>
+		<German>Kampfkunst</German>
+		<Italian>Arti marziali</Italian>
+		<Spanish>Artes marciales</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_BUILDING_KGB_AGENCY</Tag>
+		<English>KGB Agency</English>
+		<French>Agence KGB</French>
+		<German>KGB -Agentur</German>
+		<Italian>Agenzia KGB</Italian>
+		<Spanish>Agencia de KGB</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_BUILDING_NAVIGATION_SCHOOL</Tag>
+		<English>Navigation School</English>
+		<French>École de navigation</French>
+		<German>Navigationsschule</German>
+		<Italian>Scuola di navigazione</Italian>
+		<Spanish>Escuela de navegación</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_UNIT_PALADIN</Tag>
+		<English>Paladin</English>
+		<French>Paladin</French>
+		<German>Paladin</German>
+		<Italian>Paladino</Italian>
+		<Spanish>Paladín</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_UNIT_DE_ZEVEN</Tag>
+		<English>De Zeven Provincien</English>
+		<French>Les sept provinces</French>
+		<German>Die sieben Provinzen</German>
+		<Italian>Le sette province</Italian>
+		<Spanish>Las siete provincias</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_UNIT_MAN_O_WAR</Tag>
+		<English>Man of War</English>
+		<French>Homme de guerre</French>
+		<German>Krieger</German>
+		<Italian>Uomo di guerra</Italian>
+		<Spanish>Hombre de guerra</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_UNIT_ZERO</Tag>
+		<English>Zero</English>
+		<French>Zéro</French>
+		<German>Null</German>
+		<Italian>Zero</Italian>
+		<Spanish>Cero</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_UNIT_CASSADOR</Tag>
+		<English>Cassador</English>
+		<French>Boîte</French>
+		<German>Kasten</German>
+		<Italian>Scatola</Italian>
+		<Spanish>Caja</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_UNIT_MANDEKALU</Tag>
+		<English>Mandekalu Cavalry</English>
+		<French>Cavalerie stagnante</French>
+		<German>Stagnierende Kavallerie</German>
+		<Italian>Cavalleria stagnante</Italian>
+		<Spanish>Caballería estancada</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_UNIT_TERCIO</Tag>
+		<English>Tercio</English>
+		<French>Troisième</French>
+		<German>Dritte</German>
+		<Italian>Terzo</Italian>
+		<Spanish>Tercio</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_UNIT_BERBER_CAVALRY</Tag>
+		<English>Berber Cavalry</English>
+		<French>Cavalerie berbère</French>
+		<German>Berber -Kavallerie</German>
+		<Italian>Cavalleria berbera</Italian>
+		<Spanish>Caballería bereber</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_UNIT_MESHWESH_WARRIOR</Tag>
+		<English>Meshwesh Warrior</English>
+		<French>Guerrier maillé</French>
+		<German>Meshwesh Warrior</German>
+		<Italian>Meshwesh Warrior</Italian>
+		<Spanish>Guerrero Meshwesh</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_UNIT_SKI_INFANTRY</Tag>
+		<English>Ski Infantry</English>
+		<French>Ski</French>
+		<German>Ski -Infanterie</German>
+		<Italian>Fanteria da sci</Italian>
+		<Spanish>Infantería de esquí</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_UNIT_KATYUSHA</Tag>
+		<English>Katyusha</English>
+		<French>Katyusha</French>
+		<German>Katyusha</German>
+		<Italian>Katyusha</Italian>
+		<Spanish>Katyusha</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_UNIT_GREAT_BOMBARD</Tag>
+		<English>Orban Bombard</English>
+		<French>Orban Bombard</French>
+		<German>Orban Bombard</German>
+		<Italian>Orban Bombard</Italian>
+		<Spanish>Bombardeo</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_UNIT_ORGAN_GUN</Tag>
+		<English>Organ Gun</English>
+		<French>Pistolet à orgue</French>
+		<German>Organpistole</German>
+		<Italian>Pistola per organo</Italian>
+		<Spanish>Pistola de órgano</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_UNIT_TOMAHAWK</Tag>
+		<English>Mohawk Warrior</English>
+		<French>Guerrier mohawk</French>
+		<German>Mohawk Warrior</German>
+		<Italian>Mohawk Warrior</Italian>
+		<Spanish>Guerrero mohawk</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_BUILDING_MATICA</Tag>
+		<English>Matica</English>
+		<French>Matica</French>
+		<German>Matica</German>
+		<Italian>Matica</Italian>
+		<Spanish>Matica</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_RELIGION_ZOROASTRIANISM</Tag>
+		<English>Zoroastrianism</English>
+		<French>Zoroastrisme</French>
+		<German>Zoroastrianismus</German>
+		<Italian>Zoroastrismo</Italian>
+		<Spanish>Zoroastrismo</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_RELIGION_ZOROASTRIANISM_ADJECTIVE</Tag>
+		<English>Zoroastrian</English>
+		<French>Zoroastrien</French>
+		<German>Zoroastrian</German>
+		<Italian>Zoroastriano</Italian>
+		<Spanish>Zoroastriano</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_BUILDING_ZOROASTRIAN_CATHEDRAL</Tag>
+		<English>Zoroastrian Dar be-mehr</English>
+		<French>Zoroastrien</French>
+		<German>Zoroastrian Dar be-mehr</German>
+		<Italian>Zoroastriano</Italian>
+		<Spanish>Zoroastriano</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_UNIT_WAR_ELEPHANT_INDIAN</Tag>
+		<English>Indian War Elephant</English>
+		<French>Éléphant de la guerre indienne</French>
+		<German>Indischer Kriegselefant</German>
+		<Italian>Elefante della guerra indiana</Italian>
+		<Spanish>Elefante de Guerra India</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_BUILDING_ZOROASTRIAN_TEMPLE</Tag>
+		<English>Zoroastrian Temple</English>
+		<French>Temple zoroastrien</French>
+		<German>Zoroastrischer Tempel</German>
+		<Italian>Tempio zoroastriano</Italian>
+		<Spanish>Templo Zoroastriano</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_BUILDING_ZOROASTRIAN_SHRINE</Tag>
+		<English>The Atash Behram</English>
+		<French>L'Atash Behram</French>
+		<German>Der Atash Behram</German>
+		<Italian>Atash Behram</Italian>
+		<Spanish>El atash behram</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_BUILDING_ZOROASTRIAN_MONASTERY</Tag>
+		<English>Zoroastrian Monastery</English>
+		<French>Monastère zoroastrien</French>
+		<German>Zoroastrisches Kloster</German>
+		<Italian>Monastero zoroastriano</Italian>
+		<Spanish>Monasterio zoroastriano</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_UNIT_ZOROASTRIAN_MISSIONARY</Tag>
+		<English>Zoroastrian Missionary</English>
+		<French>Missionnaire zoroastrien</French>
+		<German>Zoroastrische Missionar</German>
+		<Italian>Missionario zoroastriano</Italian>
+		<Spanish>Misionero zoroastriano</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_UNIT_HIGHLANDER</Tag>
+		<English>Highlander</English>
+		<French>Highlander</French>
+		<German>Highlander</German>
+		<Italian>Highlander</Italian>
+		<Spanish>Montañés</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_UNIT_MONASPA</Tag>
+		<English>Monaspa</English>
+		<French>Monaspa</French>
+		<German>Monaspa</German>
+		<Italian>Monaspa</Italian>
+		<Spanish>Monaspa</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_UNIT_B17</Tag>
+		<English>B-17 Bomber</English>
+		<French>B-17 Bomber</French>
+		<German>B-17 Bomber</German>
+		<Italian>Bombardiere B-17</Italian>
+		<Spanish>Bombardero B-17</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_UNIT_COMPANION</Tag>
+		<English>Hetairoi</English>
+		<French>Cœur</French>
+		<German>KOEDOR</German>
+		<Italian>Cuore</Italian>
+		<Spanish>Corazón</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_UNIT_QUINQUEREME</Tag>
+		<English>Quinquereme</English>
+		<French>Quinquerme</French>
+		<German>Quinquerme</German>
+		<Italian>Quinquerme</Italian>
+		<Spanish>Quinquerme</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_UNIT_DROMON</Tag>
+		<English>Dromon</English>
+		<French>Dromon</French>
+		<German>Dromon</German>
+		<Italian>Dromon</Italian>
+		<Spanish>Dromón</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_UNIT_PLA</Tag>
+		<English>People's Liberation Army</English>
+		<French>Armée de Libération du Peuple</French>
+		<German>Volksbefreiungsarmee</German>
+		<Italian>Esercito di liberazione popolare</Italian>
+		<Spanish>Ejército de liberación del pueblo</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_UNIT_EAGLE_WARRIOR</Tag>
+		<English>Eagle Warrior</English>
+		<French>Eagle Warrior</French>
+		<German>Eagle Warrior</German>
+		<Italian>Eagle Warrior</Italian>
+		<Spanish>Guerrero de águila</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_UNIT_HWARANG</Tag>
+		<English>Gakgungsu</English>
+		<French>Takgungsu</French>
+		<German>Takgungsu</German>
+		<Italian>Takgungsu</Italian>
+		<Spanish>Takgungsu</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_UNIT_ENGLISH_LONGBOWMAN</Tag>
+		<English>Longbowman</English>
+		<French>Arc</French>
+		<German>Longbowman</German>
+		<Italian>Longbowman</Italian>
+		<Spanish>Arco largo</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_CIV_MOROCCO_DESC</Tag>
+		<English>Moroccan Empire</English>
+		<French>Empire marocain</French>
+		<German>Marokkanisches Reich</German>
+		<Italian>Impero marocchino</Italian>
+		<Spanish>Imperio marroquí</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_CIV_MOROCCO_SHORT_DESC</Tag>
+		<English>Morocco</English>
+		<French>Maroc</French>
+		<German>Marokko</German>
+		<Italian>Marocco</Italian>
+		<Spanish>Marruecos</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_CIV_MOROCCO_ADJECTIVE</Tag>
+		<English>Moroccan</English>
+		<French>Marocain</French>
+		<German>marokkanisch</German>
+		<Italian>Marocchino</Italian>
+		<Spanish>marroquí</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_UNIT_MOROCCAN_BLACK_GUARD</Tag>
+		<English>Black Guard</English>
+		<French>Garde noire</French>
+		<German>Schwarze Wache</German>
+		<Italian>Guardia nera</Italian>
+		<Spanish>Guardia negro</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_BUILDING_MOROCCAN_RIBAT</Tag>
+		<English>Ribat</English>
+		<French>Compte rendu</French>
+		<German>Einweisung</German>
+		<Italian>Riunione</Italian>
+		<Spanish>Instrucciones</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_BUILDING_MUGHAL_FORT</Tag>
+		<English>Mughal Fort</English>
+		<French>Fort moghol</French>
+		<German>Mogul -Fort</German>
+		<Italian>Mughal Fort</Italian>
+		<Spanish>Fuerte mogol</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_LEADER_AHMAD_AL_MANSUR</Tag>
+		<English>Ahmad al Mansur</English>
+		<French>Ahmad al Mansur</French>
+		<German>Ahmad al Mansur</German>
+		<Italian>Ahmad al Mansur</Italian>
+		<Spanish>Ahmad al Mansur</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_CIV_POLYNESIA_ADJECTIVE</Tag>
+		<English>Polynesian</English>
+		<French>Polynésien</French>
+		<German>Polynesischer</German>
+		<Italian>Polinesiano</Italian>
+		<Spanish>Polinesio</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_CIV_POLYNESIA_DESC</Tag>
+		<English>Polynesian Empire</English>
+		<French>Empire polynésien</French>
+		<German>Polynesischer Reich</German>
+		<Italian>Impero polinesiano</Italian>
+		<Spanish>Imperio polinesio</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_CIV_POLYNESIA_SHORT_DESC</Tag>
+		<English>Polynesia</English>
+		<French>Polynésie</French>
+		<German>Polynesien</German>
+		<Italian>Polinesia</Italian>
+		<Spanish>Polinesio</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_UNIT_POLYNESIA_BOAT</Tag>
+		<English>Teewana</English>
+		<French>Adolescent</French>
+		<German>Teenager</German>
+		<Italian>Adolescente</Italian>
+		<Spanish>Adolescente</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_LEADER_KAMEHAMEHA</Tag>
+		<English>Kamehameha</English>
+		<French>Kamehameha</French>
+		<German>Kamehameha</German>
+		<Italian>Kamehameha</Italian>
+		<Spanish>Kamehameha</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_BUILDING_POLYNESIA_FISHERY</Tag>
+		<English>Fishery</English>
+		<French>Pêcherie</French>
+		<German>Fischerei</German>
+		<Italian>Pesca</Italian>
+		<Spanish>Pesquería</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_TECH_GLOBALIZATION</Tag>
+		<English>Telecommunications</English>
+		<French>
+			<Text>Télécommunications</Text>
+			<Gender>Male</Gender>
+			<Plural>0</Plural>
+		</French>
+		<German>
+			<Text>Telekommunikation</Text>
+			<Gender>Male</Gender>
+			<Plural>0</Plural>
+		</German>
+		<Italian>
+			<Text>Telecomunicazioni</Text>
+			<Gender>Male</Gender>
+			<Plural>0</Plural>
+		</Italian>
+		<Spanish>
+			<Text>Telecomunicaciones</Text>
+			<Gender>Male</Gender>
+			<Plural>0</Plural>
+		</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_BONUS_COTTON</Tag>
+		<English>Cotton</English>
+		<French>
+			<Text>Coton</Text>
+			<Gender>Female</Gender>
+			<Plural>0</Plural>
+		</French>
+		<German>
+			<Text>Baumwolle</Text>
+			<Gender>Male</Gender>
+			<Plural>0</Plural>
+		</German>
+		<Italian>
+			<Text>cotone</Text>
+			<Gender>Female</Gender>
+			<Plural>0:1</Plural>
+		</Italian>
+		<Spanish>
+			<Text>Algodón</Text>
+			<Gender>Male</Gender>
+			<Plural>1</Plural>
+		</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_BONUS_COFFEE</Tag>
+		<English>Coffee</English>
+		<French>
+			<Text>Café</Text>
+			<Gender>Female</Gender>
+			<Plural>0</Plural>
+		</French>
+		<German>
+			<Text>Kaffee</Text>
+			<Gender>Male</Gender>
+			<Plural>0</Plural>
+		</German>
+		<Italian>
+			<Text>Caffè</Text>
+			<Gender>Female</Gender>
+			<Plural>0:1</Plural>
+		</Italian>
+		<Spanish>
+			<Text>Café</Text>
+			<Gender>Male</Gender>
+			<Plural>1</Plural>
+		</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_BONUS_AMBER</Tag>
+		<English>Amber</English>
+		<French>
+			<Text>ambre</Text>
+			<Gender>Female</Gender>
+			<Plural>0</Plural>
+		</French>
+		<German>
+			<Text>Bernstein</Text>
+			<Gender>Male</Gender>
+			<Plural>0</Plural>
+		</German>
+		<Italian>
+			<Text>Ambra</Text>
+			<Gender>Female</Gender>
+			<Plural>0:1</Plural>
+		</Italian>
+		<Spanish>
+			<Text>Ámbar</Text>
+			<Gender>Male</Gender>
+			<Plural>1</Plural>
+		</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_BONUS_POTATO</Tag>
+		<English>Potato</English>
+		<French>
+			<Text>Pomme de terre</Text>
+			<Gender>Female</Gender>
+			<Plural>0</Plural>
+		</French>
+		<German>
+			<Text>Kartoffel</Text>
+			<Gender>Male</Gender>
+			<Plural>0</Plural>
+		</German>
+		<Italian>
+			<Text>Patata</Text>
+			<Gender>Female</Gender>
+			<Plural>0:1</Plural>
+		</Italian>
+		<Spanish>
+			<Text>Papa</Text>
+			<Gender>Male</Gender>
+			<Plural>1</Plural>
+		</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_BONUS_TOBACCO</Tag>
+		<English>Tobacco</English>
+		<French>
+			<Text>le tabac</Text>
+			<Gender>Female</Gender>
+			<Plural>0</Plural>
+		</French>
+		<German>
+			<Text>Tabak</Text>
+			<Gender>Male</Gender>
+			<Plural>0</Plural>
+		</German>
+		<Italian>
+			<Text>Tabacco</Text>
+			<Gender>Female</Gender>
+			<Plural>0:1</Plural>
+		</Italian>
+		<Spanish>
+			<Text>Tabaco</Text>
+			<Gender>Male</Gender>
+			<Plural>1</Plural>
+		</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_BONUS_OLIVES</Tag>
+		<English>Olives</English>
+		<French>
+			<Text>Olives</Text>
+			<Gender>Female</Gender>
+			<Plural>0</Plural>
+		</French>
+		<German>
+			<Text>Oliven</Text>
+			<Gender>Male</Gender>
+			<Plural>0</Plural>
+		</German>
+		<Italian>
+			<Text>Olive</Text>
+			<Gender>Female</Gender>
+			<Plural>0:1</Plural>
+		</Italian>
+		<Spanish>
+			<Text>Aceitunas</Text>
+			<Gender>Male</Gender>
+			<Plural>1</Plural>
+		</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_BONUS_SALT</Tag>
+		<English>Salt</English>
+		<French>
+			<Text>Sel</Text>
+			<Gender>Female</Gender>
+			<Plural>0</Plural>
+		</French>
+		<German>
+			<Text>Salz</Text>
+			<Gender>Male</Gender>
+			<Plural>0</Plural>
+		</German>
+		<Italian>
+			<Text>Sale</Text>
+			<Gender>Female</Gender>
+			<Plural>0:1</Plural>
+		</Italian>
+		<Spanish>
+			<Text>Sal</Text>
+			<Gender>Male</Gender>
+			<Plural>1</Plural>
+		</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_BONUS_SHRIMP</Tag>
+		<English>Shrimp</English>
+		<French>Crevette</French>
+		<German>Garnele</German>
+		<Italian>Gamberetto</Italian>
+		<Spanish>Camarón</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_PROMOTION_VIGILANTE</Tag>
+		<English>Viglante</English>
+		<French>
+			<Text>En train de regarder</Text>
+			<Gender>Female</Gender>
+			<Plural>0</Plural>
+		</French>
+		<German>
+			<Text>Aufpassen</Text>
+			<Gender>Male</Gender>
+			<Plural>0</Plural>
+		</German>
+		<Italian>
+			<Text>Guardando</Text>
+			<Gender>Male</Gender>
+			<Plural>0</Plural>
+		</Italian>
+		<Spanish>
+			<Text>Mirando</Text>
+			<Gender>Male</Gender>
+			<Plural>0</Plural>
+		</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_GREAT_PERSON_AARON</Tag>
+		<English>Aaron the Bookseller</English>
+		<French>
+			<Text>Aaron le libraire</Text>
+			<Gender>Male</Gender>
+			<Plural>0</Plural>
+		</French>
+		<German>
+			<Text>Aaron der Buchhändler</Text>
+			<Gender>Male</Gender>
+			<Plural>0</Plural>
+		</German>
+		<Italian>
+			<Text>Aaron il libraio</Text>
+			<Gender>Male</Gender>
+			<Plural>0</Plural>
+		</Italian>
+		<Spanish>
+			<Text>Aaron el librero</Text>
+			<Gender>Male</Gender>
+			<Plural>0</Plural>
+		</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_GREAT_PERSON_GIOVANNI</Tag>
+		<English>Giovanni Arnolfini</English>
+		<French>
+			<Text>Giovanni Arnolfini</Text>
+			<Gender>Male</Gender>
+			<Plural>0</Plural>
+		</French>
+		<German>
+			<Text>Giovanni Arnolfini</Text>
+			<Gender>Male</Gender>
+			<Plural>0</Plural>
+		</German>
+		<Italian>
+			<Text>Giovanni Arnolfini</Text>
+			<Gender>Male</Gender>
+			<Plural>0</Plural>
+		</Italian>
+		<Spanish>
+			<Text>Giovanni Arnolfini</Text>
+			<Gender>Male</Gender>
+			<Plural>0</Plural>
+		</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_GREAT_PERSON_GREGORIO</Tag>
+		<English>Gregorio Dati</English>
+		<French>
+			<Text>Données Gregorio</Text>
+			<Gender>Male</Gender>
+			<Plural>0</Plural>
+		</French>
+		<German>
+			<Text>Gregorio -Daten</Text>
+			<Gender>Male</Gender>
+			<Plural>0</Plural>
+		</German>
+		<Italian>
+			<Text>Gregorio Dati</Text>
+			<Gender>Male</Gender>
+			<Plural>0</Plural>
+		</Italian>
+		<Spanish>
+			<Text>Datos de Gregorio</Text>
+			<Gender>Male</Gender>
+			<Plural>0</Plural>
+		</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_GREAT_PERSON_FRANCESCO</Tag>
+		<English>Francesco Datini</English>
+		<French>
+			<Text>Francesco Dataini</Text>
+			<Gender>Male</Gender>
+			<Plural>0</Plural>
+		</French>
+		<German>
+			<Text>Francesco Dataini</Text>
+			<Gender>Male</Gender>
+			<Plural>0</Plural>
+		</German>
+		<Italian>
+			<Text>Francesco Dataini</Text>
+			<Gender>Male</Gender>
+			<Plural>0</Plural>
+		</Italian>
+		<Spanish>
+			<Text>Francesco Dataini</Text>
+			<Gender>Male</Gender>
+			<Plural>0</Plural>
+		</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_GREAT_PERSON_DOMINI</Tag>
+		<English>Domini Guardato</English>
+		<French>
+			<Text>Les domaines ont regardé</Text>
+			<Gender>Male</Gender>
+			<Plural>0</Plural>
+		</French>
+		<German>
+			<Text>Domains sahen sich an</Text>
+			<Gender>Male</Gender>
+			<Plural>0</Plural>
+		</German>
+		<Italian>
+			<Text>Domini Guardato</Text>
+			<Gender>Male</Gender>
+			<Plural>0</Plural>
+		</Italian>
+		<Spanish>
+			<Text>Dominios mirados</Text>
+			<Gender>Male</Gender>
+			<Plural>0</Plural>
+		</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_GREAT_PERSON_ANTONIO</Tag>
+		<English>Antonio Malfante</English>
+		<French>
+			<Text>Antonio Malfante</Text>
+			<Gender>Male</Gender>
+			<Plural>0</Plural>
+		</French>
+		<German>
+			<Text>Antonio Malfante</Text>
+			<Gender>Male</Gender>
+			<Plural>0</Plural>
+		</German>
+		<Italian>
+			<Text>Antonio Malfante</Text>
+			<Gender>Male</Gender>
+			<Plural>0</Plural>
+		</Italian>
+		<Spanish>
+			<Text>Antonio Malfante</Text>
+			<Gender>Male</Gender>
+			<Plural>0</Plural>
+		</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_GREAT_PERSON_NICCOLO</Tag>
+		<English>Niccolo de Conti</English>
+		<French>
+			<Text>Niccolo de Conti</Text>
+			<Gender>Male</Gender>
+			<Plural>0</Plural>
+		</French>
+		<German>
+			<Text>Niccolo de Conti</Text>
+			<Gender>Male</Gender>
+			<Plural>0</Plural>
+		</German>
+		<Italian>
+			<Text>Niccolo de Conti</Text>
+			<Gender>Male</Gender>
+			<Plural>0</Plural>
+		</Italian>
+		<Spanish>
+			<Text>Niccolo de conti</Text>
+			<Gender>Male</Gender>
+			<Plural>0</Plural>
+		</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_GREAT_PERSON_PALADINO</Tag>
+		<English>Paladino Gondola</English>
+		<French>
+			<Text>Gondole de paladin</Text>
+			<Gender>Male</Gender>
+			<Plural>0</Plural>
+		</French>
+		<German>
+			<Text>Paladin Gondel</Text>
+			<Gender>Male</Gender>
+			<Plural>0</Plural>
+		</German>
+		<Italian>
+			<Text>Paladino Gondola</Text>
+			<Gender>Male</Gender>
+			<Plural>0</Plural>
+		</Italian>
+		<Spanish>
+			<Text>Góndola de paladín</Text>
+			<Gender>Male</Gender>
+			<Plural>0</Plural>
+		</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_GREAT_PERSON_VILLANI</Tag>
+		<English>Giovanni Villani</English>
+		<French>
+			<Text>Giovanni Villani</Text>
+			<Gender>Male</Gender>
+			<Plural>0</Plural>
+		</French>
+		<German>
+			<Text>Giovanni Villani</Text>
+			<Gender>Male</Gender>
+			<Plural>0</Plural>
+		</German>
+		<Italian>
+			<Text>Giovanni Villani</Text>
+			<Gender>Male</Gender>
+			<Plural>0</Plural>
+		</Italian>
+		<Spanish>
+			<Text>Giovanni Villani</Text>
+			<Gender>Male</Gender>
+			<Plural>0</Plural>
+		</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_GREAT_PERSON_ALVISE</Tag>
+		<English>Alvise Cadamosto</English>
+		<French>
+			<Text>Alvise Cadamosto</Text>
+			<Gender>Male</Gender>
+			<Plural>0</Plural>
+		</French>
+		<German>
+			<Text>Alvise Cadamosto</Text>
+			<Gender>Male</Gender>
+			<Plural>0</Plural>
+		</German>
+		<Italian>
+			<Text>Alvise Cadamosto</Text>
+			<Gender>Male</Gender>
+			<Plural>0</Plural>
+		</Italian>
+		<Spanish>
+			<Text>Alvise Cadamosto</Text>
+			<Gender>Male</Gender>
+			<Plural>0</Plural>
+		</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_GREAT_PERSON_CESARE</Tag>
+		<English>Cesare Federici</English>
+		<French>
+			<Text>Cesare Federici</Text>
+			<Gender>Male</Gender>
+			<Plural>0</Plural>
+		</French>
+		<German>
+			<Text>Cesare Federici</Text>
+			<Gender>Male</Gender>
+			<Plural>0</Plural>
+		</German>
+		<Italian>
+			<Text>Cesare Federici</Text>
+			<Gender>Male</Gender>
+			<Plural>0</Plural>
+		</Italian>
+		<Spanish>
+			<Text>Cesare federici</Text>
+			<Gender>Male</Gender>
+			<Plural>0</Plural>
+		</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_GREAT_PERSON_AMBROGIO</Tag>
+		<English>Ambrogio Contarini</English>
+		<French>
+			<Text>Ambrogio Contarini</Text>
+			<Gender>Male</Gender>
+			<Plural>0</Plural>
+		</French>
+		<German>
+			<Text>Ambrogio Contarini</Text>
+			<Gender>Male</Gender>
+			<Plural>0</Plural>
+		</German>
+		<Italian>
+			<Text>Ambrogio Contarini</Text>
+			<Gender>Male</Gender>
+			<Plural>0</Plural>
+		</Italian>
+		<Spanish>
+			<Text>Ambrogio Contarini</Text>
+			<Gender>Male</Gender>
+			<Plural>0</Plural>
+		</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_GREAT_PERSON_GASPARO</Tag>
+		<English>Gasparo Balbi</English>
+		<French>
+			<Text>Gasparo Balbi</Text>
+			<Gender>Male</Gender>
+			<Plural>0</Plural>
+		</French>
+		<German>
+			<Text>Gasparo Balbi</Text>
+			<Gender>Male</Gender>
+			<Plural>0</Plural>
+		</German>
+		<Italian>
+			<Text>Gasparo Balbi</Text>
+			<Gender>Male</Gender>
+			<Plural>0</Plural>
+		</Italian>
+		<Spanish>
+			<Text>Gasparo Balbi</Text>
+			<Gender>Male</Gender>
+			<Plural>0</Plural>
+		</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_GREAT_PERSON_BARTOLOMEO</Tag>
+		<English>Bartolomeo Contarini</English>
+		<French>
+			<Text>Bartolomeo Contarini</Text>
+			<Gender>Male</Gender>
+			<Plural>0</Plural>
+		</French>
+		<German>
+			<Text>Bartolomeo Contarini</Text>
+			<Gender>Male</Gender>
+			<Plural>0</Plural>
+		</German>
+		<Italian>
+			<Text>Bartolomeo Contarini</Text>
+			<Gender>Male</Gender>
+			<Plural>0</Plural>
+		</Italian>
+		<Spanish>
+			<Text>Bartolomeo Contarini</Text>
+			<Gender>Male</Gender>
+			<Plural>0</Plural>
+		</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_GREAT_PERSON_MARCO</Tag>
+		<English>Marco Barbarigo di Croia</English>
+		<French>
+			<Text>Marco Barbarigo de Croia</Text>
+			<Gender>Male</Gender>
+			<Plural>0</Plural>
+		</French>
+		<German>
+			<Text>Marco Barbarigo von Croia</Text>
+			<Gender>Male</Gender>
+			<Plural>0</Plural>
+		</German>
+		<Italian>
+			<Text>Marco Barbarigo di Croia</Text>
+			<Gender>Male</Gender>
+			<Plural>0</Plural>
+		</Italian>
+		<Spanish>
+			<Text>Marco Barbarro de Croia</Text>
+			<Gender>Male</Gender>
+			<Plural>0</Plural>
+		</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_GREAT_PERSON_GIOSAFAT</Tag>
+		<English>Giosafat Barbaro</English>
+		<French>
+			<Text>Giosafat Barbaro</Text>
+			<Gender>Male</Gender>
+			<Plural>0</Plural>
+		</French>
+		<German>
+			<Text>Giosafat Barbaro</Text>
+			<Gender>Male</Gender>
+			<Plural>0</Plural>
+		</German>
+		<Italian>
+			<Text>Giosafat Barbaro</Text>
+			<Gender>Male</Gender>
+			<Plural>0</Plural>
+		</Italian>
+		<Spanish>
+			<Text>Giosafat Barbaro</Text>
+			<Gender>Male</Gender>
+			<Plural>0</Plural>
+		</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_GREAT_PERSON_KRSTO</Tag>
+		<English>Krsto Zmajevic</English>
+		<French>
+			<Text>Le cercueil des dragons</Text>
+			<Gender>Male</Gender>
+			<Plural>0</Plural>
+		</French>
+		<German>
+			<Text>Der Sarg der Drachen</Text>
+			<Gender>Male</Gender>
+			<Plural>0</Plural>
+		</German>
+		<Italian>
+			<Text>La bara dei draghi</Text>
+			<Gender>Male</Gender>
+			<Plural>0</Plural>
+		</Italian>
+		<Spanish>
+			<Text>El ataúd de los dragones</Text>
+			<Gender>Male</Gender>
+			<Plural>0</Plural>
+		</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_GREAT_PERSON_BERTOLOME</Tag>
+		<English>Bertolome Zorzi</English>
+		<French>
+			<Text>Bertolome Zorzi</Text>
+			<Gender>Male</Gender>
+			<Plural>0</Plural>
+		</French>
+		<German>
+			<Text>Bertolome Zorzi</Text>
+			<Gender>Male</Gender>
+			<Plural>0</Plural>
+		</German>
+		<Italian>
+			<Text>Bertolome Zorzi</Text>
+			<Gender>Male</Gender>
+			<Plural>0</Plural>
+		</Italian>
+		<Spanish>
+			<Text>Bertolome zorzi</Text>
+			<Gender>Male</Gender>
+			<Plural>0</Plural>
+		</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_GREAT_PERSON_JOSEPH</Tag>
+		<English>Joseph Pardo</English>
+		<French>
+			<Text>Joseph Pardo</Text>
+			<Gender>Male</Gender>
+			<Plural>0</Plural>
+		</French>
+		<German>
+			<Text>Joseph Pardo</Text>
+			<Gender>Male</Gender>
+			<Plural>0</Plural>
+		</German>
+		<Italian>
+			<Text>Joseph Pardo</Text>
+			<Gender>Male</Gender>
+			<Plural>0</Plural>
+		</Italian>
+		<Spanish>
+			<Text>Joseph Pardo</Text>
+			<Gender>Male</Gender>
+			<Plural>0</Plural>
+		</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_GREAT_PERSON_JOSEPH</Tag>
+		<English>Joseph Pardo</English>
+		<French>
+			<Text>Joseph Pardo</Text>
+			<Gender>Male</Gender>
+			<Plural>0</Plural>
+		</French>
+		<German>
+			<Text>Joseph Pardo</Text>
+			<Gender>Male</Gender>
+			<Plural>0</Plural>
+		</German>
+		<Italian>
+			<Text>Joseph Pardo</Text>
+			<Gender>Male</Gender>
+			<Plural>0</Plural>
+		</Italian>
+		<Spanish>
+			<Text>Joseph Pardo</Text>
+			<Gender>Male</Gender>
+			<Plural>0</Plural>
+		</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_PROMOTION_SKIRMISHER</Tag>
+		<English>Skirmisher</English>
+		<French>Escarmur</French>
+		<German>Scharmützel</German>
+		<Italian>Schernellatore</Italian>
+		<Spanish>Tirador escondido</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_PROMOTION_CITY_GARRISON4</Tag>
+		<English>City Garrison IV</English>
+		<French>City Garrison IV</French>
+		<German>City Garrison IV</German>
+		<Italian>City Garrison IV</Italian>
+		<Spanish>Ciudad Garrison IV</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_PROMOTION_NAVIGATION3</Tag>
+		<English>Navigation III</English>
+		<French>Navigation III</French>
+		<German>Navigation III</German>
+		<Italian>Navigazione III</Italian>
+		<Spanish>Navegación III</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_PROMOTION_DRILL5</Tag>
+		<English>Drill V</English>
+		<French>Percer V</French>
+		<German>Drill v</German>
+		<Italian>Drill v</Italian>
+		<Spanish>Taladro</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_PROMOTION_BARDING</Tag>
+		<English>Charge</English>
+		<French>
+			<Text>Charge</Text>
+			<Gender>Female</Gender>
+			<Plural>0</Plural>
+		</French>
+		<German>
+			<Text>Aufladung</Text>
+			<Gender>Male</Gender>
+			<Plural>0</Plural>
+		</German>
+		<Italian>
+			<Text>Carica</Text>
+			<Gender>Male</Gender>
+			<Plural>0</Plural>
+		</Italian>
+		<Spanish>
+			<Text>Cargar</Text>
+			<Gender>Male</Gender>
+			<Plural>0</Plural>
+		</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_BUILDING_MACHU_PICCHU</Tag>
+		<English>Machu Picchu</English>
+		<French>Machu Pitch</French>
+		<German>Machu Pitchu</German>
+		<Italian>Machu Pitchu</Italian>
+		<Spanish>Machu Pitchu</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_BUILDING_PISA</Tag>
+		<English>Leaning Tower of Pisa</English>
+		<French>La tour penchée de Pise</French>
+		<German>Der Schiefe Turm von Pisa</German>
+		<Italian>Torre pendente di Pisa</Italian>
+		<Spanish>Torre inclinada de Pisa</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_BUILDING_TERRACOTTA</Tag>
+		<English>Terracotta Army</English>
+		<French>Armée de terre cuite</French>
+		<German>Terracotta Armee</German>
+		<Italian>Esercito di terracotta</Italian>
+		<Spanish>Ejército de terracota</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_UNIT_FRENCH_MUSKETEER2</Tag>
+		<English>Musketeer</English>
+		<French>
+			<Text>Mousquetaire</Text>
+			<Gender>Male</Gender>
+			<Plural>0</Plural>
+		</French>
+		<German>
+			<Text>Musketier</Text>
+			<Gender>Male</Gender>
+			<Plural>0</Plural>
+		</German>
+		<Italian>
+			<Text>Moschettiere</Text>
+			<Gender>Male</Gender>
+			<Plural>0:1</Plural>
+		</Italian>
+		<Spanish>
+			<Text>Mosquetero</Text>
+			<Gender>Male</Gender>
+			<Plural>0:1</Plural>
+		</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_BUILDING_VIETNAMESE_HAT_TUONG</Tag>
+		<English>Water puppet Theater</English>
+		<French>Théâtre de marionnettes à eau</French>
+		<German>Wasserpuppentheater</German>
+		<Italian>Teatro per burattino</Italian>
+		<Spanish>Teatro de marionetas de agua</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_BUILDING_PAPER_MINT</Tag>
+		<English>Paper Mint</English>
+		<French>Pointer de papier</French>
+		<German>Papierminze</German>
+		<Italian>Menta di carta</Italian>
+		<Spanish>Menta de papel</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_BUILDING_ARMORY</Tag>
+		<English>Armory</English>
+		<French>Arsenal</French>
+		<German>Waffenkammer</German>
+		<Italian>Armeria</Italian>
+		<Spanish>Arsenal</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_BUILDING_SCHOOL</Tag>
+		<English>Public School</English>
+		<French>École publique</French>
+		<German>Öffentliche Schule</German>
+		<Italian>Scuola pubblica</Italian>
+		<Spanish>Escuela publica</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_BUILDING_CHATEAU</Tag>
+		<English>Chateau</English>
+		<French>Château</French>
+		<German>Chateau</German>
+		<Italian>Chateau</Italian>
+		<Spanish>Castillo</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_BUILDING_SAGA</Tag>
+		<English>Saga</English>
+		<French>Saga</French>
+		<German>Saga</German>
+		<Italian>Saga</Italian>
+		<Spanish>Saga</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_CIV_VIETNAM_ADJECTIVE</Tag>
+		<English>Vietnamese</English>
+		<French>Vietnamien</French>
+		<German>Vietnamesisch</German>
+		<Italian>vietnamita</Italian>
+		<Spanish>vietnamita</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_CIV_VIETNAM_DESC</Tag>
+		<English>Vietnamese Empire</English>
+		<French>Empire vietnamien</French>
+		<German>Vietnamesisches Reich</German>
+		<Italian>Impero vietnamita</Italian>
+		<Spanish>Imperio vietnamita</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_CIV_VIETNAM_SHORT_DESC</Tag>
+		<English>Vietnam</English>
+		<French>Vietnam</French>
+		<German>Vietnam</German>
+		<Italian>Vietnam</Italian>
+		<Spanish>Vietnam</Spanish>
+	</TEXT>
+</Civ4GameText>

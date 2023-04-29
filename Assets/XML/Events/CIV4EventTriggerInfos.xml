@@ -192,7 +192,7 @@
 				<ObsoleteTech>TECH_REFRIGERATION</ObsoleteTech>
 				<ObsoleteTech>TECH_PLASTICS</ObsoleteTech>
 				<ObsoleteTech>TECH_SATELLITES</ObsoleteTech>
-				<ObsoleteTech>TECH_ADVANCED_FLIGHT</ObsoleteTech>
+				<ObsoleteTech>TECH_FLIGHT</ObsoleteTech>
 				<ObsoleteTech>TECH_ECOLOGY</ObsoleteTech>
 			</ObsoleteTechs>
 			<bRecurring>0</bRecurring>
@@ -913,7 +913,7 @@
 				<ObsoleteTech>TECH_REFRIGERATION</ObsoleteTech>
 				<ObsoleteTech>TECH_PLASTICS</ObsoleteTech>
 				<ObsoleteTech>TECH_SATELLITES</ObsoleteTech>
-				<ObsoleteTech>TECH_ADVANCED_FLIGHT</ObsoleteTech>
+				<ObsoleteTech>TECH_FLIGHT</ObsoleteTech>
 				<ObsoleteTech>TECH_ECOLOGY</ObsoleteTech>
 			</ObsoleteTechs>
 			<bRecurring>0</bRecurring>
@@ -2358,7 +2358,7 @@
 				</TriggerText>
 			</TriggerTexts>
 			<bSinglePlayer>1</bSinglePlayer>
-			<iPercentGamesActive>70</iPercentGamesActive>
+			<iPercentGamesActive>100</iPercentGamesActive>
 			<iWeight>100</iWeight>
 			<bProbabilityUnitMultiply>0</bProbabilityUnitMultiply>
 			<bProbabilityBuildingMultiply>0</bProbabilityBuildingMultiply>
@@ -2401,6 +2401,86 @@
 			<bHeadquarters>0</bHeadquarters>
 			<Events>
 				<Event>EVENT_FAUX_PAS_1</Event>
+			</Events>
+			<PrereqEvents/>
+			<bPrereqEventPlot>0</bPrereqEventPlot>
+			<OrPreReqs/>
+			<AndPreReqs/>
+			<ObsoleteTechs/>
+			<bRecurring>0</bRecurring>
+			<bTeam>0</bTeam>
+			<bGlobal>1</bGlobal>
+			<bPickPlayer>1</bPickPlayer>
+			<bOtherPlayerWar>0</bOtherPlayerWar>
+			<bOtherPlayerHasReligion>0</bOtherPlayerHasReligion>
+			<bOtherPlayerHasOtherReligion>0</bOtherPlayerHasOtherReligion>
+			<bOtherPlayerAI>0</bOtherPlayerAI>
+			<iOtherPlayerShareBorders>0</iOtherPlayerShareBorders>
+			<OtherPlayerHasTech>NONE</OtherPlayerHasTech>
+			<bPickCity>0</bPickCity>
+			<bPickOtherPlayerCity>0</bPickOtherPlayerCity>
+			<bShowPlot>0</bShowPlot>
+			<iCityFoodWeight>0</iCityFoodWeight>
+			<PythonCanDo/>
+			<PythonCanDoCity/>
+			<PythonCanDoUnit/>
+			<PythonCallback/>
+		</EventTriggerInfo>
+		<EventTriggerInfo>
+			<Type>EVENTTRIGGER_FAUX_PAS2</Type>
+			<WorldNewsTexts>
+				<Text>TXT_KEY_EVENTTRIGGER_FAUX_PAS2</Text>
+			</WorldNewsTexts>
+			<TriggerTexts>
+				<TriggerText>
+					<Text>TXT_KEY_EVENT_TRIGGER_FAUX_PAS_2</Text>
+					<Era>NONE</Era>
+				</TriggerText>
+			</TriggerTexts>
+			<bSinglePlayer>1</bSinglePlayer>
+			<iPercentGamesActive>100</iPercentGamesActive>
+			<iWeight>100</iWeight>
+			<bProbabilityUnitMultiply>0</bProbabilityUnitMultiply>
+			<bProbabilityBuildingMultiply>0</bProbabilityBuildingMultiply>
+			<Civic>NONE</Civic>
+			<iMinTreasury>0</iMinTreasury>
+			<iMinPopulation>0</iMinPopulation>
+			<iMaxPopulation>0</iMaxPopulation>
+			<iMinMapLandmass>0</iMinMapLandmass>
+			<iMinOurLandmass>0</iMinOurLandmass>
+			<iMaxOurLandmass>-1</iMaxOurLandmass>
+			<MinDifficulty>NONE</MinDifficulty>
+			<iAngry>0</iAngry>
+			<iUnhealthy>0</iUnhealthy>
+			<UnitsRequired/>
+			<iNumUnits>0</iNumUnits>
+			<iNumUnitsGlobal>0</iNumUnitsGlobal>
+			<iUnitDamagedWeight>0</iUnitDamagedWeight>
+			<iUnitDistanceWeight>0</iUnitDistanceWeight>
+			<iUnitExperienceWeight>0</iUnitExperienceWeight>
+			<bUnitsOnPlot>0</bUnitsOnPlot>
+			<BuildingsRequired/>
+			<iNumBuildings>0</iNumBuildings>
+			<iNumBuildingsGlobal>0</iNumBuildingsGlobal>
+			<iNumPlotsRequired>0</iNumPlotsRequired>
+			<bOwnPlot>1</bOwnPlot>
+			<iPlotType>-1</iPlotType>
+			<FeaturesRequired/>
+			<TerrainsRequired/>
+			<ImprovementsRequired/>
+			<BonusesRequired/>
+			<RoutesRequired/>
+			<ReligionsRequired/>
+			<iNumReligions>0</iNumReligions>
+			<CorporationsRequired/>
+			<iNumCorporations>0</iNumCorporations>
+			<bPickReligion>0</bPickReligion>
+			<bStateReligion>0</bStateReligion>
+			<bHolyCity>0</bHolyCity>
+			<bPickCorporation>0</bPickCorporation>
+			<bHeadquarters>0</bHeadquarters>
+			<Events>
+				<Event>EVENT_FAUX_PAS_2</Event>
 			</Events>
 			<PrereqEvents/>
 			<bPrereqEventPlot>0</bPrereqEventPlot>
@@ -5948,8 +6028,10 @@
 			<MinDifficulty>NONE</MinDifficulty>
 			<iAngry>0</iAngry>
 			<iUnhealthy>0</iUnhealthy>
-			<UnitsRequired/>
-			<iNumUnits>0</iNumUnits>
+			<UnitsRequired>
+				<UnitClass>UNITCLASS_ARCHER</UnitClass>
+			</UnitsRequired>
+			<iNumUnits>1</iNumUnits>
 			<iNumUnitsGlobal>0</iNumUnitsGlobal>
 			<iUnitDamagedWeight>0</iUnitDamagedWeight>
 			<iUnitDistanceWeight>0</iUnitDistanceWeight>
@@ -6501,7 +6583,7 @@
 			<PrereqEvents/>
 			<bPrereqEventPlot>0</bPrereqEventPlot>
 			<OrPreReqs>
-				<PrereqTech>TECH_RADIO</PrereqTech>
+				<PrereqTech>TECH_FLIGHT</PrereqTech>
 			</OrPreReqs>
 			<AndPreReqs/>
 			<ObsoleteTechs/>
@@ -7223,7 +7305,7 @@
 				</TriggerText>
 			</TriggerTexts>
 			<bSinglePlayer>0</bSinglePlayer>
-			<iPercentGamesActive>65</iPercentGamesActive>
+			<iPercentGamesActive>75</iPercentGamesActive>
 			<iWeight>100</iWeight>
 			<bProbabilityUnitMultiply>0</bProbabilityUnitMultiply>
 			<bProbabilityBuildingMultiply>0</bProbabilityBuildingMultiply>
@@ -7312,6 +7394,98 @@
 			<PythonCallback/>
 		</EventTriggerInfo>
 		<EventTriggerInfo>
+			<Type>EVENTTRIGGER_POTATOKING</Type>
+			<WorldNewsTexts>
+				<Text>TXT_KEY_EVENTTRIGGER_POTATOKING</Text>
+			</WorldNewsTexts>
+			<TriggerTexts>
+				<TriggerText>
+					<Text>TXT_KEY_EVENT_TRIGGER_POTATOKING_1</Text>
+					<Era>NONE</Era>
+				</TriggerText>
+			</TriggerTexts>
+			<bSinglePlayer>0</bSinglePlayer>
+			<iPercentGamesActive>75</iPercentGamesActive>
+			<iWeight>100</iWeight>
+			<bProbabilityUnitMultiply>0</bProbabilityUnitMultiply>
+			<bProbabilityBuildingMultiply>0</bProbabilityBuildingMultiply>
+			<Civic>CIVIC_HEREDITARY_RULE</Civic>
+			<iMinTreasury>0</iMinTreasury>
+			<iMinPopulation>0</iMinPopulation>
+			<iMaxPopulation>0</iMaxPopulation>
+			<iMinMapLandmass>0</iMinMapLandmass>
+			<iMinOurLandmass>0</iMinOurLandmass>
+			<iMaxOurLandmass>-1</iMaxOurLandmass>
+			<MinDifficulty>NONE</MinDifficulty>
+			<iAngry>0</iAngry>
+			<iUnhealthy>0</iUnhealthy>
+			<UnitsRequired/>
+			<iNumUnits>0</iNumUnits>
+			<iNumUnitsGlobal>0</iNumUnitsGlobal>
+			<iUnitDamagedWeight>0</iUnitDamagedWeight>
+			<iUnitDistanceWeight>0</iUnitDistanceWeight>
+			<iUnitExperienceWeight>0</iUnitExperienceWeight>
+			<bUnitsOnPlot>0</bUnitsOnPlot>
+			<BuildingsRequired/>
+			<iNumBuildings>1</iNumBuildings>
+			<iNumBuildingsGlobal>0</iNumBuildingsGlobal>
+			<iNumPlotsRequired>1</iNumPlotsRequired>
+			<bOwnPlot>1</bOwnPlot>
+			<iPlotType>-1</iPlotType>
+			<FeaturesRequired>
+				<FeatureType>NONE</FeatureType>
+			</FeaturesRequired>
+			<TerrainsRequired>
+				<TerrainType>TERRAIN_GRASS</TerrainType>
+				<TerrainType>TERRAIN_PLAINS</TerrainType>
+			</TerrainsRequired>
+			<ImprovementsRequired>
+				<ImprovementType>NONE</ImprovementType>
+			</ImprovementsRequired>
+			<BonusesRequired/>
+			<RoutesRequired>
+				<RouteType>NONE</RouteType>
+			</RoutesRequired>
+			<ReligionsRequired/>
+			<iNumReligions>0</iNumReligions>
+			<CorporationsRequired/>
+			<iNumCorporations>0</iNumCorporations>
+			<bPickReligion>0</bPickReligion>
+			<bStateReligion>0</bStateReligion>
+			<bHolyCity>0</bHolyCity>
+			<bPickCorporation>0</bPickCorporation>
+			<bHeadquarters>0</bHeadquarters>
+			<Events>
+				<Event>EVENT_POTATOKING_1</Event>
+				<Event>EVENT_POTATOKING_2</Event>
+			</Events>
+			<PrereqEvents/>
+			<bPrereqEventPlot>0</bPrereqEventPlot>
+			<OrPreReqs>
+				<PrereqTech>TECH_ASTRONOMY</PrereqTech>
+			</OrPreReqs>
+			<AndPreReqs/>
+			<ObsoleteTechs/>
+			<bRecurring>0</bRecurring>
+			<bTeam>0</bTeam>
+			<bGlobal>1</bGlobal>
+			<bPickPlayer>0</bPickPlayer>
+			<bOtherPlayerWar>0</bOtherPlayerWar>
+			<bOtherPlayerHasReligion>0</bOtherPlayerHasReligion>
+			<bOtherPlayerHasOtherReligion>0</bOtherPlayerHasOtherReligion>
+			<bOtherPlayerAI>0</bOtherPlayerAI>
+			<iOtherPlayerShareBorders>0</iOtherPlayerShareBorders>
+			<OtherPlayerHasTech>NONE</OtherPlayerHasTech>
+			<bPickCity>1</bPickCity>
+			<bPickOtherPlayerCity>0</bPickOtherPlayerCity>
+			<bShowPlot>1</bShowPlot>
+			<iCityFoodWeight>0</iCityFoodWeight>
+			<PythonCanDo>canTriggerPotatoKing</PythonCanDo>
+			<PythonCanDoCity/>
+			<PythonCanDoUnit/>
+			<PythonCallback/>
+		</EventTriggerInfo>
+		<EventTriggerInfo>
 			<Type>EVENTTRIGGER_INDEPENDENTFILMS</Type>
 			<WorldNewsTexts>
 				<Text>TXT_KEY_EVENTTRIGGER_INDEPENDENTFILMS</Text>
@@ -7323,7 +7497,7 @@
 				</TriggerText>
 			</TriggerTexts>
 			<bSinglePlayer>0</bSinglePlayer>
-			<iPercentGamesActive>35</iPercentGamesActive>
+			<iPercentGamesActive>50</iPercentGamesActive>
 			<iWeight>100</iWeight>
 			<bProbabilityUnitMultiply>0</bProbabilityUnitMultiply>
 			<bProbabilityBuildingMultiply>0</bProbabilityBuildingMultiply>
@@ -7626,8 +7800,8 @@
 			<PrereqEvents/>
 			<bPrereqEventPlot>0</bPrereqEventPlot>
 			<OrPreReqs>
-				<PrereqTech>TECH_INDUSTRIALISM</PrereqTech>
-				<PrereqTech>TECH_RADIO</PrereqTech>
+				<PrereqTech>TECH_ASSEMBLY_LINE</PrereqTech>
+				<PrereqTech>TECH_FLIGHT</PrereqTech>
 			</OrPreReqs>
 			<AndPreReqs/>
 			<ObsoleteTechs/>
@@ -7710,7 +7884,7 @@
 			<PrereqEvents/>
 			<bPrereqEventPlot>0</bPrereqEventPlot>
 			<OrPreReqs>
-				<PrereqTech>TECH_INDUSTRIALISM</PrereqTech>
+				<PrereqTech>TECH_ASSEMBLY_LINE</PrereqTech>
 				<PrereqTech>TECH_RADIO</PrereqTech>
 			</OrPreReqs>
 			<AndPreReqs/>
@@ -7794,8 +7968,8 @@
 			<PrereqEvents/>
 			<bPrereqEventPlot>0</bPrereqEventPlot>
 			<OrPreReqs>
-				<PrereqTech>TECH_INDUSTRIALISM</PrereqTech>
-				<PrereqTech>TECH_RADIO</PrereqTech>
+				<PrereqTech>TECH_ASSEMBLY_LINE</PrereqTech>
+				<PrereqTech>TECH_FLIGHT</PrereqTech>
 			</OrPreReqs>
 			<AndPreReqs/>
 			<ObsoleteTechs/>
@@ -7808,6 +7982,89 @@
 			<bOtherPlayerHasOtherReligion>0</bOtherPlayerHasOtherReligion>
 			<bOtherPlayerAI>0</bOtherPlayerAI>
 			<iOtherPlayerShareBorders>0</iOtherPlayerShareBorders>
+			<OtherPlayerHasTech>NONE</OtherPlayerHasTech>
+			<bPickCity>1</bPickCity>
+			<bPickOtherPlayerCity>0</bPickOtherPlayerCity>
+			<bShowPlot>1</bShowPlot>
+			<iCityFoodWeight>0</iCityFoodWeight>
+			<PythonCanDo/>
+			<PythonCanDoCity/>
+			<PythonCanDoUnit/>
+			<PythonCallback/>
+		</EventTriggerInfo>
+		<EventTriggerInfo>
+			<Type>EVENTTRIGGER_FREEDOMRELIGION</Type>
+			<WorldNewsTexts>
+				<Text>TXT_KEY_EVENTTRIGGER_FREEDOMRELIGION</Text>
+			</WorldNewsTexts>
+			<TriggerTexts>
+				<TriggerText>
+					<Text>TXT_KEY_EVENT_TRIGGER_FREEDOMRELIGION_1</Text>
+					<Era>NONE</Era>
+				</TriggerText>
+			</TriggerTexts>
+			<bSinglePlayer>0</bSinglePlayer>
+			<iPercentGamesActive>95</iPercentGamesActive>
+			<iWeight>100</iWeight>
+			<bProbabilityUnitMultiply>0</bProbabilityUnitMultiply>
+			<bProbabilityBuildingMultiply>0</bProbabilityBuildingMultiply>
+			<Civic>CIVIC_FREE_RELIGION</Civic>
+			<iMinTreasury>0</iMinTreasury>
+			<iMinPopulation>0</iMinPopulation>
+			<iMaxPopulation>0</iMaxPopulation>
+			<iMinMapLandmass>0</iMinMapLandmass>
+			<iMinOurLandmass>0</iMinOurLandmass>
+			<iMaxOurLandmass>-1</iMaxOurLandmass>
+			<MinDifficulty>NONE</MinDifficulty>
+			<iAngry>0</iAngry>
+			<iUnhealthy>0</iUnhealthy>
+			<UnitsRequired/>
+			<iNumUnits>0</iNumUnits>
+			<iNumUnitsGlobal>0</iNumUnitsGlobal>
+			<iUnitDamagedWeight>0</iUnitDamagedWeight>
+			<iUnitDistanceWeight>0</iUnitDistanceWeight>
+			<iUnitExperienceWeight>0</iUnitExperienceWeight>
+			<bUnitsOnPlot>0</bUnitsOnPlot>
+			<BuildingsRequired/>
+			<iNumBuildings>0</iNumBuildings>
+			<iNumBuildingsGlobal>0</iNumBuildingsGlobal>
+			<iNumPlotsRequired>0</iNumPlotsRequired>
+			<bOwnPlot>0</bOwnPlot>
+			<iPlotType>-1</iPlotType>
+			<FeaturesRequired/>
+			<TerrainsRequired/>
+			<ImprovementsRequired/>
+			<BonusesRequired/>
+			<RoutesRequired/>
+			<ReligionsRequired/>
+			<iNumReligions>1</iNumReligions>
+			<CorporationsRequired/>
+			<iNumCorporations>0</iNumCorporations>
+			<bPickReligion>0</bPickReligion>
+			<bStateReligion>0</bStateReligion>
+			<bHolyCity>0</bHolyCity>
+			<bPickCorporation>0</bPickCorporation>
+			<bHeadquarters>0</bHeadquarters>
+			<Events>
+				<Event>EVENT_FREEDOMRELIGION_1</Event>
+				<Event>EVENT_FREEDOMRELIGION_2</Event>
+			</Events>
+			<PrereqEvents/>
+			<bPrereqEventPlot>0</bPrereqEventPlot>
+			<OrPreReqs>
+				<PrereqTech>TECH_ENLIGHTENMENT</PrereqTech>
+			</OrPreReqs>
+			<AndPreReqs/>
+			<ObsoleteTechs/>
+			<bRecurring>0</bRecurring>
+			<bTeam>0</bTeam>
+			<bGlobal>1</bGlobal>
+			<bPickPlayer>1</bPickPlayer>
+			<bOtherPlayerWar>0</bOtherPlayerWar>
+			<bOtherPlayerHasReligion>1</bOtherPlayerHasReligion>
+			<bOtherPlayerHasOtherReligion>0</bOtherPlayerHasOtherReligion>
+			<bOtherPlayerAI>0</bOtherPlayerAI>
+			<iOtherPlayerShareBorders>1</iOtherPlayerShareBorders>
 			<OtherPlayerHasTech>NONE</OtherPlayerHasTech>
 			<bPickCity>1</bPickCity>
 			<bPickOtherPlayerCity>0</bPickOtherPlayerCity>
@@ -7844,8 +8101,10 @@
 			<MinDifficulty>NONE</MinDifficulty>
 			<iAngry>0</iAngry>
 			<iUnhealthy>0</iUnhealthy>
-			<UnitsRequired/>
-			<iNumUnits>0</iNumUnits>
+			<UnitsRequired>
+				<UnitClass>UNITCLASS_AXEMAN</UnitClass>
+			</UnitsRequired>
+			<iNumUnits>1</iNumUnits>
 			<iNumUnitsGlobal>0</iNumUnitsGlobal>
 			<iUnitDamagedWeight>0</iUnitDamagedWeight>
 			<iUnitDistanceWeight>0</iUnitDistanceWeight>
@@ -7996,6 +8255,92 @@
 			<PythonCallback/>
 		</EventTriggerInfo>
 		<EventTriggerInfo>
+			<Type>EVENTTRIGGER_NEW_MILITARY_SYSTEM</Type>
+			<WorldNewsTexts>
+				<Text>TXT_KEY_EVENTTRIGGER_NEW_MILITARY_SYSTEM_1</Text>
+			</WorldNewsTexts>
+			<TriggerTexts>
+				<TriggerText>
+					<Text>TXT_KEY_EVENT_TRIGGER_NEW_MILITARY_SYSTEM_1</Text>
+					<Era>NONE</Era>
+				</TriggerText>
+			</TriggerTexts>
+			<bSinglePlayer>0</bSinglePlayer>
+			<iPercentGamesActive>80</iPercentGamesActive>
+			<iWeight>200</iWeight>
+			<bProbabilityUnitMultiply>0</bProbabilityUnitMultiply>
+			<bProbabilityBuildingMultiply>0</bProbabilityBuildingMultiply>
+			<Civic>NONE</Civic>
+			<iMinTreasury>500</iMinTreasury>
+			<iMinPopulation>0</iMinPopulation>
+			<iMaxPopulation>0</iMaxPopulation>
+			<iMinMapLandmass>0</iMinMapLandmass>
+			<iMinOurLandmass>0</iMinOurLandmass>
+			<iMaxOurLandmass>-1</iMaxOurLandmass>
+			<MinDifficulty>NONE</MinDifficulty>
+			<iAngry>0</iAngry>
+			<iUnhealthy>0</iUnhealthy>
+			<UnitsRequired/>
+			<iNumUnits>0</iNumUnits>
+			<iNumUnitsGlobal>0</iNumUnitsGlobal>
+			<iUnitDamagedWeight>0</iUnitDamagedWeight>
+			<iUnitDistanceWeight>0</iUnitDistanceWeight>
+			<iUnitExperienceWeight>0</iUnitExperienceWeight>
+			<bUnitsOnPlot>0</bUnitsOnPlot>
+			<BuildingsRequired/>
+			<iNumBuildings>0</iNumBuildings>
+			<iNumBuildingsGlobal>0</iNumBuildingsGlobal>
+			<iNumPlotsRequired>0</iNumPlotsRequired>
+			<bOwnPlot>0</bOwnPlot>
+			<iPlotType>-1</iPlotType>
+			<FeaturesRequired/>
+			<TerrainsRequired/>
+			<ImprovementsRequired/>
+			<BonusesRequired/>
+			<RoutesRequired/>
+			<ReligionsRequired/>
+			<iNumReligions>0</iNumReligions>
+			<CorporationsRequired/>
+			<iNumCorporations>0</iNumCorporations>
+			<bPickReligion>0</bPickReligion>
+			<bStateReligion>0</bStateReligion>
+			<bHolyCity>0</bHolyCity>
+			<bPickCorporation>0</bPickCorporation>
+			<bHeadquarters>0</bHeadquarters>
+			<Events>
+				<Event>EVENT_NEW_MILITARY_SYSTEM_1</Event>
+				<Event>EVENT_NEW_MILITARY_SYSTEM_2</Event>
+			</Events>
+			<PrereqEvents/>
+			<bPrereqEventPlot>0</bPrereqEventPlot>
+			<OrPreReqs>
+				<PrereqTech>TECH_MILITARY_SCIENCE</PrereqTech>
+			</OrPreReqs>
+			<AndPreReqs/>
+			<ObsoleteTechs>
+				<ObsoleteTech>TECH_RAILROAD</ObsoleteTech>
+				<ObsoleteTech>TECH_RIFLING</ObsoleteTech>
+			</ObsoleteTechs>
+			<bRecurring>0</bRecurring>
+			<bTeam>0</bTeam>
+			<bGlobal>1</bGlobal>
+			<bPickPlayer>0</bPickPlayer>
+			<bOtherPlayerWar>0</bOtherPlayerWar>
+			<bOtherPlayerHasReligion>0</bOtherPlayerHasReligion>
+			<bOtherPlayerHasOtherReligion>0</bOtherPlayerHasOtherReligion>
+			<bOtherPlayerAI>0</bOtherPlayerAI>
+			<iOtherPlayerShareBorders>0</iOtherPlayerShareBorders>
+			<OtherPlayerHasTech>NONE</OtherPlayerHasTech>
+			<bPickCity>0</bPickCity>
+			<bPickOtherPlayerCity>0</bPickOtherPlayerCity>
+			<bShowPlot>1</bShowPlot>
+			<iCityFoodWeight>0</iCityFoodWeight>
+			<PythonCanDo/>
+			<PythonCanDoCity/>
+			<PythonCanDoUnit/>
+			<PythonCallback/>
+		</EventTriggerInfo>
+		<EventTriggerInfo>
 			<Type>EVENTTRIGGER_SMOKELESS_POWDER</Type>
 			<WorldNewsTexts>
 				<Text>TXT_KEY_EVENTTRIGGER_SMOKELESS_POWDER_1</Text>
@@ -8054,13 +8399,12 @@
 			<PrereqEvents/>
 			<bPrereqEventPlot>0</bPrereqEventPlot>
 			<OrPreReqs>
-				<PrereqTech>TECH_GUNPOWDER</PrereqTech>
+				<PrereqTech>TECH_MILITARY_SCIENCE</PrereqTech>
 			</OrPreReqs>
 			<AndPreReqs/>
 			<ObsoleteTechs>
+				<ObsoleteTech>TECH_RAILROAD</ObsoleteTech>
 				<ObsoleteTech>TECH_RIFLING</ObsoleteTech>
-				<ObsoleteTech>TECH_STEEL</ObsoleteTech>
-				<ObsoleteTech>TECH_SCIENTIFIC_METHOD</ObsoleteTech>
 			</ObsoleteTechs>
 			<bRecurring>0</bRecurring>
 			<bTeam>0</bTeam>
@@ -8232,9 +8576,8 @@
 			</OrPreReqs>
 			<AndPreReqs/>
 			<ObsoleteTechs>
-				<ObsoleteTech>TECH_STEAM_POWER</ObsoleteTech>
-				<ObsoleteTech>TECH_SCIENTIFIC_METHOD</ObsoleteTech>
-				<ObsoleteTech>TECH_ARTILLERY</ObsoleteTech>
+				<ObsoleteTech>TECH_RAILROAD</ObsoleteTech>
+				<ObsoleteTech>TECH_RIFLING</ObsoleteTech>
 			</ObsoleteTechs>
 			<bRecurring>0</bRecurring>
 			<bTeam>0</bTeam>
@@ -8316,14 +8659,14 @@
 			<OrPreReqs/>
 			<AndPreReqs>
 				<PrereqTech>TECH_RIFLING</PrereqTech>
-				<PrereqTech>TECH_STEEL</PrereqTech>
+				<PrereqTech>TECH_BALLISTICS</PrereqTech>
 			</AndPreReqs>
 			<ObsoleteTechs>
 				<ObsoleteTech>TECH_RADIO</ObsoleteTech>
 				<ObsoleteTech>TECH_REFRIGERATION</ObsoleteTech>
 				<ObsoleteTech>TECH_PLASTICS</ObsoleteTech>
 				<ObsoleteTech>TECH_SATELLITES</ObsoleteTech>
-				<ObsoleteTech>TECH_ADVANCED_FLIGHT</ObsoleteTech>
+				<ObsoleteTech>TECH_FLIGHT</ObsoleteTech>
 				<ObsoleteTech>TECH_ECOLOGY</ObsoleteTech>
 			</ObsoleteTechs>
 			<bRecurring>0</bRecurring>
@@ -8406,7 +8749,7 @@
 			<OrPreReqs/>
 			<AndPreReqs>
 				<PrereqTech>TECH_FLIGHT</PrereqTech>
-				<PrereqTech>TECH_INDUSTRIALISM</PrereqTech>
+				<PrereqTech>TECH_ASSEMBLY_LINE</PrereqTech>
 			</AndPreReqs>
 			<ObsoleteTechs>
 				<ObsoleteTech>TECH_COMPOSITES</ObsoleteTech>
@@ -9221,7 +9564,7 @@
 				</TriggerText>
 			</TriggerTexts>
 			<bSinglePlayer>0</bSinglePlayer>
-			<iPercentGamesActive>20</iPercentGamesActive>
+			<iPercentGamesActive>95</iPercentGamesActive>
 			<iWeight>200</iWeight>
 			<bProbabilityUnitMultiply>0</bProbabilityUnitMultiply>
 			<bProbabilityBuildingMultiply>0</bProbabilityBuildingMultiply>
@@ -9319,7 +9662,7 @@
 				</TriggerText>
 			</TriggerTexts>
 			<bSinglePlayer>0</bSinglePlayer>
-			<iPercentGamesActive>20</iPercentGamesActive>
+			<iPercentGamesActive>50</iPercentGamesActive>
 			<iWeight>200</iWeight>
 			<bProbabilityUnitMultiply>0</bProbabilityUnitMultiply>
 			<bProbabilityBuildingMultiply>0</bProbabilityBuildingMultiply>
@@ -9405,7 +9748,7 @@
 				</TriggerText>
 			</TriggerTexts>
 			<bSinglePlayer>0</bSinglePlayer>
-			<iPercentGamesActive>20</iPercentGamesActive>
+			<iPercentGamesActive>50</iPercentGamesActive>
 			<iWeight>200</iWeight>
 			<bProbabilityUnitMultiply>0</bProbabilityUnitMultiply>
 			<bProbabilityBuildingMultiply>0</bProbabilityBuildingMultiply>
@@ -9491,7 +9834,7 @@
 				</TriggerText>
 			</TriggerTexts>
 			<bSinglePlayer>0</bSinglePlayer>
-			<iPercentGamesActive>20</iPercentGamesActive>
+			<iPercentGamesActive>50</iPercentGamesActive>
 			<iWeight>200</iWeight>
 			<bProbabilityUnitMultiply>0</bProbabilityUnitMultiply>
 			<bProbabilityBuildingMultiply>0</bProbabilityBuildingMultiply>
@@ -9577,7 +9920,7 @@
 				</TriggerText>
 			</TriggerTexts>
 			<bSinglePlayer>0</bSinglePlayer>
-			<iPercentGamesActive>20</iPercentGamesActive>
+			<iPercentGamesActive>50</iPercentGamesActive>
 			<iWeight>200</iWeight>
 			<bProbabilityUnitMultiply>0</bProbabilityUnitMultiply>
 			<bProbabilityBuildingMultiply>0</bProbabilityBuildingMultiply>
@@ -9663,7 +10006,7 @@
 				</TriggerText>
 			</TriggerTexts>
 			<bSinglePlayer>0</bSinglePlayer>
-			<iPercentGamesActive>20</iPercentGamesActive>
+			<iPercentGamesActive>50</iPercentGamesActive>
 			<iWeight>200</iWeight>
 			<bProbabilityUnitMultiply>0</bProbabilityUnitMultiply>
 			<bProbabilityBuildingMultiply>0</bProbabilityBuildingMultiply>
@@ -9733,6 +10076,92 @@
 			<bShowPlot>1</bShowPlot>
 			<iCityFoodWeight>0</iCityFoodWeight>
 			<PythonCanDo>canTriggerTheVedicAryans</PythonCanDo>
+			<PythonCanDoCity/>
+			<PythonCanDoUnit/>
+			<PythonCallback/>
+		</EventTriggerInfo>
+		<EventTriggerInfo>
+			<Type>EVENTTRIGGER_THE_SEA_PEOPLES</Type>
+			<WorldNewsTexts>
+				<Text>TXT_KEY_EVENTTRIGGER_THE_SEA_PEOPLES</Text>
+			</WorldNewsTexts>
+			<TriggerTexts>
+				<TriggerText>
+					<Text>TXT_KEY_EVENTTRIGGER_THE_SEA_PEOPLES</Text>
+					<Era>NONE</Era>
+				</TriggerText>
+			</TriggerTexts>
+			<bSinglePlayer>0</bSinglePlayer>
+			<iPercentGamesActive>50</iPercentGamesActive>
+			<iWeight>200</iWeight>
+			<bProbabilityUnitMultiply>0</bProbabilityUnitMultiply>
+			<bProbabilityBuildingMultiply>0</bProbabilityBuildingMultiply>
+			<Civic>NONE</Civic>
+			<iMinTreasury>0</iMinTreasury>
+			<iMinPopulation>0</iMinPopulation>
+			<iMaxPopulation>0</iMaxPopulation>
+			<iMinMapLandmass>0</iMinMapLandmass>
+			<iMinOurLandmass>0</iMinOurLandmass>
+			<iMaxOurLandmass>-1</iMaxOurLandmass>
+			<MinDifficulty>NONE</MinDifficulty>
+			<iAngry>0</iAngry>
+			<iUnhealthy>0</iUnhealthy>
+			<UnitsRequired/>
+			<iNumUnits>0</iNumUnits>
+			<iNumUnitsGlobal>0</iNumUnitsGlobal>
+			<iUnitDamagedWeight>0</iUnitDamagedWeight>
+			<iUnitDistanceWeight>0</iUnitDistanceWeight>
+			<iUnitExperienceWeight>0</iUnitExperienceWeight>
+			<bUnitsOnPlot>0</bUnitsOnPlot>
+			<BuildingsRequired/>
+			<iNumBuildings>0</iNumBuildings>
+			<iNumBuildingsGlobal>0</iNumBuildingsGlobal>
+			<iNumPlotsRequired>0</iNumPlotsRequired>
+			<bOwnPlot>0</bOwnPlot>
+			<iPlotType>-1</iPlotType>
+			<FeaturesRequired/>
+			<TerrainsRequired/>
+			<ImprovementsRequired/>
+			<BonusesRequired/>
+			<RoutesRequired/>
+			<ReligionsRequired/>
+			<iNumReligions>0</iNumReligions>
+			<CorporationsRequired/>
+			<iNumCorporations>0</iNumCorporations>
+			<bPickReligion>0</bPickReligion>
+			<bStateReligion>0</bStateReligion>
+			<bHolyCity>0</bHolyCity>
+			<bPickCorporation>0</bPickCorporation>
+			<bHeadquarters>0</bHeadquarters>
+			<Events>
+				<Event>EVENT_THE_SEA_PEOPLES_1</Event>
+			</Events>
+			<PrereqEvents/>
+			<bPrereqEventPlot>0</bPrereqEventPlot>
+			<OrPreReqs/>
+			<AndPreReqs/>
+			<ObsoleteTechs>
+				<ObsoleteTech>TECH_NATIONALISM</ObsoleteTech>
+				<ObsoleteTech>TECH_PRINTING_PRESS</ObsoleteTech>
+				<ObsoleteTech>TECH_EDUCATION</ObsoleteTech>
+				<ObsoleteTech>TECH_ASTRONOMY</ObsoleteTech>
+				<ObsoleteTech>TECH_GUNPOWDER</ObsoleteTech>
+			</ObsoleteTechs>
+			<bRecurring>0</bRecurring>
+			<bTeam>0</bTeam>
+			<bGlobal>1</bGlobal>
+			<bPickPlayer>0</bPickPlayer>
+			<bOtherPlayerWar>0</bOtherPlayerWar>
+			<bOtherPlayerHasReligion>0</bOtherPlayerHasReligion>
+			<bOtherPlayerHasOtherReligion>0</bOtherPlayerHasOtherReligion>
+			<bOtherPlayerAI>0</bOtherPlayerAI>
+			<iOtherPlayerShareBorders>0</iOtherPlayerShareBorders>
+			<OtherPlayerHasTech>NONE</OtherPlayerHasTech>
+			<bPickCity>0</bPickCity>
+			<bPickOtherPlayerCity>0</bPickOtherPlayerCity>
+			<bShowPlot>1</bShowPlot>
+			<iCityFoodWeight>0</iCityFoodWeight>
+			<PythonCanDo>canTriggerTheSeaPeoples</PythonCanDo>
 			<PythonCanDoCity/>
 			<PythonCanDoUnit/>
 			<PythonCallback/>
@@ -10689,7 +11118,7 @@
 			<PrereqEvents/>
 			<bPrereqEventPlot>0</bPrereqEventPlot>
 			<OrPreReqs>
-				<PrereqTech>TECH_RADIO</PrereqTech>
+				<PrereqTech>TECH_FLIGHT</PrereqTech>
 			</OrPreReqs>
 			<AndPreReqs/>
 			<ObsoleteTechs/>
@@ -10864,7 +11293,7 @@
 			<PrereqEvents/>
 			<bPrereqEventPlot>0</bPrereqEventPlot>
 			<OrPreReqs>
-				<PrereqTech>TECH_RADIO</PrereqTech>
+				<PrereqTech>TECH_FLIGHT</PrereqTech>
 			</OrPreReqs>
 			<AndPreReqs/>
 			<ObsoleteTechs/>
@@ -11927,7 +12356,7 @@
 			</OrPreReqs>
 			<AndPreReqs/>
 			<ObsoleteTechs>
-				<ObsoleteTech>TECH_RIFLING</ObsoleteTech>
+				<ObsoleteTech>TECH_MILITARY_SCIENCE</ObsoleteTech>
 				<ObsoleteTech>TECH_RAILROAD</ObsoleteTech>
 				<ObsoleteTech>TECH_ECONOMICS</ObsoleteTech>
 			</ObsoleteTechs>
@@ -12103,7 +12532,7 @@
 				<ObsoleteTech>TECH_REFRIGERATION</ObsoleteTech>
 				<ObsoleteTech>TECH_PLASTICS</ObsoleteTech>
 				<ObsoleteTech>TECH_SATELLITES</ObsoleteTech>
-				<ObsoleteTech>TECH_ADVANCED_FLIGHT</ObsoleteTech>
+				<ObsoleteTech>TECH_FLIGHT</ObsoleteTech>
 				<ObsoleteTech>TECH_ECOLOGY</ObsoleteTech>
 			</ObsoleteTechs>
 			<bRecurring>0</bRecurring>
@@ -12194,7 +12623,7 @@
 				<ObsoleteTech>TECH_REFRIGERATION</ObsoleteTech>
 				<ObsoleteTech>TECH_PLASTICS</ObsoleteTech>
 				<ObsoleteTech>TECH_SATELLITES</ObsoleteTech>
-				<ObsoleteTech>TECH_ADVANCED_FLIGHT</ObsoleteTech>
+				<ObsoleteTech>TECH_FLIGHT</ObsoleteTech>
 				<ObsoleteTech>TECH_ECOLOGY</ObsoleteTech>
 			</ObsoleteTechs>
 			<bRecurring>0</bRecurring>
@@ -12798,7 +13227,7 @@
 				<ObsoleteTech>TECH_REFRIGERATION</ObsoleteTech>
 				<ObsoleteTech>TECH_PLASTICS</ObsoleteTech>
 				<ObsoleteTech>TECH_SATELLITES</ObsoleteTech>
-				<ObsoleteTech>TECH_ADVANCED_FLIGHT</ObsoleteTech>
+				<ObsoleteTech>TECH_FLIGHT</ObsoleteTech>
 				<ObsoleteTech>TECH_ECOLOGY</ObsoleteTech>
 			</ObsoleteTechs>
 			<bRecurring>0</bRecurring>
@@ -14692,8 +15121,7 @@
 			</OrPreReqs>
 			<AndPreReqs/>
 			<ObsoleteTechs>
-				<ObsoleteTech>TECH_RIFLING</ObsoleteTech>
-				<ObsoleteTech>TECH_RAILROAD</ObsoleteTech>
+				<ObsoleteTech>TECH_MILITARY_SCIENCE</ObsoleteTech>
 			</ObsoleteTechs>
 			<bRecurring>0</bRecurring>
 			<bTeam>0</bTeam>
@@ -14779,8 +15207,7 @@
 			<OrPreReqs/>
 			<AndPreReqs/>
 			<ObsoleteTechs>
-				<ObsoleteTech>TECH_RIFLING</ObsoleteTech>
-				<ObsoleteTech>TECH_RAILROAD</ObsoleteTech>
+				<ObsoleteTech>TECH_MILITARY_SCIENCE</ObsoleteTech>
 			</ObsoleteTechs>
 			<bRecurring>0</bRecurring>
 			<bTeam>0</bTeam>
@@ -15032,7 +15459,7 @@
 			<OrPreReqs/>
 			<AndPreReqs>
 				<PrereqTech>TECH_FLIGHT</PrereqTech>
-				<PrereqTech>TECH_INDUSTRIALISM</PrereqTech>
+				<PrereqTech>TECH_ASSEMBLY_LINE</PrereqTech>
 			</AndPreReqs>
 			<ObsoleteTechs>
 				<ObsoleteTech>TECH_ROBOTICS</ObsoleteTech>
@@ -16197,7 +16624,7 @@
 			<bPrereqEventPlot>0</bPrereqEventPlot>
 			<OrPreReqs/>
 			<AndPreReqs>
-				<PrereqTech>TECH_INDUSTRIALISM</PrereqTech>
+				<PrereqTech>TECH_ASSEMBLY_LINE</PrereqTech>
 			</AndPreReqs>
 			<ObsoleteTechs>
 				<ObsoleteTech>TECH_ROBOTICS</ObsoleteTech>

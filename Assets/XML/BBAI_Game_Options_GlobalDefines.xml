@@ -59,6 +59,6 @@
 		advc.112: The BBAI default was 0; 1 in K-Mod. Not supported in AdvCiv.
 		-->
 		<DefineName>BBAI_HUMAN_AS_VASSAL_OPTION</DefineName>
-		<iDefineIntVal>0</iDefineIntVal>
+		<iDefineIntVal>1</iDefineIntVal>
 	</Define>
 </Civ4Defines>

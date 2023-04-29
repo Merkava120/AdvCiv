@@ -1,0 +1,3 @@
+<NIF>Art/Units/Japanese_Spearman/Yamato_Spearman.nif</NIF>
+			<KFM>Art/Units/Unique_Maya_Holkan/Unique_Mayan_Holkan.kfm</KFM>
+			<SHADERNIF>Art/Units/Japanese_Spearman/Yamato_Spearman.nif</SHADERNIF>

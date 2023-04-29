@@ -1,0 +1,227 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<Civ4GameText xmlns="http://www.firaxis.com">
+	<TEXT>
+		<Tag>TXT_KEY_UNIT_TERRAIN_STRENGTH_MOD</Tag>
+		<English>[ICON_BULLET]%D1_Change%% %s2_TerrOrFeat Strength</English>
+		<French>[ICON_BULLET]% D1_change %%% S2_TERRORFEAT</French>
+		<German>[ICON_BULLET]%D1_Change %%%S2_TERRORFEAT -Stärke</German>
+		<Italian>[ICON_BULLET]%D1_change %%%s2_terrorfeat forza</Italian>
+		<Spanish>[ICON_BULLET]%D1_change %%%s2_terrorfeat fuerza</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_TECH_ENLIGHTENMENT_QUOTE</Tag>
+		<English>"Knowing others is wisdom, knowing youreself is enlightenment." - Lao Tzu</English>
+		<French>"Connaître les autres est la sagesse, vous connaître est l'illumination."- Lao tzu</French>
+		<German>"Andere zu kennen ist Weisheit, sich selbst zu kennen, ist Erleuchtung."- Lao Tzu</German>
+		<Italian>"Conoscere gli altri è saggezza, conoscere te stesso è l'illuminazione."- Lao Tzu</Italian>
+		<Spanish>"Conocer a los demás es sabiduría, saber a ti mismo es la iluminación".- Lao Tzu</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_TECH_STIRRUPS_QUOTE</Tag>
+		<English>"Betwixt the stirrup and the ground, Mercy I asked, mercy I found." - William Camden</English>
+		<French>"Entre l'étrier et le sol, la miséricorde que j'ai demandé, miséricorde que j'ai trouvée."- William Camden</French>
+		<German>"Zwischen dem Steigbügel und dem Boden, Barmherzigkeit, fragte ich, Gnade, die ich fand."- William Camden</German>
+		<Italian>"Tra la staffa e il terreno, misericordia che ho chiesto, misericordia che ho trovato."- William Camden</Italian>
+		<Spanish>"Entre el estribo y el suelo, misericordia le pregunté, la misericordia que encontré".- William Camden</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_TECH_CHIVALRY_QUOTE</Tag>
+		<English>"The more science intervenes in warfare, the more will be the need for engineers in the field armies; in the late war there were never enough sappers at any time." -  Bernard Montgomery</English>
+		<French>"Plus la science intervient dans la guerre, plus vous en sera la nécessité pour les ingénieurs dans les armées de terrain; à la fin de la guerre, il n'y avait jamais assez de sapeurs à tout moment."- Bernard Montgomery</French>
+		<German>"Je mehr Wissenschaft in die Kriegsführung eingeht, desto mehr wird die Notwendigkeit für Ingenieure in den Feldarmeen sein. Im Spätkrieg gab es zu keinem Zeitpunkt genug Sapper."- Bernard Montgomery</German>
+		<Italian>"Più scienza interviene in guerra, più sarà la necessità di ingegneri negli eserciti di campo; nella tarda guerra non ci sono mai stati abbastanza bustatori in qualsiasi momento."- Bernard Montgomery</Italian>
+		<Spanish>"Mientras más ciencia intervinen en la guerra, más será la necesidad de ingenieros en los ejércitos de campo; en la guerra tardía nunca hubo suficientes zapatrones en ningún momento".- Bernard Montgomery</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_TECH_BOWMANSHIP_QUOTE</Tag>
+		<English>"Even as the archer loves the arrow that flies, so too he loves the bow that remains constant in his hands." - Nigerian Proverb</English>
+		<French>"Même si l'Archer aime la flèche qui vole, il aime aussi l'arc qui reste constant dans ses mains."- Proverbe nigérian</French>
+		<German>"Auch wenn der Bogenschütze den Pfeil liebt, der fliegt, liebt er auch den Bogen, der konstant in seinen Händen bleibt."- Nigerianisches Sprichwort</German>
+		<Italian>"Anche se l'arciere ama la freccia che vola, così anche lui ama l'arco che rimane costante nelle sue mani."- Proverbio nigeriano</Italian>
+		<Spanish>"Incluso cuando el arquero ama la flecha que vuela, también ama el arco que permanece constante en sus manos".- Proverbio nigeriano</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_TECH_ACOUSTICS_QUOTE</Tag>
+		<English>"Their rising all at once was as the sound of thunder heard remote." - Milton</English>
+		<French>"Leur montage à la fois était alors que le son de Thunder a entendu éloigné."- Milton</French>
+		<German>"Ihr Aufstieg auf einmal war, als das Geräusch von Donner fern hörte."- Milton</German>
+		<Italian>"La loro sorgere in una volta era come il suono di Thunder ascoltato a distanza."- Milton</Italian>
+		<Spanish>"Su aumento a la vez fue el sonido del trueno que se escuchó remoto".- Milton</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_TECH_ARCHITECTURE_QUOTE</Tag>
+		<English>"Architecture begins where engineering ends." - Walter Gropius</English>
+		<French>"L'architecture commence là où se termine l'ingénierie."- Walter Gropius</French>
+		<German>"Die Architektur beginnt dort, wo Engineering endet."- Walter Gropius</German>
+		<Italian>"L'architettura inizia dove finisce l'ingegneria."- Walter Gropius</Italian>
+		<Spanish>"La arquitectura comienza donde termina la ingeniería".- Walter Gropius</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_TECH_ARCHAEOLOGY_QUOTE</Tag>
+		<English>"Those who cannot remember the past are condemned to repeat it." - George Santayana</English>
+		<French>"Ceux qui ne se souviennent pas du passé sont condamnés à le répéter."- George Santayana</French>
+		<German>"Diejenigen, die sich nicht an die Vergangenheit erinnern können, werden verurteilt, sie zu wiederholen."- George Santayana</German>
+		<Italian>"Coloro che non ricordano il passato sono condannati a ripeterlo."- George Santayana</Italian>
+		<Spanish>"Aquellos que no pueden recordar el pasado están condenados a repetirlo".- George Santayana</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_TECH_GUNNERY_QUOTE</Tag>
+		<English>"All you need for happiness is a good gun, a good horse, and a good wife." - Daniel Boone</English>
+		<French>"Tout ce dont vous avez besoin de bonheur est un bon pistolet, un bon cheval et une bonne épouse."- Daniel Boone</French>
+		<German>"Alles, was Sie zum Glück brauchen, ist eine gute Waffe, ein gutes Pferd und eine gute Frau."- Daniel Boone</German>
+		<Italian>"Tutto ciò di cui hai bisogno per la felicità è una buona pistola, un buon cavallo e una buona moglie."- Daniel Boone</Italian>
+		<Spanish>"Todo lo que necesitas para la felicidad es un buen arma, un buen caballo y una buena esposa".- Daniel Boone</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_TECH_PHYSICS2_QUOTE</Tag>
+		<English>"To every action there is always opposed an equal reaction." - Isaac Newton</English>
+		<French>"À chaque action, il y a toujours une réaction égale."- Isaac Newton</French>
+		<German>"Für jede Aktion gibt es immer eine gleiche Reaktion."- Isaac Newton</German>
+		<Italian>"Ad ogni azione c'è sempre una reazione uguale."- Isaac Newton</Italian>
+		<Spanish>"Para cada acción siempre se opone una reacción igual".- Isaac Newton</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_TECH_ATOMIC_THEORY_QUOTE</Tag>
+		<English>"Nothing exists except atoms and empty space; everything else is opinion." - Democritus</English>
+		<French>"Rien n'existe sauf les atomes et l'espace vide; tout le reste est une opinion."- démocrite</French>
+		<German>"Nichts existiert außer Atomen und leerem Raum; alles andere ist die Meinung."- Demokrit</German>
+		<Italian>"Nulla esiste tranne atomi e spazio vuoto; tutto il resto è opinione."- Democrito</Italian>
+		<Spanish>"Nada existe excepto átomos y espacio vacío; todo lo demás es la opinión".- Demócrito</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_TECH_RADAR_QUOTE</Tag>
+		<English>"Vision is the art of seeing things invisible." - Jonathan Swift</English>
+		<French>"La vision est l'art de voir les choses invisibles."- Jonathan Swift</French>
+		<German>"Vision ist die Kunst, Dinge unsichtbar zu sehen."- Jonathan Swift</German>
+		<Italian>"La visione è l'arte di vedere le cose invisibili."- Jonathan Swift</Italian>
+		<Spanish>"La visión es el arte de ver las cosas invisibles".- Jonathan Swift</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_TECH_PARTICLE_PHYSICS_QUOTE</Tag>
+		<English>"If I could remember the names of all these particles, I'd be a botanist." - Enrico Fermi</English>
+		<French>"Si je pouvais me souvenir des noms de toutes ces particules, je serais botaniste."- Enrico Fermi</French>
+		<German>"Wenn ich mich an die Namen all dieser Partikel erinnern könnte, wäre ich ein Botaniker."- Enrico Fermi</German>
+		<Italian>"Se potessi ricordare i nomi di tutte queste particelle, sarei un botanico."- Enrico Fermi</Italian>
+		<Spanish>"Si pudiera recordar los nombres de todas estas partículas, sería un botánico".- Enrico Fermi</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_TECH_TRAPPING_QUOTE</Tag>
+		<English>"Even brute beasts and wandering birds do not fall into the same traps or nets twice." - Saint Jerome</English>
+		<French>"Même les bêtes brutes et les oiseaux errants ne tombent pas deux fois dans les mêmes pièges ou les mêmes filets."- Saint Jerome</French>
+		<German>"Selbst Brute -Bestien und wandernde Vögel fallen nicht zweimal in die gleichen Fallen oder Netze."- Heiliger Jerome</German>
+		<Italian>"Anche le bestie bruta e gli uccelli erranti non cadono due volte nelle stesse trappole o reti."- San Girolamo</Italian>
+		<Spanish>"Incluso las bestias brutas y las aves errantes no caen en las mismas trampas o redes dos veces".- San Jerónimo</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_TECH_SMELTING_QUOTE</Tag>
+		<English>"Before that steam drill shall beat me down, I'll die with my hammer in my hand." - from "John Henry, the Steel-Driving Man"</English>
+		<French>"Avant que ce foret à vapeur ne me bat, je mourrai avec mon marteau dans ma main."- De "John Henry, l'homme de la conduite d'acier"</French>
+		<German>"Bevor diese Dampfübin mich niederschlagen soll, werde ich mit meinem Hammer in der Hand sterben."- von "John Henry, The Steel-Fahrer" "</German>
+		<Italian>"Prima che quel trapano a vapore mi abbattesse, morirò con il mio martello in mano."- Da "John Henry, The Steel Driving Man"</Italian>
+		<Spanish>"Antes de que ese taladro de vapor me ganará, moriré con mi martillo en la mano".- De "John Henry, el hombre de conducción de acero"</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_TECH_ASTROLOGY_QUOTE</Tag>
+		<English>"Anyone can be a millionaire, but to become a billionaire you need an astologer." - J.P.Morgan</English>
+		<French>"N'importe qui peut être millionnaire, mais pour devenir milliardaire, vous avez besoin d'un astologue."- JP Morgan</French>
+		<German>"Jeder kann Millionär sein, aber um ein Milliardär zu werden, brauchen Sie einen Astologen."- JP Morgan</German>
+		<Italian>"Chiunque può essere un milionario, ma per diventare un miliardario hai bisogno di un astologo."- JP Morgan</Italian>
+		<Spanish>"Cualquiera puede ser millonario, pero para convertirse en multimillonario necesitas un astólogo".- J.P.Morgan</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_TECH_SHIPBUILDING_QUOTE</Tag>
+		<English>"There is nothing but a plank between a sailor and eternity." - Thomas Gibbons</English>
+		<French>"Il n'y a rien d'autre qu'une planche entre un marin et l'éternité."- Thomas Gibbons</French>
+		<German>"Es gibt nichts als eine Planke zwischen einem Seemann und Ewigkeit."- Thomas Gibbons</German>
+		<Italian>"Non c'è altro che una tavola tra un marinaio ed eternità."- Thomas Gibbons</Italian>
+		<Spanish>"No hay nada más que una tabla entre un marinero y una eternidad".- Thomas Gibbons</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_TECH_IRRIGATION_QUOTE</Tag>
+		<English>"Thousands have lived without love, not one without water." - W. H. Auden</English>
+		<French>"Des milliers ont vécu sans amour, pas un sans eau."- W. H. Auden</French>
+		<German>"Tausende haben ohne Liebe gelebt, nicht ohne Wasser."- W. H. Auden</German>
+		<Italian>"Migliaia di persone hanno vissuto senza amore, non uno senza acqua."- W. H. Auden</Italian>
+		<Spanish>"Miles han vivido sin amor, no uno sin agua".- W. H. Auden</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_TECH_COMPASS_QUOTE</Tag>
+		<English>"The winds and the waves are always on the side of the ablest navigators." - Edward Gibbon</English>
+		<French>"Les vents et les vagues sont toujours du côté des navigateurs les plus abondants."- Edward Gibbon</French>
+		<German>"Die Winde und Wellen stehen immer auf der Seite der schädlichsten Navigatoren."- Edward Gibbon</German>
+		<Italian>"I venti e le onde sono sempre sul lato dei navigatori più abili."- Edward Gibbon</Italian>
+		<Spanish>"Los vientos y las olas siempre están del lado de los navegadores más hábiles".- Edward Gibbon</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_TECH_BALLISTICS_QUOTE</Tag>
+		<English>"Men, like bullets, go farthest when they are smoothest." - Jean Paul</English>
+		<French>"Les hommes, comme les balles, vont le plus loin quand ils sont les plus lisses."- Jean Paul</French>
+		<German>"Männer, wie Kugeln, gehen am weitesten, wenn sie reibungslos sind."- Jean Paul</German>
+		<Italian>"Gli uomini, come i proiettili, vanno più lontani quando sono più fluidi."- Jean Paul</Italian>
+		<Spanish>"Los hombres, como las balas, van más lejos cuando son más suaves".- Juan Pablo</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_TECH_STEEL_QUOTE</Tag>
+		<English>"There never was a good knife made of bad steel." - Benjamin Franklin</English>
+		<French>"Il n'y a jamais eu de bon couteau en mauvais acier."- Benjamin Franklin</French>
+		<German>"Es gab nie ein gutes Messer aus schlechtem Stahl."- Benjamin Franklin</German>
+		<Italian>"Non c'è mai stato un buon coltello in acciaio cattivo."- Benjamin Franklin</Italian>
+		<Spanish>"Nunca hubo un buen cuchillo hecho de mal de acero".- Benjamin Franklin</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_TECH_DYNAMITE_QUOTE</Tag>
+		<English>"As soon as men decide that all means are permitted to fight an evil, then their good becomes indistinguishable from the evil that they set out to destroy." - Christopher Dawson</English>
+		<French>"Dès que les hommes décident que tous les moyens sont autorisés à combattre un mal, alors leur bien devient indiscernable du mal qu'ils ont décidé de détruire."- Christopher Dawson</French>
+		<German>"Sobald die Menschen entscheiden, dass alle Mittel ein Böses bekämpfen dürfen, wird ihr Gut nicht von dem Bösen zu unterscheiden, das sie sich auf die sich auf die Suche machten, um sie zu zerstören."- Christopher Dawson</German>
+		<Italian>"Non appena gli uomini decidono che tutti i mezzi sono autorizzati a combattere un male, allora il loro bene diventa indistinguibile dal male che hanno deciso di distruggere."- Christopher Dawson</Italian>
+		<Spanish>"Tan pronto como los hombres deciden que todos los medios pueden luchar contra un mal, entonces su bien se vuelve indistinguible del mal que se propusieron destruir".- Christopher Dawson</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_TECH_NANOTECHNOLOGY_QUOTE</Tag>
+		<English>"If technology is the engine of change, then nanotechnology is the fuel for humanity's future." - Natasha Vita-More</English>
+		<French>"Si la technologie est le moteur du changement, alors la nanotechnologie est le carburant pour l'avenir de l'humanité."- Natasha Vita-More</French>
+		<German>"Wenn Technologie der Motor des Wandels ist, dann ist die Nanotechnologie der Kraftstoff für die Zukunft der Menschheit."- Natasha Vita-More</German>
+		<Italian>"Se la tecnologia è il motore del cambiamento, allora la nanotecnologia è il carburante per il futuro dell'umanità."- Natasha Vita-More</Italian>
+		<Spanish>"Si la tecnología es el motor del cambio, entonces la nanotecnología es el combustible para el futuro de la humanidad".- Natasha vita-More</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_BUILDING_GLOBAL_FREE_SPECIALISTS</Tag>
+		<English>[ICON_BULLET]%D1_Change Free Specialists in all cities</English>
+		<French>[ICON_BULLET]% D1_Change Free Specialists dans toutes les villes</French>
+		<German>[ICON_BULLET]%D1_Change -freie Spezialisten in allen Städten</German>
+		<Italian>[ICON_BULLET]%D1_change specialisti gratuiti in tutte le città</Italian>
+		<Spanish>[ICON_BULLET]%D1_CHANCE Specialistas gratuitos en todas las ciudades</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_BUILDING_GLOBAL_FREE_SPECIALIST</Tag>
+		<English>[ICON_BULLET]%D1_Change Free [COLOR_HIGHLIGHT_TEXT][LINK=literal]%s2_SpclstName[\LINK][COLOR_REVERT] in All cities</English>
+		<French>[ICON_BULLET]% D1_change gratuit[COLOR_HIGHLIGHT_TEXT][LINK=literal]% s2_spclstname[\LINK][COLOR_REVERT]Dans toutes les villes</French>
+		<German>[ICON_BULLET]%D1_change frei[COLOR_HIGHLIGHT_TEXT][LINK=literal]%s2_spclstname[\LINK][COLOR_REVERT]in allen Städten</German>
+		<Italian>[ICON_BULLET]%D1_change gratuito[COLOR_HIGHLIGHT_TEXT][LINK=literal]%s2_spclstname[\LINK][COLOR_REVERT]In tutte le città</Italian>
+		<Spanish>[ICON_BULLET]%D1_change gratis[COLOR_HIGHLIGHT_TEXT][LINK=literal]%s2_spclstname[\LINK][COLOR_REVERT]en todas las ciudades</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_VICTORY_SCREEN_BUILDING</Tag>
+		<English>Build %s1 %s2</English>
+		<French>Construire% s1% s2</French>
+		<German>Bauen Sie %S1 %S2</German>
+		<Italian>Costruisci %S1 %S2</Italian>
+		<Spanish>Construir %s1 %s2</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_TUTORIAL_QUEST_OBJECTIVE_UPDATE</Tag>
+		<English>Objective Update:</English>
+		<French>Mise à jour objective:</French>
+		<German>Objektives Update:</German>
+		<Italian>Aggiornamento obiettivo:</Italian>
+		<Spanish>Actualización objetiva:</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_CIVIC_WE_LOVE_RULER</Tag>
+		<English>"We Love the Governor Day"</English>
+		<French>"Nous aimons le jour du gouverneur"</French>
+		<German>"Wir lieben den Governor Day"</German>
+		<Italian>"Adoriamo il Giorno del Governatore"</Italian>
+		<Spanish>"Amamos el Día del Gobernador"</Spanish>
+	</TEXT>
+</Civ4GameText>

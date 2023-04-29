@@ -24,6 +24,20 @@
 			<!-- (For coal-starved nations, only Italy and Japan come to mind.
 				 Japan actually needs Coal for its UB, and Italy isn't exactly
 				 in the game.) -->
+			<DiscouragedCivs>
+				<DiscouragedCiv>
+					<CivilizationType>CIVILIZATION_ITALY</CivilizationType>
+					<UntilEra>NONE</UntilEra>
+				</DiscouragedCiv>
+				<DiscouragedCiv>
+					<CivilizationType>CIVILIZATION_JAPAN</CivilizationType>
+					<UntilEra>NONE</UntilEra>
+				</DiscouragedCiv>
+				<DiscouragedCiv>
+					<CivilizationType>CIVILIZATION_BRAZIL</CivilizationType>
+					<UntilEra>NONE</UntilEra>
+				</DiscouragedCiv>
+			</DiscouragedCivs>
 			<EncouragedCivs>
 				<EncouragedCiv>
 					<CivilizationType>CIVILIZATION_ENGLAND</CivilizationType>
@@ -32,6 +46,10 @@
 				<EncouragedCiv>
 					<CivilizationType>CIVILIZATION_GERMANY</CivilizationType>
 					<UntilEra>ERA_FUTURE</UntilEra>
+				</EncouragedCiv>
+				<EncouragedCiv>
+					<CivilizationType>CIVILIZATION_AUSTRALIA</CivilizationType>
+					<UntilEra>NONE</UntilEra>
 				</EncouragedCiv>
 			</EncouragedCivs>
 		</TruBonusInfo>
@@ -51,6 +69,10 @@
 			<EncouragedCivs>
 				<EncouragedCiv>
 					<CivilizationType>CIVILIZATION_INCA</CivilizationType>
+					<UntilEra>NONE</UntilEra>
+				</EncouragedCiv>
+				<EncouragedCiv>
+					<CivilizationType>CIVILIZATION_ASSYRIA</CivilizationType>
 					<UntilEra>NONE</UntilEra>
 				</EncouragedCiv>
 				<EncouragedCiv>
@@ -120,6 +142,10 @@
 					<UntilEra>NONE</UntilEra>
 				</DiscouragedCiv>
 				<DiscouragedCiv>
+					<CivilizationType>CIVILIZATION_ASSYRIA</CivilizationType>
+					<UntilEra>NONE</UntilEra>
+				</DiscouragedCiv>
+				<DiscouragedCiv>
 					<CivilizationType>CIVILIZATION_SUMERIA</CivilizationType>
 					<UntilEra>NONE</UntilEra>
 				</DiscouragedCiv>
@@ -139,6 +165,14 @@
 				</EncouragedCiv>
 				<EncouragedCiv>
 					<CivilizationType>CIVILIZATION_OTTOMAN</CivilizationType>
+					<UntilEra>NONE</UntilEra>
+				</EncouragedCiv>
+				<EncouragedCiv>
+					<CivilizationType>CIVILIZATION_HITTITES</CivilizationType>
+					<UntilEra>NONE</UntilEra>
+				</EncouragedCiv>
+				<EncouragedCiv>
+					<CivilizationType>CIVILIZATION_AUSTRALIA</CivilizationType>
 					<UntilEra>NONE</UntilEra>
 				</EncouragedCiv>
 				<EncouragedCiv>
@@ -221,6 +255,10 @@
 					<UntilEra>NONE</UntilEra>
 				</DiscouragedCiv>
 				<DiscouragedCiv>
+					<CivilizationType>CIVILIZATION_AUSTRIA</CivilizationType>
+					<UntilEra>NONE</UntilEra>
+				</DiscouragedCiv>
+				<DiscouragedCiv>
 					<CivilizationType>CIVILIZATION_JAPAN</CivilizationType>
 					<UntilEra>NONE</UntilEra>
 				</DiscouragedCiv>
@@ -276,6 +314,10 @@
 					<UntilEra>NONE</UntilEra>
 				</EncouragedCiv>
 				<EncouragedCiv>
+					<CivilizationType>CIVILIZATION_ASSYRIA</CivilizationType>
+					<UntilEra>NONE</UntilEra>
+				</EncouragedCiv>
+				<EncouragedCiv>
 					<CivilizationType>CIVILIZATION_SUMERIA</CivilizationType>
 					<UntilEra>NONE</UntilEra>
 				</EncouragedCiv>
@@ -312,11 +354,11 @@
 			<BonusType>BONUS_BANANA</BonusType>
 			<DiscouragedRegions>
 				<DiscouragedRegion>
-					<GeoRegion>ARTSTYLE_EUROPEAN</GeoRegion>
+					<GeoRegion>ARTSTYLE_EUROPE</GeoRegion>
 					<UntilEra>NONE</UntilEra>
 				</DiscouragedRegion>
 				<DiscouragedRegion>
-					<GeoRegion>ARTSTYLE_MIDDLE_EAST</GeoRegion>
+					<GeoRegion>ARTSTYLE_CRESCENT</GeoRegion>
 					<UntilEra>ERA_MEDIEVAL</UntilEra>
 				</DiscouragedRegion>
 				<DiscouragedRegion>
@@ -337,6 +379,10 @@
 					<CivilizationType>CIVILIZATION_KOREA</CivilizationType>
 					<UntilEra>NONE</UntilEra>
 				</DiscouragedCiv>
+				<DiscouragedCiv>
+					<CivilizationType>CIVILIZATION_AUSTRALIA</CivilizationType>
+					<UntilEra>NONE</UntilEra>
+				</DiscouragedCiv>
 			</DiscouragedCivs>
 		</TruBonusInfo>
 		<TruBonusInfo>
@@ -354,15 +400,15 @@
 			<BonusType>BONUS_CORN</BonusType>
 			<DiscouragedRegions>
 				<DiscouragedRegion>
-					<GeoRegion>ARTSTYLE_EUROPEAN</GeoRegion>
+					<GeoRegion>ARTSTYLE_EUROPE</GeoRegion>
 					<UntilEra>ERA_RENAISSANCE</UntilEra>
 				</DiscouragedRegion>
 				<DiscouragedRegion>
-					<GeoRegion>ARTSTYLE_MIDDLE_EAST</GeoRegion>
+					<GeoRegion>ARTSTYLE_CRESCENT</GeoRegion>
 					<UntilEra>ERA_RENAISSANCE</UntilEra>
 				</DiscouragedRegion>
 				<DiscouragedRegion>
-					<GeoRegion>ARTSTYLE_ASIAN</GeoRegion>
+					<GeoRegion>ARTSTYLE_ASIA</GeoRegion>
 					<UntilEra>ERA_RENAISSANCE</UntilEra>
 				</DiscouragedRegion>
 			</DiscouragedRegions>
@@ -374,6 +420,10 @@
 				<DiscouragedCiv>
 					<CivilizationType>CIVILIZATION_CARTHAGE</CivilizationType>
 					<UntilEra>ERA_RENAISSANCE</UntilEra>
+				</DiscouragedCiv>
+				<DiscouragedCiv>
+					<CivilizationType>CIVILIZATION_BRAZIL</CivilizationType>
+					<UntilEra>NONE</UntilEra>
 				</DiscouragedCiv>
 			</DiscouragedCivs>
 			<!-- Many other resources being discouraged should already make
@@ -413,6 +463,10 @@
 					<UntilEra>NONE</UntilEra>
 				</EncouragedCiv>
 				<EncouragedCiv>
+					<CivilizationType>CIVILIZATION_AUSTRALIA</CivilizationType>
+					<UntilEra>NONE</UntilEra>
+				</EncouragedCiv>
+				<EncouragedCiv>
 					<CivilizationType>CIVILIZATION_NETHERLANDS</CivilizationType>
 					<UntilEra>NONE</UntilEra>
 				</EncouragedCiv>
@@ -445,6 +499,12 @@
 		<!--TruBonusInfo>
 			<Type>TRU_DEER</Type>
 			<BonusType>BONUS_DEER</BonusType>
+			<EncouragedCivs>
+				<EncouragedCiv>
+					<CivilizationType>CIVILIZATION_KOREA</CivilizationType>
+					<UntilEra>NONE</UntilEra>
+				</EncouragedCiv>
+			</EncouragedCivs>
 		</TruBonusInfo-->
 		<TruBonusInfo>
 			<Type>TRU_FISH</Type>
@@ -520,10 +580,26 @@
 					<CivilizationType>CIVILIZATION_OTTOMAN</CivilizationType>
 					<UntilEra>NONE</UntilEra>
 				</DiscouragedCiv>
+				<DiscouragedCiv>
+					<CivilizationType>CIVILIZATION_ASSYRIA</CivilizationType>
+					<UntilEra>NONE</UntilEra>
+				</DiscouragedCiv>
+				<DiscouragedCiv>
+					<CivilizationType>CIVILIZATION_HITTITES</CivilizationType>
+					<UntilEra>NONE</UntilEra>
+				</DiscouragedCiv>
 			</DiscouragedCivs>
 			<EncouragedCivs>
 				<EncouragedCiv>
-					<CivilizationType>CIVILIZATION_CHINA</CivilizationType>
+					<CivilizationType>CIVILIZATION_AMERICA</CivilizationType>
+					<UntilEra>NONE</UntilEra>
+				</EncouragedCiv>
+				<EncouragedCiv>
+					<CivilizationType>CIVILIZATION_SERBIA</CivilizationType>
+					<UntilEra>NONE</UntilEra>
+				</EncouragedCiv>
+				<EncouragedCiv>
+					<CivilizationType>CIVILIZATION_SPAIN</CivilizationType>
 					<UntilEra>NONE</UntilEra>
 				</EncouragedCiv>
 			</EncouragedCivs>
@@ -533,15 +609,19 @@
 			<BonusType>BONUS_RICE</BonusType>
 			<DiscouragedRegions>
 				<DiscouragedRegion>
-					<GeoRegion>ARTSTYLE_EUROPEAN</GeoRegion>
+					<GeoRegion>ARTSTYLE_EUROPE</GeoRegion>
 					<UntilEra>ERA_RENAISSANCE</UntilEra>
 				</DiscouragedRegion>
 				<DiscouragedRegion>
-					<GeoRegion>ARTSTYLE_MIDDLE_EAST</GeoRegion>
+					<GeoRegion>ARTSTYLE_CRESCENT</GeoRegion>
 					<UntilEra>ERA_CLASSICAL</UntilEra>
 				</DiscouragedRegion>
 				<DiscouragedRegion>
 					<GeoRegion>ARTSTYLE_SOUTH_AMERICA</GeoRegion>
+					<UntilEra>ERA_RENAISSANCE</UntilEra>
+				</DiscouragedRegion>
+				<DiscouragedRegion>
+					<GeoRegion>ARTSTYLE_SOUTH_PACIFIC</GeoRegion>
 					<UntilEra>ERA_RENAISSANCE</UntilEra>
 				</DiscouragedRegion>
 			</DiscouragedRegions>
@@ -598,6 +678,10 @@
 			</DiscouragedCivs>
 			<EncouragedCivs>
 				<EncouragedCiv>
+					<CivilizationType>CIVILIZATION_AUSTRALIA</CivilizationType>
+					<UntilEra>NONE</UntilEra>
+				</EncouragedCiv>
+				<EncouragedCiv>
 					<CivilizationType>CIVILIZATION_MONGOL</CivilizationType>
 					<UntilEra>NONE</UntilEra>
 				</EncouragedCiv>
@@ -606,8 +690,13 @@
 					<UntilEra>NONE</UntilEra>
 				</EncouragedCiv>
 				<EncouragedCiv>
+					<CivilizationType>CIVILIZATION_HITTITES</CivilizationType>
+					<UntilEra>NONE</UntilEra>
+				</EncouragedCiv>
+				<EncouragedCiv>
 					<!-- Alt. idea: Copper until ERA_MEDIEVAL. But having
-						 Copper all the time undercuts their UU. -->
+						 Copper all the time can make their mounted UU feel
+						 a little redundant. -->
 					<CivilizationType>CIVILIZATION_PERSIA</CivilizationType>
 					<UntilEra>ERA_MEDIEVAL</UntilEra>
 				</EncouragedCiv>
@@ -708,6 +797,10 @@
 					<UntilEra>NONE</UntilEra>
 				</DiscouragedCiv>
 				<DiscouragedCiv>
+					<CivilizationType>CIVILIZATION_ASSYRIA</CivilizationType>
+					<UntilEra>NONE</UntilEra>
+				</DiscouragedCiv>
+				<DiscouragedCiv>
 					<CivilizationType>CIVILIZATION_SUMERIA</CivilizationType>
 					<UntilEra>NONE</UntilEra>
 				</DiscouragedCiv>
@@ -728,6 +821,10 @@
 					<UntilEra>NONE</UntilEra>
 				</DiscouragedCiv>
 				<DiscouragedCiv>
+					<CivilizationType>CIVILIZATION_ASSYRIA</CivilizationType>
+					<UntilEra>NONE</UntilEra>
+				</DiscouragedCiv>
+				<DiscouragedCiv>
 					<CivilizationType>CIVILIZATION_SUMERIA</CivilizationType>
 					<UntilEra>NONE</UntilEra>
 				</DiscouragedCiv>
@@ -745,6 +842,10 @@
 				</DiscouragedCiv>
 				<DiscouragedCiv>
 					<CivilizationType>CIVILIZATION_GERMANY</CivilizationType>
+					<UntilEra>NONE</UntilEra>
+				</DiscouragedCiv>
+				<DiscouragedCiv>
+					<CivilizationType>CIVILIZATION_AUSTRIA</CivilizationType>
 					<UntilEra>NONE</UntilEra>
 				</DiscouragedCiv>
 				<DiscouragedCiv>
@@ -780,7 +881,7 @@
 			<BonusType>BONUS_INCENSE</BonusType>
 			<DiscouragedRegions>
 				<DiscouragedRegion>
-					<GeoRegion>ARTSTYLE_EUROPEAN</GeoRegion>
+					<GeoRegion>ARTSTYLE_EUROPE</GeoRegion>
 					<UntilEra>NONE</UntilEra>
 				</DiscouragedRegion>
 			</DiscouragedRegions>
@@ -792,6 +893,10 @@
 				</DiscouragedCiv>
 				<DiscouragedCiv>
 					<CivilizationType>CIVILIZATION_BABYLON</CivilizationType>
+					<UntilEra>NONE</UntilEra>
+				</DiscouragedCiv>
+				<DiscouragedCiv>
+					<CivilizationType>CIVILIZATION_ASSYRIA</CivilizationType>
 					<UntilEra>NONE</UntilEra>
 				</DiscouragedCiv>
 				<DiscouragedCiv>
@@ -817,7 +922,7 @@
 			<BonusType>BONUS_IVORY</BonusType>
 			<DiscouragedRegions>
 				<DiscouragedRegion>
-					<GeoRegion>ARTSTYLE_EUROPEAN</GeoRegion>
+					<GeoRegion>ARTSTYLE_EUROPE</GeoRegion>
 					<UntilEra>NONE</UntilEra>
 				</DiscouragedRegion>
 				<DiscouragedRegion>
@@ -830,7 +935,15 @@
 				 but not for warfare. -->
 			<DiscouragedCivs>
 				<DiscouragedCiv>
+					<CivilizationType>CIVILIZATION_AUSTRALIA</CivilizationType>
+					<UntilEra>NONE</UntilEra>
+				</DiscouragedCiv>
+				<DiscouragedCiv>
 					<CivilizationType>CIVILIZATION_OTTOMAN</CivilizationType>
+					<UntilEra>NONE</UntilEra>
+				</DiscouragedCiv>
+				<DiscouragedCiv>
+					<CivilizationType>CIVILIZATION_HITTITES</CivilizationType>
 					<UntilEra>NONE</UntilEra>
 				</DiscouragedCiv>
 				<DiscouragedCiv>
@@ -851,6 +964,10 @@
 					<CivilizationType>CIVILIZATION_KOREA</CivilizationType>
 					<UntilEra>NONE</UntilEra>
 				</DiscouragedCiv>
+				<DiscouragedCiv>
+					<CivilizationType>CIVILIZATION_BRAZIL</CivilizationType>
+					<UntilEra>NONE</UntilEra>
+				</DiscouragedCiv>
 			</DiscouragedCivs>
 			<EncouragedCivs>
 				<EncouragedCiv>
@@ -868,12 +985,12 @@
 			<BonusType>BONUS_SILK</BonusType>
 			<DiscouragedRegions>
 				<DiscouragedRegion>
-					<GeoRegion>ARTSTYLE_EUROPEAN</GeoRegion>
+					<GeoRegion>ARTSTYLE_EUROPE</GeoRegion>
 					<UntilEra>ERA_MEDIEVAL</UntilEra>
 				</DiscouragedRegion>
 				<!-- Want to exempt Anatolia -->
 				<!--DiscouragedRegion>
-					<GeoRegion>ARTSTYLE_MIDDLE_EAST</GeoRegion>
+					<GeoRegion>ARTSTYLE_CRESCENT</GeoRegion>
 					<UntilEra>ERA_MEDIEVAL</UntilEra>
 				</DiscouragedRegion-->
 				<DiscouragedRegion>
@@ -901,6 +1018,10 @@
 				<DiscouragedCiv>
 					<CivilizationType>CIVILIZATION_BABYLON</CivilizationType>
 					<UntilEra>ERA_MEDIEVAL</UntilEra>
+				</DiscouragedCiv>
+				<DiscouragedCiv>
+					<CivilizationType>CIVILIZATION_ASSYRIA</CivilizationType>
+					<UntilEra>NONE</UntilEra>
 				</DiscouragedCiv>
 				<DiscouragedCiv>
 					<CivilizationType>CIVILIZATION_SUMERIA</CivilizationType>
@@ -937,6 +1058,10 @@
 				</DiscouragedCiv>
 				<DiscouragedCiv>
 					<CivilizationType>CIVILIZATION_BABYLON</CivilizationType>
+					<UntilEra>NONE</UntilEra>
+				</DiscouragedCiv>
+				<DiscouragedCiv>
+					<CivilizationType>CIVILIZATION_ASSYRIA</CivilizationType>
 					<UntilEra>NONE</UntilEra>
 				</DiscouragedCiv>
 				<DiscouragedCiv>
@@ -993,7 +1118,7 @@
 			<BonusType>BONUS_SPICES</BonusType>
 			<DiscouragedRegions>
 				<DiscouragedRegion>
-					<GeoRegion>ARTSTYLE_EUROPEAN</GeoRegion>
+					<GeoRegion>ARTSTYLE_EUROPE</GeoRegion>
 					<UntilEra>NONE</UntilEra>
 				</DiscouragedRegion>
 			</DiscouragedRegions>
@@ -1031,6 +1156,10 @@
 					<UntilEra>NONE</UntilEra>
 				</DiscouragedCiv>
 				<DiscouragedCiv>
+					<CivilizationType>CIVILIZATION_ASSYRIA</CivilizationType>
+					<UntilEra>NONE</UntilEra>
+				</DiscouragedCiv>
+				<DiscouragedCiv>
 					<CivilizationType>CIVILIZATION_SUMERIA</CivilizationType>
 					<UntilEra>NONE</UntilEra>
 				</DiscouragedCiv>
@@ -1065,6 +1194,10 @@
 					<CivilizationType>CIVILIZATION_MAYA</CivilizationType>
 					<UntilEra>NONE</UntilEra>
 				</EncouragedCiv>
+				<EncouragedCiv>
+					<CivilizationType>CIVILIZATION_BRAZIL</CivilizationType>
+					<UntilEra>NONE</UntilEra>
+				</EncouragedCiv>
 			</EncouragedCivs>
 		</TruBonusInfo>
 		<TruBonusInfo>
@@ -1072,12 +1205,12 @@
 			<BonusType>BONUS_SUGAR</BonusType>
 			<DiscouragedRegions>
 				<DiscouragedRegion>
-					<GeoRegion>ARTSTYLE_EUROPEAN</GeoRegion>
+					<GeoRegion>ARTSTYLE_EUROPE</GeoRegion>
 					<!-- beet sugar -->
 					<UntilEra>ERA_RENAISSANCE</UntilEra>
 				</DiscouragedRegion>
 				<DiscouragedRegion>
-					<GeoRegion>ARTSTYLE_MIDDLE_EAST</GeoRegion>
+					<GeoRegion>ARTSTYLE_CRESCENT</GeoRegion>
 					<UntilEra>ERA_MEDIEVAL</UntilEra>
 				</DiscouragedRegion>
 				<DiscouragedRegion>
@@ -1096,6 +1229,12 @@
 					<UntilEra>NONE</UntilEra>
 				</DiscouragedCiv>
 			</DiscouragedCivs>
+			<EncouragedCivs>
+				<EncouragedCiv>
+					<CivilizationType>CIVILIZATION_BRAZIL</CivilizationType>
+					<UntilEra>NONE</UntilEra>
+				</EncouragedCiv>
+			</EncouragedCivs>
 		</TruBonusInfo>
 		<TruBonusInfo>
 			<Type>TRU_WINE</Type>
@@ -1161,6 +1300,254 @@
 		<!--TruBonusInfo>
 			<Type>TRU_WHALE</Type>
 			<BonusType>BONUS_WHALE</BonusType>
+		</TruBonusInfo-->
+		<TruBonusInfo>
+			<Type>TRU_SHRIMP</Type>
+			<BonusType>BONUS_SHRIMP</BonusType>
+			<!-- Don't discourage the Americas. Suitable vines did grow there,
+				 and it's not proven that they weren't fermented. -->
+			<DiscouragedRegions>
+				<DiscouragedRegion>
+					<GeoRegion>ARTSTYLE_ANGLO_AMERICA</GeoRegion>
+					<UntilEra>NONE</UntilEra>
+				</DiscouragedRegion>
+				<DiscouragedRegion>
+					<GeoRegion>ARTSTYLE_EUROPE</GeoRegion>
+					<UntilEra>NONE</UntilEra>
+				</DiscouragedRegion>
+			</DiscouragedRegions>
+			<DiscouragedCivs>
+				<DiscouragedCiv>
+					<CivilizationType>CIVILIZATION_JAPAN</CivilizationType>
+					<UntilEra>NONE</UntilEra>
+				</DiscouragedCiv>
+			</DiscouragedCivs>
+			<EncouragedCivs>
+				<EncouragedCiv>
+					<CivilizationType>CIVILIZATION_INDIA</CivilizationType>
+					<UntilEra>NONE</UntilEra>
+				</EncouragedCiv>
+				<EncouragedCiv>
+					<CivilizationType>CIVILIZATION_VIETNAM</CivilizationType>
+					<UntilEra>NONE</UntilEra>
+				</EncouragedCiv>
+				<EncouragedCiv>
+					<CivilizationType>CIVILIZATION_INDONESIA</CivilizationType>
+					<UntilEra>NONE</UntilEra>
+				</EncouragedCiv>
+			</EncouragedCivs>
+		</TruBonusInfo>
+		<TruBonusInfo>
+			<Type>TRU_COTTON</Type>
+			<BonusType>BONUS_COTTON</BonusType>
+			<DiscouragedRegions>
+				<DiscouragedRegion>
+					<GeoRegion>ARTSTYLE_SOUTH_PACIFIC</GeoRegion>
+					<UntilEra>NONE</UntilEra>
+				</DiscouragedRegion>
+				<DiscouragedRegion>
+					<GeoRegion>ARTSTYLE_EUROPE</GeoRegion>
+					<UntilEra>NONE</UntilEra>
+				</DiscouragedRegion>
+				<DiscouragedRegion>
+					<GeoRegion>ARTSTYLE_GRECO_ROMAN</GeoRegion>
+					<UntilEra>NONE</UntilEra>
+				</DiscouragedRegion>
+			</DiscouragedRegions>
+			<DiscouragedCivs>
+				<DiscouragedCiv>
+					<CivilizationType>CIVILIZATION_KOREA</CivilizationType>
+					<!-- Somewhat popular in Tang dynasty, but, generally,
+						 the Chinese weren't fond of grape wine. -->
+					<UntilEra>ERA_CLASSICAL</UntilEra>
+				</DiscouragedCiv>
+			</DiscouragedCivs>
+			<EncouragedCivs>
+				<EncouragedCiv>
+					<CivilizationType>CIVILIZATION_CHINA</CivilizationType>
+					<UntilEra>NONE</UntilEra>
+				</EncouragedCiv>
+				<EncouragedCiv>
+					<CivilizationType>CIVILIZATION_INDIA</CivilizationType>
+					<UntilEra>NONE</UntilEra>
+				</EncouragedCiv>
+			</EncouragedCivs>
+		</TruBonusInfo>
+		<TruBonusInfo>
+			<Type>TRU_COFFEE</Type>
+			<BonusType>BONUS_COFFEE</BonusType>
+			<!-- Don't discourage the Americas. Suitable vines did grow there,
+				 and it's not proven that they weren't fermented. -->
+			<DiscouragedRegions>
+				<DiscouragedRegion>
+					<GeoRegion>ARTSTYLE_EUROPE</GeoRegion>
+					<UntilEra>NONE</UntilEra>
+				</DiscouragedRegion>
+				<DiscouragedRegion>
+					<GeoRegion>ARTSTYLE_GRECO_ROMAN</GeoRegion>
+					<UntilEra>NONE</UntilEra>
+				</DiscouragedRegion>
+				<DiscouragedRegion>
+					<GeoRegion>ARTSTYLE_CRESCENT</GeoRegion>
+					<UntilEra>NONE</UntilEra>
+				</DiscouragedRegion>
+				<DiscouragedRegion>
+					<GeoRegion>ARTSTYLE_ASIA</GeoRegion>
+					<UntilEra>ERA_MODERN</UntilEra>
+				</DiscouragedRegion>
+				<DiscouragedRegion>
+					<GeoRegion>ARTSTYLE_SOUTH_PACIFIC</GeoRegion>
+					<UntilEra>NONE</UntilEra>
+				</DiscouragedRegion>
+				<DiscouragedRegion>
+					<GeoRegion>ARTSTYLE_ANGLO_AMERICA</GeoRegion>
+					<UntilEra>NONE</UntilEra>
+				</DiscouragedRegion>
+			</DiscouragedRegions>
+			<EncouragedCivs>
+				<EncouragedCiv>
+					<CivilizationType>CIVILIZATION_BRAZIL</CivilizationType>
+					<UntilEra>NONE</UntilEra>
+				</EncouragedCiv>
+				<EncouragedCiv>
+					<CivilizationType>CIVILIZATION_ETHIOPIA</CivilizationType>
+					<UntilEra>NONE</UntilEra>
+				</EncouragedCiv>
+				<EncouragedCiv>
+					<CivilizationType>CIVILIZATION_INDONESIA</CivilizationType>
+					<UntilEra>NONE</UntilEra>
+				</EncouragedCiv>
+				<EncouragedCiv>
+					<CivilizationType>CIVILIZATION_VIETNAM</CivilizationType>
+					<UntilEra>NONE</UntilEra>
+				</EncouragedCiv>
+			</EncouragedCivs>
+		</TruBonusInfo>
+		<TruBonusInfo>
+			<Type>TRU_TOBACCO</Type>
+			<BonusType>BONUS_TOBACCO</BonusType>
+			<DiscouragedRegions>
+				<DiscouragedRegion>
+					<GeoRegion>ARTSTYLE_EUROPE</GeoRegion>
+					<UntilEra>NONE</UntilEra>
+				</DiscouragedRegion>
+				<DiscouragedRegion>
+					<GeoRegion>ARTSTYLE_GRECO_ROMAN</GeoRegion>
+					<UntilEra>NONE</UntilEra>
+				</DiscouragedRegion>
+				<DiscouragedRegion>
+					<GeoRegion>ARTSTYLE_ASIA</GeoRegion>
+					<UntilEra>ERA_MODERN</UntilEra>
+				</DiscouragedRegion>
+				<DiscouragedRegion>
+					<GeoRegion>ARTSTYLE_SOUTH_PACIFIC</GeoRegion>
+					<UntilEra>NONE</UntilEra>
+				</DiscouragedRegion>
+			</DiscouragedRegions>
+			<EncouragedCivs>
+				<EncouragedCiv>
+					<CivilizationType>CIVILIZATION_AMERICA</CivilizationType>
+					<UntilEra>NONE</UntilEra>
+				</EncouragedCiv>
+				<EncouragedCiv>
+					<CivilizationType>CIVILIZATION_NATIVE_AMERICA</CivilizationType>
+					<UntilEra>NONE</UntilEra>
+				</EncouragedCiv>
+				<EncouragedCiv>
+					<CivilizationType>CIVILIZATION_BRAZIL</CivilizationType>
+					<UntilEra>NONE</UntilEra>
+				</EncouragedCiv>
+			</EncouragedCivs>
+		</TruBonusInfo>
+		<TruBonusInfo>
+			<Type>TRU_OLIVES</Type>
+			<BonusType>BONUS_OLIVES</BonusType>
+			<DiscouragedRegions>
+				<DiscouragedRegion>
+					<GeoRegion>ARTSTYLE_ASIA</GeoRegion>
+					<UntilEra>NONE</UntilEra>
+				</DiscouragedRegion>
+				<DiscouragedRegion>
+					<GeoRegion>ARTSTYLE_SOUTH_PACIFIC</GeoRegion>
+					<UntilEra>NONE</UntilEra>
+				</DiscouragedRegion>
+			</DiscouragedRegions>
+			<DiscouragedCivs>
+				<DiscouragedCiv>
+					<CivilizationType>CIVILIZATION_DACIA</CivilizationType>
+					<UntilEra>NONE</UntilEra>
+				</DiscouragedCiv>
+			</DiscouragedCivs>
+			<EncouragedCivs>
+				<EncouragedCiv>
+					<CivilizationType>CIVILIZATION_ITALY</CivilizationType>
+					<UntilEra>NONE</UntilEra>
+				</EncouragedCiv>
+				<EncouragedCiv>
+					<CivilizationType>CIVILIZATION_ROME</CivilizationType>
+					<UntilEra>NONE</UntilEra>
+				</EncouragedCiv>
+				<EncouragedCiv>
+					<CivilizationType>CIVILIZATION_SPAIN</CivilizationType>
+					<UntilEra>NONE</UntilEra>
+				</EncouragedCiv>
+				<EncouragedCiv>
+					<CivilizationType>CIVILIZATION_GREECE</CivilizationType>
+					<UntilEra>NONE</UntilEra>
+				</EncouragedCiv>
+				<EncouragedCiv>
+					<CivilizationType>CIVILIZATION_MOROCCO</CivilizationType>
+					<UntilEra>NONE</UntilEra>
+				</EncouragedCiv>
+				<EncouragedCiv>
+					<CivilizationType>CIVILIZATION_OTTOMAN</CivilizationType>
+					<UntilEra>NONE</UntilEra>
+				</EncouragedCiv>
+				<EncouragedCiv>
+					<CivilizationType>CIVILIZATION_HITTITES</CivilizationType>
+					<UntilEra>NONE</UntilEra>
+				</EncouragedCiv>
+			</EncouragedCivs>
+		</TruBonusInfo>
+		<TruBonusInfo>
+			<Type>TRU_POTATO</Type>
+			<BonusType>BONUS_POTATO</BonusType>
+			<DiscouragedRegions>
+				<DiscouragedRegion>
+					<GeoRegion>ARTSTYLE_ASIA</GeoRegion>
+					<UntilEra>ERA_RENAISSANCE</UntilEra>
+				</DiscouragedRegion>
+				<DiscouragedRegion>
+					<GeoRegion>ARTSTYLE_EUROPE</GeoRegion>
+					<UntilEra>ERA_RENAISSANCE</UntilEra>
+				</DiscouragedRegion>
+				<DiscouragedRegion>
+					<GeoRegion>ARTSTYLE_SOUTH_PACIFIC</GeoRegion>
+					<UntilEra>ERA_RENAISSANCE</UntilEra>
+				</DiscouragedRegion>
+			</DiscouragedRegions>
+			<EncouragedCivs>
+				<EncouragedCiv>
+					<CivilizationType>CIVILIZATION_GERMANY</CivilizationType>
+					<UntilEra>NONE</UntilEra>
+				</EncouragedCiv>
+				<EncouragedCiv>
+					<CivilizationType>CIVILIZATION_NATIVE_AMERICA</CivilizationType>
+					<UntilEra>NONE</UntilEra>
+				</EncouragedCiv>
+				<EncouragedCiv>
+					<CivilizationType>CIVILIZATION_AMERICA</CivilizationType>
+					<UntilEra>NONE</UntilEra>
+				</EncouragedCiv>
+			</EncouragedCivs>
+		</TruBonusInfo>
+		<!--TruBonusInfo>
+			<Type>TRU_AMBER</Type>
+			<BonusType>BONUS_AMBER</BonusType>
+		</TruBonusInfo-->
+		<!--TruBonusInfo>
+			<Type>TRU_SALT</Type>
+			<BonusType>BONUS_SALT</BonusType>
 		</TruBonusInfo-->
 	</TruBonusInfos>
 </Civ4TruBonusInfos>

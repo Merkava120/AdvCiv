@@ -1,0 +1,11 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<Civ4GameText xmlns="http://www.firaxis.com">
+	<TEXT>
+		<Tag>TXT_KEY_BUILDING_MILITARY_ACADEMY_STRATEGY</Tag>
+		<English>[COLOR_BUILDING_TEXT]Military Academies[COLOR_REVERT] provides free xp to military units.</English>
+		<French>[COLOR_BUILDING_TEXT]Académies militaires[COLOR_REVERT]Fournit des XP gratuits aux unités militaires.</French>
+		<German>[COLOR_BUILDING_TEXT]Militärakademien[COLOR_REVERT]Bietet kostenlose XP für Militäreinheiten.</German>
+		<Italian>[COLOR_BUILDING_TEXT]Accademie militari[COLOR_REVERT]Fornisce XP gratuito alle unità militari.</Italian>
+		<Spanish>[COLOR_BUILDING_TEXT]Academias militares[COLOR_REVERT]Proporciona XP gratuito a las unidades militares.</Spanish>
+	</TEXT>
+</Civ4GameText>

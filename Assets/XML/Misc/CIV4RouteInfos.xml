@@ -21,7 +21,7 @@
 			<Yields/>
 			<TechMovementChanges>
 				<TechMovementChange>
-					<PrereqTech>TECH_ENGINEERING</PrereqTech>
+					<PrereqTech>TECH_ARCHITECTURE</PrereqTech>
 					<iMovementChange>-10</iMovementChange>
 				</TechMovementChange>
 			</TechMovementChanges>
@@ -38,7 +38,6 @@
 			<!-- advc.255 -->
 			<iAirBombDefense>5</iAirBombDefense>
 			<!-- advc.255 -->
-			<RoutePillage>ROUTE_ROAD</RoutePillage>
 			<BonusType>NONE</BonusType>
 			<PrereqOrBonuses>
 				<PrereqOrBonus>

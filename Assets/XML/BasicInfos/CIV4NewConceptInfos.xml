@@ -214,5 +214,20 @@
 			<Description>TXT_KEY_TRAIT_SPIRITUAL</Description>
 			<Civilopedia>TXT_KEY_TRAIT_SPIRITUAL_PEDIA</Civilopedia>
 		</NewConceptInfo>
+		<NewConceptInfo>
+			<Type>CONCEPT_TRAIT_CONSTRUCTIVE</Type>
+			<Description>TXT_KEY_TRAIT_CONSTRUCTIVE</Description>
+			<Civilopedia>TXT_KEY_TRAIT_CONSTRUCTIVE_PEDIA</Civilopedia>
+		</NewConceptInfo>
+		<NewConceptInfo>
+			<Type>CONCEPT_TRAIT_SEAFARING</Type>
+			<Description>TXT_KEY_TRAIT_SEAFARING</Description>
+			<Civilopedia>TXT_KEY_TRAIT_SEAFARING_PEDIA</Civilopedia>
+		</NewConceptInfo>
+		<NewConceptInfo>
+			<Type>CONCEPT_TRAIT_SCIENTIFIC</Type>
+			<Description>TXT_KEY_TRAIT_SCIENTIFIC</Description>
+			<Civilopedia>TXT_KEY_TRAIT_SCIENTIFIC_PEDIA</Civilopedia>
+		</NewConceptInfo>
 	</NewConceptInfos>
 </Civ4NewConceptInfos>

@@ -94,7 +94,7 @@
 		<!-- We continue a war because we've been paid for it. (Or maybe, rather,
 			 to prove that we're a reliable hireling.) -->
 		<DefineName>UWAI_WEIGHT_HIRED_HAND</DefineName>
-		<iDefineIntVal>100</iDefineIntVal>
+		<iDefineIntVal>0</iDefineIntVal>
 	</Define>
 	<Define>
 		<!-- By conquering cities, we reduce culture pressure on our cities. -->
@@ -102,9 +102,10 @@
 		<iDefineIntVal>100</iDefineIntVal>
 	</Define>
 	<Define>
+                        <!-- Adv_plus change from 100 to 0. -->
 		<!-- Fight a joint war for the "mutual struggle" diplo bonus. -->
 		<DefineName>UWAI_WEIGHT_SUCKING_UP</DefineName>
-		<iDefineIntVal>100</iDefineIntVal>
+		<iDefineIntVal>0</iDefineIntVal>
 	</Define>
 	<Define>
 		<!-- To weaken a civ that we perceive as a long-term military threat. -->
@@ -178,8 +179,9 @@
 	<Define>
 		<!-- Discourages early war against humans; not fair when the AI has a
 			 head start. -->
+                 	<!-- Adv_plus change from 100 to 0. -->
 		<DefineName>UWAI_WEIGHT_FAIR_PLAY</DefineName>
-		<iDefineIntVal>100</iDefineIntVal>
+		<iDefineIntVal>0</iDefineIntVal>
 	</Define>
 	<Define>
 		<!-- War as its own purpose. Before this aspect was added, there was too
@@ -207,8 +209,9 @@
 			 from our war utility. When already at war, only half of that is
 			 subtracted. iLoveOfPeace is unused in AdvCiv, so this aspect
 			 exists only for mod-mods. -->
+ 		<!-- Adv_plus change from 100 to 0. -->
 		<DefineName>UWAI_WEIGHT_LOVE_OF_PEACE</DefineName>
-		<iDefineIntVal>100</iDefineIntVal>
+		<iDefineIntVal>0</iDefineIntVal>
 	</Define>
 	<Define>
 	<!-- We're wary of waging war when a dangerous third party appears likely
@@ -222,7 +225,7 @@
 		 long time. Conversely, we're more inclined to make peace if many wars
 		 have been ongoing for a long time. -->
 		<DefineName>UWAI_WEIGHT_DRAMATIC_ARC</DefineName>
-		<iDefineIntVal>100</iDefineIntVal>
+		<iDefineIntVal>0</iDefineIntVal>
 	</Define>
 
 	<Define>
@@ -279,7 +282,7 @@
 			 advc.130r: Reduce a little. Caveat: Should be careful about
 			 changing this value, it's used as a baseline in many places. -->
 		<DefineName>WAR_SUCCESS_CITY_CAPTURING</DefineName>
-		<iDefineIntVal>22</iDefineIntVal>
+		<iDefineIntVal>25</iDefineIntVal>
 	</Define>
 	<Define>
 		<!-- Ratio of enemy power to team power for AI to consider running TURTLE (all out defense, no offensive forays) strategy.  
@@ -290,7 +293,7 @@
 	<Define>
 		<!-- Minimum stack strength ratio at which AI will attack enemy city it is next to, higher means less suicide.  BTS default: 120, BBAI: 125, now: 123 -->
 		<DefineName>BBAI_ATTACK_CITY_STACK_RATIO</DefineName>
-		<iDefineIntVal>123</iDefineIntVal>
+		<iDefineIntVal>125</iDefineIntVal>
 	</Define>
 	<!-- advc.003j: Obsoleted by K-Mod code (CvUnitAI::AI_bombardCity) -->
 	<!-- Minimum attack odds of best attacker for AI to skip bombarding a city
@@ -311,7 +314,7 @@
 		<!-- Minimum stack strength ratio for AI to skip bombarding city and just attack, higher is more conservative.  BBAI default: 150 -->
 		<!-- advc.114c: Was 140 in K-Mod, now 137. -->
 		<DefineName>BBAI_SKIP_BOMBARD_MIN_STACK_RATIO</DefineName>
-		<iDefineIntVal>137</iDefineIntVal>
+		<iDefineIntVal>125</iDefineIntVal>
 	</Define>
 	<Define>
 		<!-- Minimum city site value that the AI will consider settling. default: 600. (K-Mod) -->

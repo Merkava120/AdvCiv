@@ -27,7 +27,7 @@
 		 Recommended: -10/-50; use sth. like -1000/-1000 to log details always. -->
     <Define>
         <DefineName>UWAI_REPORT_THRESH</DefineName>
-        <iDefineIntVal>-10</iDefineIntVal>
+        <iDefineIntVal>-50</iDefineIntVal>
     </Define>
     <Define>
         <DefineName>UWAI_REPORT_THRESH_HUMAN</DefineName>
@@ -40,7 +40,7 @@
 		 to 0 (default), no such messages are shown. -->
 	<Define>
         <DefineName>UWAI_SPECTATOR_ENABLED</DefineName>
-        <iDefineIntVal>0</iDefineIntVal>
+        <iDefineIntVal>1</iDefineIntVal>
     </Define>
 
 	<!-- [advc.104]

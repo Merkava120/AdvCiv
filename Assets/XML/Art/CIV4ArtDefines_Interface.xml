@@ -824,6 +824,10 @@
 			<Path>Art/Interface/Main Menu/CIV4MainMenuReplay.kfm</Path>
 		</InterfaceArtInfo>
 		<InterfaceArtInfo>
+			<Type>MAINMENU_SCENE_ADVC</Type>
+			<Path>Art/Interface/Adv Menu/CIV4MainMenuBG.nif</Path>
+		</InterfaceArtInfo>
+		<InterfaceArtInfo>
 			<Type>MAINMENU_SCENE</Type>
 			<Path>Art/Interface/Main Menu/CIV4MainMenuBG.nif</Path>
 		</InterfaceArtInfo>

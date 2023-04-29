@@ -1,0 +1,11 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<Civ4GameText xmlns="http://www.firaxis.com">
+	<TEXT>
+		<Tag>TXT_KEY_BUILDING_HANGING_GARDEN_STRATEGY</Tag>
+		<English>The [COLOR_BUILDING_TEXT]Hanging Gardens[COLOR_REVERT] reduces unhealthiness that comes from the city's population. It increases the odds of its city generating a [COLOR_UNIT_TEXT]Great Engineer[COLOR_REVERT].</English>
+		<French>Le[COLOR_BUILDING_TEXT]Jardins suspendus[COLOR_REVERT]réduit la malfaisance qui vient de la population de la ville.Il augmente les chances que sa ville générant un[COLOR_UNIT_TEXT]Grand ingénieur[COLOR_REVERT].</French>
+		<German>Der[COLOR_BUILDING_TEXT]Hängende Gärten[COLOR_REVERT]Reduziert die Ungesundheit, die aus der Bevölkerung der Stadt kommt.Es erhöht die Wahrscheinlichkeit, dass seine Stadt a erzeugt[COLOR_UNIT_TEXT]Toller Ingenieur[COLOR_REVERT].</German>
+		<Italian>Il[COLOR_BUILDING_TEXT]Giardini pensili[COLOR_REVERT]Riduce la malsanilità che viene dalla popolazione della città.Aumenta le probabilità della sua città che generano a[COLOR_UNIT_TEXT]Ottimo ingegnere[COLOR_REVERT].</Italian>
+		<Spanish>El[COLOR_BUILDING_TEXT]Jardines colgantes[COLOR_REVERT]Reduce la falta de salud que proviene de la población de la ciudad.Aumenta las probabilidades de que su ciudad genere un[COLOR_UNIT_TEXT]Gran ingeniero[COLOR_REVERT].</Spanish>
+	</TEXT>
+</Civ4GameText>

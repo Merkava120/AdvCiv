@@ -243,6 +243,14 @@
 		<Spanish>Saludos. Soy [OUR_NAME], emperador, mariscal y primer ciudadano de [OUR_CIV_SHORT]. Pod&#233;is llamarme "Peque&#241;o Caporal", pero entonces tendr&#237;a que mataros.</Spanish>
 	</TEXT>
 	<TEXT>
+		<Tag>AI_DIPLO_FIRST_CONTACT_LEADER_ADOLF_HITLER_1</Tag>
+		<English>To conquer a nation, first disarm its citizens. So tell me, [CT_NAME]. Are your citizens disarmed?</English>
+		<French>Le peuple sup&#233;rieur des [OUR_CIV_SHORT] vous souhaite la bienvenue. Moi, [OUR_NAME], d&#233;sire faire la paix avec mes voisins... ce qui comprend votre pitoyable culture.</French>
+		<German>Das gro&#223;e, bedeutende Volk von [OUR_CIV_SHORT] gr&#252;&#223;t Euch. Ich, [OUR_NAME], w&#252;nsche, in Frieden mit unseren Nachbarn zu leben - selbst mit Eurer k&#252;mmerlichen Kultur.</German>
+		<Italian>La grande nazione [OUR_CIV_SHORT:4] e il suo popolo sprezzante ti danno il benvenuto. Io, [OUR_NAME], desidero la pace con tutti i miei vicini... anche quelli culturalmente inferiori, come te.</Italian>
+		<Spanish>La magn&#237;fica civilizaci&#243;n de [OUR_CIV_SHORT] y su pueblo superior os saludan. Yo, [OUR_NAME], deseo la paz con todos mis vecinos. Incluso con vuestra endeble cultura.</Spanish>
+	</TEXT>
+	<TEXT>
 		<Tag>AI_DIPLO_FIRST_CONTACT_LEADER_BISMARCK_1</Tag>
 		<English>[OUR_CIV_SHORT] the great and her superior people greet you. Remember, [CT_NAME], the main thing is to make history, not to write it. I wish you luck.</English>
 		<French>Le peuple sup&#233;rieur des [OUR_CIV_SHORT] vous souhaite la bienvenue. Moi, [OUR_NAME], d&#233;sire faire la paix avec mes voisins... ce qui comprend votre pitoyable culture.</French>
@@ -260,7 +268,7 @@
 	</TEXT>
 	<TEXT>
 		<Tag>AI_DIPLO_FIRST_CONTACT_LEADER_FREDERICK_1</Tag>
-		<English>I am [OUR_NAME]. Diplomacy without arms is like music without instruments. Let us play!</English>
+		<English>Greetings, [CT_NAME]. I am [OUR_NAME], the first servant of state, and the leader of its enlightened people.</English>
 		<French>Sa tr&#232;s gracieuse majest&#233; Isabelle, &#233;lue de Dieu et gardienne de la foi, daigne vous souhaiter la bienvenue, [CT_NAME]. Dites-moi : &#234;tes-vous un peuple droit ou un ramassis de pa&#239;ens barbares qui ne m&#233;ritent que d'&#234;tre effac&#233;s de nos belles contr&#233;es ?</French>
 		<German>Ihre hochwohlgeborene Majest&#228;t Isabella, gottesf&#252;rchtig und stark im Glauben, geruht, Euch Gr&#252;&#223;e zu entbieten, [CT_NAME]. Sagt mir: Ist Euer Volk rechtschaffen oder seid Ihr ketzerische Heiden, die vom Angesicht dieser unbefleckten Erde getilgt werden sollten?</German>
 		<Italian>Sua maest&#224;, la virtuosa Isabella, prediletta di Dio e protettrice della Fede, ti saluta, [CT_NAME]. Adesso dimmi, sei una persona onesta o infida, che merita di essere spazzata via da questa terra?</Italian>
@@ -528,6 +536,14 @@
 		<Spanish>Hablad con las piezas de artiller&#237;a, [CT_NAME].</Spanish>
 	</TEXT>
 	<TEXT>
+		<Tag>AI_DIPLO_REFUSE_TO_TALK_LEADER_ADOLF_HITLER_1</Tag>
+		<English>The man who has no sense of history, is like a man who has no ears or eyes. If you get it, then get out of here!</English>
+		<French>Vous parler ? Ne me faites pas rire !</French>
+		<German>Mit EUCH reden soll ich? Dass ich nicht lache!</German>
+		<Italian>Parlare con TE? Non farmi ridere!</Italian>
+		<Spanish>&#191;Hablar con VOS? &#161;No me hag&#225;is re&#237;r!</Spanish>
+	</TEXT>
+	<TEXT>
 		<Tag>AI_DIPLO_REFUSE_TO_TALK_LEADER_BISMARCK_1</Tag>
 		<English>An appeal to fear never finds an echo in [OUR_CIV_ADJ] hearts, [CT_NAME].</English>
 		<French>Vous parler ? Ne me faites pas rire !</French>
@@ -752,6 +768,14 @@
 		<Spanish>&#191;Por qu&#233; tendr&#237;amos que firmar la paz cuando nuestros ej&#233;rcitos [OUR_CIV_ADJ:3] est&#225;n a punto de acabar con vosotros?</Spanish>
 	</TEXT>
 	<TEXT>
+		<Tag>AI_DIPLO_NO_PEACE_LEADER_ADOLF_HITLER_1</Tag>
+		<English>He who would live must fight. He who doesn't wish to fight in this world, where permanent struggle is the law of life, has not the right to exist, [CT_NAME]!</English>
+		<French>Votre requ&#234;te est rejet&#233;e. Bienvenue dans la guerre ouverte, [CT_NAME].</French>
+		<German>Eure Bitte wird abgewiesen! Willkommen im Krieg, [CT_NAME]!</German>
+		<Italian>Richiesta negata. Benvenuto nella guerra totale, [CT_NAME].</Italian>
+		<Spanish>Petici&#243;n denegada. Os damos la bienvenida a la guerra total, [CT_NAME].</Spanish>
+	</TEXT>
+	<TEXT>
 		<Tag>AI_DIPLO_NO_PEACE_LEADER_BISMARCK_1</Tag>
 		<English>A government must not waiver once it has chosen its course, [CT_NAME]. It must not look to the left or right, but go forward. This war is not yet over.</English>
 		<French>Votre requ&#234;te est rejet&#233;e. Bienvenue dans la guerre ouverte, [CT_NAME].</French>
@@ -960,6 +984,14 @@
 		<Spanish>Hoy estamos muy ocupados, [CT_NAME], pero quiz&#225; podamos concederos una breve audiencia.</Spanish>
 	</TEXT>
 	<TEXT>
+		<Tag>AI_DIPLO_GREETINGS_ATT_FR_LEADER_ADOLF_HITLER_1</Tag>
+		<English>The stronger must dominate and not mate with the weaker, which would signify the sacrifice of its own higher nature. Don't you agree, [CT_NAME]?</English>
+		<French>Les [OUR_CIV_SHORT] vous saluent, [CT_NAME]. Venez... asseyez-vous et admirez mes immenses moustaches !</French>
+		<German>Das Volk von [OUR_CIV_SHORT] gr&#252;&#223;t Euch, [CT_NAME]. Kommt - nehmt Platz und bewundert meine umfassende Bart- und Per&#252;ckensammlung!</German>
+		<Italian>[OUR_CIV_SHORT:1] ti saluta, [CT_NAME]. Vieni, siediti qui e ammira i miei enormi baffi!</Italian>
+		<Spanish>[OUR_CIV_SHORT] os saluda, [CT_NAME]. &#161;Venga, sentaos y admirad mi impresionante mostacho!</Spanish>
+	</TEXT>
+	<TEXT>
 		<Tag>AI_DIPLO_GREETINGS_ATT_FR_LEADER_BISMARCK_1</Tag>
 		<English>When you want to fool the world, tell the truth! What can I do for you today, [CT_NAME]?</English>
 		<French>Les [OUR_CIV_SHORT] vous saluent, [CT_NAME]. Venez... asseyez-vous et admirez mes immenses moustaches !</French>
@@ -977,7 +1009,7 @@
 	</TEXT>
 	<TEXT>
 		<Tag>AI_DIPLO_GREETINGS_ATT_FR_LEADER_FREDERICK_1</Tag>
-		<English>My people and I have come to an agreement that satisfied us both. They are to say what they please, and I am to do what I please. And it pleases me to see you!</English>
+		<English>Books make up no small part of human happiness. And it gives me the happiness to see you, no less than that!</English>
 		<French>Les [OUR_CIV_SHORT] vous saluent, [CT_NAME]. Venez... asseyez-vous et admirez mes immenses moustaches !</French>
 		<German>Das Volk von [OUR_CIV_SHORT] gr&#252;&#223;t Euch, [CT_NAME]. Kommt - nehmt Platz und bewundert meine umfassende Bart- und Per&#252;ckensammlung!</German>
 		<Italian>[OUR_CIV_SHORT:1] ti saluta, [CT_NAME]. Vieni, siediti qui e ammira i miei enormi baffi!</Italian>
@@ -1236,13 +1268,11 @@
 		<Italian>Ho poco tempo da dedicare alle tue chiacchiere, [CT_NAME]. Taglia corto.</Italian>
 		<Spanish>Tengo poco tiempo para hablar con vos, [CT_NAME], en resumidas cuentas.</Spanish>
 	</TEXT>
-	<!-- Having looked up the French original, let's use that for F.
-		 Wrote a German translation (meh). -->
 	<TEXT>
 		<Tag>AI_DIPLO_GREETINGS_ATT_FUR_LEADER_NAPOLEON_2</Tag>
 		<English>You again. The great proof of madness is the disproportion of one's designs to one's means. You are mad, [CT_NAME].</English>
-		<French>La grande preuve de la folie est la disproportion de ses desseins avec ses moyens. Vous êtes [NUM1:fou:folle], [CT_NAME].</French>
-		<German>Wenn das nicht [CT_NAME] ist. Apropos, Tollheit erweist sich klar am Missverhältnis von Mitteln und Zielen.</German>
+		<French>La grande preuve de la folie est la disproportion de ses desseins avec ses moyens. Vous ?es [NUM1:fou:folle], [CT_NAME].</French>
+		<German>Wenn das nicht [CT_NAME] ist. Apropos, Tollheit erweist sich klar am Missverh?tnis von Mitteln und Zielen.</German>
 		<Italian>Ho poco tempo da dedicare alle tue chiacchiere, [CT_NAME]. Taglia corto.</Italian>
 		<Spanish>Tengo poco tiempo para hablar con vos, [CT_NAME], en resumidas cuentas.</Spanish>
 	</TEXT>
@@ -1251,9 +1281,17 @@
 		<Tag>AI_DIPLO_GREETINGS_ATT_FUR_LEADER_NAPOLEON_3</Tag>
 		<English>The fool, my dear [CT_NAME], has one great advantage over a man of sense - [NUM1:he:she] is always satisfied with [NUM1:himself:herself].</English>
 		<French>Je n'ai pas de temps &#224; perdre en bavardages, [CT_NAME]. Notre entrevue n'a dur&#233; que trop longtemps.</French>
-		<German>Man muss es Euch lassen, [NUM1:mon cher:ma chère] [CT_NAME]: Was Selbstzufriedenheit angeht, ist der Narr dem verständigen Mann weit voraus.</German>
+		<German>Man muss es Euch lassen, [NUM1:mon cher:ma ch?e] [CT_NAME]: Was Selbstzufriedenheit angeht, ist der Narr dem verst?digen Mann weit voraus.</German>
 		<Italian>Ho poco tempo da dedicare alle tue chiacchiere, [CT_NAME]. Taglia corto.</Italian>
 		<Spanish>Tengo poco tiempo para hablar con vos, [CT_NAME], en resumidas cuentas.</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>AI_DIPLO_GREETINGS_ATT_FUR_LEADER_ADOLF_HITLER_1</Tag>
+		<English>Do not compare yourself to others, [CT_NAME]. If you do so, you are insulting THEM.</English>
+		<French>Venez-en au fait, [CT_NAME]. J'ai des affaires d'&#233;tat plus IMPORTANTES &#224; r&#233;gler.</French>
+		<German>Kommt zum Punkt, [CT_NAME]! Ich muss mich um WICHTIGE Staatsangelegenheiten k&#252;mmern!</German>
+		<Italian>Vai al punto, [CT_NAME]. Ho cose IMPORTANTI da fare.</Italian>
+		<Spanish>Id al grano, [CT_NAME]. Tenemos asuntos de estado IMPORTANTES que atender.</Spanish>
 	</TEXT>
 	<TEXT>
 		<Tag>AI_DIPLO_GREETINGS_ATT_FUR_LEADER_BISMARCK_1</Tag>
@@ -1273,7 +1311,7 @@
 	</TEXT>
 	<TEXT>
 		<Tag>AI_DIPLO_GREETINGS_ATT_FUR_LEADER_ALEXANDER_1</Tag>
-		<English>One day I will look upon the breadth of my domain and weep because there are no more worlds to conquer. Until then, however, you'd better watch yourself!</English>
+		<English>Holy shadows of the dead, I am not to blame for your cruel and bitter fate. But keep in mind: I do not feel happy for this, and you'd better watch yourself!</English>
 		<French>Vous &#234;tes encore en vie ? Comme c'est d&#233;cevant... </French>
 		<German>Ihr weilt also immer noch unter den Lebenden, wie? Was f&#252;r eine Entt&#228;uschung!</German>
 		<Italian>Sei ancora vivo, vero? Che peccato.</Italian>
@@ -1654,6 +1692,14 @@
 		<Spanish>Nuestros ej&#233;rcitos ans&#237;an nuevas tierras que conquistar, [CT_NAME]. &#191;Qu&#233; pagar&#237;ais para cercioraros de que no sean las vuestras?</Spanish>
 	</TEXT>
 	<TEXT>
+		<Tag>AI_DIPLO_DEMAND_TRIBUTE_POWER_WEAKER_ADOLF_HITLER_1</Tag>
+		<English>if you want to shine like sun first you have to burn like it. Will you provide this to [OUR_EMPIRE]?</English>
+		<French>Pour la sauvegarde d'une amiti&#233; durable, je vous demande de verser un tribut au grand peuple de [OUR_NAME].</French>
+		<German>Um den Fortbestand unserer freundschaftlichen Beziehungen zu sichern, solltet Ihr ohne Wenn und Aber diesen Tribut an die Untertanen des gro&#223;en Staatsoberhaupts [OUR_NAME] entrichten!</German>
+		<Italian>In nome della nostra lunga amicizia, offri un tributo alla popolazione [OUR_NAME:3].</Italian>
+		<Spanish>En aras de nuestra amistad, dadle un tributo al gran pueblo de [OUR_NAME].</Spanish>
+	</TEXT>
+	<TEXT>
 		<Tag>AI_DIPLO_DEMAND_TRIBUTE_POWER_WEAKER_BISMARCK_1</Tag>
 		<English>Guten Tag, [CT_NAME]. I have always said, better pointed bullets than pointed speeches. Today I will make an exception, however, and make an appeal to the goodness of your heart.</English>
 		<French>Pour la sauvegarde d'une amiti&#233; durable, je vous demande de verser un tribut au grand peuple de [OUR_NAME].</French>
@@ -1663,7 +1709,7 @@
 	</TEXT>
 	<TEXT>
 		<Tag>AI_DIPLO_DEMAND_TRIBUTE_POWER_WEAKER_FREDERICK_1</Tag>
-		<English>If my soldiers were to begin to think, not one would remain in the ranks. Please, [CT_NAME], help me numb their minds with this.</English>
+		<English>The greatest and noblest pleasure that men can have in this world is to discover new truths; and the next is to shake off old prejudices. Come, [CT_NAME], share your wealth -- it will make you richer, I promise!</English>
 		<French>Pour la sauvegarde d'une amiti&#233; durable, je vous demande de verser un tribut au grand peuple de [OUR_NAME].</French>
 		<German>Um den Fortbestand unserer freundschaftlichen Beziehungen zu sichern, solltet Ihr ohne Wenn und Aber diesen Tribut an die Untertanen des gro&#223;en Staatsoberhaupts [OUR_NAME] entrichten!</German>
 		<Italian>In nome della nostra lunga amicizia, offri un tributo alla popolazione [OUR_NAME:3].</Italian>
@@ -1801,6 +1847,14 @@
 		<Spanish>Seremos breves, haced lo que os exigimos o ateneos a las consecuencias. Eso es todo.</Spanish>
 	</TEXT>
 	<TEXT>
+		<Tag>AI_DIPLO_DEMAND_TRIBUTE_POWER_EQUAL_ADOLF_HITLER_1</Tag>
+		<English>The victor will never be asked if he told the truth. The truth is, you have to give this to [OUR_EMPIRE].</English>
+		<French>J'ai horreur du mot "chantage", [CT_NAME]. Je pr&#233;f&#232;re employer le terme "extorsion."</French>
+		<German>"Erpressung" ist so ein h&#228;ssliches Wort, [CT_NAME]! Ich nenne es lieber "Beschaffungspolitik"!</German>
+		<Italian>"Corruzione" &#232; una brutta parola, [CT_NAME]. Preferisco usare "estorsione".</Italian>
+		<Spanish>"Chantaje" es una palabra muy fea, [CT_NAME]. Nosotros preferimos llamarlo "extorsi&#243;n".</Spanish>
+	</TEXT>
+	<TEXT>
 		<Tag>AI_DIPLO_DEMAND_TRIBUTE_POWER_EQUAL_BISMARCK_1</Tag>
 		<English>Anyone who has ever looked into the glazed eyes of a soldier dying on the battlefield will think hard before starting a war. Remember that when you consider our request.</English>
 		<French>J'ai horreur du mot "chantage", [CT_NAME]. Je pr&#233;f&#232;re employer le terme "extorsion."</French>
@@ -1810,7 +1864,7 @@
 	</TEXT>
 	<TEXT>
 		<Tag>AI_DIPLO_DEMAND_TRIBUTE_POWER_EQUAL_FREDERICK_1</Tag>
-		<English>The greatest and noblest pleasure that men can have in this world is to discover new truths; and the next is to shake off old prejudices. Come, [CT_NAME], share your wealth -- it will make you richer, I promise!</English>
+		<English>My people and I have come to an agreement that satisfied us both. They are to say what they please, and I am to do what I please. In this case, this will be the thing that would satisfy us both, [CT_NAME].</English>
 		<French>J'ai horreur du mot "chantage", [CT_NAME]. Je pr&#233;f&#232;re employer le terme "extorsion."</French>
 		<German>"Erpressung" ist so ein h&#228;ssliches Wort, [CT_NAME]! Ich nenne es lieber "Beschaffungspolitik"!</German>
 		<Italian>"Corruzione" &#232; una brutta parola, [CT_NAME]. Preferisco usare "estorsione".</Italian>
@@ -1976,6 +2030,14 @@
 		<Spanish>Si dese&#225;is aplazar vuestra destrucci&#243;n, [CT_NAME], dadnos lo que queremos.</Spanish>
 	</TEXT>
 	<TEXT>
+		<Tag>AI_DIPLO_DEMAND_TRIBUTE_POWER_STRONGER_ADOLF_HITLER_1</Tag>
+		<English>Kill, Destroy, Sack, Tell lie; how much you want after victory nobody asks why?</English>
+		<French>Je vais &#234;tre honn&#234;te avec vous : la cupidit&#233; est la seule chose qui nous emp&#234;che de rayer votre m&#233;diocre civilisation de la carte. Donnez-nous ce que nous demandons ou mourez.</French>
+		<German>Glaubt mir, nur die reine Gier hat uns bisher davon abgehalten, Eure mickrige Zivilisation zu vernichten! Zahlt uns, was wir verlangen, oder sterbt!</German>
+		<Italian>Ad essere sinceri, &#232; l'avidit&#224; che ci trattiene dal distruggere la tua insignificante civilt&#224;. Dacci quello che vogliamo, o la pagherai.</Italian>
+		<Spanish>Para ser sinceros, la pura avaricia es lo &#250;nico que nos impide destruir vuestra insignificante civilizaci&#243;n. Pagadnos lo que queremos o pereced.</Spanish>
+	</TEXT>
+	<TEXT>
 		<Tag>AI_DIPLO_DEMAND_TRIBUTE_POWER_STRONGER_BISMARCK_1</Tag>
 		<English>The great questions of today will not be settled by means of speeches and majority decisions, but by iron and blood. My question to you is simple: will you concede?</English>
 		<French>Je vais &#234;tre honn&#234;te avec vous : la cupidit&#233; est la seule chose qui nous emp&#234;che de rayer votre m&#233;diocre civilisation de la carte. Donnez-nous ce que nous demandons ou mourez.</French>
@@ -1985,7 +2047,7 @@
 	</TEXT>
 	<TEXT>
 		<Tag>AI_DIPLO_DEMAND_TRIBUTE_POWER_STRONGER_FREDERICK_1</Tag>
-		<English>I begin by taking. I shall find scholars later to demonstrate my perfect right.</English>
+		<English>He who defends everything defends nothing, [CT_NAME]. There is time to give up something for a better cause...</English>
 		<French>Je vais &#234;tre honn&#234;te avec vous : la cupidit&#233; est la seule chose qui nous emp&#234;che de rayer votre m&#233;diocre civilisation de la carte. Donnez-nous ce que nous demandons ou mourez.</French>
 		<German>Glaubt mir, nur die reine Gier hat uns bisher davon abgehalten, Eure mickrige Zivilisation zu vernichten! Zahlt uns, was wir verlangen, oder sterbt!</German>
 		<Italian>Ad essere sinceri, &#232; l'avidit&#224; che ci trattiene dal distruggere la tua insignificante civilt&#224;. Dacci quello che vogliamo, o la pagherai.</Italian>
@@ -2179,6 +2241,30 @@
 		<Italian>Risposta confusa. Riprova pi&#249; tardi. (Tono cauto)</Italian>
 		<Spanish>Mmm... Ahora mismo no sabemos qu&#233; pensar. (Cauta)</Spanish>
 	</TEXT>
+	<TEXT>
+		<Tag>AI_DIPLO_DECLARE_WAR_LEADER_SEJONG_1</Tag>
+		<English>It is not your land, if you didn't cutivate it. And it is not your people, if you didn't care for, [CT_NAME]. I will fix that for you. ([OUR_NAME] declares war!)</English>
+		<French>Je suppose que vous r&#233;alisez que cela signifie la guerre ? ([OUR_NAME] vous d&#233;clare la guerre !)</French>
+		<German>Ihr stellt mich vor die Wahl allein zwischen Gewalt und Feigheit, und Feigheit ist das größte Laster. ([OUR_NAME] declares war!)</German>
+		<Italian>Credo tu sappia che questo significa guerra. ([OUR_NAME] dichiara guerra!)</Italian>
+		<Spanish>Supongo que os dais cuenta de que esto significa la guerra. (&#161;[OUR_NAME] os declara la guerra!)</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>AI_DIPLO_DECLARE_WAR_LEADER_SEJONG_2</Tag>
+		<English>The one generous gets people's love, and the one who rule over its people with dignity and power gets people's hate. You've chosen the later. So now, you will pay for that! ([OUR_NAME] declares war!)</English>
+		<French>Je suppose que vous r&#233;alisez que cela signifie la guerre ? ([OUR_NAME] vous d&#233;clare la guerre !)</French>
+		<German>Ihr stellt mich vor die Wahl allein zwischen Gewalt und Feigheit, und Feigheit ist das größte Laster. ([OUR_NAME] declares war!)</German>
+		<Italian>Credo tu sappia che questo significa guerra. ([OUR_NAME] dichiara guerra!)</Italian>
+		<Spanish>Supongo que os dais cuenta de que esto significa la guerra. (&#161;[OUR_NAME] os declara la guerra!)</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>AI_DIPLO_DECLARE_WAR_LEADER_SEJONG_3</Tag>
+		<English>The ultimate peace I think is the world where people can do anything without any difficulties. Unfortunately, there is one "obstacle" to achieve that! ([OUR_NAME] declares war!)</English>
+		<French>Je suppose que vous r&#233;alisez que cela signifie la guerre ? ([OUR_NAME] vous d&#233;clare la guerre !)</French>
+		<German>Ihr stellt mich vor die Wahl allein zwischen Gewalt und Feigheit, und Feigheit ist das größte Laster. ([OUR_NAME] declares war!)</German>
+		<Italian>Credo tu sappia che questo significa guerra. ([OUR_NAME] dichiara guerra!)</Italian>
+		<Spanish>Supongo que os dais cuenta de que esto significa la guerra. (&#161;[OUR_NAME] os declara la guerra!)</Spanish>
+	</TEXT>
 	<!-- advc.005h: Based on gandhiashramsevagram.org/voice-of-truth/gandhiji-on-nonviolence-and-cowardice.php
 		"I do believe that, where there is only a choice between cowardice and violence, I would advise violence.... But I believe that non-violence is infinitely superior to violence, forgiveness is more manly than punishment." (Young India, 11-8-'20, p. 3)
 		"Non-violence and cowardice are contradictory terms. Non-violence is the greatest virtue, cowardice the greatest vice. Non-violence springs from love, cowardice from hate. Non-violence always suffers, cowardice would always inflict suffering." (Young India, 31-10-'29, p. 356)
@@ -2193,6 +2279,22 @@
 		<Italian>Credo tu sappia che questo significa guerra. ([OUR_NAME] dichiara guerra!)</Italian>
 		<Spanish>Supongo que os dais cuenta de que esto significa la guerra. (&#161;[OUR_NAME] os declara la guerra!)</Spanish>
 	</TEXT>
+	<TEXT>
+		<Tag>AI_DIPLO_DECLARE_WAR_LEADER_GANDHI_2</Tag>
+		<English>When I despair, I remember that all through history the way of truth and love have always won. There have been tyrants and murderers, and for a time, they can seem invincible, but in the end, they always fall. Think of it--always. ([OUR_NAME] declares war!)</English>
+		<French>Je suppose que vous r&#233;alisez que cela signifie la guerre ? ([OUR_NAME] vous d&#233;clare la guerre !)</French>
+		<German>Ihr stellt mich vor die Wahl allein zwischen Gewalt und Feigheit, und Feigheit ist das größte Laster. ([OUR_NAME] declares war!)</German>
+		<Italian>Credo tu sappia che questo significa guerra. ([OUR_NAME] dichiara guerra!)</Italian>
+		<Spanish>Supongo que os dais cuenta de que esto significa la guerra. (&#161;[OUR_NAME] os declara la guerra!)</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>AI_DIPLO_DECLARE_WAR_LEADER_GANDHI_3</Tag>
+		<English>"An eye for an eye will only make the whole world blind." Perhaps, I should make one exception... ([OUR_NAME] declares war!)</English>
+		<French>Je suppose que vous r&#233;alisez que cela signifie la guerre ? ([OUR_NAME] vous d&#233;clare la guerre !)</French>
+		<German>Ihr stellt mich vor die Wahl allein zwischen Gewalt und Feigheit, und Feigheit ist das größte Laster. ([OUR_NAME] declares war!)</German>
+		<Italian>Credo tu sappia che questo significa guerra. ([OUR_NAME] dichiara guerra!)</Italian>
+		<Spanish>Supongo que os dais cuenta de que esto significa la guerra. (&#161;[OUR_NAME] os declara la guerra!)</Spanish>
+	</TEXT>
 	<!-- advc.005h: Based on
 		 "I send you a kaffis of mustard seed, that you may taste and acknowledge the bitterness of my victory."
 		 Widely quoted, historicity dubious. FIS translations are from #1, which
@@ -2201,10 +2303,153 @@
 		<Tag>AI_DIPLO_DECLARE_WAR_LEADER_ALEXANDER_1</Tag>
 		<English>I've brought a kaffis of mustard seed for you to foretaste the bitterness of my victory. ([OUR_NAME] declares war!)</English>
 		<French>Ce monde n'est pas assez grand pour nous deux ! ([OUR_NAME] vous d&#233;clare la guerre !)</French>
-		<German>Ich lasse Euch Senfkörner zukommen -- als einen Vorgeschmack auf eure bittere Niederlage! ([OUR_NAME] declares war!)</German>
+		<German>Ich lasse Euch Senfk?ner zukommen -- als einen Vorgeschmack auf eure bittere Niederlage! ([OUR_NAME] declares war!)</German>
 		<German>Diese Welt ist nicht gro&#223; genug f&#252;r uns beide! ([OUR_NAME] erkl&#228;rt Euch den Krieg!)</German>
 		<Italian>Questo mondo non &#232; grande abbastanza per tutti e due! ([OUR_NAME] dichiara guerra!)</Italian>
 		<Spanish>&#161;Este mundo no es lo bastante grande para nuestras dos naciones! (&#161;[OUR_NAME] os declara la guerra!)</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>AI_DIPLO_DECLARE_WAR_LEADER_ALEXANDER_2</Tag>
+		<English>There are so many worlds, and I have not yet conquered even one. ([OUR_NAME] declares war!)</English>
+		<French>Ce monde n'est pas assez grand pour nous deux ! ([OUR_NAME] vous d&#233;clare la guerre !)</French>
+		<German>Ich lasse Euch Senfk?ner zukommen -- als einen Vorgeschmack auf eure bittere Niederlage! ([OUR_NAME] declares war!)</German>
+		<German>Diese Welt ist nicht gro&#223; genug f&#252;r uns beide! ([OUR_NAME] erkl&#228;rt Euch den Krieg!)</German>
+		<Italian>Questo mondo non &#232; grande abbastanza per tutti e due! ([OUR_NAME] dichiara guerra!)</Italian>
+		<Spanish>&#161;Este mundo no es lo bastante grande para nuestras dos naciones! (&#161;[OUR_NAME] os declara la guerra!)</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>AI_DIPLO_DECLARE_WAR_LEADER_ALEXANDER_3</Tag>
+		<English>One day I will look upon the breadth of my domain and weep because there are no more worlds to conquer. But not this time! ([OUR_NAME] declares war!)</English>
+		<French>Ce monde n'est pas assez grand pour nous deux ! ([OUR_NAME] vous d&#233;clare la guerre !)</French>
+		<German>Ich lasse Euch Senfk?ner zukommen -- als einen Vorgeschmack auf eure bittere Niederlage! ([OUR_NAME] declares war!)</German>
+		<German>Diese Welt ist nicht gro&#223; genug f&#252;r uns beide! ([OUR_NAME] erkl&#228;rt Euch den Krieg!)</German>
+		<Italian>Questo mondo non &#232; grande abbastanza per tutti e due! ([OUR_NAME] dichiara guerra!)</Italian>
+		<Spanish>&#161;Este mundo no es lo bastante grande para nuestras dos naciones! (&#161;[OUR_NAME] os declara la guerra!)</Spanish>
+	</TEXT>
+	<!-- advc+: Changed first contact quote with 'servant' thing. -->
+	<TEXT>
+		<Tag>AI_DIPLO_DECLARE_WAR_LEADER_FREDERICK_1</Tag>
+		<English>Diplomacy without arms is like music without instruments, isn't that right? Let us play! ([OUR_NAME] declares war!)</English>
+		<French>Sa tr&#232;s gracieuse majest&#233; Isabelle, &#233;lue de Dieu et gardienne de la foi, daigne vous souhaiter la bienvenue, [CT_NAME]. Dites-moi : &#234;tes-vous un peuple droit ou un ramassis de pa&#239;ens barbares qui ne m&#233;ritent que d'&#234;tre effac&#233;s de nos belles contr&#233;es ?</French>
+		<German>Ihre hochwohlgeborene Majest&#228;t Isabella, gottesf&#252;rchtig und stark im Glauben, geruht, Euch Gr&#252;&#223;e zu entbieten, [CT_NAME]. Sagt mir: Ist Euer Volk rechtschaffen oder seid Ihr ketzerische Heiden, die vom Angesicht dieser unbefleckten Erde getilgt werden sollten?</German>
+		<Italian>Sua maest&#224;, la virtuosa Isabella, prediletta di Dio e protettrice della Fede, ti saluta, [CT_NAME]. Adesso dimmi, sei una persona onesta o infida, che merita di essere spazzata via da questa terra?</Italian>
+		<Spanish>Su rect&#237;sima majestad, Isabel, elegida de Dios y protectora de la Fe, se digna a saludaros, [CT_NAME]. Decidme, &#191;sois un pueblo recto o sois infieles diab&#243;licos que han de ser borrados de la faz de esta hermosa tierra?</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>AI_DIPLO_DECLARE_WAR_LEADER_FREDERICK_2</Tag>
+		<English>Now, I am going to play your game, [CT_NAME]. Let's see who can get the ace. ([OUR_NAME] declares war!)</English>
+		<French>Sa tr&#232;s gracieuse majest&#233; Isabelle, &#233;lue de Dieu et gardienne de la foi, daigne vous souhaiter la bienvenue, [CT_NAME]. Dites-moi : &#234;tes-vous un peuple droit ou un ramassis de pa&#239;ens barbares qui ne m&#233;ritent que d'&#234;tre effac&#233;s de nos belles contr&#233;es ?</French>
+		<German>Ihre hochwohlgeborene Majest&#228;t Isabella, gottesf&#252;rchtig und stark im Glauben, geruht, Euch Gr&#252;&#223;e zu entbieten, [CT_NAME]. Sagt mir: Ist Euer Volk rechtschaffen oder seid Ihr ketzerische Heiden, die vom Angesicht dieser unbefleckten Erde getilgt werden sollten?</German>
+		<Italian>Sua maest&#224;, la virtuosa Isabella, prediletta di Dio e protettrice della Fede, ti saluta, [CT_NAME]. Adesso dimmi, sei una persona onesta o infida, che merita di essere spazzata via da questa terra?</Italian>
+		<Spanish>Su rect&#237;sima majestad, Isabel, elegida de Dios y protectora de la Fe, se digna a saludaros, [CT_NAME]. Decidme, &#191;sois un pueblo recto o sois infieles diab&#243;licos que han de ser borrados de la faz de esta hermosa tierra?</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>AI_DIPLO_DECLARE_WAR_LEADER_FREDERICK_3</Tag>
+		<English>I begin by taking. I shall find scholars later to demonstrate my perfect right.</English>
+		<French>Je vais &#234;tre honn&#234;te avec vous : la cupidit&#233; est la seule chose qui nous emp&#234;che de rayer votre m&#233;diocre civilisation de la carte. Donnez-nous ce que nous demandons ou mourez.</French>
+		<German>Glaubt mir, nur die reine Gier hat uns bisher davon abgehalten, Eure mickrige Zivilisation zu vernichten! Zahlt uns, was wir verlangen, oder sterbt!</German>
+		<Italian>Ad essere sinceri, &#232; l'avidit&#224; che ci trattiene dal distruggere la tua insignificante civilt&#224;. Dacci quello che vogliamo, o la pagherai.</Italian>
+		<Spanish>Para ser sinceros, la pura avaricia es lo &#250;nico que nos impide destruir vuestra insignificante civilizaci&#243;n. Pagadnos lo que queremos o pereced.</Spanish>
+	</TEXT>
+	<!-- advc+: "iron and blood". -->
+	<TEXT>
+		<Tag>AI_DIPLO_DECLARE_WAR_LEADER_BISMARCK_1</Tag>
+		<English>"Iron and Blood" is the sole thing that determines one's fate, [CT_NAME]. ([OUR_NAME] declares war!)</English>
+		<French>Sa tr&#232;s gracieuse majest&#233; Isabelle, &#233;lue de Dieu et gardienne de la foi, daigne vous souhaiter la bienvenue, [CT_NAME]. Dites-moi : &#234;tes-vous un peuple droit ou un ramassis de pa&#239;ens barbares qui ne m&#233;ritent que d'&#234;tre effac&#233;s de nos belles contr&#233;es ?</French>
+		<German>Ihre hochwohlgeborene Majest&#228;t Isabella, gottesf&#252;rchtig und stark im Glauben, geruht, Euch Gr&#252;&#223;e zu entbieten, [CT_NAME]. Sagt mir: Ist Euer Volk rechtschaffen oder seid Ihr ketzerische Heiden, die vom Angesicht dieser unbefleckten Erde getilgt werden sollten?</German>
+		<Italian>Sua maest&#224;, la virtuosa Isabella, prediletta di Dio e protettrice della Fede, ti saluta, [CT_NAME]. Adesso dimmi, sei una persona onesta o infida, che merita di essere spazzata via da questa terra?</Italian>
+		<Spanish>Su rect&#237;sima majestad, Isabel, elegida de Dios y protectora de la Fe, se digna a saludaros, [CT_NAME]. Decidme, &#191;sois un pueblo recto o sois infieles diab&#243;licos que han de ser borrados de la faz de esta hermosa tierra?</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>AI_DIPLO_DECLARE_WAR_LEADER_BISMARCK_2</Tag>
+		<English>The position of a country is not determined by its liberalism, but its power. I am sure you know what it means... ([OUR_NAME] declares war!)</English>
+		<French>Sa tr&#232;s gracieuse majest&#233; Isabelle, &#233;lue de Dieu et gardienne de la foi, daigne vous souhaiter la bienvenue, [CT_NAME]. Dites-moi : &#234;tes-vous un peuple droit ou un ramassis de pa&#239;ens barbares qui ne m&#233;ritent que d'&#234;tre effac&#233;s de nos belles contr&#233;es ?</French>
+		<German>Ihre hochwohlgeborene Majest&#228;t Isabella, gottesf&#252;rchtig und stark im Glauben, geruht, Euch Gr&#252;&#223;e zu entbieten, [CT_NAME]. Sagt mir: Ist Euer Volk rechtschaffen oder seid Ihr ketzerische Heiden, die vom Angesicht dieser unbefleckten Erde getilgt werden sollten?</German>
+		<Italian>Sua maest&#224;, la virtuosa Isabella, prediletta di Dio e protettrice della Fede, ti saluta, [CT_NAME]. Adesso dimmi, sei una persona onesta o infida, che merita di essere spazzata via da questa terra?</Italian>
+		<Spanish>Su rect&#237;sima majestad, Isabel, elegida de Dios y protectora de la Fe, se digna a saludaros, [CT_NAME]. Decidme, &#191;sois un pueblo recto o sois infieles diab&#243;licos que han de ser borrados de la faz de esta hermosa tierra?</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>AI_DIPLO_DECLARE_WAR_LEADER_BISMARCK_3</Tag>
+		<English>Speeches and majority decisions won't do anything good for us, [CT_NAME]! Now is the time to make some changes! ([OUR_NAME] declares war!)</English>
+		<French>Sa tr&#232;s gracieuse majest&#233; Isabelle, &#233;lue de Dieu et gardienne de la foi, daigne vous souhaiter la bienvenue, [CT_NAME]. Dites-moi : &#234;tes-vous un peuple droit ou un ramassis de pa&#239;ens barbares qui ne m&#233;ritent que d'&#234;tre effac&#233;s de nos belles contr&#233;es ?</French>
+		<German>Ihre hochwohlgeborene Majest&#228;t Isabella, gottesf&#252;rchtig und stark im Glauben, geruht, Euch Gr&#252;&#223;e zu entbieten, [CT_NAME]. Sagt mir: Ist Euer Volk rechtschaffen oder seid Ihr ketzerische Heiden, die vom Angesicht dieser unbefleckten Erde getilgt werden sollten?</German>
+		<Italian>Sua maest&#224;, la virtuosa Isabella, prediletta di Dio e protettrice della Fede, ti saluta, [CT_NAME]. Adesso dimmi, sei una persona onesta o infida, che merita di essere spazzata via da questa terra?</Italian>
+		<Spanish>Su rect&#237;sima majestad, Isabel, elegida de Dios y protectora de la Fe, se digna a saludaros, [CT_NAME]. Decidme, &#191;sois un pueblo recto o sois infieles diab&#243;licos que han de ser borrados de la faz de esta hermosa tierra?</Spanish>
+	</TEXT>
+	<!-- advc+: "Lebensraum". -->
+	<TEXT>
+		<Tag>AI_DIPLO_DECLARE_WAR_LEADER_ADOLF_HITLER_1</Tag>
+		<English>The very first essential for success is a perpetually constant and regular employment of violence, [CT_NAME]! ([OUR_NAME] declares war!)</English>
+		<French>Sa tr&#232;s gracieuse majest&#233; Isabelle, &#233;lue de Dieu et gardienne de la foi, daigne vous souhaiter la bienvenue, [CT_NAME]. Dites-moi : &#234;tes-vous un peuple droit ou un ramassis de pa&#239;ens barbares qui ne m&#233;ritent que d'&#234;tre effac&#233;s de nos belles contr&#233;es ?</French>
+		<German>Ihre hochwohlgeborene Majest&#228;t Isabella, gottesf&#252;rchtig und stark im Glauben, geruht, Euch Gr&#252;&#223;e zu entbieten, [CT_NAME]. Sagt mir: Ist Euer Volk rechtschaffen oder seid Ihr ketzerische Heiden, die vom Angesicht dieser unbefleckten Erde getilgt werden sollten?</German>
+		<Italian>Sua maest&#224;, la virtuosa Isabella, prediletta di Dio e protettrice della Fede, ti saluta, [CT_NAME]. Adesso dimmi, sei una persona onesta o infida, che merita di essere spazzata via da questa terra?</Italian>
+		<Spanish>Su rect&#237;sima majestad, Isabel, elegida de Dios y protectora de la Fe, se digna a saludaros, [CT_NAME]. Decidme, &#191;sois un pueblo recto o sois infieles diab&#243;licos que han de ser borrados de la faz de esta hermosa tierra?</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>AI_DIPLO_DECLARE_WAR_LEADER_ADOLF_HITLER_2</Tag>
+		<English>When diplomacy ends, War begins. ([OUR_NAME] declares war!)</English>
+		<French>Sa tr&#232;s gracieuse majest&#233; Isabelle, &#233;lue de Dieu et gardienne de la foi, daigne vous souhaiter la bienvenue, [CT_NAME]. Dites-moi : &#234;tes-vous un peuple droit ou un ramassis de pa&#239;ens barbares qui ne m&#233;ritent que d'&#234;tre effac&#233;s de nos belles contr&#233;es ?</French>
+		<German>Ihre hochwohlgeborene Majest&#228;t Isabella, gottesf&#252;rchtig und stark im Glauben, geruht, Euch Gr&#252;&#223;e zu entbieten, [CT_NAME]. Sagt mir: Ist Euer Volk rechtschaffen oder seid Ihr ketzerische Heiden, die vom Angesicht dieser unbefleckten Erde getilgt werden sollten?</German>
+		<Italian>Sua maest&#224;, la virtuosa Isabella, prediletta di Dio e protettrice della Fede, ti saluta, [CT_NAME]. Adesso dimmi, sei una persona onesta o infida, che merita di essere spazzata via da questa terra?</Italian>
+		<Spanish>Su rect&#237;sima majestad, Isabel, elegida de Dios y protectora de la Fe, se digna a saludaros, [CT_NAME]. Decidme, &#191;sois un pueblo recto o sois infieles diab&#243;licos que han de ser borrados de la faz de esta hermosa tierra?</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>AI_DIPLO_DECLARE_WAR_LEADER_ADOLF_HITLER_3</Tag>
+		<English>If you win, you need not have to explain... If you lose, you should not be there to explain! ([OUR_NAME] declares war!)</English>
+		<French>Sa tr&#232;s gracieuse majest&#233; Isabelle, &#233;lue de Dieu et gardienne de la foi, daigne vous souhaiter la bienvenue, [CT_NAME]. Dites-moi : &#234;tes-vous un peuple droit ou un ramassis de pa&#239;ens barbares qui ne m&#233;ritent que d'&#234;tre effac&#233;s de nos belles contr&#233;es ?</French>
+		<German>Ihre hochwohlgeborene Majest&#228;t Isabella, gottesf&#252;rchtig und stark im Glauben, geruht, Euch Gr&#252;&#223;e zu entbieten, [CT_NAME]. Sagt mir: Ist Euer Volk rechtschaffen oder seid Ihr ketzerische Heiden, die vom Angesicht dieser unbefleckten Erde getilgt werden sollten?</German>
+		<Italian>Sua maest&#224;, la virtuosa Isabella, prediletta di Dio e protettrice della Fede, ti saluta, [CT_NAME]. Adesso dimmi, sei una persona onesta o infida, che merita di essere spazzata via da questa terra?</Italian>
+		<Spanish>Su rect&#237;sima majestad, Isabel, elegida de Dios y protectora de la Fe, se digna a saludaros, [CT_NAME]. Decidme, &#191;sois un pueblo recto o sois infieles diab&#243;licos que han de ser borrados de la faz de esta hermosa tierra?</Spanish>
+	</TEXT>
+	<!-- advc+: "JAPAN". -->
+	<TEXT>
+		<Tag>AI_DIPLO_DECLARE_WAR_LEADER_TOKUGAWA_1</Tag>
+		<English>Patience means restraining one's inclinations. And my inclination is this: ([OUR_NAME] declares war!)</English>
+		<French>Sa tr&#232;s gracieuse majest&#233; Isabelle, &#233;lue de Dieu et gardienne de la foi, daigne vous souhaiter la bienvenue, [CT_NAME]. Dites-moi : &#234;tes-vous un peuple droit ou un ramassis de pa&#239;ens barbares qui ne m&#233;ritent que d'&#234;tre effac&#233;s de nos belles contr&#233;es ?</French>
+		<German>Ihre hochwohlgeborene Majest&#228;t Isabella, gottesf&#252;rchtig und stark im Glauben, geruht, Euch Gr&#252;&#223;e zu entbieten, [CT_NAME]. Sagt mir: Ist Euer Volk rechtschaffen oder seid Ihr ketzerische Heiden, die vom Angesicht dieser unbefleckten Erde getilgt werden sollten?</German>
+		<Italian>Sua maest&#224;, la virtuosa Isabella, prediletta di Dio e protettrice della Fede, ti saluta, [CT_NAME]. Adesso dimmi, sei una persona onesta o infida, che merita di essere spazzata via da questa terra?</Italian>
+		<Spanish>Su rect&#237;sima majestad, Isabel, elegida de Dios y protectora de la Fe, se digna a saludaros, [CT_NAME]. Decidme, &#191;sois un pueblo recto o sois infieles diab&#243;licos que han de ser borrados de la faz de esta hermosa tierra?</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>AI_DIPLO_DECLARE_WAR_LEADER_TOKUGAWA_2</Tag>
+		<English>Remember, slow and steady wins the race! ([OUR_NAME] declares war!)</English>
+		<French>Sa tr&#232;s gracieuse majest&#233; Isabelle, &#233;lue de Dieu et gardienne de la foi, daigne vous souhaiter la bienvenue, [CT_NAME]. Dites-moi : &#234;tes-vous un peuple droit ou un ramassis de pa&#239;ens barbares qui ne m&#233;ritent que d'&#234;tre effac&#233;s de nos belles contr&#233;es ?</French>
+		<German>Ihre hochwohlgeborene Majest&#228;t Isabella, gottesf&#252;rchtig und stark im Glauben, geruht, Euch Gr&#252;&#223;e zu entbieten, [CT_NAME]. Sagt mir: Ist Euer Volk rechtschaffen oder seid Ihr ketzerische Heiden, die vom Angesicht dieser unbefleckten Erde getilgt werden sollten?</German>
+		<Italian>Sua maest&#224;, la virtuosa Isabella, prediletta di Dio e protettrice della Fede, ti saluta, [CT_NAME]. Adesso dimmi, sei una persona onesta o infida, che merita di essere spazzata via da questa terra?</Italian>
+		<Spanish>Su rect&#237;sima majestad, Isabel, elegida de Dios y protectora de la Fe, se digna a saludaros, [CT_NAME]. Decidme, &#191;sois un pueblo recto o sois infieles diab&#243;licos que han de ser borrados de la faz de esta hermosa tierra?</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>AI_DIPLO_DECLARE_WAR_LEADER_TOKUGAWA_3</Tag>
+		<English>Patience is the key to any battle, [CT_NAME]. Now, the waiting is over! ([OUR_NAME] declares war!)</English>
+		<French>Sa tr&#232;s gracieuse majest&#233; Isabelle, &#233;lue de Dieu et gardienne de la foi, daigne vous souhaiter la bienvenue, [CT_NAME]. Dites-moi : &#234;tes-vous un peuple droit ou un ramassis de pa&#239;ens barbares qui ne m&#233;ritent que d'&#234;tre effac&#233;s de nos belles contr&#233;es ?</French>
+		<German>Ihre hochwohlgeborene Majest&#228;t Isabella, gottesf&#252;rchtig und stark im Glauben, geruht, Euch Gr&#252;&#223;e zu entbieten, [CT_NAME]. Sagt mir: Ist Euer Volk rechtschaffen oder seid Ihr ketzerische Heiden, die vom Angesicht dieser unbefleckten Erde getilgt werden sollten?</German>
+		<Italian>Sua maest&#224;, la virtuosa Isabella, prediletta di Dio e protettrice della Fede, ti saluta, [CT_NAME]. Adesso dimmi, sei una persona onesta o infida, che merita di essere spazzata via da questa terra?</Italian>
+		<Spanish>Su rect&#237;sima majestad, Isabel, elegida de Dios y protectora de la Fe, se digna a saludaros, [CT_NAME]. Decidme, &#191;sois un pueblo recto o sois infieles diab&#243;licos que han de ser borrados de la faz de esta hermosa tierra?</Spanish>
+	</TEXT>
+
+	<TEXT>
+		<Tag>AI_DIPLO_DECLARE_WAR_LEADER_MEIJI_1</Tag>
+		<English>Sorry, did I forget to declare war? Well, here it is! ([OUR_NAME] declares war!)</English>
+		<French>Sa tr&#232;s gracieuse majest&#233; Isabelle, &#233;lue de Dieu et gardienne de la foi, daigne vous souhaiter la bienvenue, [CT_NAME]. Dites-moi : &#234;tes-vous un peuple droit ou un ramassis de pa&#239;ens barbares qui ne m&#233;ritent que d'&#234;tre effac&#233;s de nos belles contr&#233;es ?</French>
+		<German>Ihre hochwohlgeborene Majest&#228;t Isabella, gottesf&#252;rchtig und stark im Glauben, geruht, Euch Gr&#252;&#223;e zu entbieten, [CT_NAME]. Sagt mir: Ist Euer Volk rechtschaffen oder seid Ihr ketzerische Heiden, die vom Angesicht dieser unbefleckten Erde getilgt werden sollten?</German>
+		<Italian>Sua maest&#224;, la virtuosa Isabella, prediletta di Dio e protettrice della Fede, ti saluta, [CT_NAME]. Adesso dimmi, sei una persona onesta o infida, che merita di essere spazzata via da questa terra?</Italian>
+		<Spanish>Su rect&#237;sima majestad, Isabel, elegida de Dios y protectora de la Fe, se digna a saludaros, [CT_NAME]. Decidme, &#191;sois un pueblo recto o sois infieles diab&#243;licos que han de ser borrados de la faz de esta hermosa tierra?</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>AI_DIPLO_DECLARE_WAR_LEADER_MEIJI_2</Tag>
+		<English>You've been interfering with [OUR_CIV]'s constructive endeavours toward the stabilization of the world. Now, you will pay for that! ([OUR_NAME] declares war!)</English>
+		<French>Sa tr&#232;s gracieuse majest&#233; Isabelle, &#233;lue de Dieu et gardienne de la foi, daigne vous souhaiter la bienvenue, [CT_NAME]. Dites-moi : &#234;tes-vous un peuple droit ou un ramassis de pa&#239;ens barbares qui ne m&#233;ritent que d'&#234;tre effac&#233;s de nos belles contr&#233;es ?</French>
+		<German>Ihre hochwohlgeborene Majest&#228;t Isabella, gottesf&#252;rchtig und stark im Glauben, geruht, Euch Gr&#252;&#223;e zu entbieten, [CT_NAME]. Sagt mir: Ist Euer Volk rechtschaffen oder seid Ihr ketzerische Heiden, die vom Angesicht dieser unbefleckten Erde getilgt werden sollten?</German>
+		<Italian>Sua maest&#224;, la virtuosa Isabella, prediletta di Dio e protettrice della Fede, ti saluta, [CT_NAME]. Adesso dimmi, sei una persona onesta o infida, che merita di essere spazzata via da questa terra?</Italian>
+		<Spanish>Su rect&#237;sima majestad, Isabel, elegida de Dios y protectora de la Fe, se digna a saludaros, [CT_NAME]. Decidme, &#191;sois un pueblo recto o sois infieles diab&#243;licos que han de ser borrados de la faz de esta hermosa tierra?</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>AI_DIPLO_DECLARE_WAR_LEADER_MEIJI_3</Tag>
+		<English>The [OUR_CIV_ADJ] Government regrets to have to notify hereby the [CT_CIV_ADJ] Government that in view of the attitude of the [CT_CIV_ADJ] Government it cannot but consider that it is impossible to reach an agreement through further negotiations. Did we mean it? Well, you'll see... ([OUR_NAME] declares war!)</English>
+		<French>Sa tr&#232;s gracieuse majest&#233; Isabelle, &#233;lue de Dieu et gardienne de la foi, daigne vous souhaiter la bienvenue, [CT_NAME]. Dites-moi : &#234;tes-vous un peuple droit ou un ramassis de pa&#239;ens barbares qui ne m&#233;ritent que d'&#234;tre effac&#233;s de nos belles contr&#233;es ?</French>
+		<German>Ihre hochwohlgeborene Majest&#228;t Isabella, gottesf&#252;rchtig und stark im Glauben, geruht, Euch Gr&#252;&#223;e zu entbieten, [CT_NAME]. Sagt mir: Ist Euer Volk rechtschaffen oder seid Ihr ketzerische Heiden, die vom Angesicht dieser unbefleckten Erde getilgt werden sollten?</German>
+		<Italian>Sua maest&#224;, la virtuosa Isabella, prediletta di Dio e protettrice della Fede, ti saluta, [CT_NAME]. Adesso dimmi, sei una persona onesta o infida, che merita di essere spazzata via da questa terra?</Italian>
+		<Spanish>Su rect&#237;sima majestad, Isabel, elegida de Dios y protectora de la Fe, se digna a saludaros, [CT_NAME]. Decidme, &#191;sois un pueblo recto o sois infieles diab&#243;licos que han de ser borrados de la faz de esta hermosa tierra?</Spanish>
 	</TEXT>
 
 </Civ4GameText>

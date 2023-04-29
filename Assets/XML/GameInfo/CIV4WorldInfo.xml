@@ -20,8 +20,7 @@
 			<iMaxConscriptModifier>-30</iMaxConscriptModifier>
 			<!-- advc.140: was 37 -->
 			<iWarWearinessModifier>30</iWarWearinessModifier>
-			<!-- advc.252 -->
-			<iUnitCostPercent>109</iUnitCostPercent>
+			<iUnitCostPercent>100</iUnitCostPercent>
 			<!-- advc.137: was 10x6 -->
 			<iGridWidth>18</iGridWidth>
 			<iGridHeight>13</iGridHeight>
@@ -32,7 +31,7 @@
 			<!-- advc.140: was 80 -->
 			<iTradeProfitPercent>70</iTradeProfitPercent>
 			<!-- advc.140: was 50 -->
-			<iDistanceMaintenancePercent>55</iDistanceMaintenancePercent>
+			<iDistanceMaintenancePercent>60</iDistanceMaintenancePercent>
 			<!-- advc.140: Was 45. Note (applies to all world sizes) that the DLL
 				 adjusts this factor based on the crowdedness of the map.-->
 			<iNumCitiesMaintenancePercent>42</iNumCitiesMaintenancePercent>
@@ -46,7 +45,7 @@
 			<Type>WORLDSIZE_TINY</Type>
 			<Description>TXT_KEY_WORLD_TINY</Description>
 			<Help>TXT_KEY_WORLD_TINY_HELP</Help>
-			<iDefaultPlayers>3</iDefaultPlayers>
+			<iDefaultPlayers>4</iDefaultPlayers>
 			<iUnitNameModifier>40</iUnitNameModifier>
 			<iTargetNumCities>4</iTargetNumCities>
 			<iNumFreeBuildingBonuses>1</iNumFreeBuildingBonuses>
@@ -56,7 +55,7 @@
 			<!-- advc.140: was 30 -->
 			<iWarWearinessModifier>20</iWarWearinessModifier>
 			<!-- advc.252 -->
-			<iUnitCostPercent>106</iUnitCostPercent>
+			<iUnitCostPercent>100</iUnitCostPercent>
 			<!-- advc.137: was 13x8 -->
 			<iGridWidth>23</iGridWidth>
 			<iGridHeight>17</iGridHeight>
@@ -67,7 +66,7 @@
 			<!-- advc.140: was 70 -->
 			<iTradeProfitPercent>63</iTradeProfitPercent>
 			<!-- advc.140: was 60 -->
-			<iDistanceMaintenancePercent>64</iDistanceMaintenancePercent>
+			<iDistanceMaintenancePercent>67</iDistanceMaintenancePercent>
 			<!-- advc.140: was 40 -->
 			<iNumCitiesMaintenancePercent>38</iNumCitiesMaintenancePercent>
 			<iColonyMaintenancePercent>60</iColonyMaintenancePercent>
@@ -80,7 +79,7 @@
 			<Type>WORLDSIZE_SMALL</Type>
 			<Description>TXT_KEY_WORLD_SMALL</Description>
 			<Help>TXT_KEY_WORLD_SMALL_HELP</Help>
-			<iDefaultPlayers>5</iDefaultPlayers>
+			<iDefaultPlayers>6</iDefaultPlayers>
 			<iUnitNameModifier>30</iUnitNameModifier>
 			<iTargetNumCities>5</iTargetNumCities>
 			<iNumFreeBuildingBonuses>3</iNumFreeBuildingBonuses>
@@ -88,8 +87,7 @@
 			<iMaxConscriptModifier>0</iMaxConscriptModifier>
 			<!-- advc.140: was 10 -->
 			<iWarWearinessModifier>12</iWarWearinessModifier>
-			<!-- advc.252 -->
-			<iUnitCostPercent>103</iUnitCostPercent>
+			<iUnitCostPercent>100</iUnitCostPercent>
 			<!-- advc.137: was 16x10 -->
 			<iGridWidth>30</iGridWidth>
 			<iGridHeight>22</iGridHeight>
@@ -100,7 +98,7 @@
 			<!-- advc.140: was 60 -->
 			<iTradeProfitPercent>55</iTradeProfitPercent>
 			<!-- advc.140: was 70 -->
-			<iDistanceMaintenancePercent>73</iDistanceMaintenancePercent>
+			<iDistanceMaintenancePercent>75</iDistanceMaintenancePercent>
 			<!-- advc.140: was 35 -->
 			<iNumCitiesMaintenancePercent>34</iNumCitiesMaintenancePercent>
 			<iColonyMaintenancePercent>52</iColonyMaintenancePercent>
@@ -114,7 +112,7 @@
 			<Description>TXT_KEY_WORLD_STANDARD</Description>
 			<Help>TXT_KEY_WORLD_STANDARD_HELP</Help>
 			<!-- advc.137: was 7 -->
-			<iDefaultPlayers>8</iDefaultPlayers>
+			<iDefaultPlayers>9</iDefaultPlayers>
 			<iUnitNameModifier>20</iUnitNameModifier>
 			<iTargetNumCities>5</iTargetNumCities>
 			<!-- advc.140: was 5 -->
@@ -151,7 +149,7 @@
 			<Description>TXT_KEY_WORLD_LARGE</Description>
 			<Help>TXT_KEY_WORLD_LARGE_HELP</Help>
 			<!-- advc.137: was 9 -->
-			<iDefaultPlayers>11</iDefaultPlayers>
+			<iDefaultPlayers>13</iDefaultPlayers>
 			<iUnitNameModifier>10</iUnitNameModifier>
 			<iTargetNumCities>6</iTargetNumCities>
 			<!-- advc.140: was 6 -->
@@ -163,7 +161,7 @@
 			<!-- advc.140: was -30 -->
 			<iWarWearinessModifier>-13</iWarWearinessModifier>
 			<!-- advc.252 -->
-			<iUnitCostPercent>97</iUnitCostPercent>
+			<iUnitCostPercent>100</iUnitCostPercent>
 			<!-- advc.137: was 26x16 -->
 			<iGridWidth>47</iGridWidth>
 			<iGridHeight>34</iGridHeight>
@@ -173,7 +171,7 @@
 			<iResearchPercent>137</iResearchPercent>
 			<iTradeProfitPercent>40</iTradeProfitPercent>
 			<!-- advc.140: was 90 -->
-			<iDistanceMaintenancePercent>91</iDistanceMaintenancePercent>
+			<iDistanceMaintenancePercent>89</iDistanceMaintenancePercent>
 			<!-- advc.140: was 25 -->
 			<iNumCitiesMaintenancePercent>26</iNumCitiesMaintenancePercent>
 			<iColonyMaintenancePercent>37</iColonyMaintenancePercent>
@@ -187,7 +185,7 @@
 			<Description>TXT_KEY_WORLD_HUGE</Description>
 			<Help>TXT_KEY_WORLD_HUGE_HELP</Help>
 			<!-- advc.137: was 11 -->
-			<iDefaultPlayers>16</iDefaultPlayers>
+			<iDefaultPlayers>18</iDefaultPlayers>
 			<iUnitNameModifier>0</iUnitNameModifier>
 			<iTargetNumCities>6</iTargetNumCities>
 			<!-- advc.140: was 7 -->
@@ -198,19 +196,18 @@
 			<iMaxConscriptModifier>45</iMaxConscriptModifier>
 			<!-- advc.140: was -50 -->
 			<iWarWearinessModifier>-25</iWarWearinessModifier>
-			<!-- advc.252 -->
-			<iUnitCostPercent>94</iUnitCostPercent>
+			<!-- advc.137: was 32 -->
+			<iUnitCostPercent>100</iUnitCostPercent>
 			<!-- advc.137: was 32x20 -->
 			<iGridWidth>60</iGridWidth>
 			<iGridHeight>42</iGridHeight>
-			<!-- advc.129: was 1 -->
-			<iTerrainGrainChange>2</iTerrainGrainChange>
-			<!-- advc.129: was 1 -->
-			<iFeatureGrainChange>2</iFeatureGrainChange>
+			<iTerrainGrainChange>1</iTerrainGrainChange>
+			<iFeatureGrainChange>1</iFeatureGrainChange>
 			<iResearchPercent>150</iResearchPercent>
 			<!-- advc.140: was 30 -->
 			<iTradeProfitPercent>33</iTradeProfitPercent>
-			<iDistanceMaintenancePercent>100</iDistanceMaintenancePercent>
+			<!-- advc.140: was 100 -->
+			<iDistanceMaintenancePercent>97</iDistanceMaintenancePercent>
 			<!-- advc.140: was 20 -->
 			<iNumCitiesMaintenancePercent>22</iNumCitiesMaintenancePercent>
 			<iColonyMaintenancePercent>30</iColonyMaintenancePercent>
@@ -231,7 +228,7 @@
 			<iBuildingClassPrereqModifier>75</iBuildingClassPrereqModifier>
 			<iMaxConscriptModifier>50</iMaxConscriptModifier>
 			<iWarWearinessModifier>-25</iWarWearinessModifier>
-			<iUnitCostPercent>91</iUnitCostPercent>
+			<iUnitCostPercent>100</iUnitCostPercent>
 			<iGridWidth>73</iGridWidth>
 			<iGridHeight>51</iGridHeight>
 			<iTerrainGrainChange>3</iTerrainGrainChange>

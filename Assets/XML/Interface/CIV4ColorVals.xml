@@ -4,9 +4,6 @@
 <!-- Copyright Firaxis Games 2005 -->
 <!-- -->
 <!-- Color Vals -->
-<!-- advc.002i: Most of the player colors changed (see comments below). See the
-	 BtS Civ4ColorVals for the original values (K-Mod didn't change any
-	 colors). Change all the player text colors. -->
 <Civ4ColorVals xmlns="x-schema:CIV4InterfaceSchema.xml">
 	<ColorVals>
 		<ColorVal>
@@ -100,7 +97,6 @@
 			<fBlue>1.00</fBlue>
 			<fAlpha>1.00</fAlpha>
 		</ColorVal>
-		<!-- advc.002i: was 0.99, 0.58, 0.16 -->
 		<ColorVal>
 			<Type>COLOR_YIELD_FOOD</Type>
 			<fRed>0.87</fRed>
@@ -122,21 +118,11 @@
 			<fBlue>0.08</fBlue>
 			<fAlpha>1.00</fAlpha>
 		</ColorVal>
-		<!-- advc.ctr: Brightened a bit (for use as a text color) -->
 		<ColorVal>
 			<Type>COLOR_CITY_BLUE</Type>
-			<fRed>0.08</fRed>
-			<fGreen>0.5</fGreen>
-			<fBlue>0.88</fBlue>
-			<fAlpha>1.00</fAlpha>
-		</ColorVal>
-		<!-- advc.004k: Use that color also for the Sea Patrol mission.
-			 But it's still too dark for hover text, so ... -->
-		<ColorVal>
-			<Type>COLOR_CITY_BLUE_TEXT</Type>
-			<fRed>0.2</fRed>
-			<fGreen>0.6</fGreen>
-			<fBlue>1.00</fBlue>
+			<fRed>0.07</fRed>
+			<fGreen>0.46</fGreen>
+			<fBlue>0.80</fBlue>
 			<fAlpha>1.00</fAlpha>
 		</ColorVal>
 		<ColorVal>
@@ -146,13 +132,13 @@
 			<fBlue>0.25</fBlue>
 			<fAlpha>1.00</fAlpha>
 		</ColorVal>
-		<!--ColorVal>
+		<ColorVal>
 			<Type>COLOR_CITY_BROWN</Type>
 			<fRed>0.70</fRed>
 			<fGreen>0.45</fGreen>
 			<fBlue>0.00</fBlue>
 			<fAlpha>1.00</fAlpha>
-		</ColorVal-->
+		</ColorVal>
 		<!-- advc.210a: White for now.
 			 Replacing the unused color above in order to stay compatible
 			 with the BtS replay format. -->
@@ -184,21 +170,21 @@
 			<fBlue>0.00</fBlue>
 			<fAlpha>1.00</fAlpha>
 		</ColorVal>
-		<!-- advc.092: Was 0,90,20 (_STORED and _RATE both) -->
+		<!-- advc.002i: was 0,90,20 -->
 		<ColorVal>
 			<Type>COLOR_RESEARCH_STORED</Type>
 			<fRed>0.00</fRed>
-			<fGreen>0.75</fGreen>
+			<fGreen>0.82</fGreen>
 			<fBlue>0.35</fBlue>
 			<fAlpha>1.00</fAlpha>
 		</ColorVal>
-		<!-- advc.092: Same as _STORED; alpha was 0.6. -->
+		<!-- advc.002i: Alpha was 0.6 -->
 		<ColorVal>
 			<Type>COLOR_RESEARCH_RATE</Type>
 			<fRed>0.00</fRed>
-			<fGreen>0.75</fGreen>
-			<fBlue>0.35</fBlue>
-			<fAlpha>0.54</fAlpha>
+			<fGreen>0.90</fGreen>
+			<fBlue>0.20</fBlue>
+			<fAlpha>0.60</fAlpha>
 		</ColorVal>
 		<ColorVal>
 			<Type>COLOR_CULTURE_STORED</Type>
@@ -226,10 +212,10 @@
 			 apart from the alpha value, which was 0.6. -->
 		<ColorVal>
 			<Type>COLOR_GREAT_PEOPLE_RATE</Type>
-			<fRed>0.83</fRed>
-			<fGreen>0.86</fGreen>
+			<fRed>1.00</fRed>
+			<fGreen>1.00</fGreen>
 			<fBlue>0.00</fBlue>
-			<fAlpha>0.50</fAlpha>
+			<fAlpha>0.60</fAlpha>
 		</ColorVal>
 		<ColorVal>
 			<Type>COLOR_NEGATIVE_RATE</Type>
@@ -395,113 +381,107 @@
 		</ColorVal>
 		<ColorVal>
 			<Type>COLOR_PLAYER_BLACK</Type>
-			<fRed>0.13</fRed>
-			<fGreen>0.13</fGreen>
-			<fBlue>0.13</fBlue>
+			<fRed>0.1</fRed>
+			<fGreen>0.1</fGreen>
+			<fBlue>0.1</fBlue>
 			<fAlpha>1.00</fAlpha>
 		</ColorVal>
 		<ColorVal>
 			<Type>COLOR_PLAYER_BLACK_TEXT</Type>
-			<fRed>0.8</fRed>
-			<fGreen>0.808</fGreen>
-			<fBlue>0.851</fBlue>
+			<fRed>0.25</fRed>
+			<fGreen>0.25</fGreen>
+			<fBlue>0.25</fBlue>
 			<fAlpha>1.00</fAlpha>
 		</ColorVal>
-		<!-- paled and brightened -->
 		<ColorVal>
 			<Type>COLOR_PLAYER_BLUE</Type>
-			<fRed>0.26</fRed>
-			<fGreen>0.44</fGreen>
-			<fBlue>0.98</fBlue>
+			<fRed>0.21</fRed>
+			<fGreen>0.40</fGreen>
+			<fBlue>1.00</fBlue>
 			<fAlpha>1.00</fAlpha>
 		</ColorVal>
 		<ColorVal>
 			<Type>COLOR_PLAYER_LIGHT_BLUE_TEXT</Type>
-			<fRed>0.58</fRed>
-			<fGreen>0.74</fGreen>
-			<fBlue>0.99</fBlue>
+			<fRed>0.70</fRed>
+			<fGreen>0.80</fGreen>
+			<fBlue>1.00</fBlue>
 			<fAlpha>1.00</fAlpha>
 		</ColorVal>
-		<!-- darkened -->
 		<ColorVal>
 			<Type>COLOR_PLAYER_BROWN</Type>
-			<fRed>0.36</fRed>
-			<fGreen>0.20</fGreen>
+			<fRed>0.39</fRed>
+			<fGreen>0.24</fGreen>
 			<fBlue>0.00</fBlue>
 			<fAlpha>1.00</fAlpha>
 		</ColorVal>
 		<ColorVal>
 			<Type>COLOR_PLAYER_BROWN_TEXT</Type>
-			<fRed>0.61</fRed>
-			<fGreen>0.37</fGreen>
-			<fBlue>0.15</fBlue>
+			<fRed>0.90</fRed>
+			<fGreen>0.65</fGreen>
+			<fBlue>0.30</fBlue>
 			<fAlpha>1.00</fAlpha>
 		</ColorVal>
-		<!-- desaturated, less red -->
 		<ColorVal>
 			<Type>COLOR_PLAYER_CYAN</Type>
-			<fRed>0.43</fRed>
-			<fGreen>0.82</fGreen>
-			<fBlue>0.91</fBlue>
+			<fRed>0.07</fRed>
+			<fGreen>0.80</fGreen>
+			<fBlue>0.96</fBlue>
 			<fAlpha>1.00</fAlpha>
 		</ColorVal>
 		<ColorVal>
 			<Type>COLOR_PLAYER_CYAN_TEXT</Type>
-			<fRed>0.58</fRed>
-			<fGreen>0.86</fGreen>
-			<fBlue>0.94</fBlue>
+			<fRed>0.6</fRed>
+			<fGreen>1.0</fGreen>
+			<fBlue>0.973</fBlue>
 			<fAlpha>1.00</fAlpha>
 		</ColorVal>
-		<!-- darkened, less red -->
 		<ColorVal>
 			<Type>COLOR_PLAYER_DARK_BLUE</Type>
-			<fRed>0.10</fRed>
-			<fGreen>0.01</fGreen>
-			<fBlue>0.49</fBlue>
+			<fRed>0.16</fRed>
+			<fGreen>0.00</fGreen>
+			<fBlue>0.64</fBlue>
 			<fAlpha>1.00</fAlpha>
 		</ColorVal>
 		<ColorVal>
 			<Type>COLOR_PLAYER_DARK_BLUE_TEXT</Type>
-			<fRed>0.24</fRed>
-			<fGreen>0.02</fGreen>
-			<fBlue>0.85</fBlue>
+			<fRed>0.65</fRed>
+			<fGreen>0.55</fGreen>
+			<fBlue>0.90</fBlue>
 			<fAlpha>1.00</fAlpha>
 		</ColorVal>
-		<!-- darkened -->
 		<ColorVal>
 			<Type>COLOR_PLAYER_DARK_CYAN</Type>
-			<fRed>0.04</fRed>
-			<fGreen>0.45</fGreen>
-			<fBlue>0.45</fBlue>
+			<fRed>0.00</fRed>
+			<fGreen>0.54</fGreen>
+			<fBlue>0.55</fBlue>
 			<fAlpha>1.00</fAlpha>
 		</ColorVal>
 		<ColorVal>
 			<Type>COLOR_PLAYER_DARK_CYAN_TEXT</Type>
-			<fRed>0.06</fRed>
-			<fGreen>0.66</fGreen>
-			<fBlue>0.67</fBlue>
+			<fRed>0</fRed>
+			<fGreen>.831</fGreen>
+			<fBlue>.788</fBlue>
 			<fAlpha>1.00</fAlpha>
 		</ColorVal>
-		<!-- more brown (bean green) -->
 		<ColorVal>
 			<Type>COLOR_PLAYER_DARK_GREEN</Type>
-			<fRed>0.22</fRed>
-			<fGreen>0.41</fGreen>
-			<fBlue>0.08</fBlue>
+			<fRed>0.00</fRed>
+			<fGreen>0.39</fGreen>
+			<fBlue>0.00</fBlue>
 			<fAlpha>1.00</fAlpha>
 		</ColorVal>
 		<ColorVal>
 			<Type>COLOR_PLAYER_DARK_DARK_GREEN</Type>
 			<fRed>0.00</fRed>
-			<fGreen>0.26</fGreen>
+			<fGreen>0.27</fGreen>
 			<fBlue>0.00</fBlue>
 			<fAlpha>1.00</fAlpha>
 		</ColorVal>
 		<ColorVal>
 			<Type>COLOR_PLAYER_DARK_GREEN_TEXT</Type>
-			<fRed>0.37</fRed>
-			<fGreen>0.61</fGreen>
-			<fBlue>0.15</fBlue>
+			<fRed>0.561</fRed>
+			<fGreen>0.80</fGreen>
+			<fBlue>0.561</fBlue>
 			<fAlpha>1.00</fAlpha>
 		</ColorVal>
 		<ColorVal>
@@ -513,159 +493,156 @@
 		</ColorVal>
 		<ColorVal>
 			<Type>COLOR_PLAYER_DARK_PINK_TEXT</Type>
-			<fRed>0.89</fRed>
+			<fRed>1.00</fRed>
 			<fGreen>0.00</fGreen>
-			<fBlue>0.56</fBlue>
+			<fBlue>1.00</fBlue>
 			<fAlpha>1.00</fAlpha>
 		</ColorVal>
-		<!-- slightly more blue -->
 		<ColorVal>
 			<Type>COLOR_PLAYER_DARK_PURPLE</Type>
-			<fRed>0.40</fRed>
+			<fRed>0.45</fRed>
 			<fGreen>0.00</fGreen>
 			<fBlue>0.49</fBlue>
 			<fAlpha>1.00</fAlpha>
 		</ColorVal>
 		<ColorVal>
 			<Type>COLOR_PLAYER_DARK_PURPLE_TEXT</Type>
-			<fRed>0.67</fRed>
-			<fGreen>0.00</fGreen>
-			<fBlue>0.77</fBlue>
+			<fRed>0.80</fRed>
+			<fGreen>0.35</fGreen>
+			<fBlue>0.85</fBlue>
 			<fAlpha>1.00</fAlpha>
 		</ColorVal>
-		<!-- darkened -->
 		<ColorVal>
 			<Type>COLOR_PLAYER_DARK_RED</Type>
-			<fRed>0.49</fRed>
-			<fGreen>0.05</fGreen>
-			<fBlue>0.05</fBlue>
+			<fRed>0.62</fRed>
+			<fGreen>0.00</fGreen>
+			<fBlue>0.00</fBlue>
 			<fAlpha>1.00</fAlpha>
 		</ColorVal>
 		<ColorVal>
 			<Type>COLOR_PLAYER_DARK_RED_TEXT</Type>
-			<fRed>0.80</fRed>
-			<fGreen>0.15</fGreen>
-			<fBlue>0.12</fBlue>
+			<fRed>1.00</fRed>
+			<fGreen>0.22</fGreen>
+			<fBlue>0.22</fBlue>
 			<fAlpha>1.00</fAlpha>
 		</ColorVal>
-		<!-- a little bit more orange -->
 		<ColorVal>
 			<Type>COLOR_PLAYER_DARK_YELLOW</Type>
 			<fRed>1.00</fRed>
-			<fGreen>0.75</fGreen>
-			<fBlue>0.0</fBlue>
+			<fGreen>0.83</fGreen>
+			<fBlue>0.01</fBlue>
 			<fAlpha>1.00</fAlpha>
 		</ColorVal>
 		<ColorVal>
 			<Type>COLOR_PLAYER_DARK_YELLOW_TEXT</Type>
 			<fRed>1.0</fRed>
-			<fGreen>0.76</fGreen>
-			<fBlue>0.00</fBlue>
+			<fGreen>0.93</fGreen>
+			<fBlue>0.21</fBlue>
 			<fAlpha>1.00</fAlpha>
 		</ColorVal>
-		<!-- darkened -->
 		<ColorVal>
 			<Type>COLOR_PLAYER_GRAY</Type>
-			<fRed>0.65</fRed>
-			<fGreen>0.65</fGreen>
-			<fBlue>0.65</fBlue>
+			<fRed>0.7</fRed>
+			<fGreen>0.7</fGreen>
+			<fBlue>0.7</fBlue>
 			<fAlpha>1.00</fAlpha>
 		</ColorVal>
 		<ColorVal>
 			<Type>COLOR_PLAYER_GRAY_TEXT</Type>
-			<fRed>0.77</fRed>
-			<fGreen>0.77</fGreen>
-			<fBlue>0.77</fBlue>
+			<fRed>0.8</fRed>
+			<fGreen>0.8</fGreen>
+			<fBlue>0.8</fBlue>
 			<fAlpha>1.00</fAlpha>
 		</ColorVal>
-		<!-- desaturated -->
 		<ColorVal>
 			<Type>COLOR_PLAYER_GREEN</Type>
 			<fRed>0.49</fRed>
-			<fGreen>0.81</fGreen>
-			<fBlue>0.24</fBlue>
+			<fGreen>0.88</fGreen>
+			<fBlue>0.00</fBlue>
 			<fAlpha>1.00</fAlpha>
 		</ColorVal>
 		<ColorVal>
 			<Type>COLOR_PLAYER_GREEN_TEXT</Type>
-			<fRed>0.60</fRed>
-			<fGreen>0.91</fGreen>
-			<fBlue>0.21</fBlue>
+			<fRed>0.486</fRed>
+			<fGreen>0.882</fGreen>
+			<fBlue>0.0</fBlue>
 			<fAlpha>1.00</fAlpha>
 		</ColorVal>
-		<!-- desaturated -->
 		<ColorVal>
 			<Type>COLOR_PLAYER_ORANGE</Type>
-			<fRed>1.00</fRed>
-			<fGreen>0.46</fGreen>
-			<fBlue>0.15</fBlue>
+			<fRed>0.99</fRed>
+			<fGreen>0.35</fGreen>
+			<fBlue>0.0</fBlue>
 			<fAlpha>1.00</fAlpha>
 		</ColorVal>
 		<ColorVal>
 			<Type>COLOR_PLAYER_ORANGE_TEXT</Type>
-			<fRed>1.00</fRed>
-			<fGreen>0.58</fGreen>
-			<fBlue>0.19</fBlue>
+			<fRed>.996</fRed>
+			<fGreen>.459</fGreen>
+			<fBlue>0.0</fBlue>
 			<fAlpha>1.00</fAlpha>
 		</ColorVal>
-		<!-- lightened; and it isn't and never was peach, it's a light brown,
-			 perhaps "old gold" -->
 		<ColorVal>
 			<Type>COLOR_PLAYER_PEACH</Type>
-			<fRed>0.62</fRed>
-			<fGreen>0.52</fGreen>
-			<fBlue>0.06</fBlue>
+			<fRed>0.60</fRed>
+			<fGreen>0.49</fGreen>
+			<fBlue>0.0</fBlue>
 			<fAlpha>1.00</fAlpha>
 		</ColorVal>
 		<ColorVal>
 			<Type>COLOR_PLAYER_PEACH_TEXT</Type>
-			<fRed>0.73</fRed>
-			<fGreen>0.63</fGreen>
-			<fBlue>0.07</fBlue>
+			<fRed>0.761</fRed>
+			<fGreen>0.698</fGreen>
+			<fBlue>0.396</fBlue>
 			<fAlpha>1.00</fAlpha>
 		</ColorVal>
-		<!-- more red -->
 		<ColorVal>
 			<Type>COLOR_PLAYER_PINK</Type>
-			<fRed>1.00</fRed>
-			<fGreen>0.62</fGreen>
-			<fBlue>0.48</fBlue>
+			<fRed>0.98</fRed>
+			<fGreen>0.67</fGreen>
+			<fBlue>0.49</fBlue>
 			<fAlpha>1.00</fAlpha>
 		</ColorVal>
 		<ColorVal>
 			<Type>COLOR_PLAYER_PINK_TEXT</Type>
-			<fRed>0.99</fRed>
-			<fGreen>0.74</fGreen>
-			<fBlue>0.61</fBlue>
+			<fRed>0.980</fRed>
+			<fGreen>0.72</fGreen>
+			<fBlue>0.57</fBlue>
 			<fAlpha>1.00</fAlpha>
 		</ColorVal>
-		<!-- more red -->
 		<ColorVal>
 			<Type>COLOR_PLAYER_PURPLE</Type>
-			<fRed>0.90</fRed>
-			<fGreen>0.43</fGreen>
-			<fBlue>0.92</fBlue>
+			<fRed>0.77</fRed>
+			<fGreen>0.34</fGreen>
+			<fBlue>1.00</fBlue>
+			<fAlpha>1.00</fAlpha>
+		</ColorVal>
+		<ColorVal>
+			<Type>COLOR_PLAYER_PURPLE2</Type>
+			<fRed>0.735</fRed>
+			<fGreen>0.5</fGreen>
+			<fBlue>0.90</fBlue>
 			<fAlpha>1.00</fAlpha>
 		</ColorVal>
 		<ColorVal>
 			<Type>COLOR_PLAYER_PURPLE_TEXT</Type>
-			<fRed>0.95</fRed>
-			<fGreen>0.58</fGreen>
+			<fRed>0.85</fRed>
+			<fGreen>0.65</fGreen>
 			<fBlue>1.00</fBlue>
 			<fAlpha>1.00</fAlpha>
 		</ColorVal>
 		<ColorVal>
 			<Type>COLOR_PLAYER_RED</Type>
-			<fRed>0.82</fRed>
-			<fGreen>0.08</fGreen>
-			<fBlue>0.1</fBlue>
+			<fRed>0.75</fRed>
+			<fGreen>0.02</fGreen>
+			<fBlue>0.02</fBlue>
 			<fAlpha>1.00</fAlpha>
 		</ColorVal>
 		<ColorVal>
 			<Type>COLOR_PLAYER_RED_TEXT</Type>
-			<fRed>0.98</fRed>
-			<fGreen>0.18</fGreen>
-			<fBlue>0.22</fBlue>
+			<fRed>0.91</fRed>
+			<fGreen>0.198</fGreen>
+			<fBlue>0.316</fBlue>
 			<fAlpha>1.00</fAlpha>
 		</ColorVal>
 		<ColorVal>
@@ -677,69 +654,79 @@
 		</ColorVal>
 		<ColorVal>
 			<Type>COLOR_PLAYER_WHITE_TEXT</Type>
-			<fRed>0.96</fRed>
-			<fGreen>0.96</fGreen>
-			<fBlue>0.98</fBlue>
+			<fRed>1.00</fRed>
+			<fGreen>0.95</fGreen>
+			<fBlue>0.95</fBlue>
 			<fAlpha>1.00</fAlpha>
 		</ColorVal>
-		<!-- a bit paler, very slight green tint -->
 		<ColorVal>
 			<Type>COLOR_PLAYER_YELLOW</Type>
-			<fRed>0.97</fRed>
+			<fRed>1.00</fRed>
 			<fGreen>1.00</fGreen>
-			<fBlue>0.28</fBlue>
+			<fBlue>0.17</fBlue>
 			<fAlpha>1.00</fAlpha>
 		</ColorVal>
 		<ColorVal>
 			<Type>COLOR_PLAYER_YELLOW_TEXT</Type>
-			<fRed>0.94</fRed>
-			<fGreen>0.948</fGreen>
-			<fBlue>0.27</fBlue>
+			<fRed>0.996</fRed>
+			<fGreen>1.00</fGreen>
+			<fBlue>0.173</fBlue>
 			<fAlpha>1.00</fAlpha>
 		</ColorVal>
-		<!-- lightened -->
+		<ColorVal>
+			<Type>COLOR_PLAYER_EYELLOW</Type>
+			<fRed>1.00</fRed>
+			<fGreen>1.00</fGreen>
+			<fBlue>0.37</fBlue>
+			<fAlpha>1.00</fAlpha>
+		</ColorVal>
+		<ColorVal>
+			<Type>COLOR_PLAYER_EYELLOW_TEXT</Type>
+			<fRed>0.996</fRed>
+			<fGreen>1.00</fGreen>
+			<fBlue>0.373</fBlue>
+			<fAlpha>1.00</fAlpha>
+		</ColorVal>
 		<ColorVal>
 			<Type>COLOR_PLAYER_LIGHT_GREEN</Type>
-			<fRed>0.65</fRed>
+			<fRed>0.50</fRed>
 			<fGreen>1.00</fGreen>
-			<fBlue>0.65</fBlue>
+			<fBlue>0.50</fBlue>
 			<fAlpha>1.00</fAlpha>
 		</ColorVal>
 		<ColorVal>
 			<Type>COLOR_PLAYER_LIGHT_GREEN_TEXT</Type>
-			<fRed>0.65</fRed>
+			<fRed>0.70</fRed>
 			<fGreen>1.00</fGreen>
-			<fBlue>0.65</fBlue>
+			<fBlue>0.70</fBlue>
 			<fAlpha>1.00</fAlpha>
 		</ColorVal>
-		<!-- a little more red -->
 		<ColorVal>
 			<Type>COLOR_PLAYER_LIGHT_BLUE</Type>
-			<fRed>0.51</fRed>
-			<fGreen>0.65</fGreen>
-			<fBlue>0.98</fBlue>
+			<fRed>0.50</fRed>
+			<fGreen>0.70</fGreen>
+			<fBlue>1.00</fBlue>
 			<fAlpha>1.00</fAlpha>
 		</ColorVal>
 		<ColorVal>
 			<Type>COLOR_PLAYER_BLUE_TEXT</Type>
-			<fRed>0.38</fRed>
-			<fGreen>0.61</fGreen>
+			<fRed>0.50</fRed>
+			<fGreen>0.70</fGreen>
 			<fBlue>1.00</fBlue>
 			<fAlpha>1.00</fAlpha>
 		</ColorVal>
-		<!-- lightened -->
 		<ColorVal>
 			<Type>COLOR_PLAYER_LIGHT_YELLOW</Type>
 			<fRed>1.00</fRed>
 			<fGreen>1.00</fGreen>
-			<fBlue>0.62</fBlue>
+			<fBlue>0.50</fBlue>
 			<fAlpha>1.00</fAlpha>
 		</ColorVal>
 		<ColorVal>
 			<Type>COLOR_PLAYER_LIGHT_YELLOW_TEXT</Type>
-			<fRed>0.87</fRed>
-			<fGreen>0.87</fGreen>
-			<fBlue>0.63</fBlue>
+			<fRed>0.90</fRed>
+			<fGreen>1.00</fGreen>
+			<fBlue>0.50</fBlue>
 			<fAlpha>1.00</fAlpha>
 		</ColorVal>
 		<ColorVal>
@@ -751,138 +738,121 @@
 		</ColorVal>
 		<ColorVal>
 			<Type>COLOR_PLAYER_LIGHT_PURPLE_TEXT</Type>
-			<fRed>0.82</fRed>
-			<fGreen>0.73</fGreen>
+			<fRed>0.70</fRed>
+			<fGreen>0.60</fGreen>
 			<fBlue>1.00</fBlue>
 			<fAlpha>1.00</fAlpha>
 		</ColorVal>
-		<!-- closer to pale orange because that's only used as a secondary
-			 color. if it were used as a primary color, then light orange
-			 should be paler: 91,67,36-->
 		<ColorVal>
 			<Type>COLOR_PLAYER_LIGHT_ORANGE</Type>
-			<fRed>0.88</fRed>
-			<fGreen>0.63</fGreen>
-			<fBlue>0.31</fBlue>
+			<fRed>0.90</fRed>
+			<fGreen>0.65</fGreen>
+			<fBlue>0.32</fBlue>
 			<fAlpha>1.00</fAlpha>
 		</ColorVal>
 		<ColorVal>
 			<Type>COLOR_PLAYER_LIGHT_ORANGE_TEXT</Type>
-			<fRed>0.96</fRed>
-			<fGreen>0.80</fGreen>
-			<fBlue>0.42</fBlue>
-			<fAlpha>1.00</fAlpha>
-		</ColorVal>
-		<!-- desaturated -->
-		<ColorVal>
-			<Type>COLOR_PLAYER_MIDDLE_PURPLE</Type>
-			<fRed>0.71</fRed>
-			<fGreen>0.24</fGreen>
-			<fBlue>0.71</fBlue>
-			<fAlpha>1.00</fAlpha>
-		</ColorVal>
-		<ColorVal>
-			<Type>COLOR_PLAYER_MIDDLE_PURPLE_TEXT</Type>
-			<fRed>0.80</fRed>
-			<fGreen>0.30</fGreen>
-			<fBlue>0.80</fBlue>
-			<fAlpha>1.00</fAlpha>
-		</ColorVal>
-		<!-- less red. only used as the secondary color for babylon,
-			 which is why I made "pale orange" a bit closer to this color.
-			 if goldenrod were used as a primary color, then pale orange should
-			 be a bit lighter and more red than it currently is. -->
-		<ColorVal>
-			<Type>COLOR_PLAYER_GOLDENROD</Type>
-			<fRed>0.78</fRed>
-			<fGreen>0.59</fGreen>
-			<fBlue>0.04</fBlue>
-			<fAlpha>1.00</fAlpha>
-		</ColorVal>
-		<!-- if light black were used as a primary color, this could be given a
-			 red tint: 40,35,35. blue tint is problematic because of the Blue
-			 Marble ocean color in the fog of war.-->
-		<ColorVal>
-			<Type>COLOR_PLAYER_DARK_GRAY</Type>
-			<fRed>0.35</fRed>
-			<fGreen>0.35</fGreen>
+			<fRed>1.00</fRed>
+			<fGreen>0.75</fGreen>
 			<fBlue>0.35</fBlue>
 			<fAlpha>1.00</fAlpha>
 		</ColorVal>
 		<ColorVal>
-			<Type>COLOR_PLAYER_DARK_GRAY_TEXT</Type>
-			<fRed>0.49</fRed>
-			<fGreen>0.49</fGreen>
-			<fBlue>0.51</fBlue>
+			<Type>COLOR_PLAYER_MIDDLE_PURPLE</Type>
+			<fRed>0.675</fRed>
+			<fGreen>0.118</fGreen>
+			<fBlue>0.725</fBlue>
 			<fAlpha>1.00</fAlpha>
 		</ColorVal>
-		<!-- less brown -->
+		<ColorVal>
+			<Type>COLOR_PLAYER_MIDDLE_PURPLE_TEXT</Type>
+			<fRed>0.808</fRed>
+			<fGreen>0.396</fGreen>
+			<fBlue>0.631</fBlue>
+			<fAlpha>1.00</fAlpha>
+		</ColorVal>
+		<ColorVal>
+			<Type>COLOR_PLAYER_GOLDENROD</Type>
+			<fRed>0.871</fRed>
+			<fGreen>0.624</fGreen>
+			<fBlue>0.000</fBlue>
+			<fAlpha>1.00</fAlpha>
+		</ColorVal>
+		<ColorVal>
+			<Type>COLOR_PLAYER_DARK_GRAY</Type>
+			<fRed>0.369</fRed>
+			<fGreen>0.369</fGreen>
+			<fBlue>0.369</fBlue>
+			<fAlpha>1.00</fAlpha>
+		</ColorVal>
+		<ColorVal>
+			<Type>COLOR_PLAYER_DARK_GRAY_TEXT</Type>
+			<fRed>0.565</fRed>
+			<fGreen>0.565</fGreen>
+			<fBlue>0.565</fBlue>
+			<fAlpha>1.00</fAlpha>
+		</ColorVal>
 		<ColorVal>
 			<Type>COLOR_PLAYER_MIDDLE_GREEN</Type>
-			<fRed>0.10</fRed>
-			<fGreen>0.58</fGreen>
+			<fRed>0.204</fRed>
+			<fGreen>0.576</fGreen>
 			<fBlue>0.000</fBlue>
 			<fAlpha>1.00</fAlpha>
 		</ColorVal>
 		<ColorVal>
 			<Type>COLOR_PLAYER_MIDDLE_GREEN_TEXT</Type>
-			<fRed>0.13</fRed>
-			<fGreen>0.72</fGreen>
-			<fBlue>0.01</fBlue>
+			<fRed>0.243</fRed>
+			<fGreen>0.616</fGreen>
+			<fBlue>0.000</fBlue>
 			<fAlpha>1.00</fAlpha>
 		</ColorVal>
-		<!-- more vibrant, a bit closer to the unused goldenrod -->
 		<ColorVal>
 			<Type>COLOR_PLAYER_DARK_LEMON</Type>
-			<fRed>0.88</fRed>
-			<fGreen>0.78</fGreen>
-			<fBlue>0.20</fBlue>
+			<fRed>0.847</fRed>
+			<fGreen>0.792</fGreen>
+			<fBlue>0.039</fBlue>
 			<fAlpha>1.00</fAlpha>
 		</ColorVal>
 		<ColorVal>
 			<Type>COLOR_PLAYER_DARK_LEMON_TEXT</Type>
-			<fRed>0.95</fRed>
-			<fGreen>0.89</fGreen>
-			<fBlue>0.22</fBlue>
+			<fRed>0.906</fRed>
+			<fGreen>0.851</fGreen>
+			<fBlue>0.098</fBlue>
 			<fAlpha>1.00</fAlpha>
 		</ColorVal>
-		<!-- darkened -->
 		<ColorVal>
 			<Type>COLOR_PLAYER_MIDDLE_BLUE</Type>
-			<fRed>0.11</fRed>
-			<fGreen>0.26</fGreen>
-			<fBlue>0.73</fBlue>
+			<fRed>0.000</fRed>
+			<fGreen>0.220</fGreen>
+			<fBlue>0.914</fBlue>
 			<fAlpha>1.00</fAlpha>
 		</ColorVal>
 		<ColorVal>
 			<Type>COLOR_PLAYER_MIDDLE_BLUE_TEXT</Type>
-			<fRed>0.16</fRed>
-			<fGreen>0.39</fGreen>
-			<fBlue>0.90</fBlue>
+			<fRed>0.504</fRed>
+			<fGreen>0.725</fGreen>
+			<fBlue>0.710</fBlue>
 			<fAlpha>1.00</fAlpha>
 		</ColorVal>
-		<!-- brightened -->
 		<ColorVal>
 			<Type>COLOR_PLAYER_MIDDLE_CYAN</Type>
-			<fRed>0.02</fRed>
-			<fGreen>0.76</fGreen>
-			<fBlue>0.67</fBlue>
+			<fRed>0.000</fRed>
+			<fGreen>0.639</fGreen>
+			<fBlue>0.710</fBlue>
 			<fAlpha>1.00</fAlpha>
 		</ColorVal>
 		<ColorVal>
 			<Type>COLOR_PLAYER_MIDDLE_CYAN_TEXT</Type>
-			<fRed>0.03</fRed>
-			<fGreen>0.89</fGreen>
-			<fBlue>0.82</fBlue>
+			<fRed>0.157</fRed>
+			<fGreen>0.796</fGreen>
+			<fBlue>0.867</fBlue>
 			<fAlpha>1.00</fAlpha>
 		</ColorVal>
-		<!-- brightened (although unused except as a secondary color for the
-			Maya) -->
 		<ColorVal>
 			<Type>COLOR_PLAYER_MAROON</Type>
-			<fRed>0.58</fRed>
-			<fGreen>0.23</fGreen>
-			<fBlue>0.18</fBlue>
+			<fRed>0.514</fRed>
+			<fGreen>0.200</fGreen>
+			<fBlue>0.157</fBlue>
 			<fAlpha>1.00</fAlpha>
 		</ColorVal>
 		<ColorVal>
@@ -894,34 +864,32 @@
 		</ColorVal>
 		<ColorVal>
 			<Type>COLOR_PLAYER_LIGHT_BROWN_TEXT</Type>
-			<fRed>0.73</fRed>
-			<fGreen>0.47</fGreen>
-			<fBlue>0.18</fBlue>
+			<fRed>0.580</fRed>
+			<fGreen>0.431</fGreen>
+			<fBlue>0.204</fBlue>
 			<fAlpha>1.00</fAlpha>
 		</ColorVal>
-		<!-- brightened -->
 		<ColorVal>
 			<Type>COLOR_PLAYER_DARK_ORANGE</Type>
-			<fRed>0.98</fRed>
-			<fGreen>0.24</fGreen>
+			<fRed>0.878</fRed>
+			<fGreen>0.235</fGreen>
 			<fBlue>0.000</fBlue>
 			<fAlpha>1.00</fAlpha>
 		</ColorVal>
 		<ColorVal>
 			<Type>COLOR_PLAYER_DARK_ORANGE_TEXT</Type>
-			<fRed>1.00</fRed>
-			<fGreen>0.37</fGreen>
-			<fBlue>0.00</fBlue>
+			<fRed>0.949</fRed>
+			<fGreen>0.306</fGreen>
+			<fBlue>0.071</fBlue>
 			<fAlpha>1.00</fAlpha>
 		</ColorVal>
 		<ColorVal>
 			<Type>COLOR_PLAYER_DARK_DARK_GREEN_TEXT</Type>
-			<fRed>0.00</fRed>
-			<fGreen>0.49</fGreen>
-			<fBlue>0.07</fBlue>
+			<fRed>0.355</fRed>
+			<fGreen>0.625</fGreen>
+			<fBlue>0.355</fBlue>
 			<fAlpha>1.00</fAlpha>
 		</ColorVal>
-		<!-- no change; only used as secondary color for Ottomans -->
 		<ColorVal>
 			<Type>COLOR_PLAYER_PALE_RED</Type>
 			<fRed>0.780</fRed>
@@ -929,43 +897,466 @@
 			<fBlue>0.239</fBlue>
 			<fAlpha>1.00</fAlpha>
 		</ColorVal>
-		<!-- more red -->
 		<ColorVal>
 			<Type>COLOR_PLAYER_DARK_INDIGO</Type>
-			<fRed>0.35</fRed>
-			<fGreen>0.10</fGreen>
-			<fBlue>0.80</fBlue>
+			<fRed>0.306</fRed>
+			<fGreen>0.020</fGreen>
+			<fBlue>0.835</fBlue>
 			<fAlpha>1.00</fAlpha>
 		</ColorVal>
 		<ColorVal>
 			<Type>COLOR_PLAYER_DARK_INDIGO_TEXT</Type>
-			<fRed>0.59</fRed>
-			<fGreen>0.18</fGreen>
-			<fBlue>1.00</fBlue>
+			<fRed>0.533</fRed>
+			<fGreen>0.361</fGreen>
+			<fBlue>0.859</fBlue>
 			<fAlpha>1.00</fAlpha>
 		</ColorVal>
-		<!-- less red, closer to goldenrod. only used as secondary color of
-			 Sumeria. -->
 		<ColorVal>
 			<Type>COLOR_PLAYER_PALE_ORANGE</Type>
-			<fRed>0.79</fRed>
-			<fGreen>0.49</fGreen>
-			<fBlue>0.15</fBlue>
+			<fRed>0.863</fRed>
+			<fGreen>0.471</fGreen>
+			<fBlue>0.149</fBlue>
 			<fAlpha>1.00</fAlpha>
 		</ColorVal>
-		<!-- blue tint added though it's entirely unused. -->
 		<ColorVal>
 			<Type>COLOR_PLAYER_LIGHT_BLACK</Type>
-			<fRed>0.24</fRed>
-			<fGreen>0.24</fGreen>
-			<fBlue>0.29</fBlue>
+			<fRed>0.251</fRed>
+			<fGreen>0.251</fGreen>
+			<fBlue>0.251</fBlue>
 			<fAlpha>1.00</fAlpha>
 		</ColorVal>
 		<ColorVal>
 			<Type>COLOR_PLAYER_LIGHT_BLACK_TEXT</Type>
-			<fRed>0.39</fRed>
-			<fGreen>0.39</fGreen>
-			<fBlue>0.47</fBlue>
+			<fRed>0.392</fRed>
+			<fGreen>0.392</fGreen>
+			<fBlue>0.392</fBlue>
+			<fAlpha>1.00</fAlpha>
+		</ColorVal>
+		<ColorVal>
+			<Type>COLOR_X_SIENNA</Type>
+			<fRed>0.63</fRed>
+			<fGreen>0.32</fGreen>
+			<fBlue>0.18</fBlue>
+			<fAlpha>1.00</fAlpha>
+		</ColorVal>
+		<ColorVal>
+			<Type>COLOR_PLAYER_POLAND_PRIMARY</Type>
+			<fRed>0.86</fRed>
+			<fGreen>0.16</fGreen>
+			<fBlue>0.24</fBlue>
+			<fAlpha>1.00</fAlpha>
+		</ColorVal>	
+		<ColorVal>
+			<Type>COLOR_PLAYER_POLAND_SECONDARY</Type>
+			<fRed>0.975</fRed>
+			<fGreen>0.975</fGreen>
+			<fBlue>0.975</fBlue>
+			<fAlpha>1.00</fAlpha>
+		</ColorVal>	
+		<ColorVal>
+			<Type>COLOR_PLAYER_POLAND_TEXT</Type>
+			<fRed>0.86</fRed>
+			<fGreen>0.16</fGreen>
+			<fBlue>0.24</fBlue>
+			<fAlpha>1.00</fAlpha>
+		</ColorVal>
+		<ColorVal>
+			<Type>COLOR_BARBS</Type>
+			<fRed>0.20</fRed>
+			<fGreen>0.0</fGreen>
+			<fBlue>0.0</fBlue>
+			<fAlpha>1.00</fAlpha>
+		</ColorVal>
+		<ColorVal>
+			<Type>COLOR_PLAYER_GREY</Type>
+			<fRed>0.85</fRed>
+			<fGreen>0.85</fGreen>
+			<fBlue>0.85</fBlue>
+			<fAlpha>1.00</fAlpha>
+		</ColorVal>
+		<ColorVal>
+			<Type>COLOR_PLAYER_KBLUE</Type>
+			<fRed>0.150</fRed>
+			<fGreen>0.150</fGreen>
+			<fBlue>0.800</fBlue>
+			<fAlpha>1.00</fAlpha>
+		</ColorVal>
+		<ColorVal>
+			<Type>COLOR_PLAYER_KBLUE_TEXT</Type>
+			<fRed>0.255</fRed>
+			<fGreen>0.250</fGreen>
+			<fBlue>0.800</fBlue>
+			<fAlpha>1.00</fAlpha>
+		</ColorVal>
+		<ColorVal>
+			<Type>COLOR_PLAYER_KOR</Type>
+			<fRed>0.85</fRed>
+			<fGreen>0.735</fGreen>
+			<fBlue>0.605</fBlue>
+			<fAlpha>1.00</fAlpha>
+		</ColorVal>
+		<ColorVal>
+			<Type>COLOR_PLAYER_KOR_TEXT</Type>
+			<fRed>1.0</fRed>
+			<fGreen>0.87</fGreen>
+			<fBlue>0.67</fBlue>
+			<fAlpha>1.00</fAlpha>
+		</ColorVal>
+		<ColorVal>
+			<Type>COLOR_X_DARKVIOLET</Type>
+			<fRed>0.58</fRed>
+			<fGreen>0.00</fGreen>
+			<fBlue>0.83</fBlue>
+			<fAlpha>1.00</fAlpha>
+		</ColorVal>
+		<ColorVal>
+			<Type>COLOR_X_DARKSALMON</Type>
+			<fRed>0.91</fRed>
+			<fGreen>0.59</fGreen>
+			<fBlue>0.48</fBlue>
+			<fAlpha>1.00</fAlpha>
+		</ColorVal>
+		<ColorVal>
+			<Type>COLOR_X_GHOSTWHITE</Type>
+			<fRed>0.97</fRed>
+			<fGreen>0.97</fGreen>
+			<fBlue>1.00</fBlue>
+			<fAlpha>1.00</fAlpha>
+		</ColorVal>
+		<ColorVal>
+			<Type>COLOR_PLAYER_SKIES</Type>
+			<fRed>0.039</fRed>
+			<fGreen>0.730</fGreen>
+			<fBlue>0.710</fBlue>
+			<fAlpha>1.00</fAlpha>
+		</ColorVal>
+		<ColorVal>
+			<Type>COLOR_PLAYER_TEAL</Type>
+			<fRed>0.0</fRed>
+			<fGreen>0.3020</fGreen>
+			<fBlue>0.3020</fBlue>
+			<fAlpha>1.00</fAlpha>
+		</ColorVal>
+		<ColorVal>
+			<Type>COLOR_PLAYER_TEAL2</Type>
+			<fRed>0.0</fRed>
+			<fGreen>0.2020</fGreen>
+			<fBlue>0.2020</fBlue>
+			<fAlpha>1.00</fAlpha>
+		</ColorVal>
+		<ColorVal>
+			<Type>COLOR_MOROCCAN_RED</Type>
+			<fRed>0.76</fRed>
+			<fGreen>0.20</fGreen>
+			<fBlue>0.12</fBlue>
+			<fAlpha>1.00</fAlpha>
+		</ColorVal>
+		<ColorVal>
+			<Type>COLOR_MOROCCAN_GOLDENROD</Type>
+			<fRed>0.99</fRed>
+			<fGreen>0.73</fGreen>
+			<fBlue>0.07</fBlue>
+			<fAlpha>1.00</fAlpha>
+		</ColorVal>
+		<ColorVal>
+			<Type>COLOR_PLAYER_X_GHOSTRED</Type>
+			<fRed>1.00</fRed>
+			<fGreen>0.60</fGreen>
+			<fBlue>0.60</fBlue>
+			<fAlpha>1.00</fAlpha>
+		</ColorVal>
+		<ColorVal>
+			<Type>COLOR_KHITAN</Type>
+			<fRed>0.92</fRed>
+			<fGreen>0.92</fGreen>
+			<fBlue>0.00</fBlue>
+			<fAlpha>1.00</fAlpha>
+		</ColorVal>
+		<ColorVal>
+			<Type>COLOR_KHITAN2</Type>
+			<fRed>0.10</fRed>
+			<fGreen>0.10</fGreen>
+			<fBlue>0.40</fBlue>
+			<fAlpha>1.00</fAlpha>
+		</ColorVal>
+		<ColorVal>
+			<Type>COLOR_KHITAN_FONT</Type>
+			<fRed>1.00</fRed>
+			<fGreen>1.00</fGreen>
+			<fBlue>0.00</fBlue>
+			<fAlpha>1.00</fAlpha>
+		</ColorVal>
+		<ColorVal>
+			<Type>COLOR_THRACE1</Type>
+			<fRed>0.72</fRed>
+			<fGreen>0.6</fGreen>
+			<fBlue>0.24</fBlue>
+			<fAlpha>1.00</fAlpha>
+		</ColorVal>
+		<ColorVal>
+			<Type>COLOR_THRACE2</Type>
+			<fRed>0.29</fRed>
+			<fGreen>0.34</fGreen>
+			<fBlue>0.2</fBlue>
+			<fAlpha>1.00</fAlpha>
+		</ColorVal>
+		<ColorVal>
+			<Type>COLOR_THRACE_FONT</Type>
+			<fRed>0.82</fRed>
+			<fGreen>0.7</fGreen>
+			<fBlue>0.28</fBlue>
+			<fAlpha>1.00</fAlpha>
+		</ColorVal>
+		<ColorVal>
+			<Type>COLOR_PLAYER_GEORGIA</Type>
+			<fRed>1.00</fRed>
+			<fGreen>0.95</fGreen>
+			<fBlue>0.90</fBlue>
+			<fAlpha>1.00</fAlpha>
+		</ColorVal>
+		<ColorVal>
+			<Type>COLOR_PLAYER_GEORGIA_TEXT</Type>
+			<fRed>0.95</fRed>
+			<fGreen>0.90</fGreen>
+			<fBlue>0.85</fBlue>
+			<fAlpha>1.00</fAlpha>
+		</ColorVal>
+		<ColorVal>
+			<Type>COLOR_PLAYER_PISTACHIO_GREEN</Type>
+			<fRed>0.5765</fRed>
+			<fGreen>0.7725</fGreen>
+			<fBlue>0.4471</fBlue>
+			<fAlpha>1.00</fAlpha>
+		</ColorVal>
+		<ColorVal>
+			<Type>COLOR_PLAYER_PISTACHIO_GREEN_TEXT</Type>
+			<fRed>0.6159</fRed>
+			<fGreen>0.7922</fGreen>
+			<fBlue>0.498</fBlue>
+			<fAlpha>1.00</fAlpha>
+		</ColorVal>
+		<ColorVal>
+			<Type>COLOR_X_PEACHPUFF</Type>
+			<fRed>1.00</fRed>
+			<fGreen>0.85</fGreen>
+			<fBlue>0.73</fBlue>
+			<fAlpha>1.00</fAlpha>
+		</ColorVal>
+		<ColorVal>
+			<Type>COLOR_PLAYER_DARK_RED2</Type>
+			<fRed>0.475</fRed>
+			<fGreen>0.125</fGreen>
+			<fBlue>0.125</fBlue>
+			<fAlpha>1.00</fAlpha>
+		</ColorVal>
+		<ColorVal>
+			<Type>COLOR_PLAYER_BOSNIA2</Type>
+			<fRed>0.05</fRed>
+			<fGreen>0.275</fGreen>
+			<fBlue>0.485</fBlue>
+			<fAlpha>1.00</fAlpha>
+		</ColorVal>
+		<ColorVal>
+			<Type>COLOR_PLAYER_BOSNIA1</Type>
+			<fRed>0.8</fRed>
+			<fGreen>0.225</fGreen>
+			<fBlue>0.275</fBlue>
+			<fAlpha>1.00</fAlpha>
+		</ColorVal>
+		<ColorVal>
+			<Type>COLOR_PLAYER_ROMANIA</Type>
+			<fRed>0.72</fRed>
+			<fGreen>0.58</fGreen>
+			<fBlue>0.36</fBlue>
+			<fAlpha>1.00</fAlpha>
+		</ColorVal>
+		<ColorVal>
+			<Type>COLOR_PLAYER_ANOTHER_YELLOW</Type>
+			<fRed>0.9</fRed>
+			<fGreen>0.85</fGreen>
+			<fBlue>0.125</fBlue>
+			<fAlpha>1.00</fAlpha>
+		</ColorVal>
+		<ColorVal>
+			<Type>COLOR_PLAYER_VENETIA_RED</Type>
+			<fRed>0.6</fRed>
+			<fGreen>0.06</fGreen>
+			<fBlue>0.0</fBlue>
+			<fAlpha>1.00</fAlpha>
+		</ColorVal>
+		<ColorVal>
+			<Type>COLOR_PLAYER_VENETIA_GREEN</Type>
+			<fRed>0.2</fRed>
+			<fGreen>0.6</fGreen>
+			<fBlue>0.0</fBlue>
+			<fAlpha>1.00</fAlpha>
+		</ColorVal>
+		<ColorVal>
+			<Type>COLOR_PLAYER_MUDDY</Type>
+			<fRed>0.239</fRed>
+			<fGreen>0.169</fGreen>
+			<fBlue>0.123</fBlue>
+			<fAlpha>1.00</fAlpha>
+		</ColorVal>
+		<ColorVal>
+			<Type>COLOR_PLAYER_PALE_PINK</Type>
+			<fRed>1.000</fRed>
+			<fGreen>0.600</fGreen>
+			<fBlue>0.600</fBlue>
+			<fAlpha>1.00</fAlpha>
+		</ColorVal>
+		<ColorVal>
+			<Type>COLOR_PLAYER_AUSTRALIA_BLUE</Type>
+			<fRed>0.20</fRed>
+			<fGreen>0.21</fGreen>
+			<fBlue>0.57</fBlue>
+			<fAlpha>1.00</fAlpha>
+		</ColorVal>
+		<ColorVal>
+			<Type>COLOR_PLAYER_AUSTRALIA_GREEN</Type>
+			<fRed>0.34</fRed>
+			<fGreen>0.357</fGreen>
+			<fBlue>0.165</fBlue>
+			<fAlpha>1.00</fAlpha>
+		</ColorVal>
+		<ColorVal>
+			<Type>COLOR_PLAYER_AUSTRALIA_GREEN_TEXT</Type>
+			<fRed>0.47</fRed>
+			<fGreen>0.487</fGreen>
+			<fBlue>0.285</fBlue>
+			<fAlpha>1.00</fAlpha>
+		</ColorVal>
+		<ColorVal>
+			<Type>COLOR_PLAYER_KONGO1</Type>
+			<fRed>0.65</fRed>
+			<fGreen>0.6</fGreen>
+			<fBlue>0.35</fBlue>
+			<fAlpha>1.00</fAlpha>
+		</ColorVal>
+		<ColorVal>
+			<Type>COLOR_PLAYER_KONGO2</Type>
+			<fRed>0.85</fRed>
+			<fGreen>0.25</fGreen>
+			<fBlue>0.2</fBlue>
+			<fAlpha>1.00</fAlpha>
+		</ColorVal>
+		<ColorVal>
+			<Type>COLOR_X_MOCCASIN</Type>
+			<fRed>1.00</fRed>
+			<fGreen>0.89</fGreen>
+			<fBlue>0.71</fBlue>
+			<fAlpha>1.00</fAlpha>
+		</ColorVal>
+		<ColorVal>
+			<Type>COLOR_X_CADETBLUE</Type>
+			<fRed>0.37</fRed>
+			<fGreen>0.62</fGreen>
+			<fBlue>0.63</fBlue>
+			<fAlpha>1.00</fAlpha>
+		</ColorVal>
+		<ColorVal>
+			<Type>COLOR_RAW_UMBER</Type>
+			<fRed>0.40</fRed>
+			<fGreen>0.24</fGreen>
+			<fBlue>0.17</fBlue>
+			<fAlpha>1.00</fAlpha>
+		</ColorVal>
+		<ColorVal>
+			<Type>COLOR_RAW_UMBER_TEXT</Type>
+			<fRed>0.44</fRed>
+			<fGreen>0.28</fGreen>
+			<fBlue>0.18</fBlue>
+			<fAlpha>1.00</fAlpha>
+		</ColorVal>
+		<ColorVal>
+			<Type>COLOR_PLAYER_TAWNY</Type>
+			<fRed>0.89</fRed>
+			<fGreen>0.17</fGreen>
+			<fBlue>0.0</fBlue>
+			<fAlpha>1.00</fAlpha>
+		</ColorVal>
+		<ColorVal>
+			<Type>COLOR_PLAYER_HORO_HAIR</Type>
+			<fRed>0.851</fRed>
+			<fGreen>0.565</fGreen>
+			<fBlue>0.345</fBlue>
+			<fAlpha>1.00</fAlpha>
+		</ColorVal>
+		<ColorVal>
+			<Type>COLOR_X_CORAL</Type>
+			<fRed>1.00</fRed>
+			<fGreen>0.50</fGreen>
+			<fBlue>0.31</fBlue>
+			<fAlpha>1.00</fAlpha>
+		</ColorVal>
+		<ColorVal>
+			<Type>COLOR_X_CORAL_TEXT</Type>
+			<fRed>1.00</fRed>
+			<fGreen>0.525</fGreen>
+			<fBlue>0.325</fBlue>
+			<fAlpha>1.00</fAlpha>
+		</ColorVal>
+		<ColorVal>
+			<Type>COLOR_W_NAVY</Type>
+			<fRed>0.00</fRed>
+			<fGreen>0.00</fGreen>
+			<fBlue>0.50</fBlue>
+			<fAlpha>1.00</fAlpha>
+		</ColorVal>
+		<ColorVal>
+			<Type>COLOR_PLAYER_CELTIC_GREEN</Type>
+			<fRed>0.03</fRed>
+			<fGreen>0.40</fGreen>
+			<fBlue>0.20</fBlue>
+			<fAlpha>1.00</fAlpha>
+		</ColorVal>
+		<ColorVal>
+			<Type>COLOR_PLAYER_CELTIC_GREEN_TEXT</Type>
+			<fRed>0.261</fRed>
+			<fGreen>0.80</fGreen>
+			<fBlue>0.621</fBlue>
+			<fAlpha>1.00</fAlpha>
+		</ColorVal>
+		<ColorVal>
+			<Type>COLOR_PLAYER_SPAIN_YELLOW</Type>
+			<fRed>0.96</fRed>
+			<fGreen>0.71</fGreen>
+			<fBlue>0.07</fBlue>
+			<fAlpha>1.00</fAlpha>
+		</ColorVal>
+		<ColorVal>
+			<Type>COLOR_PLAYER_SPAIN_YELLOW_TEXT</Type>
+			<fRed>0.98</fRed>
+			<fGreen>0.81</fGreen>
+			<fBlue>0.27</fBlue>
+			<fAlpha>1.00</fAlpha>
+		</ColorVal>
+		<ColorVal>
+			<Type>COLOR_PLAYER_AUS_RED</Type>
+			<fRed>0.73</fRed>
+			<fGreen>0.06</fGreen>
+			<fBlue>0.16</fBlue>
+			<fAlpha>1.00</fAlpha>
+		</ColorVal>
+		<ColorVal>
+			<Type>COLOR_PLAYER_AUS_RED_TEXT</Type>
+			<fRed>0.78</fRed>
+			<fGreen>0.8</fGreen>
+			<fBlue>0.20</fBlue>
+			<fAlpha>1.00</fAlpha>
+		</ColorVal>
+		<ColorVal>
+			<Type>COLOR_PLAYER_BRIGHT_RED</Type>
+			<fRed>0.91</fRed>
+			<fGreen>0.12</fGreen>
+			<fBlue>0.02</fBlue>
+			<fAlpha>1.00</fAlpha>
+		</ColorVal>
+		<ColorVal>
+			<Type>COLOR_PLAYER_BRIGHT_RED_TEXT</Type>
+			<fRed>0.95</fRed>
+			<fGreen>0.198</fGreen>
+			<fBlue>0.316</fBlue>
 			<fAlpha>1.00</fAlpha>
 		</ColorVal>
 	</ColorVals>

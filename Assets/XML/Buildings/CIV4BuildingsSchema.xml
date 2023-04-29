@@ -170,6 +170,12 @@
 	<ElementType name="iBombardDefense" content="textOnly" dt:type="int"/>
 	<ElementType name="iAllCityDefense" content="textOnly" dt:type="int"/>
 	<ElementType name="iEspionageDefense" content="textOnly" dt:type="int"/>
+	<!-- RevDCM Building Effects -->
+	<ElementType name="iMaxGlobalBuildingProductionModifier" content="textOnly" dt:type="int"/>
+	<ElementType name="iMaxTeamBuildingProductionModifier" content="textOnly" dt:type="int"/>
+	<ElementType name="iMaxPlayerBuildingProductionModifier" content="textOnly" dt:type="int"/>
+	<ElementType name="iUnitUpgradePriceModifier" content="textOnly" dt:type="int"/>
+	<!-- RevDCM Building Effects -->
 	<ElementType name="iAsset" content="textOnly" dt:type="int"/>
 	<!-- advc.131c (note): Now only used for buildings with defense, XP and
 		 war weariness abilities, not for production abilities. -->
@@ -473,9 +479,8 @@
 		<element type="iGlobalHurryModifier"/>
 		<element type="iExperience"/>
 		<element type="iGlobalExperience"/>
-		<!-- advc.912d (note): The DLL (CvPlayer::getFoodKept) increases this
-			 by a factor of 1.2 when playing with the "No Slavery" option.
-			 Upd.: AdvCiv 1.05 has disabled this adjustment. -->
+		<!-- advc.912d (note): The DLL increases this by a factor of
+			 1.2 when playing with the "No Slavery" option -->
 		<element type="iFoodKept"/>
 		<element type="iAirlift"/>
 		<element type="iAirModifier"/>
@@ -515,6 +520,12 @@
 		<element type="iBombardDefense"/>
 		<element type="iAllCityDefense"/>
 		<element type="iEspionageDefense"/>
+		<!-- RevDCM Building Effects -->
+		<element type="iMaxGlobalBuildingProductionModifier" minOccurs="0"/>
+		<element type="iMaxTeamBuildingProductionModifier" minOccurs="0"/>
+		<element type="iMaxPlayerBuildingProductionModifier" minOccurs="0"/>
+		<element type="iUnitUpgradePriceModifier" minOccurs="0"/>
+		<!-- RevDCM end -->
 		<element type="iAsset"/>
 		<element type="iPower"/>
 		<element type="fVisibilityPriority"/>

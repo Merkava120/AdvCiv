@@ -36,8 +36,7 @@
 		<ImprovementArtInfo>
 			<Type>ART_DEF_IMPROVEMENT_GOODY_HUT</Type>
 			<bExtraAnimations>0</bExtraAnimations>
-			<!-- advc.314: was 1.0 -->
-			<fScale>1.35</fScale>
+			<fScale>1.5</fScale>
 			<fInterfaceScale>1.0</fInterfaceScale>
 			<NIF>Art/Structures/Improvements/TribalVillage/TribalVillage.nif</NIF>
 			<KFM>Art/Structures/Improvements/TribalVillage/TribalVillage.kfm</KFM>
@@ -66,8 +65,8 @@
 			<bExtraAnimations>0</bExtraAnimations>
 			<fScale>1.0</fScale>
 			<fInterfaceScale>1.0</fInterfaceScale>
-			<NIF>Art/Structures/Improvements/Whalingboat_Ancient/Whalingboat_Ancient.nif</NIF>
-			<KFM>Art/Structures/Improvements/Whalingboat_Ancient/Whalingboat_Ancient.kfm</KFM>
+			<NIF>Art/Structures/Improvements/Nets/Nets.nif</NIF>
+			<KFM>Art/Structures/Improvements/Nets/Nets.kfm</KFM>
 			<Button>,Art/Interface/Buttons/Builds/BuildWhalingBoats.dds,Art/Interface/Buttons/Actions_Builds_LeaderHeads_Specialists_Atlas.dds,6,9</Button>
 		</ImprovementArtInfo>
 		<ImprovementArtInfo>
@@ -231,6 +230,15 @@
 			<NIF>Art/Structures/Improvements/ForestPreserve/ForestPreserve.nif</NIF>
 			<KFM>Art/Structures/Improvements/ForestPreserve/ForestPreserve.kfm</KFM>
 			<Button>,Art/Interface/Buttons/TechTree/Corporation.dds,Art/Interface/Buttons/Beyond_the_Sword_Atlas.dds,4,14</Button>
+		</ImprovementArtInfo>
+		<ImprovementArtInfo>
+			<Type>ART_DEF_IMPROVEMENT_MACHU_PICCHU</Type>
+			<bExtraAnimations>0</bExtraAnimations>
+			<fScale>0.30</fScale>
+			<fInterfaceScale>0.30</fInterfaceScale>
+			<NIF>Art/Structures/Wonders/machu/MachuPicchu.nif</NIF>
+			<KFM/>
+			<Button>Art/Structures/Wonders/machu/Machu.dds</Button>
 		</ImprovementArtInfo>
 	</ImprovementArtInfos>
 </Civ4ArtDefines>

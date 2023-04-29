@@ -2,11 +2,11 @@
 <!-- edited with XMLSPY v2004 rel. 2 U (http://www.xmlspy.com) by Alex Mantzaris (Firaxis Games) -->
 <!-- Sid Meier's Civilization 4 -->
 <!-- Copyright Firaxis Games 2005 -->
-<!-- advc (caveat): Order needs to be the same as in CvEnums.h.
-	 See warnings there about options whose position mustn't be changed. -->
+<!-- -->
+<!-- Game Option -->
 <Civ4GameOptionInfos xmlns="x-schema:CIV4GameInfoSchema.xml">
 	<GameOptionInfos>
-
+	
 		<GameOptionInfo>
 			<Type>GAMEOPTION_ADVANCED_START</Type>
 			<Description>TXT_KEY_GAME_OPTION_ADVANCED_START</Description>
@@ -65,6 +65,9 @@
 			<bDefault>0</bDefault>
 			<bVisible>1</bVisible>
 		</GameOptionInfo>
+		<!-- advc: According to DarkLunaPhantom, this option has to remain
+			 in the eighth position.
+			 github.com/DarkLunaPhantom/Civ4-K-Mod/commit/908160ecea97d427cc24736fb4fb1e1b51f282f3 -->
 		<GameOptionInfo>
 			<Type>GAMEOPTION_RANDOM_PERSONALITIES</Type>
 			<Description>TXT_KEY_GAME_OPTION_RANDOM_PERSONALITIES</Description>
@@ -137,6 +140,8 @@
 			<bDefault>0</bDefault>
 			<bVisible>1</bVisible>
 		</GameOptionInfo>
+		<!-- advc.701: Taking the spot of NEW_RANDOM_SEED so that it's grouped
+			 with the other special challenge options. -->
 		<GameOptionInfo>
 			<Type>GAMEOPTION_LOCK_MODS</Type>
 			<Description>TXT_KEY_GAME_OPTION_LOCK_MODS</Description>
@@ -189,7 +194,7 @@
 			<bDefault>0</bDefault>
 			<bVisible>1</bVisible>
 		</GameOptionInfo>
-		<!-- advc.309 -->
+		<!-- advc.309: Added NO_ANIMALS and made NO_ESPIONAGE invisible. -->
 		<GameOptionInfo>
 			<Type>GAMEOPTION_NO_ANIMALS</Type>
 			<Description>TXT_KEY_GAME_OPTION_NO_ANIMALS</Description>

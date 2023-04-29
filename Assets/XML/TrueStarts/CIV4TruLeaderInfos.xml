@@ -3,9 +3,29 @@
 <Civ4TruLeaderInfos xmlns="x-schema:CIV4TrueStartsSchema.xml">
 	<TruLeaderInfos>
 		<TruLeaderInfo>
+			<Type>TRU_ADOLF_HITLER</Type>
+			<LeaderType>LEADER_ADOLF_HITLER</LeaderType>
+			<iStartOfReign>1933</iStartOfReign>
+		</TruLeaderInfo>
+		<TruLeaderInfo>
+			<Type>TRU_ANA_NZINGA</Type>
+			<LeaderType>LEADER_ANA_NZINGA</LeaderType>
+			<iStartOfReign>1624</iStartOfReign>
+		</TruLeaderInfo>
+		<TruLeaderInfo>
+			<Type>TRU_AHMAD_AL_MANSUR</Type>
+			<LeaderType>LEADER_AHMAD_AL_MANSUR</LeaderType>
+			<iStartOfReign>1578</iStartOfReign>
+		</TruLeaderInfo>
+		<TruLeaderInfo>
 			<Type>TRU_ALEXANDER</Type>
 			<LeaderType>LEADER_ALEXANDER</LeaderType>
 			<iStartOfReign>-336</iStartOfReign>
+		</TruLeaderInfo>
+		<TruLeaderInfo>
+			<Type>TRU_ASHURBANIPAL</Type>
+			<LeaderType>LEADER_ASHURBANIPAL</LeaderType>
+			<iStartOfReign>-669</iStartOfReign>
 		</TruLeaderInfo>
 		<TruLeaderInfo>
 			<Type>TRU_ASOKA</Type>
@@ -17,6 +37,11 @@
 			<LeaderType>LEADER_AUGUSTUS</LeaderType>
 			<!-- Second triumvirate -->
 			<iStartOfReign>-43</iStartOfReign>
+		</TruLeaderInfo>
+		<TruLeaderInfo>
+			<Type>TRU_BILGE</Type>
+			<LeaderType>LEADER_BILGE</LeaderType>
+			<iStartOfReign>697</iStartOfReign>
 		</TruLeaderInfo>
 		<TruLeaderInfo>
 			<Type>TRU_BISMARCK</Type>
@@ -36,6 +61,11 @@
 			<!-- Battle of Allia. He may have been in command
 				 some years earlier. -->
 			<iStartOfReign>-390</iStartOfReign>
+		</TruLeaderInfo>
+		<TruLeaderInfo>
+			<Type>TRU_CASIMIR</Type>
+			<LeaderType>LEADER_CASIMIR</LeaderType>
+			<iStartOfReign>1333</iStartOfReign>
 		</TruLeaderInfo>
 		<TruLeaderInfo>
 			<Type>TRU_CATHERINE</Type>
@@ -59,6 +89,11 @@
 			<iStartOfReign>-559</iStartOfReign>
 		</TruLeaderInfo>
 		<TruLeaderInfo>
+			<Type>TRU_CURTIN</Type>
+			<LeaderType>LEADER_CURTIN</LeaderType>
+			<iStartOfReign>1947</iStartOfReign>
+		</TruLeaderInfo>
+		<TruLeaderInfo>
 			<Type>TRU_DARIUS</Type>
 			<LeaderType>LEADER_DARIUS</LeaderType>
 			<iStartOfReign>-522</iStartOfReign>
@@ -67,6 +102,16 @@
 			<Type>TRU_DE_GAULLE</Type>
 			<LeaderType>LEADER_DE_GAULLE</LeaderType>
 			<iStartOfReign>1944</iStartOfReign>
+		</TruLeaderInfo>
+		<TruLeaderInfo>
+			<Type>TRU_DHARMASETU</Type>
+			<LeaderType>LEADER_DHARMASETU</LeaderType>
+			<iStartOfReign>775</iStartOfReign>
+		</TruLeaderInfo>
+		<TruLeaderInfo>
+			<Type>TRU_DUSAN</Type>
+			<LeaderType>LEADER_DUSAN</LeaderType>
+			<iStartOfReign>1331</iStartOfReign>
 		</TruLeaderInfo>
 		<TruLeaderInfo>
 			<Type>TRU_ELIZABETH</Type>
@@ -96,9 +141,19 @@
 			<iStartOfReign>-2650</iStartOfReign>
 		</TruLeaderInfo>
 		<TruLeaderInfo>
+			<Type>TRU_GWANGGAETO</Type>
+			<LeaderType>LEADER_GWANGGAETO</LeaderType>
+			<iStartOfReign>386</iStartOfReign>
+		</TruLeaderInfo>
+		<TruLeaderInfo>
 			<Type>TRU_HAMMURABI</Type>
 			<LeaderType>LEADER_HAMMURABI</LeaderType>
 			<iStartOfReign>-1792</iStartOfReign>
+		</TruLeaderInfo>
+		<TruLeaderInfo>
+			<Type>TRU_HARUN_AL_RASHID</Type>
+			<LeaderType>LEADER_HARUN_AL_RASHID</LeaderType>
+			<iStartOfReign>786</iStartOfReign>
 		</TruLeaderInfo>
 		<TruLeaderInfo>
 			<Type>TRU_HANNIBAL</Type>
@@ -110,6 +165,11 @@
 			<Type>TRU_HATSHEPSUT</Type>
 			<LeaderType>LEADER_HATSHEPSUT</LeaderType>
 			<iStartOfReign>-1478</iStartOfReign>
+		</TruLeaderInfo>
+		<TruLeaderInfo>
+			<Type>TRU_HOCHIMINH</Type>
+			<LeaderType>LEADER_HOCHIMINH</LeaderType>
+			<iStartOfReign>1945</iStartOfReign>
 		</TruLeaderInfo>
 		<TruLeaderInfo>
 			<Type>TRU_HUAYNA_CAPAC</Type>
@@ -137,6 +197,16 @@
 			<iStartOfReign>527</iStartOfReign>
 		</TruLeaderInfo>
 		<TruLeaderInfo>
+			<Type>TRU_KAMEHAMEHA</Type>
+			<LeaderType>LEADER_KAMEHAMEHA</LeaderType>
+			<iStartOfReign>1782</iStartOfReign>
+		</TruLeaderInfo>
+		<TruLeaderInfo>
+			<Type>TRU_KANGXI</Type>
+			<LeaderType>LEADER_KANGXI</LeaderType>
+			<iStartOfReign>1661</iStartOfReign>
+		</TruLeaderInfo>
+		<TruLeaderInfo>
 			<Type>TRU_KUBLAI_KHAN</Type>
 			<LeaderType>LEADER_KUBLAI_KHAN</LeaderType>
 			<iStartOfReign>1260</iStartOfReign>
@@ -147,10 +217,20 @@
 			<iStartOfReign>1861</iStartOfReign>
 		</TruLeaderInfo>
 		<TruLeaderInfo>
+			<Type>TRU_MEDICIS</Type>
+			<LeaderType>LEADER_MEDICIS</LeaderType>
+			<iStartOfReign>1469</iStartOfReign>
+		</TruLeaderInfo>
+		<TruLeaderInfo>
 			<Type>TRU_LOUIS_XIV</Type>
 			<LeaderType>LEADER_LOUIS_XIV</LeaderType>
 			<!-- Coronation; came of age in 1651, took full control in 1661. -->
 			<iStartOfReign>1654</iStartOfReign>
+		</TruLeaderInfo>
+		<TruLeaderInfo>
+			<Type>TRU_MAGYAR_MATYAS</Type>
+			<LeaderType>LEADER_MAGYAR_MATYAS</LeaderType>
+			<iStartOfReign>1458</iStartOfReign>
 		</TruLeaderInfo>
 		<TruLeaderInfo>
 			<Type>TRU_MANSA_MUSA</Type>
@@ -158,10 +238,15 @@
 			<iStartOfReign>1312</iStartOfReign>
 		</TruLeaderInfo>
 		<TruLeaderInfo>
-			<Type>TRU_CHINESE_LEADER</Type>
-			<LeaderType>LEADER_CHINESE_LEADER</LeaderType>
+			<Type>TRU_MAO_ZEDONG</Type>
+			<LeaderType>LEADER_MAO_ZEDONG</LeaderType>
 			<!-- Proclamation of PRC -->
 			<iStartOfReign>1949</iStartOfReign>
+		</TruLeaderInfo>
+		<TruLeaderInfo>
+			<Type>TRU_MARIA_THERESA</Type>
+			<LeaderType>LEADER_MARIA_THERESA</LeaderType>
+			<iStartOfReign>1740</iStartOfReign>
 		</TruLeaderInfo>
 		<TruLeaderInfo>
 			<Type>TRU_MEHMED</Type>
@@ -181,9 +266,19 @@
 			<iStartOfReign>1799</iStartOfReign>
 		</TruLeaderInfo>
 		<TruLeaderInfo>
+			<Type>TRU_NEBUCHADREZZAR</Type>
+			<LeaderType>LEADER_NEBUCHADREZZAR</LeaderType>
+			<iStartOfReign>-605</iStartOfReign>
+		</TruLeaderInfo>
+		<TruLeaderInfo>
 			<Type>TRU_PACAL</Type>
 			<LeaderType>LEADER_PACAL</LeaderType>
 			<iStartOfReign>615</iStartOfReign>
+		</TruLeaderInfo>
+		<TruLeaderInfo>
+			<Type>TRU_PEDRO</Type>
+			<LeaderType>LEADER_PEDRO</LeaderType>
+			<iStartOfReign>1831</iStartOfReign>
 		</TruLeaderInfo>
 		<TruLeaderInfo>
 			<Type>TRU_PERICLES</Type>
@@ -194,6 +289,11 @@
 			<Type>TRU_PETER</Type>
 			<LeaderType>LEADER_PETER</LeaderType>
 			<iStartOfReign>1682</iStartOfReign>
+		</TruLeaderInfo>
+		<TruLeaderInfo>
+			<Type>TRU_PHILIP</Type>
+			<LeaderType>LEADER_PHILIP</LeaderType>
+			<iStartOfReign>1556</iStartOfReign>
 		</TruLeaderInfo>
 		<TruLeaderInfo>
 			<Type>TRU_QIN_SHI_HUANG</Type>
@@ -225,6 +325,11 @@
 			<iStartOfReign>1174</iStartOfReign>
 		</TruLeaderInfo>
 		<TruLeaderInfo>
+			<Type>TRU_SEJONG</Type>
+			<LeaderType>LEADER_SEJONG</LeaderType>
+			<iStartOfReign>1418</iStartOfReign>
+		</TruLeaderInfo>
+		<TruLeaderInfo>
 			<Type>TRU_SHAKA</Type>
 			<LeaderType>LEADER_SHAKA</LeaderType>
 			<iStartOfReign>1816</iStartOfReign>
@@ -234,6 +339,11 @@
 			<LeaderType>LEADER_SITTING_BULL</LeaderType>
 			<!-- When he did not agree to the settlement of Red Cloud's war -->
 			<iStartOfReign>1868</iStartOfReign>
+		</TruLeaderInfo>
+		<TruLeaderInfo>
+			<Type>TRU_SONGTSEN_GAMPO</Type>
+			<LeaderType>LEADER_SONGTSEN_GAMPO</LeaderType>
+			<iStartOfReign>617</iStartOfReign>
 		</TruLeaderInfo>
 		<TruLeaderInfo>
 			<Type>TRU_STALIN</Type>
@@ -246,9 +356,24 @@
 			<iStartOfReign>1520</iStartOfReign>
 		</TruLeaderInfo>
 		<TruLeaderInfo>
+			<Type>TRU_MEIJI</Type>
+			<LeaderType>LEADER_MEIJI</LeaderType>
+			<iStartOfReign>1868</iStartOfReign>
+		</TruLeaderInfo>
+		<TruLeaderInfo>
+			<Type>TRU_SUPPI</Type>
+			<LeaderType>LEADER_SUPPI</LeaderType>
+			<iStartOfReign>-1358</iStartOfReign>
+		</TruLeaderInfo>
+		<TruLeaderInfo>
 			<Type>TRU_SURYAVARMAN</Type>
 			<LeaderType>LEADER_SURYAVARMAN</LeaderType>
 			<iStartOfReign>1113</iStartOfReign>
+		</TruLeaderInfo>
+		<TruLeaderInfo>
+			<Type>TRU_TAMAR</Type>
+			<LeaderType>LEADER_TAMAR</LeaderType>
+			<iStartOfReign>1184</iStartOfReign>
 		</TruLeaderInfo>
 		<TruLeaderInfo>
 			<Type>TRU_TOKUGAWA</Type>
@@ -259,6 +384,11 @@
 			<Type>TRU_VICTORIA</Type>
 			<LeaderType>LEADER_VICTORIA</LeaderType>
 			<iStartOfReign>1837</iStartOfReign>
+		</TruLeaderInfo>
+		<TruLeaderInfo>
+			<Type>TRU_VLAD</Type>
+			<LeaderType>LEADER_VLAD</LeaderType>
+			<iStartOfReign>1448</iStartOfReign>
 		</TruLeaderInfo>
 		<TruLeaderInfo>
 			<Type>TRU_WANGKON</Type>

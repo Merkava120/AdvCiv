@@ -1,0 +1,19 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<Civ4GameText xmlns="http://www.firaxis.com">
+	<TEXT>
+		<Tag>TXT_KEY_BUILDING_TEMPLE_OF_ARTEMIS_STRATEGY</Tag>
+		<English>The [COLOR_BUILDING_TEXT]Temple of Artemis[COLOR_REVERT] provides the city extra [COLOR_HIGHLIGHT_TEXT]Food[COLOR_REVERT]. Also, it increases the rate of [COLOR_HIGHLIGHT_TEXT]Great Merchant[COLOR_REVERT] appearing.</English>
+		<French>Le[COLOR_BUILDING_TEXT]Temple d'Artemis[COLOR_REVERT]Fournit la ville supplémentaire[COLOR_HIGHLIGHT_TEXT]Nourriture[COLOR_REVERT].En outre, cela augmente le taux de[COLOR_HIGHLIGHT_TEXT]Grand marchand[COLOR_REVERT]apparaissant.</French>
+		<German>Der[COLOR_BUILDING_TEXT]Tempel der Artemis[COLOR_REVERT]Bietet der Stadt extra[COLOR_HIGHLIGHT_TEXT]Essen[COLOR_REVERT].Außerdem erhöht es die Rate von[COLOR_HIGHLIGHT_TEXT]Großer Händler[COLOR_REVERT]erscheinen.</German>
+		<Italian>Il[COLOR_BUILDING_TEXT]Tempio di Artemide[COLOR_REVERT]Fornisce la città extra[COLOR_HIGHLIGHT_TEXT]Cibo[COLOR_REVERT].Inoltre, aumenta il tasso di[COLOR_HIGHLIGHT_TEXT]Grande commerciante[COLOR_REVERT]Apparendo.</Italian>
+		<Spanish>El[COLOR_BUILDING_TEXT]Templo de Artemisa[COLOR_REVERT]Proporciona la ciudad extra[COLOR_HIGHLIGHT_TEXT]Alimento[COLOR_REVERT].Además, aumenta la tasa de[COLOR_HIGHLIGHT_TEXT]Gran comerciante[COLOR_REVERT]apareciendo.</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_BUILDING_UNIVERSITY_OF_SANKORE_STRATEGY</Tag>
+		<English>[COLOR_BUILDING_TEXT]University of Sankore[COLOR_REVERT] increases the scientific output of its city. Also, it makes scientist specialists more useful.</English>
+		<French>[COLOR_BUILDING_TEXT]Université de Sankore[COLOR_REVERT]augmente la production scientifique de sa ville.En outre, cela rend les spécialistes des scientifiques plus utiles.</French>
+		<German>[COLOR_BUILDING_TEXT]Universität Sankore[COLOR_REVERT]Erhöht die wissenschaftliche Leistung seiner Stadt.Außerdem macht es Wissenschaftlerspezialisten nützlicher.</German>
+		<Italian>[COLOR_BUILDING_TEXT]Università di Sankore[COLOR_REVERT]Aumenta la produzione scientifica della sua città.Inoltre, rende gli specialisti degli scienziati più utili.</Italian>
+		<Spanish>[COLOR_BUILDING_TEXT]Universidad de Sankore[COLOR_REVERT]aumenta la producción científica de su ciudad.Además, hace que los especialistas científicos sean más útiles.</Spanish>
+	</TEXT>
+</Civ4GameText>

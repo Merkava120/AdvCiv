@@ -52,6 +52,7 @@
 				<BonusType>BONUS_CRAB</BonusType>
 				<BonusType>BONUS_CLAM</BonusType>
 				<BonusType>BONUS_FISH</BonusType>
+				<BonusType>BONUS_SHRIMP</BonusType>
 				<BonusType>BONUS_RICE</BonusType>
 			</PrereqBonuses>
 			<HeadquarterCommerces>
@@ -90,6 +91,7 @@
 				<BonusType>BONUS_CORN</BonusType>
 				<BonusType>BONUS_SUGAR</BonusType>
 				<BonusType>BONUS_RICE</BonusType>
+				<BonusType>BONUS_POTATO</BonusType>
 			</PrereqBonuses>
 			<HeadquarterCommerces>
 				<iHeadquarterCommerce>4</iHeadquarterCommerce>
@@ -234,6 +236,7 @@
 				<BonusType>BONUS_GOLD</BonusType>
 				<BonusType>BONUS_SILVER</BonusType>
 				<BonusType>BONUS_GEMS</BonusType>
+				<BonusType>BONUS_AMBER</BonusType>
 			</PrereqBonuses>
 			<HeadquarterCommerces>
 				<iHeadquarterCommerce>4</iHeadquarterCommerce>

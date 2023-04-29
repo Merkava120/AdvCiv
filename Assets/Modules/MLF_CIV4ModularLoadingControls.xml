@@ -1,0 +1,104 @@
+<?xml version="1.0"?>
+<!-- Sid Meier's Civilization 4 Beyond the Sword -->
+<!-- Modified by the World of Civilization Team -->
+<!-- Master Load File -->
+<!-- -->
+<Civ4ModularLoadControls xmlns="x-schema:CIV4ModularLoadingControlsSchema.xml">
+	<DefaultConfiguration>Modules_Main_1</DefaultConfiguration>
+	<ConfigurationInfos>
+		<ConfigurationInfo>
+			<Type>Modules_Main_1</Type>
+			<Description>Initialize ALL Modules by using the MLF file structure</Description>
+			<Modules>
+				<Module>
+					<Directory>Original BtS</Directory>
+					<bLoad>1</bLoad>
+				</Module>
+				<Module>
+					<Directory>Balance</Directory>
+					<bLoad>1</bLoad>
+				</Module>				
+				<Module>
+					<Directory>Buildings</Directory>
+					<bLoad>1</bLoad>
+				</Module>
+				<Module>
+					<Directory>Builds</Directory>
+					<bLoad>1</bLoad>
+				</Module>
+				<Module>
+					<Directory>Civics</Directory>
+					<bLoad>1</bLoad>
+				</Module>
+				<Module>
+					<Directory>Civilizations</Directory>
+					<bLoad>1</bLoad>
+				</Module>
+				<Module>
+					<Directory>Art Styles</Directory>
+					<bLoad>1</bLoad>
+				</Module>
+				<Module>
+					<Directory>Combat Categories</Directory>
+					<bLoad>1</bLoad>
+				</Module>
+				<Module>
+					<Directory>Corporations</Directory>
+					<bLoad>1</bLoad>
+				</Module>
+				<Module>
+					<Directory>Events</Directory>
+					<bLoad>1</bLoad>
+				</Module>
+				<Module>
+					<Directory>Game Concepts</Directory>
+					<bLoad>1</bLoad>
+				</Module>						
+				<Module>
+					<Directory>Interface</Directory>
+					<bLoad>1</bLoad>
+				</Module>
+				<Module>
+					<Directory>LeaderHeads</Directory>
+					<bLoad>1</bLoad>
+				</Module>
+				<Module>
+					<Directory>Projects</Directory>
+					<bLoad>1</bLoad>
+				</Module>
+				<Module>
+					<Directory>Promotions</Directory>
+					<bLoad>1</bLoad>
+				</Module>				
+				<Module>
+					<Directory>Religions</Directory>
+					<bLoad>1</bLoad>
+				</Module>				
+				<Module>
+					<Directory>Resources</Directory>
+					<bLoad>1</bLoad>
+				</Module>
+				<Module>
+					<Directory>Specialists</Directory>
+					<bLoad>1</bLoad>
+				</Module>
+				<Module>
+					<Directory>Technologies</Directory>
+					<bLoad>1</bLoad>
+				</Module>
+				<Module>
+					<Directory>Terrain</Directory>
+					<bLoad>1</bLoad>
+				</Module>
+				<Module>
+					<Directory>Units</Directory>
+					<bLoad>1</bLoad>
+				</Module>
+				<Module>
+					<Directory>Wonders</Directory>
+					<bLoad>1</bLoad>
+				</Module>								
+			</Modules>
+		</ConfigurationInfo>		
+	</ConfigurationInfos>
+</Civ4ModularLoadControls>

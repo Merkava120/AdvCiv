@@ -1,0 +1,611 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<Civ4GameText xmlns="http://www.firaxis.com">
+	<TEXT>
+		<Tag>TXT_KEY_UNIT_HEAVY_SWORDSMAN_STRATEGY</Tag>
+		<English>Build this melee combat unit to counter other melee units as it gets a boost against them. </English>
+		<French>Construisez cette unité de combat de mêlée pour contrer d'autres unités de mêlée car elle obtient un coup de pouce contre eux.</French>
+		<German>Erstellen Sie diese Nahkampfeinheit, um anderen Nahkampfeinheiten entgegenzuwirken, da sie einen Schub gegen sie erhöht.</German>
+		<Italian>Costruisci questa unità di combattimento in mischia per contrastare altre unità in mischia in quanto ottiene una spinta contro di loro.</Italian>
+		<Spanish>Construya esta unidad de combate cuerpo a cuerpo para contrarrestar otras unidades cuerpo a cuerpo a medida que recibe un impulso contra ellas.</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_UNIT_JAPAN_SAMURAI_STRATEGY</Tag>
+		<English>This powerful melee combat unit (the Japanese replacement for the [COLOR_UNIT_TEXT]Heavy swordsman[COLOR_REVERT]) is special because it gets 2 first strikes as well as [COLOR_UNIT_TEXT]Drill1[COLOR_REVERT] and it is particularly effective against other melee units.</English>
+		<French>Cette puissante unité de combat de mêlée (le remplacement japonais pour le[COLOR_UNIT_TEXT]Épée lourde[COLOR_REVERT]) est spécial car il obtient 2 premières frappes ainsi que[COLOR_UNIT_TEXT]Forage 1[COLOR_REVERT]Et il est particulièrement efficace contre d'autres unités de mêlée.</French>
+		<German>Diese leistungsstarke Nahkampfeinheit (der japanische Ersatz für die[COLOR_UNIT_TEXT]Schwerer Schwertkämpfer[COLOR_REVERT]) ist etwas Besonderes, weil es sowohl 2 erste Streiks als auch erhält[COLOR_UNIT_TEXT]Drill1[COLOR_REVERT]und es ist besonders effektiv gegen andere Nahkampfeinheiten.</German>
+		<Italian>Questa potente unità di combattimento in mischia (la sostituzione giapponese per il[COLOR_UNIT_TEXT]Swordsman pesante[COLOR_REVERT]) è speciale perché ottiene 2 primi colpi e[COLOR_UNIT_TEXT]Drill1[COLOR_REVERT]Ed è particolarmente efficace contro altre unità in mischia.</Italian>
+		<Spanish>Esta poderosa unidad de combate cuerpo a cuerpo (el reemplazo japonés para el[COLOR_UNIT_TEXT]Espadachín pesado[COLOR_REVERT]) es especial porque tiene 2 primeros ataques, así como[COLOR_UNIT_TEXT]Taladro1[COLOR_REVERT]y es particularmente efectivo contra otras unidades cuerpo a cuerpo.</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_UNIT_ARQUEBUSIER_STRATEGY</Tag>
+		<English>This early gunpowder unit requires no special resources and is good for defending cities.</English>
+		<French>Cette première unité de poudre à canon ne nécessite aucune ressource spéciale et est bonne pour défendre les villes.</French>
+		<German>Diese frühe Schießpulvereinheit erfordert keine speziellen Ressourcen und eignet sich gut für die Verteidigung von Städten.</German>
+		<Italian>Questa prima unità di polvere da sparo non richiede risorse speciali ed è utile per difendere le città.</Italian>
+		<Spanish>Esta unidad de pólvora temprana no requiere recursos especiales y es buena para defender las ciudades.</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_UNIT_MUSKETMAN_STRATEGY</Tag>
+		<English>This gunpowder unit requires no special resources and is efficient against Mounted units.</English>
+		<French>Cette unité de poudre à canon ne nécessite aucune ressource spéciale et est efficace contre les unités montées.</French>
+		<German>Diese Schießpulvereinheit benötigt keine speziellen Ressourcen und ist gegen montierte Einheiten effizient.</German>
+		<Italian>Questa unità di polvere da sparo non richiede risorse speciali ed è efficiente contro le unità montate.</Italian>
+		<Spanish>Esta unidad de pólvora no requiere recursos especiales y es eficiente contra las unidades montadas.</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_UNIT_FRENCH_MUSKETEER_STRATEGY</Tag>
+		<English>This gunpowder combat unit (the French replacement for the [COLOR_UNIT_TEXT]Line Infantry[COLOR_REVERT]) is faster than any units(except cavalry) in this era.</English>
+		<French>Cette unité de combat de poudre à canon (le remplacement français pour le[COLOR_UNIT_TEXT]Ligne d'infanterie[COLOR_REVERT]) est plus rapide que toutes les unités (sauf la cavalerie) à cette époque.</French>
+		<German>Diese Schießpulverkampfeinheit (der französische Ersatz für die[COLOR_UNIT_TEXT]Linieninfanterie[COLOR_REVERT]) ist schneller als alle Einheiten (außer Kavallerie) in dieser Zeit.</German>
+		<Italian>Questa unità di combattimento di polvere da sparo (la sostituzione francese per il[COLOR_UNIT_TEXT]Fanteria di linea[COLOR_REVERT]) è più veloce di qualsiasi unità (tranne la cavalleria) in questa era.</Italian>
+		<Spanish>Esta unidad de combate de pólvora (el reemplazo francés para el[COLOR_UNIT_TEXT]Infantería de línea[COLOR_REVERT]) es más rápido que cualquier unidades (excepto la caballería) en esta época.</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_UNIT_ENGLISH_REDCOAT_STRATEGY</Tag>
+		<English>This gunpowder combat unit (the English replacement for the [COLOR_UNIT_TEXT]Line Infantry[COLOR_REVERT]) gets a bonus against mounted units and other gunpowder units..</English>
+		<French>Cette unité de combat de poudre à canon (le remplacement anglais pour le[COLOR_UNIT_TEXT]Ligne d'infanterie[COLOR_REVERT]) obtient un bonus contre des unités montées et d'autres unités de poudre à canon.</French>
+		<German>Diese Schießpulverkampfeinheit (der englische Ersatz für die[COLOR_UNIT_TEXT]Linieninfanterie[COLOR_REVERT]) bekommt einen Bonus gegen berittene Einheiten und andere Schießpulvereinheiten.</German>
+		<Italian>Questa unità di combattimento di polvere da sparo (la sostituzione inglese per il[COLOR_UNIT_TEXT]Fanteria di linea[COLOR_REVERT]) ottiene un bonus contro unità montate e altre unità di polvere da sparo ..</Italian>
+		<Spanish>Esta unidad de combate de pólvora (el reemplazo en inglés para el[COLOR_UNIT_TEXT]Infantería de línea[COLOR_REVERT]) obtiene una bonificación contra las unidades montadas y otras unidades de pólvora.</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_UNIT_GRENADIER_STRATEGY</Tag>
+		<English>Build this moderate-strength gunpowder unit as a counter to an enemy with lots of [COLOR_UNIT_TEXT]Musketman[COLOR_REVERT] and [COLOR_UNIT_TEXT]Line Infantry[COLOR_REVERT].</English>
+		<French>Construisez cette unité de poudre à canon modérée comme un compteur à un ennemi avec beaucoup de[COLOR_UNIT_TEXT]Mousquet[COLOR_REVERT]et[COLOR_UNIT_TEXT]Ligne d'infanterie[COLOR_REVERT].</French>
+		<German>Bauen Sie diese Schießpulvereinheit mit mittlerer Stärke als Zähler für einen Feind mit vielen[COLOR_UNIT_TEXT]Musketman[COLOR_REVERT]Und[COLOR_UNIT_TEXT]Linieninfanterie[COLOR_REVERT].</German>
+		<Italian>Costruisci questa unità di polvere da sparo a forza moderata come contatore a un nemico con un sacco di[COLOR_UNIT_TEXT]Musketman[COLOR_REVERT]E[COLOR_UNIT_TEXT]Fanteria di linea[COLOR_REVERT].</Italian>
+		<Spanish>Construya esta unidad de pólvora de fuerza de fuerza moderada como un mostrador de un enemigo con mucho[COLOR_UNIT_TEXT]Mosquetero[COLOR_REVERT]y[COLOR_UNIT_TEXT]Infantería de línea[COLOR_REVERT].</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_UNIT_LONGBOWMAN_STRATEGY</Tag>
+		<English>This strong archery unit gets a bonus when defending in cities or on hills.  Build them to replace your obsolete [COLOR_UNIT_TEXT]Archers[COLOR_REVERT].</English>
+		<French>Cette forte unité de tir à l'arc obtient un bonus lors de la défense dans les villes ou sur les collines.Les construire pour remplacer votre obsolète[COLOR_UNIT_TEXT]Archers[COLOR_REVERT].</French>
+		<German>Diese starke Bogenschießeinheit erhält einen Bonus, wenn sie in Städten oder auf Hügeln verteidigen.Bauen Sie sie auf, um Ihre Veraltete zu ersetzen[COLOR_UNIT_TEXT]Bogenschützen[COLOR_REVERT].</German>
+		<Italian>Questa forte unità di tiro con l'arco ottiene un bonus quando si difende in città o sulle colline.Costruirli per sostituire il tuo obsoleto[COLOR_UNIT_TEXT]Arcieri[COLOR_REVERT].</Italian>
+		<Spanish>Esta fuerte unidad de tiro con arco recibe una bonificación al defender en ciudades o en colinas.Construirlos para reemplazar su obsoleto[COLOR_UNIT_TEXT]Arquero[COLOR_REVERT].</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_UNIT_CROSSBOWMAN_STRATEGY</Tag>
+		<English>A strong archery unit that gets a bonus when fighting melee units. Stack them with [COLOR_UNIT_TEXT]Pikemen[COLOR_REVERT] and [COLOR_UNIT_TEXT]Heavy swordsman[COLOR_REVERT] for a dangerous combined-arms force.</English>
+		<French>Une forte unité de tir à l'arc qui obtient un bonus lors de la lutte contre les unités de mêlée.Empilez-les avec[COLOR_UNIT_TEXT]Pikemen[COLOR_REVERT]et[COLOR_UNIT_TEXT]Épée lourde[COLOR_REVERT]Pour une force d'armes combinées dangereuses.</French>
+		<German>Eine starke Bogenschießeneinheit, die beim Kampf gegen Nahkampfeinheiten einen Bonus bekommt.Stapeln Sie sie mit[COLOR_UNIT_TEXT]Pikemen[COLOR_REVERT]Und[COLOR_UNIT_TEXT]Schwerer Schwertkämpfer[COLOR_REVERT]für eine gefährliche Kombinationskraft.</German>
+		<Italian>Una forte unità di tiro con l'arco che ottiene un bonus quando si combattono unità in mischia.Impilarli con[COLOR_UNIT_TEXT]Pikemen[COLOR_REVERT]E[COLOR_UNIT_TEXT]Swordsman pesante[COLOR_REVERT]Per una forza per pericolosa armi combinati.</Italian>
+		<Spanish>Una fuerte unidad de tiro con arco que recibe una ventaja al luchar contra las unidades cuerpo a cuerpo.Apilarlos con[COLOR_UNIT_TEXT]Pikemen[COLOR_REVERT]y[COLOR_UNIT_TEXT]Espadachín pesado[COLOR_REVERT]para una peligrosa fuerza de armas combinadas.</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_UNIT_PERIA_IMMORTAL_STRATEGY</Tag>
+		<English>This melee combat unit (the Persian replacement for the [COLOR_UNIT_TEXT]Spearman[COLOR_REVERT]) is more effective than the previous spearman against archery units.</English>
+		<French>Cette unité de combat de mêlée (le remplacement persan pour le[COLOR_UNIT_TEXT]Lancier[COLOR_REVERT]) est plus efficace que le Spearman précédent contre les unités de tir à l'arc.</French>
+		<German>Diese Nahkampfkampfflugung (der persische Ersatz für die[COLOR_UNIT_TEXT]Spearman[COLOR_REVERT]) ist effektiver als der vorherige Spearman gegen Bogenschießen.</German>
+		<Italian>Questa unità di combattimento in mischia (la sostituzione persiana per il[COLOR_UNIT_TEXT]Spearman[COLOR_REVERT]) è più efficace del precedente Spearman contro le unità di tiro con l'arco.</Italian>
+		<Spanish>Esta unidad de combate cuerpo a cuerpo (el reemplazo persa del[COLOR_UNIT_TEXT]Lancero[COLOR_REVERT]) es más efectivo que el Spearman anterior contra las unidades de tiro con arco.</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_UNIT_MONGOL_KESHIK_STRATEGY</Tag>
+		<English>This powerful mounted combat unit (the Mongol replacement for the [COLOR_UNIT_TEXT]Knight[COLOR_REVERT]) ignores terrain movement costs and get withdrawl chance from combat.  It is an excellent counter to enemy catapults.</English>
+		<French>Cette puissante unité de combat montée (le remplacement mongol pour le[COLOR_UNIT_TEXT]Chevalier[COLOR_REVERT]) Ignore les coûts de mouvement du terrain et obtient des chances de retrait du combat.C'est un excellent compteur des catapultes ennemies.</French>
+		<German>Diese leistungsstarke montierte Kampfeinheit (der mongolische Ersatz für die[COLOR_UNIT_TEXT]Ritter[COLOR_REVERT]) ignoriert die Kosten für die Geländebewegung und erhalten Sie den Zufall vom Kampf zurück.Es ist ein ausgezeichneter Gegensatz zu feindlichen Katapulten.</German>
+		<Italian>Questa potente unità di combattimento montata (la sostituzione del mongolo per il[COLOR_UNIT_TEXT]Cavaliere[COLOR_REVERT]) Ignora i costi di movimento del terreno e ottenere la possibilità di ritirare il combattimento.È un contatore eccellente per le catapulte nemiche.</Italian>
+		<Spanish>Esta potente unidad de combate montada (el reemplazo mongol para el[COLOR_UNIT_TEXT]Caballero[COLOR_REVERT]) Ignora los costos del movimiento del terreno y obtiene la oportunidad de retirar del combate.Es un excelente mostrador para las catapultas enemigas.</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_UNIT_ARABIA_CAMELARCHER_STRATEGY</Tag>
+		<English>This powerful mounted combat unit (the Arabian replacement for the [COLOR_UNIT_TEXT]Knight[COLOR_REVERT]) is very powerful until the introduction of gunpowder units. [COLOR_UNIT_TEXT]Camel Archer[COLOR_REVERT] gains combat bonus against [COLOR_UNIT_TEXT]mounted units[COLOR_REVERT] and does not require any bonus.</English>
+		<French>Cette puissante unité de combat montée (le remplacement arabe pour le[COLOR_UNIT_TEXT]Chevalier[COLOR_REVERT]) est très puissant jusqu'à l'introduction d'unités de poudre à canon.[COLOR_UNIT_TEXT]Archer de chameau[COLOR_REVERT]gagne le bonus de combat contre[COLOR_UNIT_TEXT]unités montées[COLOR_REVERT]et ne nécessite aucun bonus.</French>
+		<German>Diese leistungsstarke Kampfeinheit (der arabische Ersatz für die[COLOR_UNIT_TEXT]Ritter[COLOR_REVERT]) ist sehr mächtig, bis die Einführung von Schießpulvereinheiten.[COLOR_UNIT_TEXT]Kamelbogenschütze[COLOR_REVERT]Gewinne Kampfbonus gegen[COLOR_UNIT_TEXT]Berge Einheiten[COLOR_REVERT]und benötigt keinen Bonus.</German>
+		<Italian>Questa potente unità di combattimento montata (la sostituzione araba per il[COLOR_UNIT_TEXT]Cavaliere[COLOR_REVERT]) è molto potente fino all'introduzione di unità di polvere da sparo.[COLOR_UNIT_TEXT]Camel Archer[COLOR_REVERT]guadagna il bonus di combattimento contro[COLOR_UNIT_TEXT]unità montate[COLOR_REVERT]e non richiede alcun bonus.</Italian>
+		<Spanish>Esta poderosa unidad de combate montada (el reemplazo árabe para el[COLOR_UNIT_TEXT]Caballero[COLOR_REVERT]) es muy poderoso hasta la introducción de unidades de pólvora.[COLOR_UNIT_TEXT]Arquero de camello[COLOR_REVERT]gana bono de combate contra[COLOR_UNIT_TEXT]unidades montadas[COLOR_REVERT]y no requiere ningún bono.</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_UNIT_SPANISH_CONQUISTADOR_STRATEGY</Tag>
+		<English>This powerful mounted combat unit (the Spanish replacement for the [COLOR_UNIT_TEXT]Cuirassier[COLOR_REVERT]) gets terrain defense bonuses, unlike other Cuirassiers. Also, it gets combat bonus against barbarian units.</English>
+		<French>Cette puissante unité de combat montée (le remplacement espagnol pour le[COLOR_UNIT_TEXT]Cuirassier[COLOR_REVERT]) Obtient des bonus de défense sur le terrain, contrairement aux autres cuirassiers.De plus, il obtient un bonus de combat contre les unités barbares.</French>
+		<German>Diese leistungsstarke Kampfeinheit (der spanische Ersatz für die[COLOR_UNIT_TEXT]Kürassier[COLOR_REVERT]) bekommt im Gegensatz zu anderen Cirassiers Boni.Außerdem wird der Kampfbonus gegen barbarische Einheiten.</German>
+		<Italian>Questa potente unità di combattimento montata (la sostituzione spagnola per il[COLOR_UNIT_TEXT]Cuirassier[COLOR_REVERT]) ottiene bonus di difesa del terreno, a differenza di altri Cuirassiers.Inoltre, ottiene un bonus di combattimento contro le unità barbarie.</Italian>
+		<Spanish>Esta poderosa unidad de combate montada (el reemplazo español para el[COLOR_UNIT_TEXT]Coracero[COLOR_REVERT]) Obtiene bonos de defensa del terreno, a diferencia de otros cuirassiers.Además, obtiene un bono de combate contra las unidades bárbaras.</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_UNIT_EARLY_CANNON_STRATEGY</Tag>
+		<English>[COLOR_UNIT_TEXT]Bombard[COLOR_REVERT] can bombard enemy city fortifications and have a chance to withdraw from combat when losing. When attacking another unit, they cause collateral damage to other enemy units sharing the target's space.</English>
+		<French>[COLOR_UNIT_TEXT]Bombarder[COLOR_REVERT]Peut bombarder les fortifications de la ville ennemie et avoir une chance de se retirer du combat lors de la perte.Lorsqu'ils attaquent une autre unité, ils causent des dommages collatéraux aux autres unités ennemies partageant l'espace de la cible.</French>
+		<German>[COLOR_UNIT_TEXT]Bombardieren[COLOR_REVERT]Kann feindliche Stadt Befestigungen bombardieren und die Chance haben, sich beim Verlieren vom Kampf zurückzuziehen.Wenn sie eine andere Einheit angreifen, verursachen sie andere feindliche Einheiten Kollateralschäden, die den Raum des Ziels teilen.</German>
+		<Italian>[COLOR_UNIT_TEXT]Bombardare[COLOR_REVERT]può bombardare fortificazioni di città nemiche e avere la possibilità di ritirarsi dal combattimento durante la perdita.Quando attaccano un'altra unità, causano danni collaterali ad altre unità nemiche che condividono lo spazio del bersaglio.</Italian>
+		<Spanish>[COLOR_UNIT_TEXT]Bombardear[COLOR_REVERT]puede bombardear las fortificaciones enemigas de la ciudad y tener la oportunidad de retirarse del combate al perder.Al atacar a otra unidad, causan daño colateral a otras unidades enemigas que comparten el espacio del objetivo.</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_TECH_STIRRUPS_STRATEGY</Tag>
+		<English>[COLOR_TECH_TEXT]Stirrups[COLOR_REVERT] allows production of [COLOR_UNIT_TEXT]War Elephant[COLOR_REVERT] and more advanced mounted units.</English>
+		<French>[COLOR_TECH_TEXT]Étrie[COLOR_REVERT]permet la production de[COLOR_UNIT_TEXT]Éléphant de guerre[COLOR_REVERT]et des unités montées plus avancées.</French>
+		<German>[COLOR_TECH_TEXT]Steigbügel[COLOR_REVERT]Ermöglicht die Produktion von[COLOR_UNIT_TEXT]Kriegselefant[COLOR_REVERT]und fortgeschrittene montierte Einheiten.</German>
+		<Italian>[COLOR_TECH_TEXT]Staffe[COLOR_REVERT]consente la produzione di[COLOR_UNIT_TEXT]Elefante di guerra[COLOR_REVERT]e unità montate più avanzate.</Italian>
+		<Spanish>[COLOR_TECH_TEXT]Estribos[COLOR_REVERT]Permite la producción de[COLOR_UNIT_TEXT]Elefante de guerra[COLOR_REVERT]y unidades montadas más avanzadas.</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_TECH_CHIVALRY_STRATEGY</Tag>
+		<English>[COLOR_TECH_TEXT]Chivalry[COLOR_REVERT] allows production of [COLOR_UNIT_TEXT]Pikeman[COLOR_REVERT] and [COLOR_UNIT_TEXT]Knight[COLOR_REVERT] units.</English>
+		<French>[COLOR_TECH_TEXT]Chevalerie[COLOR_REVERT]permet la production de[COLOR_UNIT_TEXT]Piqueur[COLOR_REVERT]et[COLOR_UNIT_TEXT]Chevalier[COLOR_REVERT]unités.</French>
+		<German>[COLOR_TECH_TEXT]Ritterlichkeit[COLOR_REVERT]Ermöglicht die Produktion von[COLOR_UNIT_TEXT]Pikeman[COLOR_REVERT]Und[COLOR_UNIT_TEXT]Ritter[COLOR_REVERT]Einheiten.</German>
+		<Italian>[COLOR_TECH_TEXT]Cavalleria[COLOR_REVERT]consente la produzione di[COLOR_UNIT_TEXT]Pikeman[COLOR_REVERT]E[COLOR_UNIT_TEXT]Cavaliere[COLOR_REVERT]unità.</Italian>
+		<Spanish>[COLOR_TECH_TEXT]Caballería[COLOR_REVERT]Permite la producción de[COLOR_UNIT_TEXT]Piquero[COLOR_REVERT]y[COLOR_UNIT_TEXT]Caballero[COLOR_REVERT]unidades.</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_TECH_ACOUSTICS_STRATEGY</Tag>
+		<English>The tech allows you to build [COLOR_BUILDING_TEXT]Concert hall[COLOR_REVERT] buildings. It will provide you an advantage in culture.</English>
+		<French>La technologie vous permet de construire[COLOR_BUILDING_TEXT]Salle de concert[COLOR_REVERT]bâtiments.Cela vous fournira un avantage dans la culture.</French>
+		<German>Mit der Technologie können Sie erstellen[COLOR_BUILDING_TEXT]Konzerthalle[COLOR_REVERT]Gebäude.Es bietet Ihnen einen Vorteil in der Kultur.</German>
+		<Italian>La tecnologia ti consente di costruire[COLOR_BUILDING_TEXT]Sala concerti[COLOR_REVERT]edifici.Ti fornirà un vantaggio nella cultura.</Italian>
+		<Spanish>La tecnología te permite construir[COLOR_BUILDING_TEXT]Sala de conciertos[COLOR_REVERT]edificios.Le proporcionará una ventaja en la cultura.</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_TECH_ARCHITECTURE_STRATEGY</Tag>
+		<English>The tech allows you to build many wonders.</English>
+		<French>La technologie vous permet de créer de nombreuses merveilles.</French>
+		<German>Mit der Technologie können Sie viele Wunder bauen.</German>
+		<Italian>La tecnologia ti consente di costruire molte meraviglie.</Italian>
+		<Spanish>La tecnología le permite construir muchas maravillas.</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_TECH_ARCHAEOLOGY_STRATEGY</Tag>
+		<English>The tech allows you to build [COLOR_BUILDING_TEXT]Museum[COLOR_REVERT] buildings. They will provide you a great advantage in culture.</English>
+		<French>La technologie vous permet de construire[COLOR_BUILDING_TEXT]Musée[COLOR_REVERT]bâtiments.Ils vous fourniront un grand avantage dans la culture.</French>
+		<German>Mit der Technologie können Sie erstellen[COLOR_BUILDING_TEXT]Museum[COLOR_REVERT]Gebäude.Sie werden Ihnen einen großen Vorteil in der Kultur bieten.</German>
+		<Italian>La tecnologia ti consente di costruire[COLOR_BUILDING_TEXT]Museo[COLOR_REVERT]edifici.Ti forniranno un grande vantaggio nella cultura.</Italian>
+		<Spanish>La tecnología te permite construir[COLOR_BUILDING_TEXT]Museo[COLOR_REVERT]edificios.Le proporcionarán una gran ventaja en la cultura.</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_TECH_CIVIL_SERVICE_STRATEGY</Tag>
+		<English>[COLOR_TECH_TEXT]Civil Service[COLOR_REVERT] enables the [COLOR_HIGHLIGHT_TEXT]Bureaucracy[COLOR_REVERT] civic and increases the gold output of [COLOR_HIGHLIGHT_TEXT]Towns[COLOR_REVERT].</English>
+		<French>[COLOR_TECH_TEXT]Service civil[COLOR_REVERT]Active le[COLOR_HIGHLIGHT_TEXT]Bureaucratie[COLOR_REVERT]civique et augmente la production d'or de[COLOR_HIGHLIGHT_TEXT]Les villes[COLOR_REVERT].</French>
+		<German>[COLOR_TECH_TEXT]Öffentlicher Dienst[COLOR_REVERT]Aktiviert das[COLOR_HIGHLIGHT_TEXT]Bürokratie[COLOR_REVERT]bürgerlich und erhöht die Goldleistung von[COLOR_HIGHLIGHT_TEXT]Städte[COLOR_REVERT].</German>
+		<Italian>[COLOR_TECH_TEXT]Servizio civile[COLOR_REVERT]Abilita il[COLOR_HIGHLIGHT_TEXT]Burocrazia[COLOR_REVERT]civico e aumenta la produzione d'oro di[COLOR_HIGHLIGHT_TEXT]Città[COLOR_REVERT].</Italian>
+		<Spanish>[COLOR_TECH_TEXT]Servicio Civil[COLOR_REVERT]habilita el[COLOR_HIGHLIGHT_TEXT]Burocracia[COLOR_REVERT]cívico y aumenta la producción de oro de[COLOR_HIGHLIGHT_TEXT]Pueblo[COLOR_REVERT].</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_TECH_DIVINE_RIGHT_STRATEGY</Tag>
+		<English>The first to research this tech founds [COLOR_HIGHLIGHT_TEXT]Islam[COLOR_REVERT]. [COLOR_TECH_TEXT]Divine Right[COLOR_REVERT] also allows construction of the [COLOR_BUILDING_TEXT]Spiral Minaret[COLOR_REVERT].</English>
+		<French>Le premier à rechercher cette technologie fonde[COLOR_HIGHLIGHT_TEXT]Islam[COLOR_REVERT].[COLOR_TECH_TEXT]Droit divin[COLOR_REVERT]permet également la construction du[COLOR_BUILDING_TEXT]Spirale Minaret[COLOR_REVERT].</French>
+		<German>Der erste, der diese Technologie recherchiert hat[COLOR_HIGHLIGHT_TEXT]Islam[COLOR_REVERT].[COLOR_TECH_TEXT]Göttliches Recht[COLOR_REVERT]ermöglicht auch die Konstruktion der[COLOR_BUILDING_TEXT]Spiralminarett[COLOR_REVERT].</German>
+		<Italian>Il primo a ricercare questa tecnologia fondata[COLOR_HIGHLIGHT_TEXT]Islam[COLOR_REVERT].[COLOR_TECH_TEXT]Diritto divino[COLOR_REVERT]consente anche la costruzione del[COLOR_BUILDING_TEXT]Minareto a spirale[COLOR_REVERT].</Italian>
+		<Spanish>El primero en investigar esta tecnología encontrada[COLOR_HIGHLIGHT_TEXT]islam[COLOR_REVERT].[COLOR_TECH_TEXT]Derecho divino[COLOR_REVERT]también permite la construcción del[COLOR_BUILDING_TEXT]Minarete en espiral[COLOR_REVERT].</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_TECH_ASTRONOMY_STRATEGY</Tag>
+		<English>[COLOR_TECH_TEXT]Astronomy[COLOR_REVERT] allows your [COLOR_UNIT_TEXT]Work Boats[COLOR_REVERT] to harvest [COLOR_HIGHLIGHT_TEXT]Whale[COLOR_REVERT] resources. [COLOR_TECH_TEXT]Astronomy[COLOR_REVERT] also enables [COLOR_UNIT_TEXT]Sentry[COLOR_REVERT] promotion.</English>
+		<French>[COLOR_TECH_TEXT]Astronomie[COLOR_REVERT]Permet votre[COLOR_UNIT_TEXT]Bateaux de travail[COLOR_REVERT]récolter[COLOR_HIGHLIGHT_TEXT]Baleine[COLOR_REVERT]ressources.[COLOR_TECH_TEXT]Astronomie[COLOR_REVERT]Active également[COLOR_UNIT_TEXT]Sentinelle[COLOR_REVERT]promotion.</French>
+		<German>[COLOR_TECH_TEXT]Astronomie[COLOR_REVERT]erlaubt dein[COLOR_UNIT_TEXT]Arbeitsboote[COLOR_REVERT]ernten[COLOR_HIGHLIGHT_TEXT]Wal[COLOR_REVERT]Ressourcen.[COLOR_TECH_TEXT]Astronomie[COLOR_REVERT]Aktiviert auch[COLOR_UNIT_TEXT]Posten[COLOR_REVERT]Förderung.</German>
+		<Italian>[COLOR_TECH_TEXT]Astronomia[COLOR_REVERT]permette il tuo[COLOR_UNIT_TEXT]Barche da lavoro[COLOR_REVERT]raccogliere[COLOR_HIGHLIGHT_TEXT]Balena[COLOR_REVERT]risorse.[COLOR_TECH_TEXT]Astronomia[COLOR_REVERT]Abilita anche[COLOR_UNIT_TEXT]Sentinella[COLOR_REVERT]promozione.</Italian>
+		<Spanish>[COLOR_TECH_TEXT]Astronomía[COLOR_REVERT]Permite su[COLOR_UNIT_TEXT]Barcos de trabajo[COLOR_REVERT]cosechar[COLOR_HIGHLIGHT_TEXT]Ballena[COLOR_REVERT]recursos.[COLOR_TECH_TEXT]Astronomía[COLOR_REVERT]también habilita[COLOR_UNIT_TEXT]Centinela[COLOR_REVERT]promoción.</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_TECH_CHEMISTRY_STRATEGY</Tag>
+		<English>[COLOR_TECH_TEXT]Chemistry[COLOR_REVERT] allows construction [COLOR_UNIT_TEXT]Early Cannon[COLOR_REVERT]. It obsoletes the [COLOR_BUILDING_TEXT]Parthenon[COLOR_REVERT] and increases production from all workshops by 1.</English>
+		<French>[COLOR_TECH_TEXT]Chimie[COLOR_REVERT]Permet la construction[COLOR_UNIT_TEXT]Canon précoce[COLOR_REVERT].Il obsolète le[COLOR_BUILDING_TEXT]Parthénon[COLOR_REVERT]et augmente la production de tous les ateliers par 1.</French>
+		<German>[COLOR_TECH_TEXT]Chemie[COLOR_REVERT]Ermöglicht die Konstruktion[COLOR_UNIT_TEXT]Frühkanone[COLOR_REVERT].Es veraltet die[COLOR_BUILDING_TEXT]Parthenon[COLOR_REVERT]und erhöht die Produktion aus allen Workshops um 1.</German>
+		<Italian>[COLOR_TECH_TEXT]Chimica[COLOR_REVERT]consente la costruzione[COLOR_UNIT_TEXT]Cannone precoce[COLOR_REVERT].Obsoleti il[COLOR_BUILDING_TEXT]Partenone[COLOR_REVERT]e aumenta la produzione da tutti i seminari di 1.</Italian>
+		<Spanish>[COLOR_TECH_TEXT]Química[COLOR_REVERT]Permite la construcción[COLOR_UNIT_TEXT]Cañón temprano[COLOR_REVERT].Obsoleta el[COLOR_BUILDING_TEXT]Partenón[COLOR_REVERT]y aumenta la producción de todos los talleres en 1.</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_TECH_GUNNERY_STRATEGY</Tag>
+		<English>[COLOR_TECH_TEXT]Gunnery[COLOR_REVERT] is integral to build powerful gun-based units.</English>
+		<French>[COLOR_TECH_TEXT]Artillerie[COLOR_REVERT]fait partie intégrante de construire des unités puissantes à base d'armes à feu.</French>
+		<German>[COLOR_TECH_TEXT]Schütze[COLOR_REVERT]ist ein wesentlicher Bestandteil des Aufbaus leistungsstarker Einheiten auf Waffenbasis.</German>
+		<Italian>[COLOR_TECH_TEXT]Pistolero[COLOR_REVERT]è parte integrante di costruire potenti unità basate sulle armi.</Italian>
+		<Spanish>[COLOR_TECH_TEXT]Artillería[COLOR_REVERT]es esencial para construir unidades potentes basadas en armas.</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_TECH_ENLIGHTENMENT_STRATEGY</Tag>
+		<English>The first civilization to discover [COLOR_TECH_TEXT]Enlightenment[COLOR_REVERT] receives a [COLOR_UNIT_TEXT]Great Scientist[COLOR_REVERT]. This tech also enables [COLOR_HIGHLIGHT_TEXT]Free Religion[COLOR_REVERT] civic.</English>
+		<French>La première civilisation à découvrir[COLOR_TECH_TEXT]Éclaircissement[COLOR_REVERT]reçoit un[COLOR_UNIT_TEXT]Grand scientifique[COLOR_REVERT].Cette technologie permet également[COLOR_HIGHLIGHT_TEXT]Religion libre[COLOR_REVERT]civique.</French>
+		<German>Die erste Zivilisation zu entdecken[COLOR_TECH_TEXT]Aufklärung[COLOR_REVERT]erhält a[COLOR_UNIT_TEXT]Großer Wissenschaftler[COLOR_REVERT].Diese Technologie ermöglicht auch[COLOR_HIGHLIGHT_TEXT]Freie Religion[COLOR_REVERT]Bürger.</German>
+		<Italian>La prima civiltà a scoprire[COLOR_TECH_TEXT]Illuminazione[COLOR_REVERT]riceve a[COLOR_UNIT_TEXT]Grande scienziato[COLOR_REVERT].Questa tecnologia abilita anche[COLOR_HIGHLIGHT_TEXT]Religione libera[COLOR_REVERT]civico.</Italian>
+		<Spanish>La primera civilización en descubrir[COLOR_TECH_TEXT]Iluminación[COLOR_REVERT]recibe un[COLOR_UNIT_TEXT]Gran científico[COLOR_REVERT].Esta tecnología también habilita[COLOR_HIGHLIGHT_TEXT]Religión libre[COLOR_REVERT]cívico.</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_TECH_PHYSICS2_STRATEGY</Tag>
+		<English>[COLOR_TECH_TEXT]Physics[COLOR_REVERT] enables to build [COLOR_BUILDING_TEXT]Castle[COLOR_REVERT], [COLOR_UNIT_TEXT]Trebuchet[COLOR_REVERT] and [COLOR_UNIT_TEXT]Pikeman[COLOR_REVERT] units.</English>
+		<French>[COLOR_TECH_TEXT]La physique[COLOR_REVERT]permet de construire[COLOR_BUILDING_TEXT]Château[COLOR_REVERT],[COLOR_UNIT_TEXT]Trébuchet[COLOR_REVERT]et[COLOR_UNIT_TEXT]Piqueur[COLOR_REVERT]unités.</French>
+		<German>[COLOR_TECH_TEXT]Physik[COLOR_REVERT]ermöglicht es zu bauen[COLOR_BUILDING_TEXT]Schloss[COLOR_REVERT]Anwesend[COLOR_UNIT_TEXT]Trebuchet[COLOR_REVERT]Und[COLOR_UNIT_TEXT]Pikeman[COLOR_REVERT]Einheiten.</German>
+		<Italian>[COLOR_TECH_TEXT]Fisica[COLOR_REVERT]Abilita di costruire[COLOR_BUILDING_TEXT]Castello[COLOR_REVERT],[COLOR_UNIT_TEXT]Trebuchet[COLOR_REVERT]E[COLOR_UNIT_TEXT]Pikeman[COLOR_REVERT]unità.</Italian>
+		<Spanish>[COLOR_TECH_TEXT]Física[COLOR_REVERT]habilita construir[COLOR_BUILDING_TEXT]Castillo[COLOR_REVERT],[COLOR_UNIT_TEXT]Trebuchet[COLOR_REVERT]y[COLOR_UNIT_TEXT]Piquero[COLOR_REVERT]unidades.</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_TECH_ATOMIC_THEORY_STRATEGY</Tag>
+		<English>[COLOR_TECH_TEXT]Atomic Theory[COLOR_REVERT] enables construction of the [COLOR_PROJECT_TEXT]Manhattan Project[COLOR_REVERT] wonder.</English>
+		<French>[COLOR_TECH_TEXT]Théorie atomique[COLOR_REVERT]permet la construction du[COLOR_PROJECT_TEXT]Projet de Manhattan[COLOR_REVERT]merveille.</French>
+		<German>[COLOR_TECH_TEXT]Atomtheorie[COLOR_REVERT]ermöglicht den Bau der[COLOR_PROJECT_TEXT]Manhattan -Projekt[COLOR_REVERT]Wunder.</German>
+		<Italian>[COLOR_TECH_TEXT]Teoria atomica[COLOR_REVERT]Abilita la costruzione del[COLOR_PROJECT_TEXT]Progetto Manhattan[COLOR_REVERT]Meraviglia.</Italian>
+		<Spanish>[COLOR_TECH_TEXT]Teoría atómica[COLOR_REVERT]habilita la construcción del[COLOR_PROJECT_TEXT]Proyecto de Manhattan[COLOR_REVERT]preguntarse.</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_TECH_FISSION_STRATEGY</Tag>
+		<English>[COLOR_TECH_TEXT]Fission[COLOR_REVERT] enables construction of [COLOR_BUILDING_TEXT]Nuclear Plants[COLOR_REVERT].</English>
+		<French>[COLOR_TECH_TEXT]Fission[COLOR_REVERT]permet la construction de[COLOR_BUILDING_TEXT]Centrale nucléaire[COLOR_REVERT].</French>
+		<German>[COLOR_TECH_TEXT]Fission[COLOR_REVERT]ermöglicht den Bau von[COLOR_BUILDING_TEXT]Atomkraftwerke[COLOR_REVERT].</German>
+		<Italian>[COLOR_TECH_TEXT]Fissione[COLOR_REVERT]Abilita la costruzione di[COLOR_BUILDING_TEXT]Piante nucleari[COLOR_REVERT].</Italian>
+		<Spanish>[COLOR_TECH_TEXT]Fisión[COLOR_REVERT]habilita la construcción de[COLOR_BUILDING_TEXT]Plantas nucleares[COLOR_REVERT].</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_TECH_FIBER_OPTICS_STRATEGY</Tag>
+		<English>[COLOR_TECH_TEXT]Fiber Optics[COLOR_REVERT] allows you to build the [COLOR_PROJECT_TEXT]SS Cockpit[COLOR_REVERT] spaceship part.</English>
+		<French>[COLOR_TECH_TEXT]La fibre optique[COLOR_REVERT]vous permet de construire le[COLOR_PROJECT_TEXT]Cockpit SS[COLOR_REVERT]partie du vaisseau spatial.</French>
+		<German>[COLOR_TECH_TEXT]Glasfaseroptik[COLOR_REVERT]ermöglicht es Ihnen, die zu bauen[COLOR_PROJECT_TEXT]SS Cockpit[COLOR_REVERT]Raumschiffteil.</German>
+		<Italian>[COLOR_TECH_TEXT]Fibra ottica[COLOR_REVERT]ti consente di costruire il[COLOR_PROJECT_TEXT]Cockpit SS[COLOR_REVERT]Parte di astronavi.</Italian>
+		<Spanish>[COLOR_TECH_TEXT]Fibra óptica[COLOR_REVERT]te permite construir el[COLOR_PROJECT_TEXT]Cabina de ss[COLOR_REVERT]parte de la nave espacial.</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_TECH_PARTICLE_PHYSICS_STRATEGY</Tag>
+		<English>[COLOR_TECH_TEXT]Particle Physics[COLOR_REVERT] allows you to build the [COLOR_PROJECT_TEXT]SS Engine[COLOR_REVERT] spaceship part.</English>
+		<French>[COLOR_TECH_TEXT]La physique des particules[COLOR_REVERT]vous permet de construire le[COLOR_PROJECT_TEXT]Moteur SS[COLOR_REVERT]partie du vaisseau spatial.</French>
+		<German>[COLOR_TECH_TEXT]Teilchenphysik[COLOR_REVERT]ermöglicht es Ihnen, die zu bauen[COLOR_PROJECT_TEXT]SS -Motor[COLOR_REVERT]Raumschiffteil.</German>
+		<Italian>[COLOR_TECH_TEXT]Fisica delle particelle[COLOR_REVERT]ti consente di costruire il[COLOR_PROJECT_TEXT]Motore ss[COLOR_REVERT]Parte di astronavi.</Italian>
+		<Spanish>[COLOR_TECH_TEXT]Partículas fisicas[COLOR_REVERT]te permite construir el[COLOR_PROJECT_TEXT]Motor SS[COLOR_REVERT]parte de la nave espacial.</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_TECH_FUSION_STRATEGY</Tag>
+		<English>[COLOR_TECH_TEXT]Fusion[COLOR_REVERT] allows you to build the [COLOR_UNIT_TEXT]Giant death Robot[COLOR_REVERT]. The first to discover this tech receives a [COLOR_UNIT_TEXT]Great Engineer[COLOR_REVERT].</English>
+		<French>[COLOR_TECH_TEXT]La fusion[COLOR_REVERT]vous permet de construire le[COLOR_UNIT_TEXT]Robot de mort géant[COLOR_REVERT].Le premier à découvrir que cette technologie reçoit un[COLOR_UNIT_TEXT]Grand ingénieur[COLOR_REVERT].</French>
+		<German>[COLOR_TECH_TEXT]Verschmelzung[COLOR_REVERT]ermöglicht es Ihnen, die zu bauen[COLOR_UNIT_TEXT]Riesiger Todesroboter[COLOR_REVERT].Der erste, der diese Technologie entdeckt, erhält eine[COLOR_UNIT_TEXT]Toller Ingenieur[COLOR_REVERT].</German>
+		<Italian>[COLOR_TECH_TEXT]Fusione[COLOR_REVERT]ti consente di costruire il[COLOR_UNIT_TEXT]Robot di morte gigante[COLOR_REVERT].Il primo a scoprire questa tecnologia riceve un[COLOR_UNIT_TEXT]Ottimo ingegnere[COLOR_REVERT].</Italian>
+		<Spanish>[COLOR_TECH_TEXT]Fusión[COLOR_REVERT]te permite construir el[COLOR_UNIT_TEXT]Robot de la muerte gigante[COLOR_REVERT].El primero en descubrir esta tecnología recibe un[COLOR_UNIT_TEXT]Gran ingeniero[COLOR_REVERT].</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_TECH_FLIGHT_STRATEGY</Tag>
+		<English>[COLOR_TECH_TEXT]Flight[COLOR_REVERT] allows you to build [COLOR_UNIT_TEXT]Triplane[COLOR_REVERT].</English>
+		<French>[COLOR_TECH_TEXT]Vol[COLOR_REVERT]vous permet de construire[COLOR_UNIT_TEXT]Triplan[COLOR_REVERT].</French>
+		<German>[COLOR_TECH_TEXT]Flug[COLOR_REVERT]ermöglicht es Ihnen zu bauen[COLOR_UNIT_TEXT]Triplane[COLOR_REVERT].</German>
+		<Italian>[COLOR_TECH_TEXT]Volo[COLOR_REVERT]ti permette di costruire[COLOR_UNIT_TEXT]Triplani[COLOR_REVERT].</Italian>
+		<Spanish>[COLOR_TECH_TEXT]Vuelo[COLOR_REVERT]te permite construir[COLOR_UNIT_TEXT]Triplano[COLOR_REVERT].</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_TECH_RADAR_STRATEGY</Tag>
+		<English>[COLOR_TECH_TEXT]Radar[COLOR_REVERT] allows you to build [COLOR_UNIT_TEXT]Carriers[COLOR_REVERT], [COLOR_UNIT_TEXT]Fighters[COLOR_REVERT], and other air units (with additional techs). It also enables construction of [COLOR_BUILDING_TEXT]Airports[COLOR_REVERT].</English>
+		<French>[COLOR_TECH_TEXT]Radar[COLOR_REVERT]vous permet de construire[COLOR_UNIT_TEXT]Transporteurs[COLOR_REVERT],[COLOR_UNIT_TEXT]Combattants[COLOR_REVERT]et d'autres unités aériennes (avec des techniciens supplémentaires).Il permet également la construction de[COLOR_BUILDING_TEXT]Aéroports[COLOR_REVERT].</French>
+		<German>[COLOR_TECH_TEXT]Radar[COLOR_REVERT]ermöglicht es Ihnen zu bauen[COLOR_UNIT_TEXT]Träger[COLOR_REVERT]Anwesend[COLOR_UNIT_TEXT]Kämpfer[COLOR_REVERT]und andere Lufteinheiten (mit zusätzlichen Technikern).Es ermöglicht auch die Konstruktion von[COLOR_BUILDING_TEXT]Flughäfen[COLOR_REVERT].</German>
+		<Italian>[COLOR_TECH_TEXT]Radar[COLOR_REVERT]ti permette di costruire[COLOR_UNIT_TEXT]Vettori[COLOR_REVERT],[COLOR_UNIT_TEXT]Combattenti[COLOR_REVERT]e altre unità aeree (con tecnologie aggiuntive).Consente anche la costruzione di[COLOR_BUILDING_TEXT]Aeroporti[COLOR_REVERT].</Italian>
+		<Spanish>[COLOR_TECH_TEXT]Radar[COLOR_REVERT]te permite construir[COLOR_UNIT_TEXT]Transportista[COLOR_REVERT],[COLOR_UNIT_TEXT]Luchadores[COLOR_REVERT]y otras unidades aéreas (con técnicos adicionales).También permite la construcción de[COLOR_BUILDING_TEXT]Aeropuerto[COLOR_REVERT].</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_TECH_GENETICS_STRATEGY</Tag>
+		<English>[COLOR_TECH_TEXT]Genetics[COLOR_REVERT] greatly increases the health of your cities.</English>
+		<French>[COLOR_TECH_TEXT]La génétique[COLOR_REVERT]augmente considérablement la santé de vos villes.</French>
+		<German>[COLOR_TECH_TEXT]Genetik[COLOR_REVERT]Erhöht die Gesundheit Ihrer Städte stark.</German>
+		<Italian>[COLOR_TECH_TEXT]Genetica[COLOR_REVERT]Aumenta notevolmente la salute delle tue città.</Italian>
+		<Spanish>[COLOR_TECH_TEXT]Genética[COLOR_REVERT]aumenta enormemente la salud de sus ciudades.</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_TECH_HUNTING_STRATEGY</Tag>
+		<English>Starting technology for all civilizations</English>
+		<French>Démarrage de la technologie pour toutes les civilisations</French>
+		<German>Starten der Technologie für alle Zivilisationen</German>
+		<Italian>Avvio della tecnologia per tutte le civiltà</Italian>
+		<Spanish>Tecnología inicial para todas las civilizaciones</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_TECH_TRAPPING_STRATEGY</Tag>
+		<English>[COLOR_TECH_TEXT]Trapping[COLOR_REVERT] allows you to create [COLOR_UNIT_TEXT]Scouts[COLOR_REVERT] and [COLOR_UNIT_TEXT]Spearman[COLOR_REVERT] units. It also enables your workers to build the [COLOR_HIGHLIGHT_TEXT]Camp[COLOR_REVERT] improvement.</English>
+		<French>[COLOR_TECH_TEXT]Piégeage[COLOR_REVERT]vous permet de créer[COLOR_UNIT_TEXT]Scouts[COLOR_REVERT]et[COLOR_UNIT_TEXT]Lancier[COLOR_REVERT]unités.Il permet également à vos travailleurs de construire le[COLOR_HIGHLIGHT_TEXT]Camp[COLOR_REVERT]amélioration.</French>
+		<German>[COLOR_TECH_TEXT]Fangen[COLOR_REVERT]ermöglicht es Ihnen zu erstellen[COLOR_UNIT_TEXT]Pfadfinder[COLOR_REVERT]Und[COLOR_UNIT_TEXT]Spearman[COLOR_REVERT]Einheiten.Es ermöglicht Ihren Arbeitern auch, das zu bauen[COLOR_HIGHLIGHT_TEXT]Lager[COLOR_REVERT]Verbesserung.</German>
+		<Italian>[COLOR_TECH_TEXT]Intrappolamento[COLOR_REVERT]ti permette di creare[COLOR_UNIT_TEXT]Scout[COLOR_REVERT]E[COLOR_UNIT_TEXT]Spearman[COLOR_REVERT]unità.Consente inoltre ai tuoi lavoratori di costruire il[COLOR_HIGHLIGHT_TEXT]Campo[COLOR_REVERT]miglioramento.</Italian>
+		<Spanish>[COLOR_TECH_TEXT]Captura[COLOR_REVERT]te permite crear[COLOR_UNIT_TEXT]Exploradores[COLOR_REVERT]y[COLOR_UNIT_TEXT]Lancero[COLOR_REVERT]unidades.También permite a sus trabajadores construir el[COLOR_HIGHLIGHT_TEXT]Acampar[COLOR_REVERT]mejora.</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_TECH_MASONRY_STRATEGY</Tag>
+		<English>[COLOR_TECH_TEXT]Masonry[COLOR_REVERT] allows your workers to build [COLOR_HIGHLIGHT_TEXT]Quarry[COLOR_REVERT] improvements. It also enables construction of [COLOR_BUILDING_TEXT]Walls[COLOR_REVERT] and [COLOR_BUILDING_TEXT]Aqueduct[COLOR_REVERT] city improvements, as well as the [COLOR_BUILDING_TEXT]Pyramids[COLOR_REVERT], [COLOR_BUILDING_TEXT]Sphinx[COLOR_REVERT] and [COLOR_BUILDING_TEXT]Great Lighthouse[COLOR_REVERT] wonders.</English>
+		<French>[COLOR_TECH_TEXT]Maçonnerie[COLOR_REVERT]permet à vos travailleurs de construire[COLOR_HIGHLIGHT_TEXT]Carrière[COLOR_REVERT]Améliorations.Il permet également la construction de[COLOR_BUILDING_TEXT]Des murs[COLOR_REVERT]et[COLOR_BUILDING_TEXT]Aqueduc[COLOR_REVERT]améliorations de la ville, ainsi que le[COLOR_BUILDING_TEXT]Pyramides[COLOR_REVERT],[COLOR_BUILDING_TEXT]Sphinx[COLOR_REVERT]et[COLOR_BUILDING_TEXT]Grand phare[COLOR_REVERT]merveilles.</French>
+		<German>[COLOR_TECH_TEXT]Mauerwerk[COLOR_REVERT]ermöglicht es Ihren Arbeitern zu bauen[COLOR_HIGHLIGHT_TEXT]Steinbruch[COLOR_REVERT]Verbesserungen.Es ermöglicht auch die Konstruktion von[COLOR_BUILDING_TEXT]Wände[COLOR_REVERT]Und[COLOR_BUILDING_TEXT]Aquädukt[COLOR_REVERT]Verbesserungen der Stadt sowie die[COLOR_BUILDING_TEXT]Pyramiden[COLOR_REVERT]Anwesend[COLOR_BUILDING_TEXT]Sphinx[COLOR_REVERT]Und[COLOR_BUILDING_TEXT]Großer Leuchtturm[COLOR_REVERT]Wunder.</German>
+		<Italian>[COLOR_TECH_TEXT]Opere murarie[COLOR_REVERT]consente ai tuoi lavoratori di costruire[COLOR_HIGHLIGHT_TEXT]Cava[COLOR_REVERT]miglioramenti.Consente anche la costruzione di[COLOR_BUILDING_TEXT]Muri[COLOR_REVERT]E[COLOR_BUILDING_TEXT]Acquedotto[COLOR_REVERT]Miglioramenti della città, così come il[COLOR_BUILDING_TEXT]Piramidi[COLOR_REVERT],[COLOR_BUILDING_TEXT]Sfinge[COLOR_REVERT]E[COLOR_BUILDING_TEXT]Grande faro[COLOR_REVERT]miracoli.</Italian>
+		<Spanish>[COLOR_TECH_TEXT]Albañilería[COLOR_REVERT]permite que sus trabajadores construyan[COLOR_HIGHLIGHT_TEXT]Cantera[COLOR_REVERT]mejoras.También permite la construcción de[COLOR_BUILDING_TEXT]Paredes[COLOR_REVERT]y[COLOR_BUILDING_TEXT]Acueducto[COLOR_REVERT]mejoras en la ciudad, así como el[COLOR_BUILDING_TEXT]Pirámides[COLOR_REVERT],[COLOR_BUILDING_TEXT]Esfinge[COLOR_REVERT]y[COLOR_BUILDING_TEXT]Gran faro[COLOR_REVERT]Maravillas.</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_TECH_SMELTING_STRATEGY</Tag>
+		<English>[COLOR_TECH_TEXT]Steel[COLOR_REVERT] allows you to train powerful mid-era heavy armor units.</English>
+		<French>[COLOR_TECH_TEXT]Acier[COLOR_REVERT]Vous permet de former des unités d'armure lourdes puissantes.</French>
+		<German>[COLOR_TECH_TEXT]Stahl[COLOR_REVERT]ermöglicht es Ihnen, mächtige schwere Rüstungeinheiten mittlerer Zeit auszubilden.</German>
+		<Italian>[COLOR_TECH_TEXT]Acciaio[COLOR_REVERT]Ti permette di addestrare potenti unità di armatura pesante di mezzogiorno.</Italian>
+		<Spanish>[COLOR_TECH_TEXT]Acero[COLOR_REVERT]Te permite entrenar poderosas unidades de armadura pesada de la era media.</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_TECH_ASTROLOGY_STRATEGY</Tag>
+		<English>[COLOR_TECH_TEXT]Astrology[COLOR_REVERT] allows you to build religious shrines.</English>
+		<French>[COLOR_TECH_TEXT]Astrologie[COLOR_REVERT]vous permet de construire des sanctuaires religieux.</French>
+		<German>[COLOR_TECH_TEXT]Astrologie[COLOR_REVERT]ermöglicht es Ihnen, religiöse Schreine zu bauen.</German>
+		<Italian>[COLOR_TECH_TEXT]Astrologia[COLOR_REVERT]ti permette di costruire santuari religiosi.</Italian>
+		<Spanish>[COLOR_TECH_TEXT]Astrología[COLOR_REVERT]te permite construir santuarios religiosos.</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_TECH_SHIPBUILDING_STRATEGY</Tag>
+		<English>[COLOR_TECH_TEXT]Shipbuilding[COLOR_REVERT] allows you to train [COLOR_BUILDING_TEXT]Trireme[COLOR_REVERT] and to build [COLOR_BUILDING_TEXT]Harbor[COLOR_REVERT], [COLOR_BUILDING_TEXT]Moai Statue[COLOR_REVERT] and [COLOR_BUILDING_TEXT]Mausoleum of Maussollos[COLOR_REVERT].</English>
+		<French>[COLOR_TECH_TEXT]Construction navale[COLOR_REVERT]vous permet de vous entraîner[COLOR_BUILDING_TEXT]Trirème[COLOR_REVERT]Et pour construire[COLOR_BUILDING_TEXT]port[COLOR_REVERT],[COLOR_BUILDING_TEXT]Belle statue[COLOR_REVERT]et[COLOR_BUILDING_TEXT]Mausolée de Maussollos[COLOR_REVERT].</French>
+		<German>[COLOR_TECH_TEXT]Schiffbau[COLOR_REVERT]ermöglicht es Ihnen zu trainieren[COLOR_BUILDING_TEXT]Trireme[COLOR_REVERT]und bauen[COLOR_BUILDING_TEXT]Hafen[COLOR_REVERT]Anwesend[COLOR_BUILDING_TEXT]Schöne Statue[COLOR_REVERT]Und[COLOR_BUILDING_TEXT]Mausoleum von Maussollos[COLOR_REVERT].</German>
+		<Italian>[COLOR_TECH_TEXT]Costruzione navale[COLOR_REVERT]ti permette di allenarti[COLOR_BUILDING_TEXT]Trireme[COLOR_REVERT]e per costruire[COLOR_BUILDING_TEXT]Porto[COLOR_REVERT],[COLOR_BUILDING_TEXT]Bella statua[COLOR_REVERT]E[COLOR_BUILDING_TEXT]Mausoleo di Maussollos[COLOR_REVERT].</Italian>
+		<Spanish>[COLOR_TECH_TEXT]Construcción naval[COLOR_REVERT]te permite entrenar[COLOR_BUILDING_TEXT]Trirremo[COLOR_REVERT]y construir[COLOR_BUILDING_TEXT]Puerto[COLOR_REVERT],[COLOR_BUILDING_TEXT]Bonita estatua[COLOR_REVERT]y[COLOR_BUILDING_TEXT]Mausoleo de Maussolos[COLOR_REVERT].</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_TECH_CONSTRUCTION_STRATEGY</Tag>
+		<English>This tech allows you to build the [COLOR_UNIT_TEXT]Catapult[COLOR_REVERT] unit. It also enables [COLOR_BUILDING_TEXT]Colosseums[COLOR_REVERT], and your units no longer lose movement when crossing rivers on roads.  </English>
+		<French>Cette technologie vous permet de construire le[COLOR_UNIT_TEXT]Catapulte[COLOR_REVERT]unité.Il permet également[COLOR_BUILDING_TEXT]Colosse[COLOR_REVERT], et vos unités ne perdent plus de mouvement lorsque vous traversez des rivières sur les routes.</French>
+		<German>Mit dieser Technologie können Sie die erstellen[COLOR_UNIT_TEXT]Katapult[COLOR_REVERT]Einheit.Es ermöglicht auch[COLOR_BUILDING_TEXT]Colosseums[COLOR_REVERT]und Ihre Einheiten verlieren keine Bewegung mehr beim Überqueren von Flüssen auf Straßen.</German>
+		<Italian>Questa tecnologia ti consente di costruire il[COLOR_UNIT_TEXT]Catapulta[COLOR_REVERT]unità.Abilita anche[COLOR_BUILDING_TEXT]Colosseo[COLOR_REVERT]E le tue unità non perdono più il movimento quando attraversano i fiumi sulle strade.</Italian>
+		<Spanish>Esta tecnología le permite construir el[COLOR_UNIT_TEXT]Catapulta[COLOR_REVERT]unidad.También habilita[COLOR_BUILDING_TEXT]Colosseos[COLOR_REVERT], y sus unidades ya no pierden movimiento al cruzar ríos en las carreteras.</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_TECH_HORSEBACK_RIDING_STRATEGY</Tag>
+		<English>[COLOR_TECH_TEXT]Horseback Riding[COLOR_REVERT] enables the powerful [COLOR_UNIT_TEXT]Horse Archer[COLOR_REVERT] unit, and later on [COLOR_UNIT_TEXT]Knights[COLOR_REVERT] (with [COLOR_TECH_TEXT]Guilds[COLOR_REVERT]) and [COLOR_UNIT_TEXT]Cavalry[COLOR_REVERT] (with [COLOR_TECH_TEXT]Military Tradition[COLOR_REVERT]). </English>
+		<French>[COLOR_TECH_TEXT]Monter à cheval[COLOR_REVERT]Permet le puissant[COLOR_UNIT_TEXT]Archer de cheval[COLOR_REVERT]unité, et plus tard[COLOR_UNIT_TEXT]Chevaliers[COLOR_REVERT](avec[COLOR_TECH_TEXT]Guildes[COLOR_REVERT]) et[COLOR_UNIT_TEXT]Cavalerie[COLOR_REVERT](avec[COLOR_TECH_TEXT]Tradition militaire[COLOR_REVERT]).</French>
+		<German>[COLOR_TECH_TEXT]Reiten[COLOR_REVERT]ermöglicht die Mächtigen[COLOR_UNIT_TEXT]Pferdeschütze[COLOR_REVERT]Einheit und später[COLOR_UNIT_TEXT]Ritter[COLOR_REVERT](mit[COLOR_TECH_TEXT]Gilden[COLOR_REVERT]) Und[COLOR_UNIT_TEXT]Kavallerie[COLOR_REVERT](mit[COLOR_TECH_TEXT]Militärische Tradition[COLOR_REVERT]).</German>
+		<Italian>[COLOR_TECH_TEXT]Cavalcare a cavallo[COLOR_REVERT]Abilita i potenti[COLOR_UNIT_TEXT]ARCHER DI CAVELLO[COLOR_REVERT]unità e più tardi[COLOR_UNIT_TEXT]Cavalieri[COLOR_REVERT](con[COLOR_TECH_TEXT]Gilde[COLOR_REVERT]) E[COLOR_UNIT_TEXT]Cavalleria[COLOR_REVERT](con[COLOR_TECH_TEXT]Tradizione militare[COLOR_REVERT]).</Italian>
+		<Spanish>[COLOR_TECH_TEXT]Paseando a caballo[COLOR_REVERT]habilita el poderoso[COLOR_UNIT_TEXT]Arquero de caballos[COLOR_REVERT]unidad, y más tarde[COLOR_UNIT_TEXT]Caballeros[COLOR_REVERT](con[COLOR_TECH_TEXT]Gremios[COLOR_REVERT]) y[COLOR_UNIT_TEXT]Caballería[COLOR_REVERT](con[COLOR_TECH_TEXT]Tradición militar[COLOR_REVERT]).</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_TECH_COMPASS_STRATEGY</Tag>
+		<English>[COLOR_TECH_TEXT]Compass[COLOR_REVERT] allows you to train [COLOR_BUILDING_TEXT]Caravel[COLOR_REVERT], [COLOR_BUILDING_TEXT]Explorer[COLOR_REVERT] units and enables trade ocean.</English>
+		<French>[COLOR_TECH_TEXT]Boussole[COLOR_REVERT]vous permet de vous entraîner[COLOR_BUILDING_TEXT]Caravelle[COLOR_REVERT],[COLOR_BUILDING_TEXT]Explorateur[COLOR_REVERT]unités et permet à Trade Ocean.</French>
+		<German>[COLOR_TECH_TEXT]Kompass[COLOR_REVERT]ermöglicht es Ihnen zu trainieren[COLOR_BUILDING_TEXT]Karavelle[COLOR_REVERT]Anwesend[COLOR_BUILDING_TEXT]Forscher[COLOR_REVERT]Einheiten und ermöglicht Handel Ozean.</German>
+		<Italian>[COLOR_TECH_TEXT]Bussola[COLOR_REVERT]ti permette di allenarti[COLOR_BUILDING_TEXT]Caravella[COLOR_REVERT],[COLOR_BUILDING_TEXT]Esploratore[COLOR_REVERT]unità e consente il commercio oceanico.</Italian>
+		<Spanish>[COLOR_TECH_TEXT]Brújula[COLOR_REVERT]te permite entrenar[COLOR_BUILDING_TEXT]Carabela[COLOR_REVERT],[COLOR_BUILDING_TEXT]Explorador[COLOR_REVERT]unidades y habilita el océano comercial.</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_TECH_MACHINERY_STRATEGY</Tag>
+		<English>[COLOR_TECH_TEXT]Machinery[COLOR_REVERT] allows the [COLOR_UNIT_TEXT]Heavy swordsman[COLOR_REVERT] (with [COLOR_TECH_TEXT]Civil Service[COLOR_REVERT]) and [COLOR_UNIT_TEXT]Crossbowman[COLOR_REVERT] (with [COLOR_TECH_TEXT]Archery[COLOR_REVERT]). It also lets workers build [COLOR_HIGHLIGHT_TEXT]Windmills[COLOR_REVERT] and [COLOR_HIGHLIGHT_TEXT]Watermills[COLOR_REVERT].</English>
+		<French>[COLOR_TECH_TEXT]Machinerie[COLOR_REVERT]permet le[COLOR_UNIT_TEXT]Épée lourde[COLOR_REVERT](avec[COLOR_TECH_TEXT]Service civil[COLOR_REVERT]) et[COLOR_UNIT_TEXT]Arbalète[COLOR_REVERT](avec[COLOR_TECH_TEXT]Tir à l'archerie[COLOR_REVERT]).Il permet également aux travailleurs de construire[COLOR_HIGHLIGHT_TEXT]Moulins à vent[COLOR_REVERT]et[COLOR_HIGHLIGHT_TEXT]Moulin à eau[COLOR_REVERT].</French>
+		<German>[COLOR_TECH_TEXT]Maschinen[COLOR_REVERT]erlaubt das[COLOR_UNIT_TEXT]Schwerer Schwertkämpfer[COLOR_REVERT](mit[COLOR_TECH_TEXT]Öffentlicher Dienst[COLOR_REVERT]) Und[COLOR_UNIT_TEXT]Armbruster[COLOR_REVERT](mit[COLOR_TECH_TEXT]Bogenschießen[COLOR_REVERT]).Es lässt die Arbeiter auch bauen[COLOR_HIGHLIGHT_TEXT]Windmühlen[COLOR_REVERT]Und[COLOR_HIGHLIGHT_TEXT]Wassermühlen[COLOR_REVERT].</German>
+		<Italian>[COLOR_TECH_TEXT]Macchinari[COLOR_REVERT]consente il[COLOR_UNIT_TEXT]Swordsman pesante[COLOR_REVERT](con[COLOR_TECH_TEXT]Servizio civile[COLOR_REVERT]) E[COLOR_UNIT_TEXT]Crossbowman[COLOR_REVERT](con[COLOR_TECH_TEXT]Tiro con l'arco[COLOR_REVERT]).Permette anche ai lavoratori di costruire[COLOR_HIGHLIGHT_TEXT]Mulini a vento[COLOR_REVERT]E[COLOR_HIGHLIGHT_TEXT]Acquatore[COLOR_REVERT].</Italian>
+		<Spanish>[COLOR_TECH_TEXT]Maquinaria[COLOR_REVERT]Permite el[COLOR_UNIT_TEXT]Espadachín pesado[COLOR_REVERT](con[COLOR_TECH_TEXT]Servicio Civil[COLOR_REVERT]) y[COLOR_UNIT_TEXT]Ballesta[COLOR_REVERT](con[COLOR_TECH_TEXT]Tiro al arco[COLOR_REVERT]).También permite a los trabajadores construir[COLOR_HIGHLIGHT_TEXT]Molinos de viento[COLOR_REVERT]y[COLOR_HIGHLIGHT_TEXT]Molinos de agua[COLOR_REVERT].</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_TECH_ENGINEERING_STRATEGY</Tag>
+		<English>[COLOR_TECH_TEXT]Engineering[COLOR_REVERT] allows production of the [COLOR_UNIT_TEXT]Pikeman[COLOR_REVERT], excellent against mounted units(with [COLOR_TECH_TEXT]Steel[COLOR_REVERT]). It increases road movement and allows construction of [COLOR_BUILDING_TEXT]Castles[COLOR_REVERT] and the [COLOR_BUILDING_TEXT]Hagia Sophia[COLOR_REVERT] wonder.</English>
+		<French>[COLOR_TECH_TEXT]Ingénierie[COLOR_REVERT]permet la production du[COLOR_UNIT_TEXT]Piqueur[COLOR_REVERT], excellent contre les unités montées (avec[COLOR_TECH_TEXT]Acier[COLOR_REVERT]).Il augmente le mouvement routier et permet la construction de[COLOR_BUILDING_TEXT]Châteaux[COLOR_REVERT]et le[COLOR_BUILDING_TEXT]Hagia Sophia[COLOR_REVERT]merveille.</French>
+		<German>[COLOR_TECH_TEXT]Maschinenbau[COLOR_REVERT]Ermöglicht die Produktion der[COLOR_UNIT_TEXT]Pikeman[COLOR_REVERT], ausgezeichnet gegen berittene Einheiten (mit[COLOR_TECH_TEXT]Stahl[COLOR_REVERT]).Es erhöht die Straßenbewegung und ermöglicht den Bau von[COLOR_BUILDING_TEXT]Schlösser[COLOR_REVERT]und das[COLOR_BUILDING_TEXT]Hagia Sophia[COLOR_REVERT]Wunder.</German>
+		<Italian>[COLOR_TECH_TEXT]Ingegneria[COLOR_REVERT]consente la produzione del[COLOR_UNIT_TEXT]Pikeman[COLOR_REVERT], eccellente contro le unità montate (con[COLOR_TECH_TEXT]Acciaio[COLOR_REVERT]).Aumenta il movimento stradale e consente la costruzione di[COLOR_BUILDING_TEXT]Castelli[COLOR_REVERT]e il[COLOR_BUILDING_TEXT]Hagia Sophia[COLOR_REVERT]Meraviglia.</Italian>
+		<Spanish>[COLOR_TECH_TEXT]Ingeniería[COLOR_REVERT]permite la producción de la[COLOR_UNIT_TEXT]Piquero[COLOR_REVERT], excelente contra unidades montadas (con[COLOR_TECH_TEXT]Acero[COLOR_REVERT]).Aumenta el movimiento de la carretera y permite la construcción de[COLOR_BUILDING_TEXT]Castillos[COLOR_REVERT]y el[COLOR_BUILDING_TEXT]Santa Sofía[COLOR_REVERT]preguntarse.</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_TECH_IRRIGATION_STRATEGY</Tag>
+		<English>[COLOR_TECH_TEXT]Irrigation[COLOR_REVERT] lets your workers spread [COLOR_HIGHLIGHT_TEXT]Irrigation[COLOR_REVERT] and build the [COLOR_BUILDING_TEXT]Machu Picchu[COLOR_REVERT] wonder.</English>
+		<French>[COLOR_TECH_TEXT]Irrigation[COLOR_REVERT]permet à vos travailleurs de se propager[COLOR_HIGHLIGHT_TEXT]Irrigation[COLOR_REVERT]et construire le[COLOR_BUILDING_TEXT]Machu Pitch[COLOR_REVERT]merveille.</French>
+		<German>[COLOR_TECH_TEXT]Bewässerung[COLOR_REVERT]Lassen Sie sich Ihre Arbeiter ausbreiten[COLOR_HIGHLIGHT_TEXT]Bewässerung[COLOR_REVERT]und bauen die[COLOR_BUILDING_TEXT]Machu Pitchu[COLOR_REVERT]Wunder.</German>
+		<Italian>[COLOR_TECH_TEXT]Irrigazione[COLOR_REVERT]lascia che i tuoi lavoratori si diffondino[COLOR_HIGHLIGHT_TEXT]Irrigazione[COLOR_REVERT]e costruisci il[COLOR_BUILDING_TEXT]Machu Pitchu[COLOR_REVERT]Meraviglia.</Italian>
+		<Spanish>[COLOR_TECH_TEXT]Irrigación[COLOR_REVERT]Deja que tus trabajadores se extiendan[COLOR_HIGHLIGHT_TEXT]Irrigación[COLOR_REVERT]y construir el[COLOR_BUILDING_TEXT]Machu Pitchu[COLOR_REVERT]preguntarse.</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_TECH_OPTICS_STRATEGY</Tag>
+		<English>[COLOR_TECH_TEXT]Optics[COLOR_REVERT] allows the [COLOR_UNIT_TEXT]Galleon[COLOR_REVERT] and [COLOR_UNIT_TEXT]Frigate[COLOR_REVERT] (with [COLOR_TECH_TEXT]Chemistry[COLOR_REVERT]) naval units. It enables trading on the ocean and lets you build [COLOR_BUILDING_TEXT]Observatories[COLOR_REVERT].  It obsoletes the [COLOR_BUILDING_TEXT]Colossus[COLOR_REVERT] wonder.</English>
+		<French>[COLOR_TECH_TEXT]Optique[COLOR_REVERT]permet le[COLOR_UNIT_TEXT]Galion[COLOR_REVERT]et[COLOR_UNIT_TEXT]Frégate[COLOR_REVERT](avec[COLOR_TECH_TEXT]Chimie[COLOR_REVERT]) Unités navales.Il permet de négocier sur l'océan et vous permet de construire[COLOR_BUILDING_TEXT]Observatoires[COLOR_REVERT].Il obsolète le[COLOR_BUILDING_TEXT]Colosse[COLOR_REVERT]merveille.</French>
+		<German>[COLOR_TECH_TEXT]Optik[COLOR_REVERT]erlaubt das[COLOR_UNIT_TEXT]Galeone[COLOR_REVERT]Und[COLOR_UNIT_TEXT]Fregatte[COLOR_REVERT](mit[COLOR_TECH_TEXT]Chemie[COLOR_REVERT]) Marineeinheiten.Es ermöglicht den Handel mit dem Ozean und ermöglicht es Ihnen, bauen[COLOR_BUILDING_TEXT]Observatorien[COLOR_REVERT].Es veraltet die[COLOR_BUILDING_TEXT]Koloss[COLOR_REVERT]Wunder.</German>
+		<Italian>[COLOR_TECH_TEXT]Ottica[COLOR_REVERT]consente il[COLOR_UNIT_TEXT]Galeone[COLOR_REVERT]E[COLOR_UNIT_TEXT]Fregata[COLOR_REVERT](con[COLOR_TECH_TEXT]Chimica[COLOR_REVERT]) unità navali.Abilita il trading sull'oceano e ti consente di costruire[COLOR_BUILDING_TEXT]Osservatori[COLOR_REVERT].Obsoleti il[COLOR_BUILDING_TEXT]Colosso[COLOR_REVERT]Meraviglia.</Italian>
+		<Spanish>[COLOR_TECH_TEXT]Óptica[COLOR_REVERT]Permite el[COLOR_UNIT_TEXT]Galeón[COLOR_REVERT]y[COLOR_UNIT_TEXT]Fragata[COLOR_REVERT](con[COLOR_TECH_TEXT]Química[COLOR_REVERT]) Unidades navales.Permite el comercio en el océano y le permite construir[COLOR_BUILDING_TEXT]Observatorios[COLOR_REVERT].Obsoleta el[COLOR_BUILDING_TEXT]Coloso[COLOR_REVERT]preguntarse.</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_TECH_STEEL_STRATEGY</Tag>
+		<English>[COLOR_TECH_TEXT]Metallurgy[COLOR_REVERT] enables you to build [COLOR_UNIT_TEXT]Cannon[COLOR_REVERT] and [COLOR_UNIT_TEXT]Ironclads[COLOR_REVERT] (with [COLOR_TECH_TEXT]Steam Power[COLOR_REVERT]). It also enables construction of the [COLOR_BUILDING_TEXT]Drydocks[COLOR_REVERT] building and the [COLOR_BUILDING_TEXT]Ironworks[COLOR_REVERT] national wonder.</English>
+		<French>[COLOR_TECH_TEXT]Métallurgie[COLOR_REVERT]vous permet de construire[COLOR_UNIT_TEXT]Canon[COLOR_REVERT]et[COLOR_UNIT_TEXT]Fléau[COLOR_REVERT](avec[COLOR_TECH_TEXT]Puissance de la vapeur[COLOR_REVERT]).Il permet également la construction du[COLOR_BUILDING_TEXT]Tracts secs[COLOR_REVERT]bâtiment et le[COLOR_BUILDING_TEXT]Ferronnerie[COLOR_REVERT]merveille nationale.</French>
+		<German>[COLOR_TECH_TEXT]Metallurgie[COLOR_REVERT]ermöglicht es Ihnen zu bauen[COLOR_UNIT_TEXT]Kanone[COLOR_REVERT]Und[COLOR_UNIT_TEXT]Ironclads[COLOR_REVERT](mit[COLOR_TECH_TEXT]Dampfkraft[COLOR_REVERT]).Es ermöglicht auch den Bau der[COLOR_BUILDING_TEXT]Trockendocke[COLOR_REVERT]Gebäude und die[COLOR_BUILDING_TEXT]Eisenhütte[COLOR_REVERT]Nationales Wunder.</German>
+		<Italian>[COLOR_TECH_TEXT]Metallurgia[COLOR_REVERT]ti consente di costruire[COLOR_UNIT_TEXT]Cannone[COLOR_REVERT]E[COLOR_UNIT_TEXT]Ironclads[COLOR_REVERT](con[COLOR_TECH_TEXT]Forza vapore[COLOR_REVERT]).Consente anche la costruzione del[COLOR_BUILDING_TEXT]Drydocks[COLOR_REVERT]edificio e il[COLOR_BUILDING_TEXT]Lavori in ferro[COLOR_REVERT]National Wonder.</Italian>
+		<Spanish>[COLOR_TECH_TEXT]Metalurgia[COLOR_REVERT]le permite construir[COLOR_UNIT_TEXT]Cañón[COLOR_REVERT]y[COLOR_UNIT_TEXT]Plastilina[COLOR_REVERT](con[COLOR_TECH_TEXT]La energía de vapor[COLOR_REVERT]).También permite la construcción del[COLOR_BUILDING_TEXT]Dique seco[COLOR_REVERT]edificio y el[COLOR_BUILDING_TEXT]Herrería[COLOR_REVERT]Maravilla nacional.</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_TECH_DYNAMITE_STRATEGY</Tag>
+		<English>[COLOR_TECH_TEXT]Dynamite[COLOR_REVERT] enables you to build [COLOR_BUILDING_TEXT]Neuschwanstein Castle[COLOR_REVERT]. Also, [COLOR_TECH_TEXT]Dynamite[COLOR_REVERT] leads to research [COLOR_TECH_TEXT]Artillery[COLOR_REVERT] and [COLOR_TECH_TEXT]Railroad[COLOR_REVERT].</English>
+		<French>[COLOR_TECH_TEXT]Dynamiter[COLOR_REVERT]vous permet de construire[COLOR_BUILDING_TEXT]Le château de Neuschwanstein[COLOR_REVERT].Aussi,[COLOR_TECH_TEXT]Dynamiter[COLOR_REVERT]conduit à la recherche[COLOR_TECH_TEXT]Artillerie[COLOR_REVERT]et[COLOR_TECH_TEXT]Chemin de fer[COLOR_REVERT].</French>
+		<German>[COLOR_TECH_TEXT]Dynamit[COLOR_REVERT]ermöglicht es Ihnen zu bauen[COLOR_BUILDING_TEXT]Schloss Neuschwanstein[COLOR_REVERT].Auch,[COLOR_TECH_TEXT]Dynamit[COLOR_REVERT]führt zur Forschung[COLOR_TECH_TEXT]Artillerie[COLOR_REVERT]Und[COLOR_TECH_TEXT]Eisenbahn[COLOR_REVERT].</German>
+		<Italian>[COLOR_TECH_TEXT]Dinamite[COLOR_REVERT]ti consente di costruire[COLOR_BUILDING_TEXT]Castello di Neuschwanstein[COLOR_REVERT].Anche,[COLOR_TECH_TEXT]Dinamite[COLOR_REVERT]porta alla ricerca[COLOR_TECH_TEXT]Artiglieria[COLOR_REVERT]E[COLOR_TECH_TEXT]Ferrovia[COLOR_REVERT].</Italian>
+		<Spanish>[COLOR_TECH_TEXT]Dinamita[COLOR_REVERT]le permite construir[COLOR_BUILDING_TEXT]Castillo de Neuschwanstein[COLOR_REVERT].También,[COLOR_TECH_TEXT]Dinamita[COLOR_REVERT]conduce a la investigación[COLOR_TECH_TEXT]Artillería[COLOR_REVERT]y[COLOR_TECH_TEXT]Ferrocarril[COLOR_REVERT].</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_TECH_BALLISTICS_STRATEGY</Tag>
+		<English>[COLOR_TECH_TEXT]Ballistics[COLOR_REVERT] allows construction of [COLOR_UNIT_TEXT]Machine Gun[COLOR_REVERT] units.</English>
+		<French>[COLOR_TECH_TEXT]Balistique[COLOR_REVERT]permet la construction de[COLOR_UNIT_TEXT]Mitraillette[COLOR_REVERT]unités.</French>
+		<German>[COLOR_TECH_TEXT]Ballistik[COLOR_REVERT]Ermöglicht die Konstruktion von[COLOR_UNIT_TEXT]Maschinengewehr[COLOR_REVERT]Einheiten.</German>
+		<Italian>[COLOR_TECH_TEXT]Balistica[COLOR_REVERT]consente la costruzione di[COLOR_UNIT_TEXT]Mitragliatrice[COLOR_REVERT]unità.</Italian>
+		<Spanish>[COLOR_TECH_TEXT]Balística[COLOR_REVERT]permite la construcción de[COLOR_UNIT_TEXT]Ametralladora[COLOR_REVERT]unidades.</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_TECH_RAILROAD_STRATEGY</Tag>
+		<English>[COLOR_TECH_TEXT]Railroad[COLOR_REVERT],with [COLOR_HIGHLIGHT_TEXT]Coal[COLOR_REVERT], allows your workers to upgrade your [COLOR_HIGHLIGHT_TEXT]Roads[COLOR_REVERT] to [COLOR_HIGHLIGHT_TEXT]Railroads[COLOR_REVERT], vastly increasing your units' movement.</English>
+		<French>[COLOR_TECH_TEXT]Chemin de fer[COLOR_REVERT],avec[COLOR_HIGHLIGHT_TEXT]Charbon[COLOR_REVERT], permet à vos travailleurs de mettre à niveau votre[COLOR_HIGHLIGHT_TEXT]Routes[COLOR_REVERT]pour[COLOR_HIGHLIGHT_TEXT]Chemins de fer[COLOR_REVERT], augmentant considérablement le mouvement de vos unités.</French>
+		<German>[COLOR_TECH_TEXT]Eisenbahn[COLOR_REVERT],mit[COLOR_HIGHLIGHT_TEXT]Kohle[COLOR_REVERT]ermöglicht es Ihren Mitarbeitern, Ihre zu aktualisieren[COLOR_HIGHLIGHT_TEXT]Straßen[COLOR_REVERT]Zu[COLOR_HIGHLIGHT_TEXT]Eisenbahnen[COLOR_REVERT], erheblich die Bewegung Ihrer Einheiten erhöhen.</German>
+		<Italian>[COLOR_TECH_TEXT]Ferrovia[COLOR_REVERT],con[COLOR_HIGHLIGHT_TEXT]Carbone[COLOR_REVERT], consente ai tuoi lavoratori di aggiornare il tuo[COLOR_HIGHLIGHT_TEXT]Strade[COLOR_REVERT]A[COLOR_HIGHLIGHT_TEXT]Ferrovia[COLOR_REVERT], aumentando notevolmente il movimento delle tue unità.</Italian>
+		<Spanish>[COLOR_TECH_TEXT]Ferrocarril[COLOR_REVERT],con[COLOR_HIGHLIGHT_TEXT]Carbón[COLOR_REVERT], permite a sus trabajadores actualizar su[COLOR_HIGHLIGHT_TEXT]Carreteras[COLOR_REVERT]a[COLOR_HIGHLIGHT_TEXT]Ferrocarriles[COLOR_REVERT], aumentando enormemente el movimiento de sus unidades.</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_TECH_ASSEMBLY_LINE_STRATEGY</Tag>
+		<English>[COLOR_TECH_TEXT]Assembly Line[COLOR_REVERT] allows you to build [COLOR_UNIT_TEXT]Infantry[COLOR_REVERT] (with [COLOR_TECH_TEXT]Rifling[COLOR_REVERT]). It also enables construction of the [COLOR_BUILDING_TEXT]Automation Factory[COLOR_REVERT] building and the [COLOR_BUILDING_TEXT]Pentagon[COLOR_REVERT] wonder.</English>
+		<French>[COLOR_TECH_TEXT]Ligne d'assemblage[COLOR_REVERT]vous permet de construire[COLOR_UNIT_TEXT]Infanterie[COLOR_REVERT](avec[COLOR_TECH_TEXT]Fascinant[COLOR_REVERT]).Il permet également la construction du[COLOR_BUILDING_TEXT]Usine d'automatisation[COLOR_REVERT]bâtiment et le[COLOR_BUILDING_TEXT]Pentagone[COLOR_REVERT]merveille.</French>
+		<German>[COLOR_TECH_TEXT]Fließband[COLOR_REVERT]ermöglicht es Ihnen zu bauen[COLOR_UNIT_TEXT]Infanterie[COLOR_REVERT](mit[COLOR_TECH_TEXT]Gewehr[COLOR_REVERT]).Es ermöglicht auch den Bau der[COLOR_BUILDING_TEXT]Automatisierungsfabrik[COLOR_REVERT]Gebäude und die[COLOR_BUILDING_TEXT]Pentagon[COLOR_REVERT]Wunder.</German>
+		<Italian>[COLOR_TECH_TEXT]Catena di montaggio[COLOR_REVERT]ti permette di costruire[COLOR_UNIT_TEXT]Fanteria[COLOR_REVERT](con[COLOR_TECH_TEXT]Rigatura[COLOR_REVERT]).Consente anche la costruzione del[COLOR_BUILDING_TEXT]Fabbrica di automazione[COLOR_REVERT]edificio e il[COLOR_BUILDING_TEXT]Pentagono[COLOR_REVERT]Meraviglia.</Italian>
+		<Spanish>[COLOR_TECH_TEXT]Linea de ensamblaje[COLOR_REVERT]te permite construir[COLOR_UNIT_TEXT]Infantería[COLOR_REVERT](con[COLOR_TECH_TEXT]Estriado[COLOR_REVERT]).También permite la construcción del[COLOR_BUILDING_TEXT]Fábrica de automatización[COLOR_REVERT]edificio y el[COLOR_BUILDING_TEXT]Pentágono[COLOR_REVERT]preguntarse.</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_TECH_NANOTECHNOLOGY_STRATEGY</Tag>
+		<English>[COLOR_TECH_TEXT]Nanotechnology[COLOR_REVERT] enables the extremely powerful [COLOR_UNIT_TEXT]XCOM Squad[COLOR_REVERT] units. It lets you build the [COLOR_PROJECT_TEXT]SS Stasis Chamber[COLOR_REVERT] spaceship part.</English>
+		<French>[COLOR_TECH_TEXT]Nanotechnologie[COLOR_REVERT]permet le extrêmement puissant[COLOR_UNIT_TEXT]Squad XCOM[COLOR_REVERT]unités.Il vous permet de construire le[COLOR_PROJECT_TEXT]Chambre de stase SS[COLOR_REVERT]partie du vaisseau spatial.</French>
+		<German>[COLOR_TECH_TEXT]Nanotechnologie[COLOR_REVERT]ermöglicht die extrem mächtigen[COLOR_UNIT_TEXT]Xcom -Kader[COLOR_REVERT]Einheiten.Sie können die bauen[COLOR_PROJECT_TEXT]SS Stasis Chamber[COLOR_REVERT]Raumschiffteil.</German>
+		<Italian>[COLOR_TECH_TEXT]Nanotecnologia[COLOR_REVERT]Abilita il estremamente potente[COLOR_UNIT_TEXT]XCOM Squad[COLOR_REVERT]unità.Ti consente di costruire il[COLOR_PROJECT_TEXT]Camera SS Stasis[COLOR_REVERT]Parte di astronavi.</Italian>
+		<Spanish>[COLOR_TECH_TEXT]Nanotecnología[COLOR_REVERT]habilita el extremadamente poderoso[COLOR_UNIT_TEXT]Escuadrón de XCOM[COLOR_REVERT]unidades.Te permite construir el[COLOR_PROJECT_TEXT]Cámara de estasis SS[COLOR_REVERT]parte de la nave espacial.</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_CIVIC_SERFDOM_STRATEGY</Tag>
+		<English>Workers build improvements faster and +1 gold for each farms and plantations</English>
+		<French>Les travailleurs renforcent les améliorations plus rapidement et +1 d'or pour chaque exploitation et plantations</French>
+		<German>Arbeiter bauen für jede Farmen und Plantagen Verbesserungen schneller und +1 Gold</German>
+		<Italian>I lavoratori costruiscono miglioramenti più velocemente e +1 oro per ogni fattoria e piantagioni</Italian>
+		<Spanish>Los trabajadores construyen mejoras más rápido y +1 de oro para cada granja y plantaciones</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_BUILDING_VERSAILLES_STRATEGY</Tag>
+		<English>[COLOR_BUILDING_TEXT]Versailles[COLOR_REVERT] reduces the maintenance costs in nearby cities and acts like a second [COLOR_BUILDING_TEXT]Palace[COLOR_REVERT]. It increases the chances of creating a [COLOR_UNIT_TEXT]Great Spy[COLOR_REVERT].</English>
+		<French>[COLOR_BUILDING_TEXT]Versailles[COLOR_REVERT]réduit les coûts d'entretien dans les villes voisines et agit comme une seconde[COLOR_BUILDING_TEXT]Palais[COLOR_REVERT].Il augmente les chances de créer un[COLOR_UNIT_TEXT]Grand espion[COLOR_REVERT].</French>
+		<German>[COLOR_BUILDING_TEXT]Versailles[COLOR_REVERT]reduziert die Wartungskosten in nahe gelegenen Städten und wirkt wie eine Sekunde[COLOR_BUILDING_TEXT]Palast[COLOR_REVERT].Es erhöht die Chancen, a zu schaffen[COLOR_UNIT_TEXT]Toller Spion[COLOR_REVERT].</German>
+		<Italian>[COLOR_BUILDING_TEXT]Versailles[COLOR_REVERT]riduce i costi di manutenzione nelle città vicine e agisce come un secondo[COLOR_BUILDING_TEXT]Palazzo[COLOR_REVERT].Aumenta le possibilità di creare un[COLOR_UNIT_TEXT]Grande spia[COLOR_REVERT].</Italian>
+		<Spanish>[COLOR_BUILDING_TEXT]Versalles[COLOR_REVERT]Reduce los costos de mantenimiento en las ciudades cercanas y actúa como un segundo[COLOR_BUILDING_TEXT]Palacio[COLOR_REVERT].Aumenta las posibilidades de crear un[COLOR_UNIT_TEXT]Gran espía[COLOR_REVERT].</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_BUILDING_GRANARY_STRATEGY</Tag>
+		<English>[COLOR_BUILDING_TEXT]Granaries[COLOR_REVERT] store food to help increase a city's growth rate. They add additional health if your civ has access to [COLOR_HIGHLIGHT_TEXT]Corn[COLOR_REVERT], [COLOR_HIGHLIGHT_TEXT]Wheat[COLOR_REVERT], [COLOR_HIGHLIGHT_TEXT]Rice[COLOR_REVERT], and [COLOR_HIGHLIGHT_TEXT]Potato[COLOR_REVERT].</English>
+		<French>[COLOR_BUILDING_TEXT]Greniers[COLOR_REVERT]Stockez la nourriture pour aider à augmenter le taux de croissance d'une ville.Ils ajoutent une santé supplémentaire si votre CIV a accès à[COLOR_HIGHLIGHT_TEXT]Maïs[COLOR_REVERT],[COLOR_HIGHLIGHT_TEXT]Blé[COLOR_REVERT],[COLOR_HIGHLIGHT_TEXT]Riz[COLOR_REVERT], et[COLOR_HIGHLIGHT_TEXT]Pomme de terre[COLOR_REVERT].</French>
+		<German>[COLOR_BUILDING_TEXT]Getreidewerte[COLOR_REVERT]Lagern Sie Lebensmittel, um die Wachstumsrate einer Stadt zu erhöhen.Sie fügen zusätzliche Gesundheit hinzu, wenn Ihr CIV Zugang zu Zugang hat[COLOR_HIGHLIGHT_TEXT]Mais[COLOR_REVERT]Anwesend[COLOR_HIGHLIGHT_TEXT]Weizen[COLOR_REVERT]Anwesend[COLOR_HIGHLIGHT_TEXT]Reis[COLOR_REVERT], Und[COLOR_HIGHLIGHT_TEXT]Kartoffel[COLOR_REVERT].</German>
+		<Italian>[COLOR_BUILDING_TEXT]Granai[COLOR_REVERT]Conservare il cibo per aiutare ad aumentare il tasso di crescita di una città.Aggiungono ulteriore salute se la tua civ ha accesso a[COLOR_HIGHLIGHT_TEXT]Mais[COLOR_REVERT],[COLOR_HIGHLIGHT_TEXT]Grano[COLOR_REVERT],[COLOR_HIGHLIGHT_TEXT]Riso[COLOR_REVERT], E[COLOR_HIGHLIGHT_TEXT]Patata[COLOR_REVERT].</Italian>
+		<Spanish>[COLOR_BUILDING_TEXT]Graneros[COLOR_REVERT]Almacene los alimentos para ayudar a aumentar la tasa de crecimiento de una ciudad.Agregan salud adicional si su civio tiene acceso a[COLOR_HIGHLIGHT_TEXT]Maíz[COLOR_REVERT],[COLOR_HIGHLIGHT_TEXT]Trigo[COLOR_REVERT],[COLOR_HIGHLIGHT_TEXT]Arroz[COLOR_REVERT], y[COLOR_HIGHLIGHT_TEXT]Papa[COLOR_REVERT].</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_BUILDING_HARBOR_STRATEGY</Tag>
+		<English>The [COLOR_BUILDING_TEXT]Harbor[COLOR_REVERT] increases that city's income from trade routes. It increases a city's health from access to [COLOR_HIGHLIGHT_TEXT]Clam[COLOR_REVERT], [COLOR_HIGHLIGHT_TEXT]Crab[COLOR_REVERT], [COLOR_HIGHLIGHT_TEXT]Fish[COLOR_REVERT] and [COLOR_HIGHLIGHT_TEXT]Shrimp[COLOR_REVERT] resources.</English>
+		<French>Le[COLOR_BUILDING_TEXT]port[COLOR_REVERT]augmente les revenus de cette ville des routes commerciales.Il augmente la santé d'une ville à partir de l'accès à[COLOR_HIGHLIGHT_TEXT]Palourde[COLOR_REVERT],[COLOR_HIGHLIGHT_TEXT]Crabe[COLOR_REVERT],[COLOR_HIGHLIGHT_TEXT]Poisson[COLOR_REVERT]et[COLOR_HIGHLIGHT_TEXT]Crevette[COLOR_REVERT]ressources.</French>
+		<German>Der[COLOR_BUILDING_TEXT]Hafen[COLOR_REVERT]Erhöht das Einkommen dieser Stadt aus Handelsrouten.Es erhöht die Gesundheit einer Stadt vom Zugang zum Zugang zu[COLOR_HIGHLIGHT_TEXT]Muschel[COLOR_REVERT]Anwesend[COLOR_HIGHLIGHT_TEXT]Krabbe[COLOR_REVERT]Anwesend[COLOR_HIGHLIGHT_TEXT]Fisch[COLOR_REVERT]Und[COLOR_HIGHLIGHT_TEXT]Garnele[COLOR_REVERT]Ressourcen.</German>
+		<Italian>Il[COLOR_BUILDING_TEXT]Porto[COLOR_REVERT]Aumenta il reddito di quella città dalle rotte commerciali.Aumenta la salute di una città dall'accesso a[COLOR_HIGHLIGHT_TEXT]Mollusco[COLOR_REVERT],[COLOR_HIGHLIGHT_TEXT]Granchio[COLOR_REVERT],[COLOR_HIGHLIGHT_TEXT]Pescare[COLOR_REVERT]E[COLOR_HIGHLIGHT_TEXT]Gamberetto[COLOR_REVERT]risorse.</Italian>
+		<Spanish>El[COLOR_BUILDING_TEXT]Puerto[COLOR_REVERT]aumenta los ingresos de esa ciudad de las rutas comerciales.Aumenta la salud de una ciudad desde el acceso a[COLOR_HIGHLIGHT_TEXT]Almeja[COLOR_REVERT],[COLOR_HIGHLIGHT_TEXT]Cangrejo[COLOR_REVERT],[COLOR_HIGHLIGHT_TEXT]Pez[COLOR_REVERT]y[COLOR_HIGHLIGHT_TEXT]Camarón[COLOR_REVERT]recursos.</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_BUILDING_EFACTORY_STRATEGY</Tag>
+		<English>[COLOR_BUILDING_TEXT]Refineries[COLOR_REVERT] increase a city's production output by 3.</English>
+		<French>[COLOR_BUILDING_TEXT]Raffineries[COLOR_REVERT]Augmentez la production de production d'une ville par 3.</French>
+		<German>[COLOR_BUILDING_TEXT]Raffinerien[COLOR_REVERT]Erhöhen Sie die Produktionsproduktion einer Stadt um 3.</German>
+		<Italian>[COLOR_BUILDING_TEXT]Raffinerie[COLOR_REVERT]Aumenta la produzione di produzione di una città di 3.</Italian>
+		<Spanish>[COLOR_BUILDING_TEXT]Refinerías[COLOR_REVERT]Aumentar la producción de una ciudad en 3.</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_BUILDING_COAL_PLANT_STRATEGY</Tag>
+		<English>Coal Plants provide power for the Automation Factory, although the pollution will hurt your city's health.</English>
+		<French>Les centrales au charbon fournissent un pouvoir à l'usine d'automatisation, bien que la pollution nuise à la santé de votre ville.</French>
+		<German>Kohlekraftwerke bieten die Automatisierungsfabrik Macht, obwohl die Verschmutzung die Gesundheit Ihrer Stadt beeinträchtigt.</German>
+		<Italian>Le piante di carbone forniscono potere per la fabbrica di automazione, sebbene l'inquinamento danneggerà la salute della tua città.</Italian>
+		<Spanish>Las plantas de carbón proporcionan energía para la fábrica de automatización, aunque la contaminación perjudicará la salud de su ciudad.</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_BUILDING_HYDRO_PLANT_STRATEGY</Tag>
+		<English>[COLOR_BUILDING_TEXT]Hydro Plants[COLOR_REVERT] provide pollution-free power for [COLOR_BUILDING_TEXT]Automation Factories[COLOR_REVERT]. </English>
+		<French>[COLOR_BUILDING_TEXT]Hydro-plantes[COLOR_REVERT]fournir un pouvoir sans pollution pour[COLOR_BUILDING_TEXT]Usines d'automatisation[COLOR_REVERT].</French>
+		<German>[COLOR_BUILDING_TEXT]Wasserpflanzen[COLOR_REVERT]Verschmutzungsfreie Kraft für[COLOR_BUILDING_TEXT]Automatisierungsfabriken[COLOR_REVERT].</German>
+		<Italian>[COLOR_BUILDING_TEXT]Piante idroelettriche[COLOR_REVERT]fornire potere senza inquinamento per[COLOR_BUILDING_TEXT]Fabbriche di automazione[COLOR_REVERT].</Italian>
+		<Spanish>[COLOR_BUILDING_TEXT]Plantas hidroeléctricas[COLOR_REVERT]proporcionar energía sin contaminación para[COLOR_BUILDING_TEXT]Fábricas de automatización[COLOR_REVERT].</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_BUILDING_NUCLEAR_PLANT_STRATEGY</Tag>
+		<English>With access to [COLOR_HIGHLIGHT_TEXT]Uranium[COLOR_REVERT], [COLOR_BUILDING_TEXT]Nuclear Plants[COLOR_REVERT] provide power for [COLOR_BUILDING_TEXT]Automation Factories[COLOR_REVERT].</English>
+		<French>Avec accès à[COLOR_HIGHLIGHT_TEXT]Uranium[COLOR_REVERT],[COLOR_BUILDING_TEXT]Centrale nucléaire[COLOR_REVERT]fournir de l'énergie à[COLOR_BUILDING_TEXT]Usines d'automatisation[COLOR_REVERT].</French>
+		<German>Mit Zugang zu[COLOR_HIGHLIGHT_TEXT]Uran[COLOR_REVERT]Anwesend[COLOR_BUILDING_TEXT]Atomkraftwerke[COLOR_REVERT]Macht für die Kraft für[COLOR_BUILDING_TEXT]Automatisierungsfabriken[COLOR_REVERT].</German>
+		<Italian>Con accesso a[COLOR_HIGHLIGHT_TEXT]Uranio[COLOR_REVERT],[COLOR_BUILDING_TEXT]Piante nucleari[COLOR_REVERT]fornire potere per[COLOR_BUILDING_TEXT]Fabbriche di automazione[COLOR_REVERT].</Italian>
+		<Spanish>Con acceso a[COLOR_HIGHLIGHT_TEXT]Uranio[COLOR_REVERT],[COLOR_BUILDING_TEXT]Plantas nucleares[COLOR_REVERT]proporcionar potencia para[COLOR_BUILDING_TEXT]Fábricas de automatización[COLOR_REVERT].</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_BUILDING_THEATRE_STRATEGY</Tag>
+		<English>A [COLOR_BUILDING_TEXT]Theatre[COLOR_REVERT] provides culture and is required to build the [COLOR_BUILDING_TEXT]Globe Theatre[COLOR_REVERT] national wonder. </English>
+		<French>UN[COLOR_BUILDING_TEXT]Théâtre[COLOR_REVERT]fournit de la culture et est nécessaire pour construire le[COLOR_BUILDING_TEXT]Théâtre du globe[COLOR_REVERT]merveille nationale.</French>
+		<German>A[COLOR_BUILDING_TEXT]Theater[COLOR_REVERT]Bietet Kultur und ist erforderlich, um die aufzubauen[COLOR_BUILDING_TEXT]Globe Theatre[COLOR_REVERT]Nationales Wunder.</German>
+		<Italian>UN[COLOR_BUILDING_TEXT]Teatro[COLOR_REVERT]fornisce cultura ed è tenuto a costruire il[COLOR_BUILDING_TEXT]Globe Theater[COLOR_REVERT]National Wonder.</Italian>
+		<Spanish>UNO[COLOR_BUILDING_TEXT]Teatro[COLOR_REVERT]proporciona cultura y se requiere para construir el[COLOR_BUILDING_TEXT]Teatro Globe[COLOR_REVERT]Maravilla nacional.</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_BUILDING_AUDITORIUM_STRATEGY</Tag>
+		<English>A [COLOR_BUILDING_TEXT]Concert hall[COLOR_REVERT] increases a city's culture and increases the happiness output from using the culture slider. A [COLOR_BUILDING_TEXT]Concert hall[COLOR_REVERT] also provides culture. </English>
+		<French>UN[COLOR_BUILDING_TEXT]Salle de concert[COLOR_REVERT]Augmente la culture d'une ville et augmente la production de bonheur de l'utilisation du curseur de culture.UN[COLOR_BUILDING_TEXT]Salle de concert[COLOR_REVERT]fournit également la culture.</French>
+		<German>A[COLOR_BUILDING_TEXT]Konzerthalle[COLOR_REVERT]Erhöht die Kultur einer Stadt und erhöht die Glücksausgabe des Kulturschiebers.A[COLOR_BUILDING_TEXT]Konzerthalle[COLOR_REVERT]Bietet auch Kultur.</German>
+		<Italian>UN[COLOR_BUILDING_TEXT]Sala concerti[COLOR_REVERT]Aumenta la cultura di una città e aumenta la produzione di felicità dall'uso del cursore della cultura.UN[COLOR_BUILDING_TEXT]Sala concerti[COLOR_REVERT]Fornisce anche cultura.</Italian>
+		<Spanish>UNO[COLOR_BUILDING_TEXT]Sala de conciertos[COLOR_REVERT]Aumenta la cultura de una ciudad y aumenta la producción de felicidad al usar el control deslizante de la cultura.A[COLOR_BUILDING_TEXT]Sala de conciertos[COLOR_REVERT]también proporciona cultura.</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_BUILDING_JAIL_STRATEGY</Tag>
+		<English>[COLOR_BUILDING_TEXT]Police Stations[COLOR_REVERT] increase a city's [COLOR_HIGHLIGHT_TEXT]espionage points[COLOR_REVERT].</English>
+		<French>[COLOR_BUILDING_TEXT]Postes de police[COLOR_REVERT]Augmenter une ville[COLOR_HIGHLIGHT_TEXT]points d'espionnage[COLOR_REVERT].</French>
+		<German>[COLOR_BUILDING_TEXT]Polizeiwachen[COLOR_REVERT]Erhöhen Sie die Stadt einer Stadt[COLOR_HIGHLIGHT_TEXT]Spionagepunkte[COLOR_REVERT].</German>
+		<Italian>[COLOR_BUILDING_TEXT]Stazioni di polizia[COLOR_REVERT]Aumenta una città[COLOR_HIGHLIGHT_TEXT]punti di spionaggio[COLOR_REVERT].</Italian>
+		<Spanish>[COLOR_BUILDING_TEXT]Estaciones de policía[COLOR_REVERT]aumentar la ciudad[COLOR_HIGHLIGHT_TEXT]puntos de espionaje[COLOR_REVERT].</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_BUILDING_PYRAMID_STRATEGY</Tag>
+		<English>The [COLOR_BUILDING_TEXT]Pyramids[COLOR_REVERT] causes your workers to build improvements faster, and increases the odds of its city generating a [COLOR_UNIT_TEXT]Great Engineer[COLOR_REVERT].</English>
+		<French>Le[COLOR_BUILDING_TEXT]Pyramides[COLOR_REVERT]oblige vos travailleurs à renforcer les améliorations plus rapidement et augmente les chances que sa ville générant un[COLOR_UNIT_TEXT]Grand ingénieur[COLOR_REVERT].</French>
+		<German>Der[COLOR_BUILDING_TEXT]Pyramiden[COLOR_REVERT]veranlasst Ihre Arbeiter, Verbesserungen schneller aufzubauen, und erhöht die Wahrscheinlichkeit, dass ihre Stadt a generiert wird[COLOR_UNIT_TEXT]Toller Ingenieur[COLOR_REVERT].</German>
+		<Italian>Il[COLOR_BUILDING_TEXT]Piramidi[COLOR_REVERT]fa sì che i tuoi lavoratori costruiscano miglioramenti più rapidamente e aumenta le probabilità della sua città che generano[COLOR_UNIT_TEXT]Ottimo ingegnere[COLOR_REVERT].</Italian>
+		<Spanish>El[COLOR_BUILDING_TEXT]Pirámides[COLOR_REVERT]hace que sus trabajadores construyan mejoras más rápido y aumente las probabilidades de que su ciudad genere un[COLOR_UNIT_TEXT]Gran ingeniero[COLOR_REVERT].</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_BUILDING_HANGING_GARDEN_STRATEGY</Tag>
+		<English>The [COLOR_BUILDING_TEXT]Hanging Gardens[COLOR_REVERT] reduces unhealthiness that comes from the city's population. It increases the odds of its city generating a [COLOR_UNIT_TEXT]Great Engineer[COLOR_REVERT].</English>
+		<French>Le[COLOR_BUILDING_TEXT]Jardins suspendus[COLOR_REVERT]réduit la malfaisance qui vient de la population de la ville.Il augmente les chances que sa ville générant un[COLOR_UNIT_TEXT]Grand ingénieur[COLOR_REVERT].</French>
+		<German>Der[COLOR_BUILDING_TEXT]Hängende Gärten[COLOR_REVERT]Reduziert die Ungesundheit, die aus der Bevölkerung der Stadt kommt.Es erhöht die Wahrscheinlichkeit, dass seine Stadt a erzeugt[COLOR_UNIT_TEXT]Toller Ingenieur[COLOR_REVERT].</German>
+		<Italian>Il[COLOR_BUILDING_TEXT]Giardini pensili[COLOR_REVERT]Riduce la malsanilità che viene dalla popolazione della città.Aumenta le probabilità della sua città che generano a[COLOR_UNIT_TEXT]Ottimo ingegnere[COLOR_REVERT].</Italian>
+		<Spanish>El[COLOR_BUILDING_TEXT]Jardines colgantes[COLOR_REVERT]Reduce la falta de salud que proviene de la población de la ciudad.Aumenta las probabilidades de que su ciudad genere un[COLOR_UNIT_TEXT]Gran ingeniero[COLOR_REVERT].</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_BUILDING_PARTHENON_STRATEGY</Tag>
+		<English>The [COLOR_BUILDING_TEXT]Parthenon[COLOR_REVERT] enables you to choose all [COLOR_HIGHLIGHT_TEXT]Government[COLOR_REVERT] civics, and increases the rate of [COLOR_UNIT_TEXT]Great Artists[COLOR_REVERT] appearing. It also has a high cultural value.</English>
+		<French>Le[COLOR_BUILDING_TEXT]Parthénon[COLOR_REVERT]vous permet de choisir tout[COLOR_HIGHLIGHT_TEXT]Gouvernement[COLOR_REVERT]civique, et augmente le taux de[COLOR_UNIT_TEXT]Grands artistes[COLOR_REVERT]apparaissant.Il a également une valeur culturelle élevée.</French>
+		<German>Der[COLOR_BUILDING_TEXT]Parthenon[COLOR_REVERT]ermöglicht es Ihnen, alle auszuwählen[COLOR_HIGHLIGHT_TEXT]Regierung[COLOR_REVERT]Staatsbürgerschaft und erhöht die Rate von[COLOR_UNIT_TEXT]Tolle Künstler[COLOR_REVERT]erscheinen.Es hat auch einen hohen kulturellen Wert.</German>
+		<Italian>Il[COLOR_BUILDING_TEXT]Partenone[COLOR_REVERT]ti consente di scegliere tutto[COLOR_HIGHLIGHT_TEXT]Governo[COLOR_REVERT]civica e aumenta il tasso di[COLOR_UNIT_TEXT]Grandi artisti[COLOR_REVERT]Apparendo.Ha anche un alto valore culturale.</Italian>
+		<Spanish>El[COLOR_BUILDING_TEXT]Partenón[COLOR_REVERT]le permite elegir todo[COLOR_HIGHLIGHT_TEXT]Gobierno[COLOR_REVERT]cívica, y aumenta la tasa de[COLOR_UNIT_TEXT]Grandes artistas[COLOR_REVERT]apareciendo.También tiene un alto valor cultural.</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_BUILDING_ANGKOR_WAT_STRATEGY</Tag>
+		<English>[COLOR_BUILDING_TEXT]Angkor Wat[COLOR_REVERT] grants 3 free [COLOR_UNIT_TEXT]priest[COLOR_REVERT] in your city. Also, [COLOR_BUILDING_TEXT]Angkor Wat[COLOR_REVERT] increases the odds of its city generating a [COLOR_UNIT_TEXT]Great Engineer[COLOR_REVERT]. </English>
+		<French>[COLOR_BUILDING_TEXT]Angkor quoi[COLOR_REVERT]Grants 3 gratuits[COLOR_UNIT_TEXT]prêtre[COLOR_REVERT]Dans ta ville.Aussi,[COLOR_BUILDING_TEXT]Angkor quoi[COLOR_REVERT]augmente les chances que sa ville générant un[COLOR_UNIT_TEXT]Grand ingénieur[COLOR_REVERT].</French>
+		<German>[COLOR_BUILDING_TEXT]Angkor was[COLOR_REVERT]Zuschüsse 3 frei[COLOR_UNIT_TEXT]Priester[COLOR_REVERT]in deiner Stadt.Auch,[COLOR_BUILDING_TEXT]Angkor was[COLOR_REVERT]Erhöht die Wahrscheinlichkeit, dass die Stadt a erzeugt[COLOR_UNIT_TEXT]Toller Ingenieur[COLOR_REVERT].</German>
+		<Italian>[COLOR_BUILDING_TEXT]Angkor cosa[COLOR_REVERT]sovvenzioni 3 gratis[COLOR_UNIT_TEXT]sacerdote[COLOR_REVERT]nella tua città.Anche,[COLOR_BUILDING_TEXT]Angkor cosa[COLOR_REVERT]aumenta le probabilità della sua città che generano a[COLOR_UNIT_TEXT]Ottimo ingegnere[COLOR_REVERT].</Italian>
+		<Spanish>[COLOR_BUILDING_TEXT]Angkor que[COLOR_REVERT]subvenciones 3 gratis[COLOR_UNIT_TEXT]sacerdote[COLOR_REVERT]en tu ciudad.También,[COLOR_BUILDING_TEXT]Angkor que[COLOR_REVERT]aumenta las probabilidades de que su ciudad genere un[COLOR_UNIT_TEXT]Gran ingeniero[COLOR_REVERT].</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_BUILDING_HAGIA_SOPHIA_STRATEGY</Tag>
+		<English>The [COLOR_BUILDING_TEXT]Hagia Sophia[COLOR_REVERT] causes each your state religion buildings in every city to generate culture, and it increases the odds of its city generating a [COLOR_UNIT_TEXT]Great Artist[COLOR_REVERT].</English>
+		<French>Le[COLOR_BUILDING_TEXT]Hagia Sophia[COLOR_REVERT]Prie que chacun vos bâtiments de religion d'État de chaque ville génèrent une culture, et cela augmente les chances que sa ville générant un[COLOR_UNIT_TEXT]Grand artiste[COLOR_REVERT].</French>
+		<German>Der[COLOR_BUILDING_TEXT]Hagia Sophia[COLOR_REVERT]verursacht, dass Ihre staatlichen Religionsgebäude in jeder Stadt Kultur erzeugen, und es erhöht die Wahrscheinlichkeit, dass seine Stadt a erzeugt[COLOR_UNIT_TEXT]Großartiger Künstler[COLOR_REVERT].</German>
+		<Italian>Il[COLOR_BUILDING_TEXT]Hagia Sophia[COLOR_REVERT]fa sì che ciascuno i tuoi edifici di religione statale in ogni città generi cultura[COLOR_UNIT_TEXT]Grande artista[COLOR_REVERT].</Italian>
+		<Spanish>El[COLOR_BUILDING_TEXT]Santa Sofía[COLOR_REVERT]hace que cada uno de los edificios de religión de su estado en cada ciudad genere cultura, y aumenta las probabilidades de que su ciudad genere un[COLOR_UNIT_TEXT]Gran artista[COLOR_REVERT].</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_BUILDING_CHICHEN_ITZA_STRATEGY</Tag>
+		<English>The [COLOR_BUILDING_TEXT]Chichen Itza[COLOR_REVERT] adds additional production to all of your priest specialists. It improves the odds of its city generating a [COLOR_UNIT_TEXT]Great Prophet[COLOR_REVERT].</English>
+		<French>Le[COLOR_BUILDING_TEXT]Chichen Itza[COLOR_REVERT]Ajoute une production supplémentaire à tous vos spécialistes de prêtre.Il améliore les chances que sa ville générant un[COLOR_UNIT_TEXT]Grand prophète[COLOR_REVERT].</French>
+		<German>Der[COLOR_BUILDING_TEXT]Chichen Itza[COLOR_REVERT]Fügt allen Ihren Priesterspezialisten eine zusätzliche Produktion hinzu.Es verbessert die Wahrscheinlichkeit, dass seine Stadt a erzeugt[COLOR_UNIT_TEXT]Großer Prophet[COLOR_REVERT].</German>
+		<Italian>Il[COLOR_BUILDING_TEXT]Chichen Itza[COLOR_REVERT]Aggiunge ulteriore produzione a tutti i tuoi specialisti dei sacerdoti.Migliora le probabilità della sua città che generano a[COLOR_UNIT_TEXT]Grande profeta[COLOR_REVERT].</Italian>
+		<Spanish>El[COLOR_BUILDING_TEXT]Chichén Itzá[COLOR_REVERT]Agrega producción adicional a todos sus especialistas de sacerdote.Mejora las probabilidades de que su ciudad genere un[COLOR_UNIT_TEXT]Gran Profeta[COLOR_REVERT].</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_BUILDING_KREMLIN_STRATEGY</Tag>
+		<English>The [COLOR_BUILDING_TEXT]Kremlin[COLOR_REVERT] increases its city's chances of generating [COLOR_UNIT_TEXT]Great Spy[COLOR_REVERT] and espionage production of all cities.</English>
+		<French>Le[COLOR_BUILDING_TEXT]kremlin[COLOR_REVERT]augmente les chances de générer de sa ville[COLOR_UNIT_TEXT]Grand espion[COLOR_REVERT]et la production d'espionnage de toutes les villes.</French>
+		<German>Der[COLOR_BUILDING_TEXT]Kreml[COLOR_REVERT]Erhöht die Erzeugungschancen seiner Stadt[COLOR_UNIT_TEXT]Toller Spion[COLOR_REVERT]und Spionageproduktion aller Städte.</German>
+		<Italian>Il[COLOR_BUILDING_TEXT]Cremlino[COLOR_REVERT]aumenta le possibilità della sua città di generare[COLOR_UNIT_TEXT]Grande spia[COLOR_REVERT]e produzione di spionaggio di tutte le città.</Italian>
+		<Spanish>El[COLOR_BUILDING_TEXT]Kremlin[COLOR_REVERT]aumenta las posibilidades de generar su ciudad[COLOR_UNIT_TEXT]Gran espía[COLOR_REVERT]y producción de espionaje de todas las ciudades.</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_BUILDING_EIFFEL_TOWER_STRATEGY</Tag>
+		<English>The [COLOR_BUILDING_TEXT]Eiffel Tower[COLOR_REVERT] puts a free [COLOR_BUILDING_TEXT]Broadcast Tower[COLOR_REVERT] in every city. Its city has an improved chance of generating a [COLOR_UNIT_TEXT]Great Engineer[COLOR_REVERT].</English>
+		<French>Le[COLOR_BUILDING_TEXT]tour Eiffel[COLOR_REVERT]met un gratuit[COLOR_BUILDING_TEXT]Tour de diffusion[COLOR_REVERT]Dans chaque ville.Sa ville a une meilleure chance de générer un[COLOR_UNIT_TEXT]Grand ingénieur[COLOR_REVERT].</French>
+		<German>Der[COLOR_BUILDING_TEXT]Eiffelturm[COLOR_REVERT]stellt einen freien[COLOR_BUILDING_TEXT]Sendenturm[COLOR_REVERT]in jeder Stadt.Die Stadt hat eine verbesserte Chance, a zu erzeugen[COLOR_UNIT_TEXT]Toller Ingenieur[COLOR_REVERT].</German>
+		<Italian>Il[COLOR_BUILDING_TEXT]Torre Eiffel[COLOR_REVERT]Mette un libero[COLOR_BUILDING_TEXT]Torre di trasmissione[COLOR_REVERT]in ogni città.La sua città ha una migliore possibilità di generare un[COLOR_UNIT_TEXT]Ottimo ingegnere[COLOR_REVERT].</Italian>
+		<Spanish>El[COLOR_BUILDING_TEXT]Torre Eiffel[COLOR_REVERT]pone un[COLOR_BUILDING_TEXT]Torre de transmisión[COLOR_REVERT]en cada ciudad.Su ciudad tiene una mejor oportunidad de generar un[COLOR_UNIT_TEXT]Gran ingeniero[COLOR_REVERT].</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_BUILDING_STATUE_OF_LIBERTY_STRATEGY</Tag>
+		<English>The [COLOR_BUILDING_TEXT]Statue of Liberty[COLOR_REVERT] gives all cities in your civilization one free specialist. It increases its city's chances of generating a [COLOR_UNIT_TEXT]Great Merchant[COLOR_REVERT].</English>
+		<French>Le[COLOR_BUILDING_TEXT]Statue de la Liberté[COLOR_REVERT]Donne à toutes les villes de votre civilisation un spécialiste gratuit.Il augmente les chances de sa ville de générer un[COLOR_UNIT_TEXT]Grand marchand[COLOR_REVERT].</French>
+		<German>Der[COLOR_BUILDING_TEXT]Freiheitsstatue[COLOR_REVERT]Gibt allen Städten in Ihrer Zivilisation einen freien Spezialisten.Es erhöht die Chancen seiner Stadt, a zu erzeugen[COLOR_UNIT_TEXT]Großer Händler[COLOR_REVERT].</German>
+		<Italian>Il[COLOR_BUILDING_TEXT]Statua della Libertà[COLOR_REVERT]Dà a tutte le città della tua civiltà uno specialista gratuito.Aumenta le possibilità della sua città di generare un[COLOR_UNIT_TEXT]Grande commerciante[COLOR_REVERT].</Italian>
+		<Spanish>El[COLOR_BUILDING_TEXT]Estatua de la Libertad[COLOR_REVERT]Le da a todas las ciudades de su civilización un especialista gratuito.Aumenta las posibilidades de su ciudad de generar un[COLOR_UNIT_TEXT]Gran comerciante[COLOR_REVERT].</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_BUILDING_GREAT_DAM_STRATEGY</Tag>
+		<English>The [COLOR_BUILDING_TEXT]Three Gorges Dam[COLOR_REVERT] provides clean power to all cities on the same continent, which is needed to increase the production of the [COLOR_BUILDING_TEXT]Automation Factory[COLOR_REVERT]. It increases the odds that its city will generate a [COLOR_UNIT_TEXT]Great Engineer[COLOR_REVERT].</English>
+		<French>Le[COLOR_BUILDING_TEXT]Barrage des Trois Gorges[COLOR_REVERT]fournit une puissance propre à toutes les villes du même continent, qui est nécessaire pour augmenter la production du[COLOR_BUILDING_TEXT]Usine d'automatisation[COLOR_REVERT].Il augmente les chances que sa ville générera un[COLOR_UNIT_TEXT]Grand ingénieur[COLOR_REVERT].</French>
+		<German>Der[COLOR_BUILDING_TEXT]Drei Gorges Dam[COLOR_REVERT]Bietet allen Städten auf demselben Kontinent saubere Leistung, was erforderlich ist, um die Produktion der zu erhöhen[COLOR_BUILDING_TEXT]Automatisierungsfabrik[COLOR_REVERT].Es erhöht die Wahrscheinlichkeit, dass seine Stadt a erzeugen wird[COLOR_UNIT_TEXT]Toller Ingenieur[COLOR_REVERT].</German>
+		<Italian>Il[COLOR_BUILDING_TEXT]Tre Gorges Dam[COLOR_REVERT]fornisce energia pulita a tutte le città dello stesso continente, che è necessario per aumentare la produzione del[COLOR_BUILDING_TEXT]Fabbrica di automazione[COLOR_REVERT].Aumenta le probabilità che la sua città generi a[COLOR_UNIT_TEXT]Ottimo ingegnere[COLOR_REVERT].</Italian>
+		<Spanish>El[COLOR_BUILDING_TEXT]Tres Gorges Dam[COLOR_REVERT]Proporciona energía limpia a todas las ciudades del mismo continente, que es necesario para aumentar la producción de la[COLOR_BUILDING_TEXT]Fábrica de automatización[COLOR_REVERT].Aumenta las probabilidades de que su ciudad genere un[COLOR_UNIT_TEXT]Gran ingeniero[COLOR_REVERT].</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_PROCESS_GROWTH_STRATEGY</Tag>
+		<English>Focusing on Growth enables cities to grow population without constructing buildings.</English>
+		<French>Se concentrer sur la croissance permet aux villes de développer la population sans construire des bâtiments.</French>
+		<German>Die Konzentration auf das Wachstum ermöglicht es den Städten, die Bevölkerung zu wachsen, ohne Gebäude zu konstruieren.</German>
+		<Italian>Concentrarsi sulla crescita consente alle città di far crescere la popolazione senza costruire edifici.</Italian>
+		<Spanish>Centrarse en el crecimiento permite a las ciudades cultivar población sin construir edificios.</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_UNIT_EARLY_CANNON_STRATEGY</Tag>
+		<English>[COLOR_UNIT_TEXT]Early Cannon[COLOR_REVERT] can bombard enemy city fortifications and have a chance to withdraw from combat when losing. When attacking another unit, they cause collateral damage to other enemy units sharing the target's space.</English>
+		<French>[COLOR_UNIT_TEXT]Canon précoce[COLOR_REVERT]Peut bombarder les fortifications de la ville ennemie et avoir une chance de se retirer du combat lors de la perte.Lorsqu'ils attaquent une autre unité, ils causent des dommages collatéraux aux autres unités ennemies partageant l'espace de la cible.</French>
+		<German>[COLOR_UNIT_TEXT]Frühkanone[COLOR_REVERT]Kann feindliche Stadt Befestigungen bombardieren und die Chance haben, sich beim Verlieren vom Kampf zurückzuziehen.Wenn sie eine andere Einheit angreifen, verursachen sie andere feindliche Einheiten Kollateralschäden, die den Raum des Ziels teilen.</German>
+		<Italian>[COLOR_UNIT_TEXT]Cannone precoce[COLOR_REVERT]può bombardare fortificazioni di città nemiche e avere la possibilità di ritirarsi dal combattimento durante la perdita.Quando attaccano un'altra unità, causano danni collaterali ad altre unità nemiche che condividono lo spazio del bersaglio.</Italian>
+		<Spanish>[COLOR_UNIT_TEXT]Cañón temprano[COLOR_REVERT]puede bombardear las fortificaciones enemigas de la ciudad y tener la oportunidad de retirarse del combate al perder.Al atacar a otra unidad, causan daño colateral a otras unidades enemigas que comparten el espacio del objetivo.</Spanish>
+	</TEXT>
+</Civ4GameText>

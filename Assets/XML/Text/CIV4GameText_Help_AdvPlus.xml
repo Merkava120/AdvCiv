@@ -1,0 +1,51 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<Civ4GameText xmlns="http://www.firaxis.com">
+	<TEXT>
+		<Tag>TXT_KEY_BUILDING_ISHTAR_HELP</Tag>
+		<English>[ICON_BULLET]Establishes Contact With All Civilizations</English>
+		<French>[ICON_BULLET]Établit des contacts avec toutes les civilisations</French>
+		<German>[ICON_BULLET]Stellt den Kontakt mit allen Zivilisationen auf</German>
+		<Italian>[ICON_BULLET]Stabilisce il contatto con tutte le civiltà</Italian>
+		<Spanish>[ICON_BULLET]Establece contacto con todas las civilizaciones</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_ORG_TRAIT_HELP</Tag>
+		<English>[NEWLINE][SPACE][SPACE][ICON_BULLET]25% Less [ICON_GOLD] to Upgrade</English>
+		<French>[NEWLINE][SPACE][SPACE][ICON_BULLET]25% de moins[ICON_GOLD]mettre à niveau</French>
+		<German>[NEWLINE][SPACE][SPACE][ICON_BULLET]25% weniger[ICON_GOLD]upgraden</German>
+		<Italian>[NEWLINE][SPACE][SPACE][ICON_BULLET]25% in meno[ICON_GOLD]aggiornare</Italian>
+		<Spanish>[NEWLINE][SPACE][SPACE][ICON_BULLET]25% menos[ICON_GOLD]Para actualizar</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_IMP_TRAIT_HELP</Tag>
+		<English>[NEWLINE][SPACE][SPACE][ICON_BULLET]25% Less [ICON_GOLD] to Upgrade</English>
+		<French>[NEWLINE][SPACE][SPACE][ICON_BULLET]25% de moins[ICON_GOLD]mettre à niveau</French>
+		<German>[NEWLINE][SPACE][SPACE][ICON_BULLET]25% weniger[ICON_GOLD]upgraden</German>
+		<Italian>[NEWLINE][SPACE][SPACE][ICON_BULLET]25% in meno[ICON_GOLD]aggiornare</Italian>
+		<Spanish>[NEWLINE][SPACE][SPACE][ICON_BULLET]25% menos[ICON_GOLD]Para actualizar</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_TECH_SCIENTIFIC_METHOD_HELP</Tag>
+		<English>Makes [ICON_RESEARCH] 10% faster.</English>
+		<French>Fait du[ICON_RESEARCH]10% plus rapidement.</French>
+		<German>Macht[ICON_RESEARCH]10% schneller.</German>
+		<Italian>Fa[ICON_RESEARCH]10% più veloce.</Italian>
+		<Spanish>Marcas[ICON_RESEARCH]10% más rápido.</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_BUILDING_MACHU_PICCHU_HELP</Tag>
+		<English>[ICON_BULLET]Provides Benefits to Peaks in City Radius[NEWLINE][COLOR_WARNING_TEXT]Requires Peak in City Radius[COLOR_REVERT]</English>
+		<French>[ICON_BULLET]Offre des avantages aux pics dans le rayon de la ville[NEWLINE][COLOR_WARNING_TEXT]Nécessite un pic dans le rayon de la ville[COLOR_REVERT]</French>
+		<German>[ICON_BULLET]Bietet Vorteile für den Gipfel im Stadtradius[NEWLINE][COLOR_WARNING_TEXT]Benötigt einen Höchststand im Stadtradius[COLOR_REVERT]</German>
+		<Italian>[ICON_BULLET]Fornisce benefici alle cime nel raggio della città[NEWLINE][COLOR_WARNING_TEXT]Richiede picco nel raggio della città[COLOR_REVERT]</Italian>
+		<Spanish>[ICON_BULLET]Proporciona beneficios a los picos en el radio de la ciudad[NEWLINE][COLOR_WARNING_TEXT]Requiere pico en el radio de la ciudad[COLOR_REVERT]</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_TRAIT_EXP_HELP</Tag>
+		<English>[NEWLINE][SPACE][SPACE][ICON_BULLET]Stores +10% of [ICON_FOOD] after Growth.</English>
+		<French>[NEWLINE][SPACE][SPACE][ICON_BULLET]La croissance de Citie commence avec + 10%[ICON_FOOD]</French>
+		<German>[NEWLINE][SPACE][SPACE][ICON_BULLET]Das Wachstum von Citie beginnt mit +10%[ICON_FOOD]</German>
+		<Italian>[NEWLINE][SPACE][SPACE][ICON_BULLET]La crescita di Citie inizia con il +10%[ICON_FOOD]</Italian>
+		<Spanish>[NEWLINE][SPACE][SPACE][ICON_BULLET]El crecimiento de Citie comienza con +10%[ICON_FOOD]</Spanish>
+	</TEXT>
+</Civ4GameText>
