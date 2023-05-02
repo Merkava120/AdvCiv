@@ -87,11 +87,11 @@
 		<Italian>Quando è selezionato, posizionare il cursore su una casella che contiene costruzioni (miglioramenti, strade, eccetera) parzialmente completate mostrerà quanti turni di lavoro sono necessari per completare l'opera.</Italian>
 		<Spanish>Dejar el ratón sobre una casilla con mejoras no terminadas mostarará el número de turnos necesarios para terminar.</Spanish>
 	</TEXT-->
-	<!-- advc.011b (German: not enough room for "stets anzeigen") -->
+	<!-- advc.011b -->
 	<TEXT>
 		<Tag>TXT_KEY_BUG_OPT_MISCHOVER__PARTIALBUILDSALWAYS_TEXT</Tag>
 		<English>Always Show Partial Builds</English>
-		<German>Unfertige Arbeiten anzeigen</German>
+		<German>Unfertige Arbeiten stets anzeigen</German>
 		<Italian>Sempre mostra costruzione parziale</Italian>
 		<Spanish>Siempre muestra Construcción Parcial</Spanish>
 	</TEXT>
@@ -443,11 +443,10 @@
 		<Spanish>Muestra el límite de unidades que se pueden reclutar este turno y si la ciudad ya ha reclutado este turno en el texto flotante del botón Reclutar.</Spanish>
 	</TEXT>
 
-	<!-- advc.004: German ("Zwangsarbeit-Schaltfläche") was too long.
-		 advc.064: English was "Whip Button". -->
+	<!-- advc.004: German ("Zwangsarbeit-Schaltfläche") was too long -->
 	<TEXT>
 		<Tag>TXT_KEY_BUG_OPT_MISCHOVER__HURRYOVERFLOW_TEXT</Tag>
-		<English>Hurry Button</English>
+		<English>Whip Button</English>
 		<German>Tooltip</German>
 		<Italian>Bottone dei sacrifici</Italian>
 		<Spanish>Sacrificio</Spanish>

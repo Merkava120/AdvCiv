@@ -33,6 +33,96 @@
 	<!-- advc.012 -->
 	<ElementType name="iRivalDefense" content="textOnly" dt:type="int"/>
 	<ElementType name="Button" content="textOnly"/>
+	<!-- merkava120 terrain adjuster 1.1.1 -->
+	<ElementType name="iMappingChannel" content="textOnly" dt:type="int"/>
+	<ElementType name="iMappingType" content="textOnly" dt:type="int"/>
+	<ElementType name="MappedDescription" content="textOnly"/>
+	<ElementType name="MappedArtDefine" content="textOnly"/>
+	<ElementType name="MappedTerrain" content="textOnly"/>
+	<ElementType name="iMappedWorldSound" content="textOnly"/>
+	<ElementType name="iMappedFootstepSound" content="textOnly"/>
+	<ElementType name="BaseFeature" content="textOnly"/>
+	<ElementType name="MappedFeature" content="textOnly"/>
+	<ElementType name="FeatureChange" content="eltOnly">
+		<element type="BaseFeature" minOccurs="0" maxOccurs="*"/>
+		<element type="MappedFeature" minOccurs="0" maxOccurs="*"/>
+	</ElementType>
+	<ElementType name="FeatureChanges" content="eltOnly">
+		<element type="FeatureChange" minOccurs="0" maxOccurs="*"/>
+	</ElementType>
+	<ElementType name="BaseBonus" content="textOnly"/>
+	<ElementType name="MappedBonus" content="textOnly"/>
+	<ElementType name="BonusChange" content="eltOnly">
+		<element type="BaseBonus" minOccurs="0" maxOccurs="*"/>
+		<element type="MappedBonus" minOccurs="0" maxOccurs="*"/>
+	</ElementType>
+	<ElementType name="BonusChanges" content="eltOnly">
+		<element type="BonusChange" minOccurs="0" maxOccurs="*"/>
+	</ElementType>
+	<ElementType name="iBaseProbability" content="textOnly" dt:type="int"/>
+	<ElementType name="iHillsProbability" content="textOnly" dt:type="int"/>
+	<ElementType name="iRiverProbability" content="textOnly" dt:type="int"/>
+	<ElementType name="ProbabilityFeature" content="textOnly"/>
+	<ElementType name="iProbabilityChange" content="textOnly" dt:type="int"/>
+	<ElementType name="FeatureProbability" content="eltOnly">
+		<element type="ProbabilityFeature" minOccurs="0"/>
+		<element type="iProbabilityChange" minOccurs="0"/>
+	</ElementType>
+	<ElementType name="FeatureProbabilities" content="eltOnly">
+		<element type="FeatureProbability" minOccurs="0" maxOccurs="*"/>
+	</ElementType>
+	<ElementType name="FeatureAdjProbabilities" content="eltOnly">
+		<element type="FeatureAdjProbability" minOccurs="0" maxOccurs="*"/>
+	</ElementType>
+	<ElementType name="FeatureAdjProbability" content="eltOnly">
+		<element type="ProbabilityFeature" minOccurs="0"/>
+		<element type="iProbabilityChange" minOccurs="0"/>
+	</ElementType>
+	<ElementType name="ProbabilityTerrain" content="textOnly"/>
+	<ElementType name="TerrainAdjProbability" content="eltOnly">
+		<element type="ProbabilityTerrain" minOccurs="0"/>
+		<element type="iProbabilityChange" minOccurs="0"/>
+	</ElementType>
+	<ElementType name="TerrainAdjProbabilities" content="eltOnly">
+		<element type="TerrainAdjProbability" minOccurs="0" maxOccurs="*"/>
+	</ElementType>
+	<ElementType name="iPlaceLimit" content="textOnly" dt:type="int"/>
+	<ElementType name="iAdjHillsProbability" content="textOnly" dt:type="int"/>
+	<ElementType name="SingleAdjacentTerrain" content="textOnly"/>
+	<ElementType name="SingleAdjacentFeature" content="textOnly"/>
+	<ElementType name="iHomogeneity" content="textOnly" dt:type="int"/>
+	<ElementType name="SpecificMapping" content="eltOnly">
+		<element type="iMappingChannel"/>
+		<element type="iMappingType"/>
+	</ElementType>
+	<ElementType name="SpecificMappings" content="eltOnly">
+		<element type="SpecificMapping" minOccurs="0" maxOccurs="*"/>
+	</ElementType>
+	<ElementType name="Mapping" content="eltOnly">
+		<element type="SpecificMappings"/>
+		<element type="MappedArtDefine" minOccurs="0"/>
+		<element type="MappedDescription" minOccurs="0"/>
+		<element type="MappedTerrain" minOccurs="0"/>
+		<element type="iMappedWorldSound" minOccurs="0"/>
+		<element type="iMappedFootstepSound" minOccurs="0"/>
+		<element type="BonusChanges" minOccurs="0"/>
+		<element type="FeatureChanges" minOccurs="0"/>
+		<element type="iBaseProbability" minOccurs="0"/>
+		<element type="iHillsProbability" minOccurs="0"/>
+		<element type="iRiverProbability" minOccurs="0"/>
+		<element type="FeatureProbabilities" minOccurs="0" />
+		<element type="TerrainAdjProbabilities" minOccurs="0" />
+		<element type="FeatureAdjProbabilities" minOccurs="0"/>
+		<element type="iAdjHillsProbability" minOccurs="0"/>
+		<element type="iPlaceLimit" minOccurs="0"/>
+		<element type="SingleAdjacentFeature" minOccurs="0"/>
+		<element type="SingleAdjacentTerrain" minOccurs="0"/>
+		<element type="iHomogeneity" minOccurs="0"/>
+	</ElementType>
+	<ElementType name="Mappings" content="eltOnly">
+		<element type="Mapping" minOccurs="0" maxOccurs="*"/>
+	</ElementType>
+	<!--merkava120 1.1.1 end-->
 	<ElementType name="FootstepAudioType" content="textOnly"/>
 	<ElementType name="FootstepAudioScript" content="textOnly"/>
 	<ElementType name="FootstepSound" content="eltOnly">
@@ -50,6 +140,8 @@
 		<element type="Civilopedia"/>
 		<element type="Help" minOccurs="0"/>
 		<element type="ArtDefineTag"/>
+		<!-- Merkava120 terrain adjuster 1.1.1-->
+		<element type="Mappings" minOccurs="0"/>
 		<element type="Yields"/>
 		<element type="RiverYieldChange"/>
 		<element type="HillsYieldChange"/>

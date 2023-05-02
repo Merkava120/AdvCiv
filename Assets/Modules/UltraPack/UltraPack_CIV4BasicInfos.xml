@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<Civ4BasicInfos xmlns="x-schema:UltraPack_CIV4BasicInfoSchema.xml">
+	<ConceptInfos>
+		<ConceptInfo>
+			<Type>CONCEPT_PLATY_UI</Type>
+			<Description>TXT_KEY_CONCEPT_PLATY_UI</Description>
+			<Civilopedia>TXT_KEY_CONCEPT_PLATY_UI_PEDIA</Civilopedia>
+		</ConceptInfo>
+	</ConceptInfos>
+</Civ4BasicInfos>

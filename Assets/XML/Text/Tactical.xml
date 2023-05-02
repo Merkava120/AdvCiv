@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!--
+	Text for ranged combat modifications. Merkava120.tc
+  -->
+<Civ4GameText xmlns="http://www.firaxis.com">
+	
+	<TEXT>
+		<Tag>TXT_KEY_UNIT_HELP_ANTI_ARMOR</Tag>
+		<English>[ICON_BULLET]Anti-Armor: %d1 </English>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_UNIT_HELP_RANGE_MOVES</Tag>
+		<English>[ICON_BULLET]Ranged attacks use %d1 moves</English>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_UNIT_HELP_RANGE_DAMAGE</Tag>
+		<English>[ICON_BULLET]Ranged Damage: %d1</English>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_UNIT_HELP_RANGE_COLLATERAL_DAMAGE</Tag>
+		<English>[ICON_BULLET]Ranged Collateral Damage: %d1</English>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_RANGE_ATTACK_HELP</Tag>
+		<English>Ranged damage: %d1 to enemy %s1</English>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_RANGE_ATTACK_COLLATERAL</Tag>
+		<English>, %d1 collateral</English>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_UNIT_HELP_RANGE_DROPOFF</Tag>
+		<English>(-%d1 per tile)</English>
+	</TEXT>
+
+</Civ4GameText>

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<Civ4GameText xmlns="http://www.firaxis.com">
+	<TEXT>
+		<Tag>TXT_KEY_PEDIA_CATEGORY_INTRO</Tag>
+		<English>PlatyPedia</English>
+		<French>PlatyPedia</French>
+		<German>PlatyPedia</German>
+		<Italian>PlatyPedia</Italian>
+		<Spanish>PlatyPedia</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_PEDIA_INTRO_BODY</Tag>
+		<English>[H1]Version 4.0[\H1][NEWLINE][ICON_BULLET]Added this [COLOR_HIGHLIGHT_TEXT]Intro Section[COLOR_REVERT] for Modders to introduce their mods to new players.[NEWLINE][ICON_BULLET]No longer display buildings without relevant data in [COLOR_HIGHLIGHT_TEXT]Building Chart.[COLOR_REVERT]</English>
+		<French>[H1]Version 4.0[\H1][NEWLINE][ICON_BULLET]Added this [COLOR_HIGHLIGHT_TEXT]Intro Section[COLOR_REVERT] for Modders to introduce their mods to new players.[NEWLINE][ICON_BULLET]No longer display buildings without relevant data in [COLOR_HIGHLIGHT_TEXT]Building Chart.[COLOR_REVERT]</French>
+		<German>[H1]Version 4.0[\H1][NEWLINE][ICON_BULLET]Added this [COLOR_HIGHLIGHT_TEXT]Intro Section[COLOR_REVERT] for Modders to introduce their mods to new players.[NEWLINE][ICON_BULLET]No longer display buildings without relevant data in [COLOR_HIGHLIGHT_TEXT]Building Chart.[COLOR_REVERT]</German>
+		<Italian>[H1]Version 4.0[\H1][NEWLINE][ICON_BULLET]Added this [COLOR_HIGHLIGHT_TEXT]Intro Section[COLOR_REVERT] for Modders to introduce their mods to new players.[NEWLINE][ICON_BULLET]No longer display buildings without relevant data in [COLOR_HIGHLIGHT_TEXT]Building Chart.[COLOR_REVERT]</Italian>
+		<Spanish>[H1]Version 4.0[\H1][NEWLINE][ICON_BULLET]Added this [COLOR_HIGHLIGHT_TEXT]Intro Section[COLOR_REVERT] for Modders to introduce their mods to new players.[NEWLINE][ICON_BULLET]No longer display buildings without relevant data in [COLOR_HIGHLIGHT_TEXT]Building Chart.[COLOR_REVERT]</Spanish>
+	</TEXT>
+</Civ4GameText>
