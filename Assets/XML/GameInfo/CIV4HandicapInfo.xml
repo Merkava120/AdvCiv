@@ -134,60 +134,7 @@
 				<GoodyType>GOODY_TECH</GoodyType>
 				<GoodyType>GOODY_TECH</GoodyType>
 			</Goodies>
-			<FreeTechs>
-				<FreeTech>
-					<TechType>TECH_THE_WHEEL</TechType>
-					<bFreeTech>1</bFreeTech>
-				</FreeTech>
-				<FreeTech>
-					<TechType>TECH_AGRICULTURE</TechType>
-					<bFreeTech>1</bFreeTech>
-				</FreeTech>
-				<FreeTech>
-					<TechType>TECH_MINING</TechType>
-					<bFreeTech>1</bFreeTech>
-				</FreeTech>
-				<FreeTech>
-					<TechType>TECH_MATHEMATICS</TechType>
-					<bFreeTech>1</bFreeTech>
-				</FreeTech>
-				<FreeTech>
-					<TechType>TECH_ALPHABET</TechType>
-					<bFreeTech>1</bFreeTech>
-				</FreeTech>
-				<FreeTech>
-					<TechType>TECH_MACHINERY</TechType>
-					<bFreeTech>1</bFreeTech>
-				</FreeTech>
-				<FreeTech>
-					<TechType>TECH_FEUDALISM</TechType>
-					<bFreeTech>1</bFreeTech>
-				</FreeTech>
-				<FreeTech>
-					<TechType>TECH_PRINTING_PRESS</TechType>
-					<bFreeTech>1</bFreeTech>
-				</FreeTech>
-				<FreeTech>
-					<TechType>TECH_GUNPOWDER</TechType>
-					<bFreeTech>1</bFreeTech>
-				</FreeTech>
-				<FreeTech>
-					<TechType>TECH_STEAM_POWER</TechType>
-					<bFreeTech>1</bFreeTech>
-				</FreeTech>
-				<FreeTech>
-					<TechType>TECH_STEEL</TechType>
-					<bFreeTech>1</bFreeTech>
-				</FreeTech>
-				<FreeTech>
-					<TechType>TECH_PLASTICS</TechType>
-					<bFreeTech>1</bFreeTech>
-				</FreeTech>
-				<FreeTech>
-					<TechType>TECH_REFRIGERATION</TechType>
-					<bFreeTech>1</bFreeTech>
-				</FreeTech>
-			</FreeTechs>
+			<FreeTechs/>
 			<AIFreeTechs/>
 			<!-- advc.250a -->
 			<iDifficulty>0</iDifficulty>
@@ -314,36 +261,7 @@
 				<GoodyType>GOODY_TECH</GoodyType>
 				<GoodyType>GOODY_BARBARIANS_WEAK</GoodyType>
 			</Goodies>
-			<FreeTechs>
-				<FreeTech>
-					<TechType>TECH_THE_WHEEL</TechType>
-					<bFreeTech>1</bFreeTech>
-				</FreeTech>
-				<FreeTech>
-					<TechType>TECH_AGRICULTURE</TechType>
-					<bFreeTech>1</bFreeTech>
-				</FreeTech>
-				<FreeTech>
-					<TechType>TECH_MATHEMATICS</TechType>
-					<bFreeTech>1</bFreeTech>
-				</FreeTech>
-				<FreeTech>
-					<TechType>TECH_MACHINERY</TechType>
-					<bFreeTech>1</bFreeTech>
-				</FreeTech>
-				<FreeTech>
-					<TechType>TECH_PRINTING_PRESS</TechType>
-					<bFreeTech>1</bFreeTech>
-				</FreeTech>
-				<FreeTech>
-					<TechType>TECH_STEAM_POWER</TechType>
-					<bFreeTech>1</bFreeTech>
-				</FreeTech>
-				<FreeTech>
-					<TechType>TECH_PLASTICS</TechType>
-					<bFreeTech>1</bFreeTech>
-				</FreeTech>
-			</FreeTechs>
+			<FreeTechs/>
 			<AIFreeTechs/>
 			<!-- advc.250a -->
 			<iDifficulty>10</iDifficulty>
@@ -468,12 +386,7 @@
 				<GoodyType>GOODY_BARBARIANS_WEAK</GoodyType>
 				<GoodyType>GOODY_BARBARIANS_STRONG</GoodyType>
 			</Goodies>
-			<FreeTechs>
-				<FreeTech>
-					<TechType>TECH_THE_WHEEL</TechType>
-					<bFreeTech>1</bFreeTech>
-				</FreeTech>
-			</FreeTechs>
+			<FreeTechs/>
 			<AIFreeTechs/>
 			<!-- advc.250a -->
 			<iDifficulty>20</iDifficulty>
@@ -669,12 +582,8 @@
 			<!-- advc.313: was -30 -->
 			<iAnimalBonus>-20</iAnimalBonus>
 			<iBarbarianBonus>-5</iBarbarianBonus>
-			<!-- advc.313: start -->
-			<!-- was (effectively) -25 -->
-			<iBarbarianCityAttackBonus>-20</iBarbarianCityAttackBonus>
-			<!-- was -40 -->
+			<!-- advc.313: was -40 -->
 			<iAIAnimalBonus>-25</iAIAnimalBonus>
-			<!-- advc.313: end -->
 			<iAIBarbarianBonus>-25</iAIBarbarianBonus>
 			<iStartingDefenseUnits>0</iStartingDefenseUnits>
 			<iStartingWorkerUnits>0</iStartingWorkerUnits>
@@ -801,16 +710,12 @@
 			<!-- advc.300: was 30 -->
 			<iBarbarianCityCreationTurnsElapsed>35</iBarbarianCityCreationTurnsElapsed>
 			<iBarbarianCityCreationProb>7</iBarbarianCityCreationProb>
-			<!-- advc.313: start -->
-			<!-- was -20 -->
+			<!-- advc.313: was -20 -->
 			<iAnimalBonus>-15</iAnimalBonus>
-			<!-- was 0 -->
+			<!-- advc.313: was 0 -->
 			<iBarbarianBonus>-5</iBarbarianBonus>
-			<!-- was (effectively) -25 -->
-			<iBarbarianCityAttackBonus>-20</iBarbarianCityAttackBonus>
-			<!-- was -40 -->
+			<!-- advc.313: was -40 -->
 			<iAIAnimalBonus>-25</iAIAnimalBonus>
-			<!-- advc.313: end -->
 			<iAIBarbarianBonus>-25</iAIBarbarianBonus>
 			<iStartingDefenseUnits>0</iStartingDefenseUnits>
 			<iStartingWorkerUnits>0</iStartingWorkerUnits>
@@ -876,32 +781,7 @@
 				<GoodyType>GOODY_BARBARIANS_STRONG</GoodyType>
 			</Goodies>
 			<FreeTechs/>
-			<AIFreeTechs>
-				<FreeTech>
-					<TechType>TECH_ARCHERY</TechType>
-					<bFreeTech>1</bFreeTech>
-				</FreeTech>
-				<FreeTech>
-					<TechType>TECH_MATHEMATICS</TechType>
-					<bFreeTech>1</bFreeTech>
-				</FreeTech>
-				<FreeTech>
-					<TechType>TECH_MACHINERY</TechType>
-					<bFreeTech>1</bFreeTech>
-				</FreeTech>
-				<FreeTech>
-					<TechType>TECH_PRINTING_PRESS</TechType>
-					<bFreeTech>1</bFreeTech>
-				</FreeTech>
-				<FreeTech>
-					<TechType>TECH_STEAM_POWER</TechType>
-					<bFreeTech>1</bFreeTech>
-				</FreeTech>
-				<FreeTech>
-					<TechType>TECH_PLASTICS</TechType>
-					<bFreeTech>1</bFreeTech>
-				</FreeTech>
-			</AIFreeTechs>
+			<AIFreeTechs/>
 			<!-- advc.250a -->
 			<iDifficulty>50</iDifficulty>
 		</HandicapInfo>
@@ -961,14 +841,10 @@
 			<iBarbarianCityCreationTurnsElapsed>30</iBarbarianCityCreationTurnsElapsed>
 			<iBarbarianCityCreationProb>7</iBarbarianCityCreationProb>
 			<iAnimalBonus>-10</iAnimalBonus>
-			<!-- advc.313: start -->
-			<!-- was 0 -->
+			<!-- advc.313: was 0 -->
 			<iBarbarianBonus>-5</iBarbarianBonus>
-			<!-- was (effectively) -25 -->
-			<iBarbarianCityAttackBonus>-20</iBarbarianCityAttackBonus>
-			<!-- was -40 -->
+			<!-- advc.313: was -40 -->
 			<iAIAnimalBonus>-25</iAIAnimalBonus>
-			<!-- advc.313: end -->
 			<iAIBarbarianBonus>-25</iAIBarbarianBonus>
 			<iStartingDefenseUnits>0</iStartingDefenseUnits>
 			<iStartingWorkerUnits>0</iStartingWorkerUnits>
@@ -1037,36 +913,7 @@
 				<!--GoodyType>GOODY_BARBARIANS_STRONG</GoodyType-->
 			</Goodies>
 			<FreeTechs/>
-			<AIFreeTechs>
-				<FreeTech>
-					<TechType>TECH_HUNTING</TechType>
-					<bFreeTech>1</bFreeTech>
-				</FreeTech>
-				<FreeTech>
-					<TechType>TECH_ARCHERY</TechType>
-					<bFreeTech>1</bFreeTech>
-				</FreeTech>
-				<FreeTech>
-					<TechType>TECH_MATHEMATICS</TechType>
-					<bFreeTech>1</bFreeTech>
-				</FreeTech>
-				<FreeTech>
-					<TechType>TECH_MACHINERY</TechType>
-					<bFreeTech>1</bFreeTech>
-				</FreeTech>
-				<FreeTech>
-					<TechType>TECH_PRINTING_PRESS</TechType>
-					<bFreeTech>1</bFreeTech>
-				</FreeTech>
-				<FreeTech>
-					<TechType>TECH_STEAM_POWER</TechType>
-					<bFreeTech>1</bFreeTech>
-				</FreeTech>
-				<FreeTech>
-					<TechType>TECH_PLASTICS</TechType>
-					<bFreeTech>1</bFreeTech>
-				</FreeTech>
-			</AIFreeTechs>
+			<AIFreeTechs/>
 			<!-- advc.250a -->
 			<iDifficulty>60</iDifficulty>
 		</HandicapInfo>
@@ -1128,14 +975,10 @@
 			<iBarbarianCityCreationTurnsElapsed>25</iBarbarianCityCreationTurnsElapsed>
 			<iBarbarianCityCreationProb>8</iBarbarianCityCreationProb>
 			<iAnimalBonus>-5</iAnimalBonus>
-			<!-- advc.313: start -->
-			<!-- was 0 -->
+			<!-- advc.313: was 0 -->
 			<iBarbarianBonus>-5</iBarbarianBonus>
-			<!-- was (effectively) -25 -->
-			<iBarbarianCityAttackBonus>-15</iBarbarianCityAttackBonus>
-			<!-- was -40 -->
+			<!-- advc.313: was -40 -->
 			<iAIAnimalBonus>-25</iAIAnimalBonus>
-			<!-- advc.313: end -->
 			<iAIBarbarianBonus>-25</iAIBarbarianBonus>
 			<iStartingDefenseUnits>0</iStartingDefenseUnits>
 			<iStartingWorkerUnits>0</iStartingWorkerUnits>
@@ -1204,41 +1047,7 @@
 				<!--GoodyType>GOODY_BARBARIANS_STRONG</GoodyType-->
 			</Goodies>
 			<FreeTechs/>
-			<AIFreeTechs>
-				<!-- advc.250e -->
-				<!--FreeTech>
-					<TechType>TECH_AGRICULTURE</TechType>
-					<bFreeTech>1</bFreeTech>
-				</FreeTech-->
-				<FreeTech>
-					<TechType>TECH_HUNTING</TechType>
-					<bFreeTech>1</bFreeTech>
-				</FreeTech>
-				<FreeTech>
-					<TechType>TECH_ARCHERY</TechType>
-					<bFreeTech>1</bFreeTech>
-				</FreeTech>
-				<FreeTech>
-					<TechType>TECH_MATHEMATICS</TechType>
-					<bFreeTech>1</bFreeTech>
-				</FreeTech>
-				<FreeTech>
-					<TechType>TECH_MACHINERY</TechType>
-					<bFreeTech>1</bFreeTech>
-				</FreeTech>
-				<FreeTech>
-					<TechType>TECH_PRINTING_PRESS</TechType>
-					<bFreeTech>1</bFreeTech>
-				</FreeTech>
-				<FreeTech>
-					<TechType>TECH_STEAM_POWER</TechType>
-					<bFreeTech>1</bFreeTech>
-				</FreeTech>
-				<FreeTech>
-					<TechType>TECH_PLASTICS</TechType>
-					<bFreeTech>1</bFreeTech>
-				</FreeTech>
-			</AIFreeTechs>
+			<AIFreeTechs/>
 			<!-- advc.250a -->
 			<iDifficulty>70</iDifficulty>
 		</HandicapInfo>
@@ -1300,16 +1109,8 @@
 			<iBarbarianCityCreationProb>8</iBarbarianCityCreationProb>
 			<iAnimalBonus>0</iAnimalBonus>
 			<iBarbarianBonus>0</iBarbarianBonus>
-			<!-- advc.313: start -->
-			<!-- was (effectively) -25 -->
-			<iBarbarianCityAttackBonus>-10</iBarbarianCityAttackBonus>
-			<!-- was (effectively) -10 in K-Mod -->
-			<iSeaBarbarianBonus>-5</iSeaBarbarianBonus>
-			<!-- (Let Barbarians benefit from the advc.905a speed increase) -->
-			<iSeaBarbarianExtraMoves>0</iSeaBarbarianExtraMoves>
-			<!-- was -40 -->
+			<!-- advc.313: was -40 -->
 			<iAIAnimalBonus>-25</iAIAnimalBonus>
-			<!-- advc.313: end -->
 			<iAIBarbarianBonus>-25</iAIBarbarianBonus>
 			<iStartingDefenseUnits>0</iStartingDefenseUnits>
 			<iStartingWorkerUnits>0</iStartingWorkerUnits>
@@ -1382,65 +1183,7 @@
 				<!--GoodyType>GOODY_BARBARIANS_STRONG</GoodyType-->
 			</Goodies>
 			<FreeTechs/>
-			<AIFreeTechs>
-				<FreeTech>
-					<TechType>TECH_THE_WHEEL</TechType>
-					<bFreeTech>1</bFreeTech>
-				</FreeTech>
-				<!-- advc.250e -->
-				<!--FreeTech>
-					<TechType>TECH_AGRICULTURE</TechType>
-					<bFreeTech>1</bFreeTech>
-				</FreeTech-->
-				<FreeTech>
-					<TechType>TECH_HUNTING</TechType>
-					<bFreeTech>1</bFreeTech>
-				</FreeTech>
-				<FreeTech>
-					<TechType>TECH_ARCHERY</TechType>
-					<bFreeTech>1</bFreeTech>
-				</FreeTech>
-				<FreeTech>
-					<TechType>TECH_MATHEMATICS</TechType>
-					<bFreeTech>1</bFreeTech>
-				</FreeTech>
-				<FreeTech>
-					<TechType>TECH_IRON_WORKING</TechType>
-					<bFreeTech>1</bFreeTech>
-				</FreeTech>
-				<FreeTech>
-					<TechType>TECH_MACHINERY</TechType>
-					<bFreeTech>1</bFreeTech>
-				</FreeTech>
-				<FreeTech>
-					<TechType>TECH_FEUDALISM</TechType>
-					<bFreeTech>1</bFreeTech>
-				</FreeTech>
-				<FreeTech>
-					<TechType>TECH_PRINTING_PRESS</TechType>
-					<bFreeTech>1</bFreeTech>
-				</FreeTech>
-				<FreeTech>
-					<TechType>TECH_GUNPOWDER</TechType>
-					<bFreeTech>1</bFreeTech>
-				</FreeTech>
-				<FreeTech>
-					<TechType>TECH_STEAM_POWER</TechType>
-					<bFreeTech>1</bFreeTech>
-				</FreeTech>
-				<FreeTech>
-					<TechType>TECH_STEEL</TechType>
-					<bFreeTech>1</bFreeTech>
-				</FreeTech>
-				<FreeTech>
-					<TechType>TECH_PLASTICS</TechType>
-					<bFreeTech>1</bFreeTech>
-				</FreeTech>
-				<FreeTech>
-					<TechType>TECH_REFRIGERATION</TechType>
-					<bFreeTech>1</bFreeTech>
-				</FreeTech>
-			</AIFreeTechs>
+			<AIFreeTechs/>
 			<!-- advc.250a -->
 			<iDifficulty>85</iDifficulty>
 		</HandicapInfo>

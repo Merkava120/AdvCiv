@@ -147,10 +147,6 @@
 				<choice id="Both"/>
 			</list>
 
-			<!-- advc.120l -->
-			<option id="EspionageReminder" key="Espionage Reminder" 
-					type="boolean" default="False"/>
-
 		</section>
 	</options>
 	

@@ -10,10 +10,9 @@
 			<Type>GOODY_LOW_GOLD</Type>
 			<Description>TXT_KEY_GOODY_GOLD</Description>
 			<Sound>AS2D_GOODY_GOLD</Sound>
-			<!-- advc.314: was 20 / 21 / 21 -->
-			<iGold>15</iGold>
-			<iGoldRand1>16</iGoldRand1>
-			<iGoldRand2>16</iGoldRand2>
+			<iGold>20</iGold>
+			<iGoldRand1>21</iGoldRand1>
+			<iGoldRand2>21</iGoldRand2>
 			<iMapOffset>0</iMapOffset>
 			<iMapRange>0</iMapRange>
 			<iMapProb>0</iMapProb>
@@ -31,10 +30,9 @@
 			<Type>GOODY_HIGH_GOLD</Type>
 			<Description>TXT_KEY_GOODY_GOLD</Description>
 			<Sound>AS2D_GOODY_GOLD</Sound>
-			<!-- advc.314: was 20 / 51 / 51 -->
-			<iGold>25</iGold>
-			<iGoldRand1>31</iGoldRand1>
-			<iGoldRand2>31</iGoldRand2>
+			<iGold>20</iGold>
+			<iGoldRand1>51</iGoldRand1>
+			<iGoldRand2>51</iGoldRand2>
 			<iMapOffset>0</iMapOffset>
 			<iMapRange>0</iMapRange>
 			<iMapProb>0</iMapProb>
@@ -65,11 +63,7 @@
 			<bBad>0</bBad>
 			<UnitClass>NONE</UnitClass>
 			<BarbarianClass>NONE</BarbarianClass>
-			<!-- advc.314: Together with bBad=0, this means that there is a
-				 chance for triggering an additional event. The chance is
-				 iBarbarianUnitProb percent times a probability based on the
-				 game turn. Set to 0 for BtS behavior. -->
-			<iBarbarianUnitProb>100</iBarbarianUnitProb>
+			<iBarbarianUnitProb>0</iBarbarianUnitProb>
 			<iMinBarbarians>0</iMinBarbarians>
 		</GoodyInfo>
 		<GoodyInfo>
@@ -87,7 +81,7 @@
 			<iDamagePrereq>0</iDamagePrereq>
 			<bTech>0</bTech>
 			<bBad>0</bBad>
-			<UnitClass>UNITCLASS_SETTLER</UnitClass>
+			<UnitClass>NONE</UnitClass>
 			<BarbarianClass>NONE</BarbarianClass>
 			<iBarbarianUnitProb>0</iBarbarianUnitProb>
 			<iMinBarbarians>0</iMinBarbarians>
@@ -107,20 +101,10 @@
 			<iDamagePrereq>0</iDamagePrereq>
 			<bTech>0</bTech>
 			<bBad>0</bBad>
-			<!-- advc.314: Together with bBad=0 and iMinBarbarians>0, NONE
-				 lets the game pick the best unit that the Barbarians can
-				 currently train. Set to UNITCLASS_WARRIOR for BtS behavior. -->
 			<UnitClass>NONE</UnitClass>
 			<BarbarianClass>NONE</BarbarianClass>
-			<!-- advc.314: Together with bBad=0 and BarbarianClass=NONE,
-				 this gives the free unit a chance of receiving a free
-				 promotion. The probability is multiplied by a factor based on
-				 the game turn. -->
-			<iBarbarianUnitProb>50</iBarbarianUnitProb>
-			<!-- advc.314: Together with bBad=0, this indicates the number of
-				 units to be created, and a value above 0 creates a unit even if
-				 UnitClass is set to NONE. -->
-			<iMinBarbarians>1</iMinBarbarians>
+			<iBarbarianUnitProb>0</iBarbarianUnitProb>
+			<iMinBarbarians>0</iMinBarbarians>
 		</GoodyInfo>
 		<GoodyInfo>
 			<Type>GOODY_SCOUT</Type>
@@ -137,14 +121,9 @@
 			<iDamagePrereq>0</iDamagePrereq>
 			<bTech>0</bTech>
 			<bBad>0</bBad>
-			<UnitClass>UNITCLASS_SCOUT</UnitClass>
-			<!-- advc.314: Together with bBad=0 and iBarbarianUnitProb>0,
-				 this means that the Scout has a chance of being replaced by a
-				 Worker. Set to NONE for BtS behavior (no chance of
-				 replacement). -->
-			<BarbarianClass>UNITCLASS_WORKER</BarbarianClass>
-			<!-- advc.314: see GOODY_MAP -->
-			<iBarbarianUnitProb>100</iBarbarianUnitProb>
+			<UnitClass>NONE</UnitClass>
+			<BarbarianClass>NONE</BarbarianClass>
+			<iBarbarianUnitProb>0</iBarbarianUnitProb>
 			<iMinBarbarians>0</iMinBarbarians>
 		</GoodyInfo>
 		<GoodyInfo>
@@ -162,7 +141,7 @@
 			<iDamagePrereq>0</iDamagePrereq>
 			<bTech>0</bTech>
 			<bBad>0</bBad>
-			<UnitClass>UNITCLASS_WORKER</UnitClass>
+			<UnitClass>NONE</UnitClass>
 			<BarbarianClass>NONE</BarbarianClass>
 			<iBarbarianUnitProb>0</iBarbarianUnitProb>
 			<iMinBarbarians>0</iMinBarbarians>
@@ -184,8 +163,7 @@
 			<bBad>0</bBad>
 			<UnitClass>NONE</UnitClass>
 			<BarbarianClass>NONE</BarbarianClass>
-			<!-- advc.314: see GOODY_MAP -->
-			<iBarbarianUnitProb>100</iBarbarianUnitProb>
+			<iBarbarianUnitProb>0</iBarbarianUnitProb>
 			<iMinBarbarians>0</iMinBarbarians>
 		</GoodyInfo>
 		<GoodyInfo>
@@ -205,21 +183,16 @@
 			<bBad>0</bBad>
 			<UnitClass>NONE</UnitClass>
 			<BarbarianClass>NONE</BarbarianClass>
-			<!-- advc.314: see GOODY_MAP -->
-			<iBarbarianUnitProb>100</iBarbarianUnitProb>
+			<iBarbarianUnitProb>0</iBarbarianUnitProb>
 			<iMinBarbarians>0</iMinBarbarians>
 		</GoodyInfo>
 		<GoodyInfo>
 			<Type>GOODY_TECH</Type>
 			<Description>TXT_KEY_GOODY_TECH</Description>
 			<Sound/>
-			<!-- advc.314: Together with bTech=1, this means that research
-				 progress is granted toward a random tech. Set to all three
-				 iGolds to 0 to restore BtS behavior: an entire tech that has
-				 to be flagged bGoodyTech in Civ4TechInfos.xml. -->
-			<iGold>23</iGold>
-			<iGoldRand1>20</iGoldRand1>
-			<iGoldRand2>20</iGoldRand2>
+			<iGold>0</iGold>
+			<iGoldRand1>0</iGoldRand1>
+			<iGoldRand2>0</iGoldRand2>
 			<iMapOffset>0</iMapOffset>
 			<iMapRange>0</iMapRange>
 			<iMapProb>0</iMapProb>
@@ -249,10 +222,6 @@
 			<bTech>0</bTech>
 			<bBad>1</bBad>
 			<UnitClass>NONE</UnitClass>
-			<!-- advc.314: Together with bBad=1, iBarbarianUnitProb>0 and
-				 iMinBarbarians>0, NONE lets the game pick the best unit that
-				 the Barbarians can currently train. Set to UNITCLASS_WARRIOR
-				 for BtS behavior. -->
 			<BarbarianClass>NONE</BarbarianClass>
 			<iBarbarianUnitProb>20</iBarbarianUnitProb>
 			<iMinBarbarians>1</iMinBarbarians>
@@ -273,7 +242,6 @@
 			<bTech>0</bTech>
 			<bBad>1</bBad>
 			<UnitClass>NONE</UnitClass>
-			<!-- advc.134: see GOODY_BARBARIANS_WEAK -->
 			<BarbarianClass>NONE</BarbarianClass>
 			<iBarbarianUnitProb>40</iBarbarianUnitProb>
 			<iMinBarbarians>2</iMinBarbarians>

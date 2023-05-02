@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<Civ4GameText xmlns="http://www.firaxis.com">
+	<TEXT>
+		<Tag>TXT_KEY_CREDIT_TESTORS</Tag>
+		<English>[H1]Testors[\H1][NEWLINE][COLOR_SELECTED_TEXT]Archid, Chinese American, Dancing Hoskuld, isenchine, keldath, Lib.Spi't, Roamty, stolenrays, vincentz[COLOR_REVERT]</English>
+		<French>[H1]Testors[\H1][NEWLINE][COLOR_SELECTED_TEXT]Archid, Chinese American, Dancing Hoskuld, isenchine, keldath, Lib.Spi't, Roamty, stolenrays, vincentz[COLOR_REVERT]</French>
+		<German>[H1]Testors[\H1][NEWLINE][COLOR_SELECTED_TEXT]Archid, Chinese American, Dancing Hoskuld, isenchine, keldath, Lib.Spi't, Roamty, stolenrays, vincentz[COLOR_REVERT]</German>
+		<Italian>[H1]Testors[\H1][NEWLINE][COLOR_SELECTED_TEXT]Archid, Chinese American, Dancing Hoskuld, isenchine, keldath, Lib.Spi't, Roamty, stolenrays, vincentz[COLOR_REVERT]</Italian>
+		<Spanish>[H1]Testors[\H1][NEWLINE][COLOR_SELECTED_TEXT]Archid, Chinese American, Dancing Hoskuld, isenchine, keldath, Lib.Spi't, Roamty, stolenrays, vincentz[COLOR_REVERT]</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_CREDIT_LANGUAGE_SUPPORT</Tag>
+		<English>[H1]Language Support[\H1][NEWLINE][ICON_BULLET][COLOR_HIGHLIGHT_TEXT]English[COLOR_REVERT] by [COLOR_SELECTED_TEXT]Platyping[COLOR_REVERT]</English>
+		<French>[H1]Language Support[\H1][NEWLINE][ICON_BULLET][COLOR_HIGHLIGHT_TEXT]English[COLOR_REVERT] by [COLOR_SELECTED_TEXT]Platyping[COLOR_REVERT]</French>
+		<German>[H1]Language Support[\H1][NEWLINE][ICON_BULLET][COLOR_HIGHLIGHT_TEXT]English[COLOR_REVERT] by [COLOR_SELECTED_TEXT]Platyping[COLOR_REVERT]</German>
+		<Italian>[H1]Language Support[\H1][NEWLINE][ICON_BULLET][COLOR_HIGHLIGHT_TEXT]English[COLOR_REVERT] by [COLOR_SELECTED_TEXT]Platyping[COLOR_REVERT]</Italian>
+		<Spanish>[H1]Language Support[\H1][NEWLINE][ICON_BULLET][COLOR_HIGHLIGHT_TEXT]English[COLOR_REVERT] by [COLOR_SELECTED_TEXT]Platyping[COLOR_REVERT]</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_CREDIT_CODERS</Tag>
+		<English>[H1]Coders[\H1][NEWLINE][ICON_BULLET][COLOR_HIGHLIGHT_TEXT]Python[COLOR_REVERT] by [COLOR_SELECTED_TEXT]Platyping[COLOR_REVERT]</English>
+		<French>[H1]Coders[\H1][NEWLINE][ICON_BULLET][COLOR_HIGHLIGHT_TEXT]Python[COLOR_REVERT] by [COLOR_SELECTED_TEXT]Platyping[COLOR_REVERT]</French>
+		<German>[H1]Coders[\H1][NEWLINE][ICON_BULLET][COLOR_HIGHLIGHT_TEXT]Python[COLOR_REVERT] by [COLOR_SELECTED_TEXT]Platyping[COLOR_REVERT]</German>
+		<Italian>[H1]Coders[\H1][NEWLINE][ICON_BULLET][COLOR_HIGHLIGHT_TEXT]Python[COLOR_REVERT] by [COLOR_SELECTED_TEXT]Platyping[COLOR_REVERT]</Italian>
+		<Spanish>[H1]Coders[\H1][NEWLINE][ICON_BULLET][COLOR_HIGHLIGHT_TEXT]Python[COLOR_REVERT] by [COLOR_SELECTED_TEXT]Platyping[COLOR_REVERT]</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_CREDIT_GRAPHICS</Tag>
+		<English>[H1]Graphics[\H1][NEWLINE][ICON_BULLET][COLOR_HIGHLIGHT_TEXT]All[COLOR_REVERT] from [COLOR_SELECTED_TEXT]Firaxis[COLOR_REVERT]</English>
+		<French>[H1]Graphics[\H1][NEWLINE][ICON_BULLET][COLOR_HIGHLIGHT_TEXT]All[COLOR_REVERT] from [COLOR_SELECTED_TEXT]Firaxis[COLOR_REVERT]</French>
+		<German>[H1]Graphics[\H1][NEWLINE][ICON_BULLET][COLOR_HIGHLIGHT_TEXT]All[COLOR_REVERT] from [COLOR_SELECTED_TEXT]Firaxis[COLOR_REVERT]</German>
+		<Italian>[H1]Graphics[\H1][NEWLINE][ICON_BULLET][COLOR_HIGHLIGHT_TEXT]All[COLOR_REVERT] from [COLOR_SELECTED_TEXT]Firaxis[COLOR_REVERT]</Italian>
+		<Spanish>[H1]Graphics[\H1][NEWLINE][ICON_BULLET][COLOR_HIGHLIGHT_TEXT]All[COLOR_REVERT] from [COLOR_SELECTED_TEXT]Firaxis[COLOR_REVERT]</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_CREDIT_MOD_COMP</Tag>
+		<English>[H1]Mod Components[\H1][H2][ICON_BULLET][COLOR_HIGHLIGHT_TEXT]Platy Pedia[COLOR_REVERT][\H2]Advanced Pedia with more information and sorting functions. Coded by [COLOR_SELECTED_TEXT]Platyping[COLOR_REVERT]. Modified Upgrade Tree from Sevopedia originally by [COLOR_SELECTED_TEXT]Vovan[COLOR_REVERT].
+			[H2][ICON_BULLET][COLOR_HIGHLIGHT_TEXT]Platy Builder[COLOR_REVERT][\H2]Advanced World Builder with new functions and abilities. Coded by [COLOR_SELECTED_TEXT]Platyping[COLOR_REVERT].</English>
+		<French>[H1]Mod Components[\H1][H2][ICON_BULLET][COLOR_HIGHLIGHT_TEXT]Platy Pedia[COLOR_REVERT][\H2]Advanced Pedia with more information and sorting functions. Coded by [COLOR_SELECTED_TEXT]Platyping[COLOR_REVERT]. Modified Upgrade Tree from Sevopedia originally by [COLOR_SELECTED_TEXT]Vovan[COLOR_REVERT].
+			[H2][ICON_BULLET][COLOR_HIGHLIGHT_TEXT]Platy Builder[COLOR_REVERT][\H2]Advanced World Builder with new functions and abilities. Coded by [COLOR_SELECTED_TEXT]Platyping[COLOR_REVERT].</French>
+		<German>[H1]Mod Components[\H1][H2][ICON_BULLET][COLOR_HIGHLIGHT_TEXT]Platy Pedia[COLOR_REVERT][\H2]Advanced Pedia with more information and sorting functions. Coded by [COLOR_SELECTED_TEXT]Platyping[COLOR_REVERT]. Modified Upgrade Tree from Sevopedia originally by [COLOR_SELECTED_TEXT]Vovan[COLOR_REVERT].
+			[H2][ICON_BULLET][COLOR_HIGHLIGHT_TEXT]Platy Builder[COLOR_REVERT][\H2]Advanced World Builder with new functions and abilities. Coded by [COLOR_SELECTED_TEXT]Platyping[COLOR_REVERT].</German>
+		<Italian>[H1]Mod Components[\H1][H2][ICON_BULLET][COLOR_HIGHLIGHT_TEXT]Platy Pedia[COLOR_REVERT][\H2]Advanced Pedia with more information and sorting functions. Coded by [COLOR_SELECTED_TEXT]Platyping[COLOR_REVERT]. Modified Upgrade Tree from Sevopedia originally by [COLOR_SELECTED_TEXT]Vovan[COLOR_REVERT].
+			[H2][ICON_BULLET][COLOR_HIGHLIGHT_TEXT]Platy Builder[COLOR_REVERT][\H2]Advanced World Builder with new functions and abilities. Coded by [COLOR_SELECTED_TEXT]Platyping[COLOR_REVERT].</Italian>
+		<Spanish>[H1]Mod Components[\H1][H2][ICON_BULLET][COLOR_HIGHLIGHT_TEXT]Platy Pedia[COLOR_REVERT][\H2]Advanced Pedia with more information and sorting functions. Coded by [COLOR_SELECTED_TEXT]Platyping[COLOR_REVERT]. Modified Upgrade Tree from Sevopedia originally by [COLOR_SELECTED_TEXT]Vovan[COLOR_REVERT].
+			[H2][ICON_BULLET][COLOR_HIGHLIGHT_TEXT]Platy Builder[COLOR_REVERT][\H2]Advanced World Builder with new functions and abilities. Coded by [COLOR_SELECTED_TEXT]Platyping[COLOR_REVERT].</Spanish>
+	</TEXT>
+</Civ4GameText>
