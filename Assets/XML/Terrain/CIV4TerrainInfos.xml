@@ -11,6 +11,7 @@
 			<Description>TXT_KEY_TERRAIN_GRASS</Description>
 			<Civilopedia>TXT_KEY_TERRAIN_GRASS_PEDIA</Civilopedia>
 			<ArtDefineTag>ART_DEF_TERRAIN_GRASS</ArtDefineTag>
+			<Mappings/>
 			<Yields>
 				<iYield>2</iYield>
 				<iYield>0</iYield>
@@ -159,6 +160,7 @@
 			<Description>TXT_KEY_TERRAIN_PLAINS</Description>
 			<Civilopedia>TXT_KEY_TERRAIN_PLAINS_PEDIA</Civilopedia>
 			<ArtDefineTag>ART_DEF_TERRAIN_PLAINS</ArtDefineTag>
+			<Mappings/>
 			<Yields>
 				<iYield>1</iYield>
 				<iYield>1</iYield>
@@ -307,6 +309,7 @@
 			<Description>TXT_KEY_TERRAIN_DESERT</Description>
 			<Civilopedia>TXT_KEY_TERRAIN_DESERT_PEDIA</Civilopedia>
 			<ArtDefineTag>ART_DEF_TERRAIN_DESERT</ArtDefineTag>
+			<Mappings/>
 			<Yields/>
 			<RiverYieldChange>
 				<iYield>0</iYield>
@@ -451,6 +454,7 @@
 			<Description>TXT_KEY_TERRAIN_TUNDRA</Description>
 			<Civilopedia>TXT_KEY_TERRAIN_TUNDRA_PEDIA</Civilopedia>
 			<ArtDefineTag>ART_DEF_TERRAIN_TUNDRA</ArtDefineTag>
+			<Mappings/>
 			<Yields>
 				<iYield>1</iYield>
 				<iYield>0</iYield>
@@ -599,6 +603,7 @@
 			<Description>TXT_KEY_TERRAIN_ICE</Description>
 			<Civilopedia>TXT_KEY_TERRAIN_ICE_PEDIA</Civilopedia>
 			<ArtDefineTag>ART_DEF_TERRAIN_SNOW</ArtDefineTag>
+			<Mappings/>
 			<Yields/>
 			<RiverYieldChange/>
 			<HillsYieldChange/>

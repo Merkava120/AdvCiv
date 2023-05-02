@@ -1621,10 +1621,9 @@
 					<ContactType>CONTACT_TRADE_TECH</ContactType>
 					<iContactRand>10</iContactRand>
 				</ContactRand>
-				<!-- advc.036: was 10 -->
 				<ContactRand>
 					<ContactType>CONTACT_TRADE_BONUS</ContactType>
-					<iContactRand>8</iContactRand>
+					<iContactRand>10</iContactRand>
 				</ContactRand>
 			</ContactRands>
 			<ContactDelays>
@@ -3955,10 +3954,9 @@
 					<ContactType>CONTACT_ASK_FOR_HELP</ContactType>
 					<iContactRand>50</iContactRand>
 				</ContactRand>
-				<!-- advc.130r: Was 10000. 0 now means never. -->
 				<ContactRand>
 					<ContactType>CONTACT_DEMAND_TRIBUTE</ContactType>
-					<iContactRand>0</iContactRand>
+					<iContactRand>10000</iContactRand>
 				</ContactRand>
 				<ContactRand>
 					<!-- advc.134a: was 20 -->
@@ -4033,7 +4031,7 @@
 					<iMemoryAttitudePercent>0</iMemoryAttitudePercent>
 				</MemoryAttitudePercent>
 			</MemoryAttitudePercents>
-			<!-- advc.005a: was 0/30/70/100/100 -->
+			<!-- advc.005a: was 0/30/70/100 -->
 			<NoWarAttitudeProbs>
 				<NoWarAttitudeProb>
 					<AttitudeType>ATTITUDE_FURIOUS</AttitudeType>
@@ -4045,15 +4043,11 @@
 				</NoWarAttitudeProb>
 				<NoWarAttitudeProb>
 					<AttitudeType>ATTITUDE_CAUTIOUS</AttitudeType>
-					<iNoWarProb>85</iNoWarProb>
+					<iNoWarProb>80</iNoWarProb>
 				</NoWarAttitudeProb>
 				<NoWarAttitudeProb>
 					<AttitudeType>ATTITUDE_PLEASED</AttitudeType>
-					<iNoWarProb>110</iNoWarProb>
-				</NoWarAttitudeProb>
-				<NoWarAttitudeProb>
-					<AttitudeType>ATTITUDE_PLEASED</AttitudeType>
-					<iNoWarProb>115</iNoWarProb>
+					<iNoWarProb>100</iNoWarProb>
 				</NoWarAttitudeProb>
 			</NoWarAttitudeProbs>
 			<!-- advc.005a: Was Worker 100. India cleared large areas of
@@ -5512,10 +5506,9 @@
 					<ContactType>CONTACT_TRADE_TECH</ContactType>
 					<iContactRand>10</iContactRand>
 				</ContactRand>
-				<!-- advc.036: was 10 -->
 				<ContactRand>
 					<ContactType>CONTACT_TRADE_BONUS</ContactType>
-					<iContactRand>8</iContactRand>
+					<iContactRand>10</iContactRand>
 				</ContactRand>
 			</ContactRands>
 			<ContactDelays>
@@ -5756,10 +5749,9 @@
 					<ContactType>CONTACT_TRADE_TECH</ContactType>
 					<iContactRand>10</iContactRand>
 				</ContactRand>
-				<!-- advc.036: was 10 -->
 				<ContactRand>
 					<ContactType>CONTACT_TRADE_BONUS</ContactType>
-					<iContactRand>8</iContactRand>
+					<iContactRand>10</iContactRand>
 				</ContactRand>
 			</ContactRands>
 			<ContactDelays>
@@ -7673,10 +7665,9 @@
 					<ContactType>CONTACT_TRADE_TECH</ContactType>
 					<iContactRand>10</iContactRand>
 				</ContactRand>
-				<!-- advc.036: was 10 -->
 				<ContactRand>
 					<ContactType>CONTACT_TRADE_BONUS</ContactType>
-					<iContactRand>8</iContactRand>
+					<iContactRand>10</iContactRand>
 				</ContactRand>
 			</ContactRands>
 			<ContactDelays>
@@ -9626,10 +9617,9 @@
 					<ContactType>CONTACT_RELIGION_PRESSURE</ContactType>
 					<iContactRand>100</iContactRand>
 				</ContactRand>
-				<!-- advc.130r: Was 10000. 0 now means never. -->
 				<ContactRand>
 					<ContactType>CONTACT_CIVIC_PRESSURE</ContactType>
-					<iContactRand>0</iContactRand>
+					<iContactRand>10000</iContactRand>
 				</ContactRand>
 				<ContactRand>
 					<ContactType>CONTACT_JOIN_WAR</ContactType>
@@ -10087,10 +10077,9 @@
 					<ContactType>CONTACT_TRADE_TECH</ContactType>
 					<iContactRand>10</iContactRand>
 				</ContactRand>
-				<!-- advc.036: was 10 -->
 				<ContactRand>
 					<ContactType>CONTACT_TRADE_BONUS</ContactType>
-					<iContactRand>8</iContactRand>
+					<iContactRand>10</iContactRand>
 				</ContactRand>
 			</ContactRands>
 			<ContactDelays>
@@ -10955,10 +10944,9 @@
 					<ContactType>CONTACT_STOP_TRADING</ContactType>
 					<iContactRand>50</iContactRand>
 				</ContactRand>
-				<!-- advc.130r: Was 10000. 0 now means never. -->
 				<ContactRand>
 					<ContactType>CONTACT_GIVE_HELP</ContactType>
-					<iContactRand>0</iContactRand>
+					<iContactRand>10000</iContactRand>
 				</ContactRand>
 				<ContactRand>
 					<ContactType>CONTACT_ASK_FOR_HELP</ContactType>
@@ -10977,10 +10965,9 @@
 					<ContactType>CONTACT_TRADE_TECH</ContactType>
 					<iContactRand>20</iContactRand>
 				</ContactRand>
-				<!-- advc.036: was 20 -->
 				<ContactRand>
 					<ContactType>CONTACT_TRADE_BONUS</ContactType>
-					<iContactRand>16</iContactRand>
+					<iContactRand>20</iContactRand>
 				</ContactRand>
 			</ContactRands>
 			<ContactDelays>

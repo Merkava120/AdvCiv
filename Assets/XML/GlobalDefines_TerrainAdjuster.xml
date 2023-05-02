@@ -1,0 +1,168 @@
+<?xml version="1.0"?>
+<!-- Sid Meier's Civilization 4 -->
+<!-- Copyright Firaxis Games 2005 -->
+<Civ4Defines xmlns="x-schema:CIV4GlobalDefinesSchema.xml">
+	<!-- Set to 0 to completely ignore the terrain adjuster-->
+	<Define> 
+		<DefineName>USE_TERRAIN_ADJUSTER</DefineName>
+		<iDefineIntVal>0</iDefineIntVal> 
+	</Define>
+	<!-- Choose how many areas (islands, continents, sections, whatever) should be mapped. 
+	If you set this to a negative number, the adjuster will choose a random value between 0 and 2 * the total number of mappings available. -->
+	<Define> 
+		<DefineName>MAP_NUM_AREAS</DefineName>
+		<iDefineIntVal>3</iDefineIntVal> 
+	</Define>
+	<!-- How many different mappings should we use? For example, a value of 1 will change all of the chosen areas into the same terrain set. 3 will pick 3 different sets of terrains to apply. Etc. 
+	Use min/max to give a range or set them both to the same number to guarantee a particular number. 
+	Setting MIN to a negative number results in a value of 0
+	Setting MAX to a negative number results in a random number between 0 and the total number of mappings available. -->
+	<Define> 
+		<DefineName>MIN_MAPPINGS</DefineName>
+		<iDefineIntVal>1</iDefineIntVal> 
+	</Define>
+	<Define> 
+		<DefineName>MAX_MAPPINGS</DefineName>
+		<iDefineIntVal>4</iDefineIntVal> 
+	</Define>
+	<!-- How much of the world should be mapped to new terrain sets? Percentage-wise.
+		Negative value forces adjuster to choose randomly between 0 and 100. -->
+	<Define> 
+		<DefineName>MAPPED_PERCENT</DefineName>
+		<iDefineIntVal>30</iDefineIntVal> 
+	</Define>
+	<!-- What should the areas look like? 
+	Enter 1 for subregions - parts of existing continents. 
+	Enter 2 for islands/continents (which one will depend on the map and the sizes you chose above) 
+	Enter 3 for both - some islands and some subregions. 50% each 
+	Enter 4 for both, but 75% islands 
+	Enter 5 for both, but 75% subregions 
+	Enter 6 for both, but 90% islands
+	Enter 7 for both, but 90% subregions 
+	If a negative number or 0 is entered, the area type is random-->
+	<Define> 
+		<DefineName>AREA_TYPE</DefineName>
+		<iDefineIntVal>3</iDefineIntVal> 
+	</Define>
+	<!-- How many of the mapped areas should be surrounded with a special terrain? This is a percentage (so 0 means none will be surrounded, and 50 means half). Negative forces a random value chosen from between 0 and 100. 	-->
+	<Define> 
+		<DefineName>PERCENT_AREAS_SURROUNDED</DefineName>
+		<iDefineIntVal>0</iDefineIntVal> 
+	</Define>
+	<!--
+	You have four defines for surrounded mappings: PRIMARY and SECONDARY with a PERCENTAGE for each. This percentage is applied to the number of SURROUNDED AREAS, not ALL the areas (so if you have 8 areas and 4 surrounded and 50% of the surrounded areas have type 1 surroundings then you will have 2 areas with type 1 surroundings)-->
+	<!-- the surrounding types should be TERRAIN_SOMETHINGs, and can be peak, hills, ocean, or whatever you want. 
+	
+	If you use hills / peaks / etc. the adjuster will change the plot type to match. For now all other terrains are considered 'land', even things like 'TERRAIN_STELLAR'.  
+	
+	Once again, negative values mean choose a random one. For the terrain types, typing "NONE" means a random one is chosen. -->
+	<Define> 
+		<DefineName>PRIMARY_SURROUND_TYPE</DefineName>
+		<DefineTextVal>TERRAIN_GRASS</DefineTextVal> 
+	</Define>
+	<Define> 
+		<DefineName>PRIMARY_SURROUND_PERCENT</DefineName>
+		<DefineTextVal>0</DefineTextVal> 
+	</Define>
+	<Define> 
+		<DefineName>SECONDARY_SURROUND_TYPE</DefineName>
+		<DefineTextVal>TERRAIN_GRASS</DefineTextVal> 
+	</Define>
+	<Define> 
+		<DefineName>SECONDARY_SURROUND_PERCENT</DefineName>
+		<DefineTextVal>0</DefineTextVal> 
+	</Define>
+	<!-- now we deal with mapping 'types'. As of right now, here are the types:
+	0 - 'default' or 'realistic'; if allowed, these are applied before everything else is applied. 
+	1 - fantasy, magical, etc. 
+	2 - fictional scifi terrains that are somewhat realistic, like star wars 'ice planets' or 'volcano worlds'
+	3 - scifi unrealistic like 'bug terrain' that spreads to cover the whole world 
+	4 - planetary realistic terrain, like Mars, Venus, the Moon, etc. 
+	
+	For each of the following use a digit to represent a type. So if you want to refer to types 2 and 3 type 23. 
+	
+	Negative means "skip this one". 
+	
+	Note that using 0 first in any list will not be recognized unless it is the only one in the list. So to include 0 put it after some other numbers. 
+	-->
+	
+	<!-- Banned types: these types will not be used at all. -->
+	<Define>
+		<DefineName>BAN_TYPES</DefineName>
+		<iDefineIntVal>-1</iDefineIntVal>
+	</Define>
+	<!-- Forced types: Force all mappings to be one of these types.  -->
+	<Define>
+		<DefineName>FORCE_TYPES</DefineName>
+		<iDefineIntVal>-1</iDefineIntVal>
+	</Define>
+	<!-- Force include types: these types will always show up but other types might too (depending on the above tags).
+
+	Note: The Force Include types will override the above two tags; so if you ban type 4 and then force include type 4, type 4 WILL show up. -->
+	<Define>
+		<DefineName>FORCE_INCLUDE_TYPES</DefineName>
+		<iDefineIntVal>0</iDefineIntVal>
+	</Define>
+	<!-- add mappings you like to this define, using three digits for each mapping. For example, if you like mapping 7 and mapping 38, type 007038
+	Use -1 to ignore this
+	These mappings will ALWAYS appear if there is room -->
+	<Define> 
+		<DefineName>FAVORITE_MAPPINGS</DefineName>
+		<iDefineIntVal>-1</iDefineIntVal> 
+	</Define>
+	<!-- add mappings you hate to this define in the same way. For example, if you hate mapping 83 and 101, type 083101
+	Use -1 to ignore this
+	These mappings will NEVER appear -->
+	<Define> 
+		<DefineName>HATED_MAPPINGS</DefineName>
+		<iDefineIntVal>-1</iDefineIntVal> 
+	</Define>
+	
+	<!-- Set this to 1 to ignore all of the above rules and give a completely random mapping and variation to every single tile. -->
+	<Define> 
+		<DefineName>COMPLETE_CHAOS</DefineName>
+		<iDefineIntVal>0</iDefineIntVal> 
+	</Define>
+	<!-- Set this to non-zero to have the whole world mapped to that mapping -->
+	<Define> 
+		<DefineName>WHOLE_WORLD_MAPPING</DefineName>
+		<iDefineIntVal>0</iDefineIntVal> 
+	</Define>
+	
+	
+	<!-- Some more specific/technical options below. Ignore if you're just setting up for a game. -->
+	
+	
+	
+	<!-- Use variations? 0 means no, just use the first option for every mapping; 1 means yes -->
+	<Define> 
+		<DefineName>USE_VARIATIONS</DefineName>
+		<iDefineIntVal>1</iDefineIntVal> 
+	</Define>
+	<!-- How far apart should mappings be? -->
+	<Define>
+		<DefineName>MINIMUM_MAPPING_DIST</DefineName>
+		<iDefineIntVal>1</iDefineIntVal>
+	</Define>
+	<!-- Set to zero if you don't want my generator to add new islands. 
+	I have this as zero by default because the new islands are just grass right now. -->
+	<Define>
+		<DefineName>ADD_NEW_ISLANDS</DefineName>
+		<iDefineIntVal>0</iDefineIntVal>
+	</Define>
+	<!-- change features, if the mapping is defined to?-->
+	<Define> 
+		<DefineName>APPLY_FEATURE_MAPPINGS</DefineName>
+		<iDefineIntVal>1</iDefineIntVal> 
+	</Define>
+	<!-- change bonuses, if the mapping is defined to?-->
+	<Define> 
+		<DefineName>APPLY_BONUS_MAPPINGS</DefineName>
+		<iDefineIntVal>1</iDefineIntVal> 
+	</Define>
+	<!-- number of different terrains that a terrain can map to in the same mapping area -->
+	<Define>
+		<DefineName>HOMOGENEITY_MODULUS</DefineName>
+		<iDefineIntVal>10</iDefineIntVal>
+	</Define>
+</Civ4Defines>

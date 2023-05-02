@@ -1,0 +1,1 @@
+copy "C:\Program Files (x86)\Firaxis Games\Sid Meier's Civilization 4\Beyond the Sword\Mods\AdvCiv\CvGameCoreDLL\Project\Debug\CvGameCoreDLL.dll" "C:\Program Files (x86)\Firaxis Games\Sid Meier's Civilization 4\Beyond the Sword\Mods\AdvCiv\Assets"
