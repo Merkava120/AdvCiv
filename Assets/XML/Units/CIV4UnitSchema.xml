@@ -41,7 +41,6 @@
 	<ElementType name="bShiftDownAlt" content="textOnly" dt:type="boolean"/>
 	<ElementType name="bCtrlDownAlt" content="textOnly" dt:type="boolean"/>
 	<ElementType name="iHotKeyPriorityAlt" content="textOnly" dt:type="int"/>
-	<!-- advc (note): Set to 5 by default in the DLL -->
 	<ElementType name="iOrderPriority" content="textOnly" dt:type="int"/>
 	<ElementType name="BuildInfo" content="eltOnly">
 		<element type="Type"/>
@@ -361,6 +360,28 @@
 	<ElementType name="iCombatLimit" content="textOnly" dt:type="int"/>
 	<ElementType name="iAirCombat" content="textOnly" dt:type="int"/>
 	<ElementType name="iAirCombatLimit" content="textOnly" dt:type="int"/>
+	<!-- merkava120.tc -->
+	<ElementType name="iRangeMoves" content="textOnly" dt:type="int"/>
+	<ElementType name="iShotsPerTurn" content="textOnly" dt:type="int"/>
+	<ElementType name="iArmor" content="textOnly" dt:type="int"/>
+	<ElementType name="iHillArmor" content="textOnly" dt:type="int"/>
+	<ElementType name="iFortifyTurns" content="textOnly" dt:type="int"/>
+	<ElementType name="bFortifyToShoot" content="textOnly" dt:type="boolean"/>
+	<ElementType name="iFortifyArmor" content="textOnly" dt:type="int"/>
+	<ElementType name="iAntiArmor" content="textOnly" dt:type="int"/>
+	<ElementType name="iDropoffPerTile" content="textOnly" dt:type="int"/>
+	<ElementType name="iRangeDamage" content="textOnly" dt:type="int"/>
+	<ElementType name="iRangeDamageResistance" content="textOnly" dt:type="int"/>
+	<ElementType name="bAdjustRangeDamage" content="textOnly" dt:type="boolean"/>
+	<ElementType name="iRangeCollateralDamage" content="textOnly" dt:type="int"/>
+	<ElementType name="iRangeCollateralDamageResistance" content="textOnly" dt:type="int"/>
+	<ElementType name="bIndirectFire" content="textOnly" dt:type="boolean"/>
+	<ElementType name="bAir" content="textOnly" dt:type="boolean"/>
+	<ElementType name="bAttackAir" content="textOnly" dt:type="boolean"/>
+	<ElementType name="iSight" content="textOnly" dt:type="int"/>
+	<ElementType name="iAntiCamo" content="textOnly" dt:type="int"/>
+	<ElementType name="iCamo" content="textOnly" dt:type="int"/>
+	<!-- merkava120 end-->
 	<ElementType name="iXPValueAttack" content="textOnly" dt:type="int"/>
 	<ElementType name="iXPValueDefense" content="textOnly" dt:type="int"/>
 	<ElementType name="iFirstStrikes" content="textOnly" dt:type="int"/>
@@ -641,8 +662,51 @@
 		<element type="FeaturePassableTechs"/>
 		<element type="iCombat"/>
 		<element type="iCombatLimit"/>
+		<!-- merkava120 note - aircombat now means that this combat will be compared to enemy combat strength and that will adjust range damage. 
+			0 still allows attacks if below tags are non-zero -->
 		<element type="iAirCombat"/>
+		<!-- limit is the same still -->
 		<element type="iAirCombatLimit"/>
+		<!-- merkava120.tc -->
+		<!-- moves per attack, must be greater than MOVE_DENOMINATOR (60 = 1 move) -->
+		<element type="iRangeMoves" minOccurs="0"/>
+		<element type="iShotsPerTurn" minOccurs="0"/>
+		<!-- attack's iAntiArmor must be greater than defender's iArmor to cause damage -->
+		<element type="iArmor" minOccurs="0"/>
+		<!-- this armor is used on hills (hulldown) -->
+		<element type="iHillArmor" minOccurs="0"/>
+		<!-- turns to fortify -->
+		<element type="iFortifyTurns" minOccurs="0"/>
+		<!-- this means unit has to fortify in order to shoot -->
+		<element type="bFortifyToShoot" minOccurs="0"/>
+		<!-- armor when fortified -->
+		<element type="iFortifyArmor" minOccurs="0"/>
+		<element type="iAntiArmor" minOccurs="0"/>
+		<!-- if greater than 0, iAntiArmor decreases by this every tile -->
+		<element type="iDropoffPerTile" minOccurs="0"/>
+		<!-- damage done on successful attack to unit with 100 hitpoints -->
+		<element type="iRangeDamage" minOccurs="0"/>
+		<!-- adjustment to hitpoints; resistance 150 means it 'has' 150 hitpoints -->
+		<element type="iRangeDamageResistance" minOccurs="0"/>
+		<!-- if 1, damage is adjusted with the usual unit stats (vs unit combat, promotions, etc), independently of the airCombat tag -->
+		<element type="bAdjustRangeDamage" minOccurs="0"/>
+		<!-- if greater than 0 this amount of collateral damage will be done to units on tile -->
+		<element type="iRangeCollateralDamage" minOccurs="0"/>
+		<!-- ranged collateral damage received is divided by this; if result is less than 1, none is done -->
+		<element type="iRangeCollateralDamageResistance" minOccurs="0"/>
+		<!-- if 1, unit ignores line of sight when using ranged attacks -->
+		<element type="bIndirectFire" minOccurs="0"/>
+		<!-- if 1, unit ignores line of sight AND can't be attacked unless the attacker has bAttackAir -->
+		<element type="bAir" minOccurs="0"/>
+		<element type="bAttackAir" minOccurs="0"/>
+		<!-- distance the unit can see -->
+		<element type="iSight" minOccurs="0"/>
+		<!-- reduction to enemy camo. If less than 1, then ALL enemies will have camo for this unit. -->
+		<element type="iAntiCamo" minOccurs="0"/>
+		<!-- camo level - effectively reduces enemy view range so a 1 camo unit needs to be 1 tile closer to be spotted -->
+		<!-- camo is doubled in forests and jungles and halved if the unit fired this turn -->
+		<element type="iCamo" minOccurs="0"/>
+		<!-- merkava120 end -->
 		<element type="iXPValueAttack"/>
 		<element type="iXPValueDefense"/>
 		<element type="iFirstStrikes"/>
