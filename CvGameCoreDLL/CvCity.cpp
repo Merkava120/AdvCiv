@@ -447,7 +447,7 @@ void CvCity::kill(bool bUpdatePlotGroups, /* advc.001: */ bool bBumpUnits)
 
 void CvCity::doTurn()
 {
-	PROFILE_FUNC();
+	PROFILE("CvCity::doTurn()");
 
 	if (!isBombarded())
 		changeDefenseDamage(-GC.getDefineINT(CvGlobals::CITY_DEFENSE_DAMAGE_HEAL_RATE));
@@ -467,10 +467,10 @@ void CvCity::doTurn()
 	if(!m_szPreviousName.empty() && m_szName.compare(m_szPreviousName) != 0)
 	{
 		FAssert(isHuman());
-		GC.getGame().addReplayMessage(getPlot(), REPLAY_MESSAGE_MAJOR_EVENT,
-				kOwner.getID(), gDLL->getText("TXT_KEY_MISC_CITY_RENAMED",
+		GC.getGame().addReplayMessage(REPLAY_MESSAGE_MAJOR_EVENT, kOwner.getID(),
+				gDLL->getText("TXT_KEY_MISC_CITY_RENAMED",
 				m_szPreviousName.GetCString(), m_szName.GetCString()),
-				kOwner.getPlayerTextColor());
+				getX(), getY(), kOwner.getPlayerTextColor());
 		m_szPreviousName.clear();
 	} // </advc.106k>
 	bool const bForceProduction = true; // advc.064d
@@ -655,20 +655,7 @@ void CvCity::doRevolt()
 	{
 		if (GET_PLAYER(eCulturalOwner).isOneCityChallenge())
 			kill(true);
-		else
-		{	/*	<advc.023> Make sure that allowing cities to flip repeatedly
-				while at war can't be exploited for racking up WS.
-				Doesn't take care of shared war success, but that's hardly
-				worth exploiting. */
-			if (eCulturalOwner != BARBARIAN_PLAYER &&
-				GET_TEAM(eCulturalOwner).isAtWar(getTeam()))
-			{
-				GET_TEAM(getTeam()).AI_changeWarSuccess(TEAMID(eCulturalOwner),
-						-scaled::min(GC.getWAR_SUCCESS_CITY_CAPTURING(),
-						GET_TEAM(getTeam()).AI_getWarSuccess(TEAMID(eCulturalOwner))));
-			} // </advc.023>
-			getPlot().setOwner(eCulturalOwner, true, true); // will delete pCity
-		}
+		else getPlot().setOwner(eCulturalOwner, true, true); // will delete pCity
 		/*  advc (comment): setOwner doesn't actually delete this object; just
 			calls CvCity::kill. Messages also handled by setOwner (through
 			CvPlayer::acquireCity). */
@@ -2578,36 +2565,43 @@ int CvCity::computeOverflow(int iRawOverflow, int iProductionModifier,
 	OrderTypes eOrderType, int* piProductionGold, int* piLostProduction,
 	int iPopulationChange) const
 {
-	LOCAL_REF(int, iProductionGold, piProductionGold, 0);
-	LOCAL_REF(int, iLostProduction, piLostProduction, 0);
+	if(piProductionGold != NULL)
+		*piProductionGold = 0;
+	if(piLostProduction != NULL)
+		*piLostProduction = 0;
 	/*  (BtS and the unofficial patch cap overflow before factoring out the modifiers.
 		However, they also apply generic production modifiers to the overflow once
 		work on the next order starts, which AdvCiv no longer does.) */
 	int iOverflow = unmodifyOverflow(iRawOverflow, iProductionModifier);
 	int iMaxOverflow = overflowCapacity(iProductionModifier, iPopulationChange);
-	iLostProduction = iOverflow - iMaxOverflow;
+	int iLostProduction = iOverflow - iMaxOverflow;
 	iOverflow = std::min(iMaxOverflow, iOverflow);
-	if (iLostProduction <= 0)
+	if(iLostProduction <= 0)
 		return iOverflow;
-	iProductionGold = (iLostProduction * failGoldPercent(eOrderType)) / 100;
+	if(piLostProduction != NULL)
+		*piLostProduction = iLostProduction;
+	if(piProductionGold != NULL)
+		*piProductionGold = (iLostProduction * failGoldPercent(eOrderType)) / 100;
 	return iOverflow;
 } // </advc.064b>
 
 // BUG - Hurry Overflow: (advc.064)
 bool CvCity::hurryOverflow(HurryTypes eHurry, int* piProduction, int* piGold, bool bCountThisTurn) const
 {
-	LOCAL_REF(int, iProduction, piProduction, 0);
-	LOCAL_REF(int, iGold, piGold, 0);
+	if(piProduction != NULL)
+		*piProduction = 0;
+	if(piGold != NULL)
+		*piGold = 0;
 
-	if (!canHurry(eHurry))
+	if(!canHurry(eHurry))
 		return false;
 
-	if (GC.getInfo(eHurry).getProductionPerPopulation() == 0)
+	if(GC.getInfo(eHurry).getProductionPerPopulation() == 0)
 		return true;
 
 	int iTotal, iCurrent, iModifier;
 	OrderTypes eOrder = NO_ORDER; // advc.064b
-	if (isProductionUnit())
+	if(isProductionUnit())
 	{
 		UnitTypes eUnit = getProductionUnit();
 		iTotal = getProductionNeeded(eUnit);
@@ -2615,7 +2609,7 @@ bool CvCity::hurryOverflow(HurryTypes eHurry, int* piProduction, int* piGold, bo
 		iModifier = getProductionModifier(eUnit);
 		eOrder = ORDER_TRAIN;
 	}
-	else if (isProductionBuilding())
+	else if(isProductionBuilding())
 	{
 		BuildingTypes eBuilding = getProductionBuilding();
 		iTotal = getProductionNeeded(eBuilding);
@@ -2640,8 +2634,11 @@ bool CvCity::hurryOverflow(HurryTypes eHurry, int* piProduction, int* piGold, bo
 				option. However: Feature production can no longer contribute to
 				overflow, so ignore that in any case. */
 			getCurrentProductionDifference(!bCountThisTurn, true, true, !bCountThisTurn);
-	iProduction = computeOverflow(iRawOverflow, iModifier, eOrder, piGold, NULL,
-			-hurryPopulation(eHurry)); // </advc.064b>
+	if (piProduction != NULL)
+	{
+		*piProduction = computeOverflow(iRawOverflow, iModifier, eOrder, piGold, NULL,
+				-hurryPopulation(eHurry)); // </advc.064b>
+	}
 	return true;
 }
 
@@ -3019,9 +3016,6 @@ void CvCity::processBuilding(BuildingTypes eBuilding, int iChange, bool bObsolet
 			changeReligionInfluence(perReligionVal.first,
 					perReligionVal.second * iChange);
 		}
-		// <advc.enum> Based on code deleted from CvGame::doUpdateCacheOnTurn
-		if (kBuilding.getHolyCity() != NO_RELIGION)
-			m_aiShrine.add(kBuilding.getReligionType(), iChange); // </advc.enum>
 		FOR_EACH_NON_DEFAULT_PAIR(kBuilding.
 			getSpecialistCount(), Specialist, int)
 		{
@@ -3728,47 +3722,93 @@ int CvCity::totalBadBuildingHealth() const
 		return (getBuildingBadHealth() + getArea().getBuildingBadHealth(getOwner()) +
 				GET_PLAYER(getOwner()).getBuildingBadHealth() + getExtraBuildingBadHealth());
 	}
+
 	return 0;
 }
 
 
 int CvCity::goodHealth() const
 {
-	int iHealth = 0;
-	iHealth += std::max(0, getFreshWaterGoodHealth());
-	iHealth += std::max(0, getSurroundingGoodHealth());
-	iHealth += std::max(0, getPowerGoodHealth());
-	iHealth += std::max(0, getBonusGoodHealth());
-	iHealth += std::max(0, totalGoodBuildingHealth());
-	iHealth += std::max(0,
-			GET_PLAYER(getOwner()).getExtraHealth() + getExtraHealth());
-	iHealth += std::max(0, GC.getInfo(getHandicapType()).getHealthBonus());
-	return iHealth;
+	int iTotalHealth = 0;
+	int iHealth = getFreshWaterGoodHealth();
+	if (iHealth > 0)
+		iTotalHealth += iHealth;
+
+	iHealth = getSurroundingGoodHealth();
+	if (iHealth > 0)
+		iTotalHealth += iHealth;
+
+	iHealth = getPowerGoodHealth();
+	if (iHealth > 0)
+		iTotalHealth += iHealth;
+
+	iHealth = getBonusGoodHealth();
+	if (iHealth > 0)
+		iTotalHealth += iHealth;
+
+	iHealth = totalGoodBuildingHealth();
+	if (iHealth > 0)
+		iTotalHealth += iHealth;
+
+	iHealth = GET_PLAYER(getOwner()).getExtraHealth() + getExtraHealth();
+	if (iHealth > 0)
+		iTotalHealth += iHealth;
+
+	iHealth = GC.getInfo(getHandicapType()).getHealthBonus();
+	if (iHealth > 0)
+		iTotalHealth += iHealth;
+
+	return iTotalHealth;
 }
 
 
 int CvCity::badHealth(bool bNoAngry, int iExtra) const
 {
-	int iHealth = 0;
-	iHealth -= std::max(0, getEspionageHealthCounter());
-	iHealth += std::min(0, getFreshWaterBadHealth());
-	iHealth += std::min(0, getSurroundingBadHealth());
-	iHealth += std::min(0, getPowerBadHealth());
-	iHealth += std::min(0, getBonusBadHealth());
-	iHealth += std::min(0, totalBadBuildingHealth());
-	iHealth += std::min(0,
-			GET_PLAYER(getOwner()).getExtraHealth() + getExtraHealth());
-	iHealth += std::min(0, GC.getInfo(getHandicapType()).getHealthBonus());
+	int iTotalHealth = 0;
+	int iHealth = getEspionageHealthCounter();
+	if (iHealth > 0)
+		iTotalHealth -= iHealth;
+
+	iHealth = getFreshWaterBadHealth();
+	if (iHealth < 0)
+		iTotalHealth += iHealth;
+
+	iHealth = getSurroundingBadHealth();
+	if (iHealth < 0)
+		iTotalHealth += iHealth;
+
+	iHealth = getPowerBadHealth();
+	if (iHealth < 0)
+		iTotalHealth += iHealth;
+
+	iHealth = getBonusBadHealth();
+	if (iHealth < 0)
+		iTotalHealth += iHealth;
+
+	iHealth = totalBadBuildingHealth();
+	if (iHealth < 0)
+		iTotalHealth += iHealth;
+
+	iHealth = GET_PLAYER(getOwner()).getExtraHealth() + getExtraHealth();
+	if (iHealth < 0)
+		iTotalHealth += iHealth;
+
+	iHealth = GC.getInfo(getHandicapType()).getHealthBonus();
+	if (iHealth < 0)
+		iTotalHealth += iHealth;
 	/*	advc.001 (from Better BUG AI, fix by Fuyu):
 		Already counted by totalBadBuildingHealth. */
-	//iHealth += std::min(0, getExtraBuildingBadHealth());
-	return (unhealthyPopulation(bNoAngry, iExtra) - iHealth);
+	/*iHealth = getExtraBuildingBadHealth();
+	if (iHealth < 0)
+		iTotalHealth += iHealth;*/
+
+	return (unhealthyPopulation(bNoAngry, iExtra) - iTotalHealth);
 }
 
 
 int CvCity::healthRate(bool bNoAngry, int iExtra) const
 {
-	return std::min(0, goodHealth() - badHealth(bNoAngry, iExtra));
+	return std::min(0, (goodHealth() - badHealth(bNoAngry, iExtra)));
 }
 
 
@@ -3783,6 +3823,7 @@ int CvCity::foodDifference(bool bBottom, bool bIgnoreProduction) const
 {
 	if (isDisorder())
 		return 0;
+
 	int iDifference;
 	//if (isFoodProduction())
 	if (!bIgnoreProduction && isFoodProduction()) // K-Mod
@@ -3794,6 +3835,7 @@ int CvCity::foodDifference(bool bBottom, bool bIgnoreProduction) const
 		if (getPopulation() == 1 && getFood() == 0)
 			iDifference = std::max(0, iDifference);
 	}
+
 	return iDifference;
 }
 
@@ -3987,7 +4029,6 @@ int CvCity::cultureDistance(int iDX, int iDY)
 
 // advc.101: Replaced most of the code, but it's still the same structure as in BtS.
 int CvCity::cultureStrength(PlayerTypes ePlayer,
-	bool bIgnoreWar, bool bIgnoreOccupation, // advc.023
 	std::vector<GrievanceTypes>* paGrievances) const // Out parameter for UI support
 {
 	//int iStrength = 1 + getHighestPopulation() * 2; // BtS
@@ -4021,8 +4062,8 @@ int CvCity::cultureStrength(PlayerTypes ePlayer,
 		rEraFactor++;
 	}
 	CvPlot const& kCityPlot = getPlot();
-	PlayerTypes const eCulturalOwner = kCityPlot.calculateCulturalOwner();
-	bool bCanFlip = (canCultureFlip(ePlayer, false) && ePlayer == eCulturalOwner);
+	bool bCanFlip = (canCultureFlip(ePlayer, false) &&
+			ePlayer == kCityPlot.calculateCulturalOwner());
 	scaled rStrengthFromInnerRadius;
 	CvPlayer const& kOwner = GET_PLAYER(getOwner());
 	// <advc.099c>
@@ -4128,7 +4169,7 @@ int CvCity::cultureStrength(PlayerTypes ePlayer,
 	}
 	else
 	{
-		/*  Religion offense might still make sense even when ePlayer is defeated, but
+		/*  Religion offense might still make sense even when ePlayer is defated, but
 			can't expect the owner to memorize the state religions of defeated players.
 			Instead, count some religion offense also when the owner's state religion
 			is absent and at least one religion is in the city. This makes (some) sense
@@ -4179,15 +4220,7 @@ int CvCity::cultureStrength(PlayerTypes ePlayer,
 	if(rGrievanceModifier < 0)
 		rGrievanceModifier /= 2;
 	rStrength *= (1 + scaled::max(-1, rGrievanceModifier));
-	/*	<advc.023> Occupation state helps the garrison. Kind of a negative grievance,
-		but I think multiplying with grievances will be more intuitive. */
-	int iOccupationDiv = 1;
-	if (!bIgnoreOccupation && isOccupation())
-		iOccupationDiv *= 2;
-	if (!bIgnoreWar && isMartialLaw(eCulturalOwner))
-		iOccupationDiv *= 2;
-	rStrength /= iOccupationDiv;
-	// </advc.023>
+
 	return rStrength.round();
 }
 
@@ -4951,19 +4984,19 @@ void CvCity::updateSurroundingHealthHappiness()
 			}
 		}
 	}
-	bool bDirty = false;
 	if (getSurroundingGoodHappiness() != iNewGoodHappiness)
 	{
 		m_iSurroundingGoodHappiness = iNewGoodHappiness;
 		FAssert(getSurroundingGoodHappiness() >= 0);
-		bDirty = true;
+		AI_setAssignWorkDirty(true);
 	}
 	if (getSurroundingBadHappiness() != iNewBadHappiness)
 	{
 		m_iSurroundingBadHappiness = iNewBadHappiness;
 		FAssert(getSurroundingBadHappiness() <= 0);
-		bDirty = true;
+		AI_setAssignWorkDirty(true);
 	}
+
 	std::pair<int,int> iiGoodBad = calculateSurroundingHealth(); // advc.901: Moved into new function
 	if (getSurroundingGoodHealth() != iiGoodBad.first ||
 		getSurroundingBadHealth() != iiGoodBad.second)
@@ -4972,10 +5005,6 @@ void CvCity::updateSurroundingHealthHappiness()
 		m_iSurroundingBadHealth = iiGoodBad.second;
 		FAssert(getSurroundingGoodHealth() >= 0);
 		FAssert(getSurroundingBadHealth() <= 0);
-		bDirty = true;
-	}
-	if (bDirty)
-	{
 		AI_setAssignWorkDirty(true);
 		if (isActiveTeam())
 			setInfoDirty(true);
@@ -5101,7 +5130,7 @@ void CvCity::goodBadHealthHappyChange(CvPlot const& kPlot, ImprovementTypes eNew
 	std::pair<int,int> iiOldHealth = calculateSurroundingHealth();
 	iGoodHealthChange = iiNewHealth.first - iiOldHealth.first;
 	iBadHealthChange = iiNewHealth.second - iiOldHealth.second;
-} // </advc.901>
+}// </advc.901>
 
 // BUG - Actual Effects - start
 /*	Returns the additional angry population caused by the given happiness changes.
@@ -6578,9 +6607,8 @@ void CvCity::setCultureLevel(CultureLevelTypes eNewValue, bool bUpdatePlotGroups
 							GC.getColorType("HIGHLIGHT_TEXT"));
 				}
 			} // <advc.106>
-			GC.getGame().addReplayMessage(getPlot(), REPLAY_MESSAGE_MAJOR_EVENT,
-					getOwner(), szMsg, GC.getColorType("HIGHLIGHT_TEXT"));
-			// </advc.106>
+			GC.getGame().addReplayMessage(REPLAY_MESSAGE_MAJOR_EVENT, getOwner(), szMsg,
+					getX(), getY(), GC.getColorType("HIGHLIGHT_TEXT")); // </advc.106>
 		}
 		// ONEVENT - Culture growth
 		CvEventReporter::getInstance().cultureExpansion(this, getOwner());
@@ -6893,7 +6921,7 @@ int CvCity::getBaseYieldRateModifier(YieldTypes eYield, int iExtra) const
 void CvCity::setBaseYieldRate(YieldTypes eYield, int iNewValue)
 {
 	if (getBaseYieldRate(eYield) == iNewValue)
-		return;
+		return; // advc
 
 	FAssert(iNewValue >= 0);
 	//FAssert((iNewValue * 100) / 100 >= 0); // advc: ??
@@ -7020,16 +7048,15 @@ int CvCity::getPeaceTradeModifier(TeamTypes eTeam) const
 
 	static int const iFOREIGN_TRADE_FULL_CREDIT_PEACE_TURNS = GC.getDefineINT("FOREIGN_TRADE_FULL_CREDIT_PEACE_TURNS"); // advc.opt
 	static int const iFOREIGN_TRADE_MODIFIER = GC.getDefineINT("FOREIGN_TRADE_MODIFIER"); // advc.opt
-	int const iFullTurns = std::max(1, (iFOREIGN_TRADE_FULL_CREDIT_PEACE_TURNS *
-			// <advc.130k>
-			GC.getInfo(GC.getGame().getGameSpeedType()).get(
-			CvGameSpeedInfo::FullTradeCreditPercent)) / 100);
-	int iPeaceTurns = std::min(iFullTurns,
-			GET_TEAM(getTeam()).getTurnsAtPeace(eTeam)); // was AI_getAtPeaceCounter
-			// </advc.130k>
+	int iPeaceTurns = std::min(iFOREIGN_TRADE_FULL_CREDIT_PEACE_TURNS, GET_TEAM(getTeam()).
+			//AI_getAtPeaceCounter(eTeam)
+			getTurnsAtPeace(eTeam)); // advc.130k
+
 	if (GC.getGame().getElapsedGameTurns() <= iPeaceTurns)
 		return iFOREIGN_TRADE_MODIFIER;
-	return (iFOREIGN_TRADE_MODIFIER * iPeaceTurns) / iFullTurns;
+
+	return (iFOREIGN_TRADE_MODIFIER * iPeaceTurns) /
+			std::max(1, iFOREIGN_TRADE_FULL_CREDIT_PEACE_TURNS);
 }
 
 
@@ -7534,8 +7561,9 @@ int CvCity::getAdditionalBaseCommerceRateBySpecialist(CommerceTypes eCommerce,
 int CvCity::getAdditionalBaseCommerceRateBySpecialistImpl(CommerceTypes eCommerce,
 	SpecialistTypes eSpecialist, int iChange) const
 {
-	// advc: Forward to CvPlayer (based on MNAI - lfgr fix 01/2022)
-	return iChange * GET_PLAYER(getOwner()).specialistCommerce(eSpecialist, eCommerce);
+	CvSpecialistInfo const& kSpecialist = GC.getInfo(eSpecialist);
+	return iChange * (kSpecialist.getCommerceChange(eCommerce) +
+			GET_PLAYER(getOwner()).getSpecialistExtraCommerce(eCommerce));
 }
 // BUG - Specialist Additional Commerce - end
 
@@ -7851,18 +7879,29 @@ scaled CvCity::revoltProbability(bool bIgnoreWar,
 	{
 		return 0;
 	}
-	int iCityStrength = cultureStrength(eCulturalOwner,
-			bIgnoreWar, bIgnoreOccupation); // advc.023
+	// <advc.023>
+	scaled rOccupationFactor = 1;
+	if (isOccupation() && !bIgnoreOccupation)
+	{
+		if(!bIgnoreWar && !isBarbarian() && !GET_TEAM(getTeam()).isMinorCiv() &&
+			GET_PLAYER(eCulturalOwner).isAlive() &&
+			GET_TEAM(getTeam()).isAtWar(TEAMID(eCulturalOwner)))
+		{
+			return 0;
+		}
+		rOccupationFactor = fixp(0.5);
+	} // </advc.023>
+	int iCityStrength = cultureStrength(eCulturalOwner);
 	int iGarrison =
 			(bIgnoreGarrison ? 0 : // advc.023
 			cultureGarrison(eCulturalOwner));
-	if (iCityStrength <= iGarrison)
+	if(iCityStrength <= iGarrison)
 		return 0;
 	/*  About the two revolt tests: I guess the first one checks if the city tries
 		to revolt, and the second if the garrison can stop the revolt.
 		Restored the BtS formula for the second test. */
 	scaled r = scaled::max(0, (1 - scaled(iGarrison, iCityStrength))) *
-			getRevoltTestProbability();
+			getRevoltTestProbability() * rOccupationFactor;
 	// Don't use probabilities that are too small to be displayed
 	if (r.getPermille() < 1)
 		return 0;
@@ -7885,10 +7924,6 @@ scaled CvCity::probabilityOccupationDecrement() const
 	}
 	scaled r;
 	scaled rRevoltProb = revoltProbability(true, false, true);
-	/*	Cancel out the speed adjustment included in rRevoltProb
-		(because the countdown length is not speed-adjusted) */
-	rRevoltProb *= per100(GC.getInfo(GC.getGame().getGameSpeedType()).get(
-			CvGameSpeedInfo::RevoltDivPercent));
 	if (rRevoltProb < 1)
 		r = (1 - rRevoltProb).pow(GC.getDefineINT(CvGlobals::OCCUPATION_COUNTDOWN_EXPONENT));
 	// Don't use probabilities that are too small to be displayed
@@ -7899,9 +7934,8 @@ scaled CvCity::probabilityOccupationDecrement() const
 	return r;
 }
 
-// K-Mod: Whether or not the city is allowed to flip to the given player
-bool CvCity::canCultureFlip(PlayerTypes eToPlayer,
-	bool bCheckPriorRevolts) const // advc.101
+// K-Mod: The following function defines whether or not the city is allowed to flip to the given player
+bool CvCity::canCultureFlip(PlayerTypes eToPlayer, /* advc.101: */ bool bCheckPriorRevolts) const
 {
 	/*if (isBarbarian())
 		return true;*/ // advc.101: Commented out
@@ -7924,14 +7958,6 @@ bool CvCity::canCultureFlip(PlayerTypes eToPlayer,
 			(!bCheckPriorRevolts || // advc.101
 			getNumRevolts(eToPlayer) >= GC.getDefineINT(CvGlobals::NUM_WARNING_REVOLTS)
 			- (isBarbarian() ? 1 : 0))); // advc.101
-}
-
-// advc.023: Conditions for easier suppression while at war
-bool CvCity::isMartialLaw(PlayerTypes eRevoltPlayer) const
-{
-	CvPlayer const& kRevoltPlayer = GET_PLAYER(eRevoltPlayer);
-	return (kRevoltPlayer.isAlive() && kRevoltPlayer.isMajorCiv() &&
-			GET_TEAM(getTeam()).isAtWar(kRevoltPlayer.getTeam()));
 }
 
 
@@ -8021,10 +8047,8 @@ scaled CvCity::getRevoltTestProbability() const // advc.101: Return type was int
 {
 	// <advc.101>
 	CvGame const& kGame = GC.getGame();
-	scaled rSpeedFactor = std::max(scaled::epsilon(),
-			per100(GC.getInfo(kGame.getGameSpeedType()).get(
-			// K-Mod had used VictoryDelayPercent
-			CvGameSpeedInfo::RevoltDivPercent)));
+	// Was based on getVictoryDelayPercent() in K-Mod
+	scaled rSpeedFactor = per100(GC.getInfo(kGame.getGameSpeedType()).getGoldenAgePercent());
 	// Need to cut cities recently acquired by Barbarians some slack
 	if (isBarbarian() && kGame.getGameTurn() - getGameTurnAcquired() < 8 * rSpeedFactor)
 		return 0; // </advc.101>
@@ -8228,8 +8252,8 @@ void CvCity::doFoundMessage()
 				NULL, NO_COLOR, getX(), getY());
 	}
 	szBuffer = gDLL->getText("TXT_KEY_MISC_CITY_IS_FOUNDED", getNameKey());
-	GC.getGame().addReplayMessage(getPlot(), REPLAY_MESSAGE_CITY_FOUNDED,
-			getOwner(), szBuffer,
+	GC.getGame().addReplayMessage(REPLAY_MESSAGE_CITY_FOUNDED, getOwner(),
+			szBuffer, getX(), getY(),
 			//(ColorTypes)GC.getInfoTypeForString("COLOR_ALT_HIGHLIGHT_TEXT")
 			// advc.106: Use ALT_HIGHLIGHT for research-related stuff now
 			GET_PLAYER(getOwner()).getPlayerTextColor());
@@ -9017,8 +9041,8 @@ void CvCity::setNumRealBuildingTimed(BuildingTypes eBuilding, int iNewValue, boo
 						"TXT_KEY_MISC_COMPLETES_WONDER_THE" :
 						"TXT_KEY_MISC_COMPLETES_WONDER", // </advc.008e>
 						GET_PLAYER(getOwner()).getNameKey(), kBuilding.getTextKeyWide());
-				GC.getGame().addReplayMessage(getPlot(), REPLAY_MESSAGE_MAJOR_EVENT,
-						getOwner(), szBuffer, GC.getColorType("BUILDING_TEXT"));
+				GC.getGame().addReplayMessage(REPLAY_MESSAGE_MAJOR_EVENT, getOwner(), szBuffer,
+						getX(), getY(), GC.getColorType("BUILDING_TEXT"));
 				// <advc.106>
 				for (PlayerIter<MAJOR_CIV> it; it.hasNext(); ++it)
 				{
@@ -10825,20 +10849,21 @@ void CvCity::doReligion()
 			if (iCities > iTargetCities) // Many cities: decrease spread prob
 				rSpreadProb *= scaled(iTargetCities, iCities);
 		} // </advc.173>
+		/*	advc.173 (note): Missionaries only get slowed down by getTrainPercent().
+			But I don't think we want to double down on quicker proselytization
+			by making natural spread faster as well. Units having a bigger role
+			is normal for Marathon. */
+		rSpreadProb /= GC.getGame().gameSpeedMultiplier();
 		// K-Mod. Give a bonus for the first few cities?
 		/*int iReligionCities = GC.getGame().countReligionLevels(eLoopReligion);
 		if (iReligionCities < 3) {
 			iChancePercent *= 2 + iReligionCities;
 			iChancePercent /= 1 + iReligionCities;
 		}*/
-		// <advc>
+		// <advc> (No functional change)
 		static scaled const rRELIGION_SPREAD_DIV = std::max(scaled::epsilon(),
 				per100(GC.getDefineINT("RELIGION_SPREAD_RAND")));
-		rSpreadProb /= std::max(scaled::epsilon(),
-				rRELIGION_SPREAD_DIV * per100(
-				GC.getInfo(GC.getGame().getGameSpeedType()).get(
-				// advc.173: Had used VictoryDelayPercent
-				CvGameSpeedInfo::ReligionSpreadDivPercent)));
+		rSpreadProb /= rRELIGION_SPREAD_DIV;
 		if (SyncRandSuccess(rSpreadProb))
 		{	// </advc>
 			setHasReligion(eLoopReligion, true, true, true);
@@ -10955,14 +10980,13 @@ void CvCity::doMeltdown()
 		BuildingTypes eDangerBuilding = kCiv.buildingAt(i);
 		if (!isMeltdownBuilding(eDangerBuilding))
 			continue;
-		// advc.opt: Roll the dice before checking for a safe power source
+		// advc.opt: Roll the dice before checking for a safe power source.
+		int const iOddsDivisor = GC.getInfo(eDangerBuilding).getNukeExplosionRand();
 		{
-			int iOddsDivisor = GC.getInfo(eDangerBuilding).getNukeExplosionRand();
-			// <advc.652>
-			iOddsDivisor *= GC.getGame().getSpeedPercent();
-			iOddsDivisor /= 100; // </advc.652>
-			if (!SyncRandOneChanceIn(iOddsDivisor) ||
-				isMeltdownBuildingSuperseded(eDangerBuilding)) // kekm.5
+			// advc.652: Adjust to game speed
+			scaled rNukeProb = 1 / (iOddsDivisor * GC.getGame().gameSpeedMultiplier());
+			if (!SyncRandSuccess(rNukeProb) ||
+				isMeltdownBuildingSuperseded(eDangerBuilding)) // kekm5
 			{
 				continue;
 			}
@@ -11261,25 +11285,14 @@ void CvCity::read(FDataStreamBase* pStream)
 		m_aiFreeSpecialistCount.read(pStream);
 		m_aiImprovementFreeSpecialists.read(pStream);
 		m_aiReligionInfluence.read(pStream);
-		// <advc.enum>
-		if (uiFlag >= 16)
-			m_aiShrine.read(pStream); // </advc.enum>
 		m_aiStateReligionHappiness.read(pStream);
 		m_aiUnitCombatFreeExperience.read(pStream);
 		m_aiFreePromotionCount.read(pStream);
 		m_aiNumRealBuilding.read(pStream);
 		m_aiNumFreeBuilding.read(pStream);
 		m_abWorkingPlot.read(pStream);
-		if (uiFlag >= 17)
-		{
-			m_abHasReligion.read(pStream);
-			m_abHasCorporation.read(pStream);
-		}
-		else
-		{
-			LegacyArrayEnumMap<ReligionTypes,bool>::convert(m_abHasReligion, pStream);
-			LegacyArrayEnumMap<CorporationTypes,bool>::convert(m_abHasCorporation, pStream);
-		}
+		m_abHasReligion.read(pStream);
+		m_abHasCorporation.read(pStream);
 	}
 	else
 	{
@@ -11311,28 +11324,13 @@ void CvCity::read(FDataStreamBase* pStream)
 		m_aiReligionInfluence.readArray<int>(pStream);
 		m_aiStateReligionHappiness.readArray<int>(pStream);
 		m_aiUnitCombatFreeExperience.readArray<int>(pStream);
-		m_aiFreePromotionCount.readArray<int>(pStream, /* advc.313: */ -1);
+		m_aiFreePromotionCount.readArray<int>(pStream);
 		m_aiNumRealBuilding.readArray<int>(pStream);
 		m_aiNumFreeBuilding.readArray<int>(pStream);
 		m_abWorkingPlot.readArray<bool>(pStream);
 		m_abHasReligion.readArray<bool>(pStream);
 		m_abHasCorporation.readArray<bool>(pStream);
 	}
-	// <advc.enum>
-	if (uiFlag < 16 && GC.getNumUnitInfos() > 116 &&
-		// Great Prophet points. To save time. isHolyCity check not possible here.
-		getGreatPeopleUnitRate((UnitTypes)116) > 0)
-	{
-		FOR_EACH_ENUM(Building)
-		{
-			if (getNumBuilding(eLoopBuilding) > 0 &&
-				GC.getInfo(eLoopBuilding).getHolyCity() != NO_RELIGION)
-			{
-				m_aiShrine.add(GC.getInfo(eLoopBuilding).getReligionType(), 1);
-				break;
-			}
-		}
-	} // </advc.enum>
 	for (size_t i = 0; i < m_aTradeCities.size(); i++)
 	{
 		pStream->Read((int*)&m_aTradeCities[i].eOwner);
@@ -11645,9 +11643,7 @@ void CvCity::write(FDataStreamBase* pStream)
 	//uiFlag = 12; // advc.enum: new enum map save behavior
 	//uiFlag = 13; // advc.201: Cathedrals restored to BtS stats
 	//uiFlag = 14; // advc.179, advc.exp.1, advc.exp.2
-	//uiFlag = 15; // advc.912d: Partly reverted, adjust MaxFoodKept.
-	//uiFlag = 16; // advc.enum: m_aiShrine
-	uiFlag = 17; // advc.313: Disorganized promo removed, advc.enum: bugfix.
+	uiFlag = 15; // advc.912d: Partly reverted, adjust MaxFoodKept.
 	pStream->Write(uiFlag);
 
 	pStream->Write(m_iID);
@@ -11808,7 +11804,6 @@ void CvCity::write(FDataStreamBase* pStream)
 	m_aiFreeSpecialistCount.write(pStream);
 	m_aiImprovementFreeSpecialists.write(pStream);
 	m_aiReligionInfluence.write(pStream);
-	m_aiShrine.write(pStream); // advc.enum
 	m_aiStateReligionHappiness.write(pStream);
 	m_aiUnitCombatFreeExperience.write(pStream);
 	m_aiFreePromotionCount.write(pStream);
@@ -12595,6 +12590,25 @@ int CvCity::getNumPartisanUnits(PlayerTypes ePartisanPlayer) const
 }
 
 
+bool CvCity::hasShrine(ReligionTypes eReligion) const
+{
+	bool bHasShrine = false;
+
+	// note, for normal XML, this count will be one, there is only one shrine of each religion
+	int	shrineBuildingCount = GC.getGame().getShrineBuildingCount(eReligion);
+	for (int i = 0; i < shrineBuildingCount; i++)
+	{
+		BuildingTypes eBuilding = GC.getGame().getShrineBuilding(i, eReligion);
+		if (getNumBuilding(eBuilding) > 0)
+		{
+			bHasShrine = true;
+			break;
+		}
+	}
+	return bHasShrine;
+}
+
+
 void CvCity::invalidateYieldRankCache(YieldTypes eYield)
 {
 	if (eYield == NO_YIELD)
@@ -12770,8 +12784,8 @@ void CvCity::liberate(bool bConquest, /* advc.ctr: */ bool bPeaceDeal)
 					GC.getColorType("HIGHLIGHT_TEXT"));
 		}
 	}
-	GC.getGame().addReplayMessage(getPlot(), REPLAY_MESSAGE_MAJOR_EVENT,
-			getOwner(), szBuffer, GC.getColorType("HIGHLIGHT_TEXT"));
+	GC.getGame().addReplayMessage(REPLAY_MESSAGE_MAJOR_EVENT, getOwner(), szBuffer,
+			getX(), getY(), GC.getColorType("HIGHLIGHT_TEXT"));
 	// <advc.ctr>
 	if (!bPeaceDeal)
 		GET_PLAYER(ePlayer).AI_rememberLiberation(*this, bConquest); // </advc.ctr>

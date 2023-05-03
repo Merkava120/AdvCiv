@@ -73,40 +73,12 @@ void applyColorToString(CvWString& s, char const* szColor, bool bLink = false);
 
 float colorDifference(NiColorA const& c1, NiColorA const& c2); // advc.002i
 
-// <advc> Replacing (unused) tables in CvGlobals for single-step rotation
-inline DirectionTypes rotateDirClockw(DirectionTypes eDir,
-	int i45DegRotations = 1) // Mustn't be less than -NUM_DIRECTION_TYPES
-{
-	/*	Could also try
-		return static_cast<DirectionTypes>((eDir + i45DegRotations) & (NUM_DIRECTION_TYPES - 1));
-		... but I guess the optimizer will handle it. */
-	return static_cast<DirectionTypes>((eDir + i45DegRotations
-			+ NUM_DIRECTION_TYPES) // To avoid negative remainder
-			% NUM_DIRECTION_TYPES);
-}
-
-inline DirectionTypes rotateDirCounterClockw(DirectionTypes eDir,
-	int i45DegRotations = 1)
-{
-	return rotateDirClockw(eDir, -i45DegRotations);
-} // </advc>
 inline CardinalDirectionTypes getOppositeCardinalDirection(CardinalDirectionTypes eDir)		// Exposed to Python
 {
 	return (CardinalDirectionTypes)((eDir + 2) % NUM_CARDINALDIRECTION_TYPES);
 }
 DirectionTypes cardinalDirectionToDirection(CardinalDirectionTypes eCard);					// Exposed to Python
-DllExport inline bool isCardinalDirection(DirectionTypes eDirection)						// Exposed to Python
-{
-	switch (eDirection)
-	{
-	case DIRECTION_EAST:
-	case DIRECTION_NORTH:
-	case DIRECTION_SOUTH:
-	case DIRECTION_WEST:
-		return true;
-	}
-	return false;
-}
+DllExport bool isCardinalDirection(DirectionTypes eDirection);								// Exposed to Python
 DirectionTypes estimateDirection(int iDX, int iDY);											// Exposed to Python
 DllExport DirectionTypes estimateDirection(const CvPlot* pFromPlot, const CvPlot* pToPlot);
 
@@ -141,6 +113,9 @@ void setListHelp(CvWString& szBuffer, wchar const* szStart, wchar const* szItem,
 		wchar const* szSeparator, int& iLastListID, int iListID);
 void setListHelp(CvWStringBuffer& szBuffer, wchar const* szStart, wchar const* szItem,
 		wchar const* szSeparator, int& iLastListID, int iListID); // </advc>
+
+// advc: Just the folder name, no /Mods/. And as a wide string.
+CvWString getModName();
 
 // PlotUnitFunc's...  (advc: Parameters iData1, iData2 renamed)
 bool PUF_isGroupHead(CvUnit const* pUnit, int iDummy1 = -1, int iDummy2 = -1);

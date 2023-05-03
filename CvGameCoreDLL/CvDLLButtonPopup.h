@@ -1,5 +1,7 @@
 #pragma once
 
+// CvDLLButtonPopup.h
+
 #ifndef CIV4_DLL_BUTTON_POPUP_H
 #define CIV4_DLL_BUTTON_POPUP_H
 
@@ -14,7 +16,7 @@ public:
 	virtual ~CvDLLButtonPopup();
 	DllExport static CvDLLButtonPopup& getInstance();
 	DllExport static void freeInstance();
-	// advc (caveat): The EXE calls these virtual functions; hence the virtual destructor also needs to be left alone.
+	// advc.003i (caveat): The EXE calls these virtual functions; hence the virtual destructor also needs to be left alone.
 	virtual void OnOkClicked(CvPopup* pPopup, PopupReturn *pPopupReturn, CvPopupInfo &info);
 	virtual void OnAltExecute(CvPopup& popup, const PopupReturn& popupReturn, CvPopupInfo &info);
 	virtual void OnFocus(CvPopup* pPopup, CvPopupInfo &info);

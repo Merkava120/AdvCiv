@@ -103,7 +103,7 @@ void CvDLLButtonPopup::OnOkClicked(CvPopup* pPopup, PopupReturn *pPopupReturn, C
 				gDLL->SetDone(true);
 				break;
 			case 1:
-				kGame.exitToMenu();
+				m_kUI.exitingToMainMenu();
 				break;
 			case 2:
 				//kGame.doControl(CONTROL_RETIRE);
@@ -546,7 +546,7 @@ void CvDLLButtonPopup::OnOkClicked(CvPopup* pPopup, PopupReturn *pPopupReturn, C
 				kGame.retire(); // K-Mod
 			}
 			else if (!m_kUI.isDebugMenuCreated())
-				kGame.exitToMenu();
+				m_kUI.exitingToMainMenu();
 			else gDLL->SetDone(true);
 		}
 		break;
@@ -568,7 +568,7 @@ void CvDLLButtonPopup::OnOkClicked(CvPopup* pPopup, PopupReturn *pPopupReturn, C
 	case BUTTONPOPUP_FORCED_DISCONNECT:
 	case BUTTONPOPUP_PITBOSS_DISCONNECT:
 	case BUTTONPOPUP_KICKED:
-		kGame.exitToMenu();
+		m_kUI.exitingToMainMenu();
 		break;
 
 	case BUTTONPOPUP_VASSAL_DEMAND_TRIBUTE:

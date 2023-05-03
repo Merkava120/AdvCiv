@@ -88,7 +88,7 @@ protected:
 	void addSettingsMsg(); // advc.106h
 	// <advc.106i>
 	bool checkBounds(int iValue, int iLower, int iUpper) const;
-	bool isStoringReplaysAsBtS() const;
+	static bool STORE_REPLAYS_AS_BTS;
 	// </advc.106i>
 	static int REPLAY_VERSION;
 
@@ -127,6 +127,7 @@ protected:
 		// <advc.106i>
 		int iVersionRead;
 		bool bDisplayOtherMods;
+		CvString szPurportedModName;
 		// </advc.106i>
 		friend CvReplayInfo;
 	};

@@ -20,6 +20,10 @@ public:
 	// does all of the below "add..." functions:
 	DllExport void addGameElements();											// Exposed to Python
 
+	void addBiomes(); // merkava.mb0
+	TerrainTypes getMostAdjacentTerrain(int iPlotIndex);
+	int getMostAdjacentBiome(int iPlotIndex, bool bExcludeOwn = false, bool bProbabilistic = false);
+	bool isAdjacentToOwnBiome(int iPlotIndex, int iMinAdj = 1); //mb1.3
 	void addLakes();																			// Exposed to Python
 	DllExport void addRivers();														// Exposed to Python
 	void doRiver(CvPlot* pStartPlot,												// Exposed to Python

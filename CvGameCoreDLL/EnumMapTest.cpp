@@ -417,16 +417,6 @@ void TestEnumMap()
 		test.resetVal(eKey);
 		FAssert(test.get(eKey) == 0);
 		FAssert(!test.isAnyNonDefault());
-		/*	After resetting eKey, it'll still be (explicitly) stored,
-			but the loops should skip it. */
-		int iCount = 0;
-		FOR_EACH_NON_DEFAULT_PAIR(test, Building, int)
-			iCount++;
-		FAssert(iCount == 0);
-		iCount = 0;
-		FOR_EACH_NON_DEFAULT_KEY(test, Building)
-			iCount++;
-		FAssert(iCount == 0);
 		test.add(eKey, 2);
 		test.multiply(eKey, 3);
 		FAssert(test.get(eKey) == 6);
@@ -542,7 +532,7 @@ void TestEnumMap()
 		FAssert(test.get((UnitTypes)3) == 5);
 	}
 	{	// List enum map with end marker
-		ListEnumMap<UnitTypes,int,char,0,false,true> test;
+		ListEnumMap<UnitTypes,int,char,0,true> test;
 		test.set((UnitTypes)8, 5);
 		FAssert(test.get((UnitTypes)1) == 0);
 		FAssert(test.get((UnitTypes)8) == 5);
@@ -564,20 +554,6 @@ void TestEnumMap()
 		FAssert(!test.isAnyNonDefault());
 		test.read(&stream);
 		FAssert(test.get((UnitTypes)3) == -3);
-	}
-	{	// Monotone ListEnumMap
-		NonDefaultEnumMap<BuildingTypes,short> test;
-		BuildingTypes eKey = static_cast<BuildingTypes>(3);
-		FAssert(test.get(eKey) == 0);
-		FAssert(!test.isAnyNonDefault());
-		test.set(eKey, 1);
-		FAssert(test.isAnyNonDefault());
-		FAssert(test.get(eKey) == 1);
-		//test.resetVal(eKey); // Should fail runtime assertion
-		FOR_EACH_NON_DEFAULT_PAIR(test, Building, int)
-		{
-			FAssert(perBuildingVal.first == eKey && perBuildingVal.second == 1);
-		}
 	}
 	{	// Offline list-based enum set
 		OfflineListEnumSet<CivicTypes> test;

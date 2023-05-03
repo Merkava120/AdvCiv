@@ -623,13 +623,6 @@ void CvDLLWidgetData::parseHelp(CvWStringBuffer &szBuffer, CvWidgetDataStruct &w
 		break;
 
 	case WIDGET_MINIMAP_HIGHLIGHT:
-		// <advc.004> Leader help for Military Advisor
-		if (widgetDataStruct.m_iData1 == 2) // mode id
-		{
-			PlayerTypes ePlayer = (PlayerTypes)widgetDataStruct.m_iData2;
-			if (ePlayer > NO_PLAYER && ePlayer < MAX_CIV_PLAYERS)
-				GAMETEXT.parseLeaderHeadHelp(szBuffer, ePlayer, NO_PLAYER);
-		} // </advc.004>
 		break;
 
 	case WIDGET_PRODUCTION_MOD_HELP:
@@ -778,7 +771,15 @@ bool CvDLLWidgetData::executeAction(CvWidgetDataStruct &widgetDataStruct)
 		break;
 
 	case WIDGET_PLOT_LIST_SHIFT:
-		doPlotListShift(iData1); // advc: Moved into new function
+		gDLL->UI().changePlotListColumn(iData1 *
+			  // <advc.004n> BtS code:
+			  //((GC.ctrlKey()) ? (GC.getDefineINT("MAX_PLOT_LIST_SIZE") - 1) : 1));
+			  std::min(GC.getDefineINT("MAX_PLOT_LIST_SIZE"),
+			  gDLL->UI().getHeadSelectedCity()->getPlot().getNumUnits())
+			  /* Don't really know how to determine the number of units shown
+				 initially. Offset divided by 9 happens to work, at least for
+				 1024x768 (offset 81, 9 units) and 1280x1024 (144, 16). */
+			  - gDLL->UI().getPlotListOffset() / 9); // </advc.004n>
 		break;
 
 	case WIDGET_CITY_SCROLL:
@@ -1066,10 +1067,6 @@ bool CvDLLWidgetData::executeAltAction(CvWidgetDataStruct &widgetDataStruct)
 	bool bHandled = true;
 	switch (widgetDataStruct.m_eWidgetType)
 	{
-	// <advc.004n>
-	case WIDGET_PLOT_LIST_SHIFT:
-		doPlotListShift(iData1, true);
-		break; // </advc.004n>
 	case WIDGET_HELP_TECH_ENTRY:
 	case WIDGET_HELP_TECH_PREPREQ:
 	case WIDGET_RESEARCH:
@@ -1250,59 +1247,6 @@ void CvDLLWidgetData::doPlotList(CvWidgetDataStruct &widgetDataStruct)
 		if (bWasCityScreenUp)
 			gDLL->UI().lookAtSelectionPlot();
 	}
-}
-
-// advc: This has gotten verbose, moving it out of executeAction.
-void CvDLLWidgetData::doPlotListShift(int iChange, bool bMaxStep)
-{
-	//int iIncr = (GC.ctrlKey() ? GC.getDefineINT("MAX_PLOT_LIST_SIZE") - 1 : 1); // BtS
-	// <advc.004n>
-	if (GC.getMAX_PLOT_LIST_ROWS() <= 1)
-		return;
-	CvPlot const* pPlot = gDLL->UI().getSelectionPlot();
-	if (pPlot == NULL)
-		return;
-	int const iPlotUnits = pPlot->getNumUnits();
-	int iStep = 10;
-	if (gDLL->UI().isCityScreenUp())
-	{
-		// (Not sure that this is really a maximal limit of anything)
-		int const iBigStep = GC.getDefineINT("MAX_PLOT_LIST_SIZE"); // 100
-		/*	BUG drawing method will only ever show a single row on the city screen.
-			Don't want to expand rapidly upon the first right-shift then.
-			Instead, let the bMaxStep param jump to the final column. */
-		bool bBUGMethod = BUGOption::isEnabled("PLE__BUG_Style", false);
-		static int iUnitsPerRow = 0;
-		if (GC.getGame().getPlotListShift() == 0 && iChange == 1)
-		{
-			/*	Unhelpfully, the offset counts backward from the maximal
-				number of units that CvMainInterface can display at once.
-				Since we know that the city screen shows 1 row initially,
-				we can figure out how many units are actually shown.*/
-			iUnitsPerRow = gDLL->UI().getPlotListOffset() /
-					(GC.getMAX_PLOT_LIST_ROWS() - 1);
-			/*	Show a total of MAX_PLOT_LIST_SIZE. (Then move in steps of 10,
-				same as on the main screen, which shows multiple rows already
-				at shift 0.) */
-			if (!bBUGMethod)
-			{
-				iStep = std::max(iStep, std::min(
-						iPlotUnits, iBigStep - iUnitsPerRow));
-			}
-			else if (bMaxStep)
-				iStep = iPlotUnits - iUnitsPerRow;
-		}
-		else if (GC.getGame().getPlotListShift() == 1 && iChange == -1 &&
-			!bBUGMethod)
-		{
-			FAssert(iUnitsPerRow > 0);
-			iStep = std::min(iBigStep, iPlotUnits) - iUnitsPerRow;
-		}
-		else if (bBUGMethod && bMaxStep)
-			iStep = iPlotUnits - iUnitsPerRow;
-	}
-	GC.getGame().changePlotListShift(iChange);
-	gDLL->UI().changePlotListColumn(iChange * iStep); // </advc.004n>
 }
 
 
@@ -2005,14 +1949,15 @@ void CvDLLWidgetData::parseActionHelp(CvWidgetDataStruct &widgetDataStruct,
 	szTemp.Format(SETCOLR L"%s" ENDCOLR , TEXT_COLOR("COLOR_HIGHLIGHT_TEXT"),
 			kAction.getHotKeyDescription().c_str());
 	szBuffer.assign(szTemp);
-	CvDLLInterfaceIFaceBase& kUI = *gDLL->getInterfaceIFace();
+	CvDLLInterfaceIFaceBase& kUI = *gDLL->getInterfaceIFace(); // advc
 
 	CvUnit const* pHeadSelectedUnit = kUI.getHeadSelectedUnit();
 	if (pHeadSelectedUnit != NULL)
 	{
 		MissionTypes eMission = (MissionTypes)kAction.getMissionType();
 		if (eMission != NO_MISSION)
-		{	// advc: Moved into subroutine
+		{
+			// advc: Moved into subroutine
 			parseActionHelp_Mission(kAction, *pHeadSelectedUnit, eMission, szBuffer);
 		}
 		if (kAction.getCommandType() != NO_COMMAND)
@@ -2026,7 +1971,7 @@ void CvDLLWidgetData::parseActionHelp(CvWidgetDataStruct &widgetDataStruct,
 			}
 			else if (kAction.getCommandType() == COMMAND_UPGRADE)
 			{
-				UnitTypes const eTo = (UnitTypes)kAction.getCommandData();
+				UnitTypes eTo = (UnitTypes)kAction.getCommandData(); // advc
 				GAMETEXT.setBasicUnitHelp(szBuffer, eTo);
 
 				// <advc.080>
@@ -2478,10 +2423,10 @@ void CvDLLWidgetData::parseActionHelp_Mission(CvActionInfo const& kAction,
 		else
 		{
 			// No projection for the initial city
-			if (kUnitOwner.getNumCities() > 0)
-				GAMETEXT.setFoundCostHelp(szBuffer, kMissionPlot);
-			GAMETEXT.setHomePlotYieldHelp(szBuffer, kMissionPlot);
-			GAMETEXT.setFoundHealthHelp(szBuffer, kMissionPlot);
+			if(kUnitOwner.getNumCities() > 0)
+				szBuffer.append(getFoundCostText(kMissionPlot, kUnitOwner.getID()));
+			szBuffer.append(getHomePlotYieldText(kMissionPlot, kUnitOwner.getID()));
+			szBuffer.append(getNetFeatureHealthText(kMissionPlot, kUnitOwner.getID()));
 			// To set the info apart from TXT_KEY_MISSION_BUILD_CITY_HELP
 			szBuffer.append(NEWLINE);
 		} // </advc.004b>
@@ -3077,15 +3022,17 @@ void CvDLLWidgetData::parseActionHelp_Mission(CvActionInfo const& kAction,
 				bool bFirst = true;
 				FOR_EACH_ENUM2(Bonus, eRandBonus)
 				{
-					if (kUnitTeam.canDiscoverBonus(eRandBonus) &&
-						kImprov.getImprovementBonusDiscoverRand(eRandBonus) > 0 &&
-						kMissionPlot.canHaveBonus(eRandBonus, false, // advc.rom3
-						true)) // advc.129
+					if (kUnitTeam.isHasTech(GC.getInfo(eRandBonus).getTechReveal()))
 					{
-						szFirstBuffer.Format(L"%s%s", NEWLINE,
-								gDLL->getText("TXT_KEY_ACTION_CHANCE_DISCOVER").c_str());
-						szTempBuffer.Format(L"%c", GC.getInfo(eRandBonus).getChar());
-						setListHelp(szBuffer, szFirstBuffer, szTempBuffer, L", ", bFirst);
+						if (kImprov.getImprovementBonusDiscoverRand(eRandBonus) > 0 &&
+							kMissionPlot.canHaveBonus(eRandBonus, false, // advc.rom3
+							true)) // advc.129
+						{
+							szFirstBuffer.Format(L"%s%s", NEWLINE,
+									gDLL->getText("TXT_KEY_ACTION_CHANCE_DISCOVER").c_str());
+							szTempBuffer.Format(L"%c", GC.getInfo(eRandBonus).getChar());
+							setListHelp(szBuffer, szFirstBuffer, szTempBuffer, L", ", bFirst);
+						}
 					}
 				}
 			}
@@ -3221,7 +3168,7 @@ void CvDLLWidgetData::parseActionHelp_Mission(CvActionInfo const& kAction,
 	if (!CvWString(GC.getInfo(eMission).getHelp()).empty())
 	{	// <advc.004a>
 		if (eMission == MISSION_DISCOVER)
-			GAMETEXT.setDiscoverPathHelp(szBuffer, kUnit.getUnitType());
+			szBuffer.append(getDiscoverPathText(kUnit.getUnitType(), kUnitOwner.getID()));
 		else // </advc.004a>  <advc.004c>
 		if (eMission == MISSION_BOMBARD && kUnit.bombardTarget(kMissionPlot) != NULL)
 		{} // Fully handled in switch block above
@@ -3335,17 +3282,15 @@ void CvDLLWidgetData::parseAngryCitizenHelp(CvWidgetDataStruct &widgetDataStruct
 }
 
 
-void CvDLLWidgetData::parseChangeSpecialistHelp(
-	CvWidgetDataStruct &widgetDataStruct, CvWStringBuffer &szBuffer)
+void CvDLLWidgetData::parseChangeSpecialistHelp(CvWidgetDataStruct &widgetDataStruct, CvWStringBuffer &szBuffer)  // advc: style changes
 {
 	CvCity* pHeadSelectedCity = gDLL->UI().getHeadSelectedCity();
 	if (pHeadSelectedCity == NULL)
 		return;
-	SpecialistTypes const eSpecialist = (SpecialistTypes)widgetDataStruct.m_iData1;
-	int const iChange = widgetDataStruct.m_iData2;
-	if (iChange > 0)
+
+	if (widgetDataStruct.m_iData2 > 0)
 	{
-		GAMETEXT.parseSpecialistHelp(szBuffer, eSpecialist, pHeadSelectedCity);
+		GAMETEXT.parseSpecialistHelp(szBuffer, (SpecialistTypes)widgetDataStruct.m_iData1, pHeadSelectedCity);
 		if (widgetDataStruct.m_iData1 != GC.getDEFAULT_SPECIALIST())
 		{
 			if (!GET_PLAYER(pHeadSelectedCity->getOwner()).
@@ -3364,16 +3309,9 @@ void CvDLLWidgetData::parseChangeSpecialistHelp(
 	}
 	else
 	{
-		/*	<advc.004> Stacker display has no separate remove button;
-			should therefore show yields regardless of iChange. */
-		bool const bStacker = (BUGOption::getValue("CityScreen__Specialists", 2) == 1);
-		if (bStacker)
-		{
-			GAMETEXT.parseSpecialistHelp(szBuffer, eSpecialist, pHeadSelectedCity);
-			szBuffer.append(NEWLINE);
-		} // </advc.004>
-		szBuffer.append(gDLL->getText("TXT_KEY_MISC_REMOVE_SPECIALIST", GC.getInfo(
+		szBuffer.assign(gDLL->getText("TXT_KEY_MISC_REMOVE_SPECIALIST", GC.getInfo(
 				(SpecialistTypes)widgetDataStruct.m_iData1).getTextKeyWide()));
+
 		if (pHeadSelectedCity->getForceSpecialistCount((SpecialistTypes)widgetDataStruct.m_iData1) > 0)
 		{
 			szBuffer.append(NEWLINE);
@@ -3414,18 +3352,14 @@ void CvDLLWidgetData::parseTechTreeHelp(CvWidgetDataStruct &widgetDataStruct, Cv
 
 void CvDLLWidgetData::parseChangePercentHelp(CvWidgetDataStruct &widgetDataStruct, CvWStringBuffer &szBuffer)
 {
-	int const iChange = widgetDataStruct.m_iData2;
-	szBuffer.assign(gDLL->getText(iChange > 0 ?
-			"TXT_KEY_MISC_INCREASE_RATE" : "TXT_KEY_MISC_DECREASE_RATE",
-			GC.getInfo((CommerceTypes)widgetDataStruct.m_iData1).getTextKeyWide(),
-			abs(iChange)));
-	// <advc.004> Hint about right-click behavior
-	if (!BUGOption::isEnabled("MainInterface__MinMax_Commerce", false))
+	if (widgetDataStruct.m_iData2 > 0)
 	{
-		szBuffer.append(gDLL->getText(iChange > 0 ?
-				"TXT_KEY_MISC_INCREASE_RATE_HINT" :
-				"TXT_KEY_MISC_DECREASE_RATE_HINT"));
-	} // </advc.004>
+		szBuffer.assign(gDLL->getText("TXT_KEY_MISC_INCREASE_RATE", GC.getInfo((CommerceTypes) widgetDataStruct.m_iData1).getTextKeyWide(), widgetDataStruct.m_iData2));
+	}
+	else
+	{
+		szBuffer.assign(gDLL->getText("TXT_KEY_MISC_DECREASE_RATE", GC.getInfo((CommerceTypes) widgetDataStruct.m_iData1).getTextKeyWide(), -(widgetDataStruct.m_iData2)));
+	}
 }
 
 // advc (comment): Could this function be merged into CvGameTextMgr::parseLeaderHeadHelp?
@@ -3465,8 +3399,7 @@ void CvDLLWidgetData::parseContactCivHelp(CvWidgetDataStruct &widgetDataStruct, 
 	GAMETEXT.parsePlayerTraits(szBuffer, ePlayer);*/ // BtS
 	if (eActivePlayer != ePlayer && // advc.085
 			!kActiveTeam.isHasMet(eTeam))
-	{	/*	K-Mod. If we haven't met the player yet - don't say "contact".
-			Because we can't actually contact them! */
+	{	// K-Mod. If we haven't met the player yet - don't say "contact". Because we can't actually contact them!
 		szBuffer.append(CvWString::format(SETCOLR L"%s" ENDCOLR,
 				TEXT_COLOR("COLOR_HIGHLIGHT_TEXT"), kPlayer.getName())); // K-Mod end
 		// <advc.007>
@@ -4655,14 +4588,8 @@ void CvDLLWidgetData::parseTradeItem(CvWidgetDataStruct &widgetDataStruct,
 		GAMETEXT.setBonusHelp(szBuffer, (BonusTypes)widgetDataStruct.m_iData2);
 		break;
 	case TRADE_CITIES:
-	{	// <advc.ctr>
-		CvCity const* pCity = GET_PLAYER(eWhoFrom).getCity(widgetDataStruct.m_iData2);
-		if (pCity != NULL)
-			GAMETEXT.setCityTradeHelp(szBuffer, *pCity, eWhoTo, false, false);
-		else // </advc.ctr>
-			szBuffer.assign(gDLL->getText("TXT_KEY_TRADE_CITIES"));
+		szBuffer.assign(gDLL->getText("TXT_KEY_TRADE_CITIES"));
 		break;
-	}
 	case TRADE_PEACE:
 		szBuffer.append(gDLL->getText("TXT_KEY_TRADE_MAKE_PEACE",
 				GET_TEAM(eWhoFrom).getName().GetCString(),
@@ -5032,31 +4959,32 @@ void CvDLLWidgetData::parseNationalityHelp(CvWidgetDataStruct &widgetDataStruct,
 	std::vector<CvCity::GrievanceTypes> aeGrievances;
 	// <advc.023>
 	scaled const rDecrementProb = c.probabilityOccupationDecrement();
-	scaled const rHypotheticalProb = c.revoltProbability(true, false, true);
-	int const iCultureStr = c.cultureStrength(eCulturalOwner, false, false,
-			&aeGrievances);
+	scaled const rProbToDisplay = c.revoltProbability(true, false, true);
+	int const iCultureStr = c.cultureStrength(eCulturalOwner, &aeGrievances);
 	int const iGarrisonStr = c.cultureGarrison(eCulturalOwner);
 	scaled const rTrueProb = c.revoltProbability() * (1 - rDecrementProb);
-	if (rHypotheticalProb > 0)
+	if (rProbToDisplay > 0)
 	{
 		swprintf(szTempBuffer, (rTrueProb == 0 ? L"%.0f" : L"%.1f"),
 				100 * rTrueProb.getFloat()); // </advc.023>
 		// </advc.101>
 		szBuffer.append(NEWLINE);
 		szBuffer.append(gDLL->getText("TXT_KEY_MISC_CHANCE_OF_REVOLT", szTempBuffer));
-		/*	<advc.023> Probability after occupation and war. (If only either ends,
-			a third probability may apply, but I don't to bother showing that.) */
-		if (rTrueProb != rHypotheticalProb)
+		// <advc.023> Probability after occupation
+		if (rTrueProb != rProbToDisplay)
 		{
 			szBuffer.append(NEWLINE);
-			swprintf(szTempBuffer, L"%.1f", 100 * rHypotheticalProb.getFloat());
-			CvWString szKey;
-			if (c.isMartialLaw(eCulturalOwner) && c.isOccupation())
-				szKey = "TXT_KEY_REVOLT_CHANCE_AFTER_WAR_OCCUPATION";
-			else if (c.isMartialLaw(eCulturalOwner))
-				szKey = "TXT_KEY_REVOLT_CHANCE_AFTER_WAR";
-			else szKey = "TXT_KEY_REVOLT_CHANCE_AFTER_OCCUPTAION";
-			szBuffer.append(gDLL->getText(szKey, szTempBuffer));
+			swprintf(szTempBuffer, L"%.1f", 100 * rProbToDisplay.getFloat());
+			if(eCulturalOwner == BARBARIAN_PLAYER || !GET_PLAYER(eCulturalOwner).isAlive())
+			{
+				szBuffer.append(gDLL->getText(
+						"TXT_KEY_NO_BARB_REVOLT_IN_OCCUPATION", szTempBuffer));
+			}
+			else
+			{
+				szBuffer.append(gDLL->getText(
+						"TXT_KEY_NO_REVOLT_IN_OCCUPATION", szTempBuffer));
+			}
 		} // </advc.023>
 		// <advc.101>
 		szBuffer.append(NEWLINE);
@@ -5068,14 +4996,11 @@ void CvDLLWidgetData::parseNationalityHelp(CvWidgetDataStruct &widgetDataStruct,
 				iCultureStrength, iCultureStrength,
 				::round(100 * c.getRevoltTestProbability())));
 		// Also show c.getRevoltProtection()? */
-		if (iCultureStr > iGarrisonStr)
-		{
-			szBuffer.append(gDLL->getText("TXT_KEY_GARRISON_STRENGTH_NEEDED",
-					iCultureStr - iGarrisonStr));
-		}
+		szBuffer.append(gDLL->getText("TXT_KEY_GARRISON_STRENGTH_NEEDED",
+				iCultureStr - iGarrisonStr));
 	}
-	if (!c.isOccupation() && rHypotheticalProb <= 0 &&
-		eCulturalOwner != c.getOwner() && iGarrisonStr >= iCultureStr)
+	if (!c.isOccupation() && rProbToDisplay <= 0 && eCulturalOwner != c.getOwner() &&
+		iGarrisonStr >= iCultureStr)
 	{
 		szBuffer.append(NEWLINE);
 		szBuffer.append(gDLL->getText("TXT_KEY_GARRISON_STRENGTH_EXCESS",
@@ -5102,7 +5027,7 @@ void CvDLLWidgetData::parseNationalityHelp(CvWidgetDataStruct &widgetDataStruct,
 		szBuffer.append(NEWLINE);
 		szBuffer.append(gDLL->getText("TXT_KEY_MISC_PRIOR_REVOLTS",
 				c.getNumRevolts(eCulturalOwner)));
-		if (rTrueProb > 0 && c.canCultureFlip(eCulturalOwner))
+		if (rProbToDisplay > 0 && rTrueProb > 0 && c.canCultureFlip(eCulturalOwner))
 		{
 			szBuffer.append(NEWLINE);
 			szBuffer.append(gDLL->getText("TXT_KEY_MISC_FLIP_WARNING"));
@@ -6224,3 +6149,246 @@ bool CvDLLWidgetData::parseCityTradeHelp(CvWidgetDataStruct const& kWidget,
 	FAssert(pCity != NULL);
 	return bListMore;
 }
+
+// advc.004a:
+CvWString CvDLLWidgetData::getDiscoverPathText(UnitTypes eUnit,
+	PlayerTypes ePlayer) const
+{
+	CvWString szRetVal = NEWLINE;
+	CvPlayer const& kPlayer = GET_PLAYER(ePlayer);
+	/*	Could have ported the code in BUG TechPrefs.py, but it's unnecessarily
+		complicated for what I'm trying to do. Use getDiscoveryTech and,
+		in between calls, pretend that the previous tech has already been discovered. */
+	TechTypes eCurrentDiscover = kPlayer.getDiscoveryTech(eUnit);
+	if (eCurrentDiscover == NO_TECH || eUnit == NO_UNIT)
+		return szRetVal;
+	FlavorTypes eGPFlavor = NO_FLAVOR;
+	int iMaxFlavor = -1;
+	CvUnitInfo const& kUnit = GC.getInfo(eUnit);
+	FOR_EACH_ENUM(Flavor)
+	{
+		int iFlavor = kUnit.getFlavorValue(eLoopFlavor);
+		if (iFlavor > iMaxFlavor)
+		{
+			eGPFlavor = eLoopFlavor;
+			iMaxFlavor = iFlavor;
+		}
+	}
+	CvString szFlavor;
+	switch (eGPFlavor)
+	{
+		case FLAVOR_SCIENCE: szFlavor = "SCIENCE"; break;
+		case FLAVOR_MILITARY: szFlavor = "MILITARY"; break;
+		case FLAVOR_RELIGION: szFlavor = "RELIGION"; break;
+		case FLAVOR_PRODUCTION: szFlavor = "PRODUCTION"; break;
+		case FLAVOR_GOLD: szFlavor = "GOLD"; break;
+		case FLAVOR_CULTURE: szFlavor = "CULTURE"; break;
+		case FLAVOR_GROWTH: szFlavor = "GROWTH"; break;
+		default: FAssert(false); return szRetVal;
+	}
+	szRetVal.append(gDLL->getText("TXT_KEY_MISSION_DISCOVER_HELP1"));
+	szRetVal.append(L" ");
+	CvString szFlavorKey("TXT_KEY_FLAVOR_" + szFlavor + "_TECH");
+	szRetVal.append(gDLL->getText(szFlavorKey));
+	szRetVal.append(L". ");
+	CvTeam& kTeam = GET_TEAM(ePlayer);
+	/*	The same discovery could be enabled by multiple currently researchable techs.
+		The map lists the alt. reqs for each target tech. */
+	ArrayEnumMap2D<TechTypes,TechTypes,bool> discoverMap;
+	FOR_EACH_ENUM2(Tech, eResearchOption)
+	{
+		if (!kPlayer.canResearch(eResearchOption))
+			continue;
+		kTeam.setHasTechTemporarily(eResearchOption, true);
+		TechTypes eNextDiscover = kPlayer.getDiscoveryTech(eUnit);
+		kTeam.setHasTechTemporarily(eResearchOption, false);
+		if (eNextDiscover != eCurrentDiscover && eNextDiscover != NO_TECH)
+			discoverMap.set(eNextDiscover, eResearchOption, true);
+	}
+	int iSize = discoverMap.numNonDefault();
+	if (iSize <= 0)
+		return szRetVal;
+	szRetVal.append(gDLL->getText("TXT_KEY_MISSION_DISCOVER_HELP2"));
+	szRetVal.append(L" ");
+	if (iSize == 1)
+		szRetVal.append(gDLL->getText(szFlavorKey));
+	else
+	{
+		CvString szPluralKey = "TXT_KEY_FLAVOR_" + szFlavor + "_PLURAL";
+		szRetVal.append(gDLL->getText(szPluralKey));
+	}
+	szRetVal.append(L": ");
+	bool bFirst = true;
+	FOR_EACH_ENUM2(Tech, eNextDiscover)
+	{
+		if (discoverMap.get(eNextDiscover) == NULL)
+			continue;
+		if (bFirst)
+			bFirst = false;
+		else szRetVal.append(L", ");
+		CvTechInfo const& kNextDiscover = GC.getInfo(eNextDiscover);
+		CvWString szTemp;
+		szTemp.Format(SETCOLR L"%s" ENDCOLR, TEXT_COLOR("COLOR_TECH_TEXT"),
+				kNextDiscover.getDescription());
+		szRetVal.append(szTemp);
+		szRetVal.append(L" (");
+		szRetVal.append(gDLL->getText("TXT_KEY_MISSION_DISCOVER_REQ"));
+		szRetVal.append(L" ");
+		bool bFirstInner = true;
+		FOR_EACH_ENUM2(Tech, eReqTech)
+		{
+			if (!discoverMap.get(eNextDiscover, eReqTech))
+				continue;
+			if (bFirstInner)
+				bFirstInner = false;
+			else
+			{
+				szRetVal.append(L" ");
+				szRetVal.append(gDLL->getText("TXT_KEY_MISSION_DISCOVER_OR"));
+				szRetVal.append(L" ");
+			}
+			szTemp.Format(SETCOLR L"%s" ENDCOLR, TEXT_COLOR("COLOR_TECH_TEXT"),
+					GC.getInfo(eReqTech).getDescription());
+			szRetVal.append(szTemp);
+		}
+		szRetVal.append(L")");
+	}
+	szRetVal.append(L".");
+	return szRetVal;
+}
+
+// <advc.004b>
+CvWString CvDLLWidgetData::getFoundCostText(CvPlot const& p, PlayerTypes eOwner) const
+{
+	CvPlayer const& kOwner = GET_PLAYER(eOwner);
+	if (kOwner.isAnarchy())
+		return "";
+	int iProjPreInfl = 0;
+	// New city increases other cities' maintenance
+	FOR_EACH_CITY (c, kOwner)
+	{
+		if (c->isDisorder()) // Can't account for these
+			continue;
+		int iProjected = // Distance and corp. maintenance stay the same
+				c->calculateDistanceMaintenanceTimes100() +
+				c->calculateCorporationMaintenanceTimes100() +
+				CvCity::calculateNumCitiesMaintenanceTimes100(*c->plot(),
+				eOwner, c->getPopulation(), 1) +
+				CvCity::calculateColonyMaintenanceTimes100(*c->plot(),
+				eOwner, c->getPopulation(), 1);
+		// Snippet from CvCity::updateMaintenance
+		iProjPreInfl += (iProjected *
+				std::max(0, c->getMaintenanceModifier() + 100)) / 100;
+	}
+	int iNewCityMaint =
+			CvCity::calculateDistanceMaintenanceTimes100(p, eOwner) +
+			// Last param: +1 for the newly founded city
+			CvCity::calculateNumCitiesMaintenanceTimes100(p, eOwner, -1, 1) +
+			CvCity::calculateColonyMaintenanceTimes100(p, eOwner);
+	iProjPreInfl += iNewCityMaint;
+	iProjPreInfl /= 100;
+	// Civic upkeep
+	iProjPreInfl += kOwner.getCivicUpkeep(NULL, true, 1);
+	// Unit cost (new city increases free units, Settler unit goes away)
+	iProjPreInfl += kOwner.calculateUnitCost(CvCity::initialPopulation(), -1);
+	// Unit supply (Settler unit goes away)
+	iProjPreInfl += kOwner.calculateUnitSupply(p.getOwner() == eOwner ? 0 : -1);
+	// Inflation
+	int iCost = (iProjPreInfl * (kOwner.calculateInflationRate() + 100)) / 100;
+	// Difference from current expenses
+	iCost -= kOwner.calculateInflatedCosts();
+	/* Could, in theory, be negative due to unit cost. Don't output
+	   a negative cost (too confusing). */
+	iCost = std::max(0, iCost);
+	CvWString szRetVal = L"\n";
+	CvWString costStr = CvWString::format(L"%d", iCost);
+	szRetVal.append(gDLL->getText("TXT_KEY_PROJECTED_COST", costStr.GetCString()));
+	return szRetVal;
+}
+
+CvWString CvDLLWidgetData::getNetFeatureHealthText(CvPlot const& kCityPlot,
+	PlayerTypes eOwner) const
+{
+	int iGoodHealthPercent = 0;
+	int iBadHealthPercent = 0;
+	// bIncludeCityPlot=false: Feature gets removed upon founding
+	for (CityPlotIter it(kCityPlot, false); it.hasNext(); ++it)
+	{
+		CvPlot const& p = *it;
+		if (!p.isFeature() || !p.isRevealed(TEAMID(eOwner)))
+			continue;
+		int iHealthPercent = GC.getInfo(p.getFeatureType()).getHealthPercent();
+		if (iHealthPercent > 0)
+			iGoodHealthPercent += iHealthPercent;
+		else iBadHealthPercent -= iHealthPercent;
+	}
+	CvWString szRetVal;
+	if (kCityPlot.isFreshWater())
+	{
+		szRetVal.append(NEWLINE);
+		szRetVal.append(gDLL->getText("TXT_KEY_MISC_HEALTH_FROM_FRESH_WATER",
+				GC.getDefineINT(CvGlobals::FRESH_WATER_HEALTH_CHANGE)));
+	}
+	int iGoodHealth = iGoodHealthPercent / 100;
+	int iBadHealth = iBadHealthPercent / 100;
+	if (iGoodHealth > 0 || iBadHealth > 0)
+	{
+		szRetVal.append(NEWLINE);
+		szRetVal.append(L"+");
+		int iIcon = 0;
+		if (iGoodHealth > 0)
+		{
+			iIcon = gDLL->getSymbolID(HEALTHY_CHAR);
+			/*  Turns out good and bad health are rounded individually;
+				no need, then, to show fractions. */
+			// float fGoodHealth = iGoodHealthPercent / 100.0f;
+			//szRetVal.append(CvWString::format((iGoodHealthPercent % 10 == 0 ?
+			//		L"%.1f%c" : L"%.2f%c"), fGoodHealth, iIcon));
+			szRetVal.append(CvWString::format(L"%d%c", iGoodHealth, iIcon));
+		}
+		if (iBadHealth > 0)
+		{
+			if (iGoodHealth > 0)
+				szRetVal.append(CvWString::format(L", "));
+			iIcon = gDLL->getSymbolID(UNHEALTHY_CHAR);
+			szRetVal.append(CvWString::format(L"%d%c", iBadHealth, iIcon));
+		}
+		szRetVal.append(gDLL->getText("TXT_KEY_FROM_FEATURES"));
+	}
+	int iExtraHealth = GET_PLAYER(eOwner).getExtraHealth();
+	if (iExtraHealth != 0)
+	{
+		szRetVal.append(NEWLINE);
+		int iIcon = 0;
+		szRetVal.append(L"+");
+		if (iExtraHealth > 0)
+		{
+			iIcon = gDLL->getSymbolID(HEALTHY_CHAR);
+			szRetVal.append(CvWString::format(L"%d%c", iExtraHealth, iIcon));
+		}
+		else
+		{
+			iIcon = gDLL->getSymbolID(UNHEALTHY_CHAR);
+			szRetVal.append(CvWString::format(L"%d%c", iBadHealth, iIcon));
+		}
+		szRetVal.append(gDLL->getText("TXT_KEY_FROM_TRAIT"));
+	}
+	return szRetVal;
+}
+
+CvWString CvDLLWidgetData::getHomePlotYieldText(CvPlot const& p, PlayerTypes eOwner) const
+{
+	CvWString szRetVal = NEWLINE;
+	szRetVal.append(gDLL->getText("TXT_KEY_HOME_TILE_YIELD"));
+	FOR_EACH_ENUM(Yield)
+	{
+		int iYieldRate = p.calculateNatureYield(eLoopYield, TEAMID(eOwner), true);
+		CvYieldInfo const& kLoopYield = GC.getInfo(eLoopYield);
+		iYieldRate = std::max(iYieldRate, kLoopYield.getMinCity());
+		if (iYieldRate == 0)
+			continue;
+		CvWString szYield = CvWString::format(L", %d%c", iYieldRate, kLoopYield.getChar());
+		szRetVal.append(szYield);
+	}
+	return szRetVal;
+} // </advc.004b>

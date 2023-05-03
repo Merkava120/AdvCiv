@@ -154,6 +154,11 @@ bool CvMapGenerator::canPlaceGoodyAt(ImprovementTypes eGoody, int iX, int iY) co
 
 void CvMapGenerator::addGameElements()
 {
+	// merkava.mb0 putting this before the rest of the game elements, so that those functions can use biomes. 
+	addBiomes(); 
+	gDLL->logMemState("CvMapGen after add biomes");
+	// merkava.mb0 end
+
 	addRivers();
 	gDLL->logMemState("CvMapGen after add rivers");
 
@@ -173,6 +178,375 @@ void CvMapGenerator::addGameElements()
 	afterGeneration();
 }
 
+// merkava.mb
+void CvMapGenerator::addBiomes()
+{
+	GC.getGame().resetPlotBiomeMap();
+	// First pass: record biomes for all tiles based on their most common adjacent terrain. 
+	for (int i = 0; i < GC.getMap().numPlots(); i++)
+	{
+		TerrainTypes eMostAdjacent = getMostAdjacentTerrain(i);
+		if (eMostAdjacent != NO_TERRAIN)
+			GC.getGame().setPlotBiome(i, eMostAdjacent); 
+		else
+			GC.getGame().setPlotBiome(i, NO_TERRAIN); 
+	}
+	// Second pass: check adjacent biomes, if none similar, flip to most common adjacent. 
+	// Simultaneously, split ocean by latitude groups, as defined in global defines. 
+	int iLatitudeGroups = GC.getDefineINT("NUM_LATITUDE_GROUPS");
+	int iLatitudeDivision = (GC.getMap().getTopLatitude() - GC.getMap().getBottomLatitude()) / iLatitudeGroups;
+	for (int n = 0; n < GC.getDefineINT("NUM_SECOND_PASSES"); n++) 
+	{
+		for (int i = 0; i < GC.getMap().numPlots(); i++)
+		{
+			if (GC.getMap().plotByIndex(i)->isWater() && !GC.getMap().plotByIndex(i)->isAdjacentToLand()) // ocean: set latitude biome - negative for now
+			{
+				int iLatBiome = (GC.getMap().plotByIndex(i)->getLatitude() - GC.getMap().getBottomLatitude()) / iLatitudeDivision;
+				GC.getGame().setPlotBiome(i, (-1 * iLatBiome) - 2); // -1 is still reserved for "no biome"
+				continue; // being adjacent to itself doesn't matter for ocean - yet. 
+			}
+			if (!isAdjacentToOwnBiome(i, GC.getDefineINT("SECOND_PASS_MINIMUM_ADJACENT"))) // note "own" means own biome, not biome matching own terrain
+			{
+				int adjBiome = getMostAdjacentBiome(i, false, true); // note that this might flip it right back if min > 1; that's okay for now
+				if (adjBiome != -1) // don't spread -1 biomes around, do multiple passes here
+					GC.getGame().setPlotBiome(i, adjBiome); 
+			}
+		}
+	}
+	// Third pass! Adjacency. 
+	std::vector<std::vector<int> > aiBiomeSizeArray;
+	int* aiAdjacencyMap = new int[GC.getMap().numPlots()];
+	// initialize list
+	for (int i = 0; i < GC.getMap().numPlots(); i++)
+		aiAdjacencyMap[i] = -1;
+	if (GC.getDefineINT("DO_THIRD_PASS") > 0)
+	{
+		int iBiome = 0;
+		for (int i = 0; i < GC.getMap().numPlots(); i++)
+		{
+			CvPlot* pPlot = GC.getMap().plotByIndex(i); 
+			// check adjacent plots, take their adjacency if they share our biome
+			FOR_EACH_ADJ_PLOT2(pLoopPlot, *pPlot)
+			{
+				if (GC.getGame().getPlotBiome(pLoopPlot->plotNum()) == GC.getGame().getPlotBiome(i) && aiAdjacencyMap[pLoopPlot->plotNum()] != -1)
+					aiAdjacencyMap[i] = aiAdjacencyMap[pLoopPlot->plotNum()];
+			}
+			// if we still have no adjacency, this is a new biome
+			if (aiAdjacencyMap[i] == -1) 
+			{
+				aiAdjacencyMap[i] = iBiome;
+				iBiome++;
+			}
+			// post-check: if adjacent tiles share our biome but not our adjacency, flip them to ours. 
+			FOR_EACH_ADJ_PLOT2(pLoopPlot, *pPlot)
+			{
+				if (GC.getGame().getPlotBiome(pLoopPlot->plotNum()) == GC.getGame().getPlotBiome(i) && aiAdjacencyMap[pLoopPlot->plotNum()] != aiAdjacencyMap[i])
+				{
+					int iOriginalAdjacency = aiAdjacencyMap[pLoopPlot->plotNum()];
+					aiAdjacencyMap[pLoopPlot->plotNum()] = aiAdjacencyMap[i];
+					if (iOriginalAdjacency != -1)
+					{
+						int iNew = -1;
+						int iOld = -1;
+						// This means two biomes actually touch each other and are one biome. 
+						// so whichever is less, flip the other to that. 
+						if (iOriginalAdjacency < aiAdjacencyMap[i])
+						{
+							iOld = aiAdjacencyMap[i];
+							iNew = iOriginalAdjacency;
+						}
+						else if (iOriginalAdjacency > aiAdjacencyMap[i])
+						{
+							iOld = iOriginalAdjacency;
+							iNew = aiAdjacencyMap[i];
+						}
+						for (int ii = 0; ii < i; ii++)
+							if (aiAdjacencyMap[ii] == iOld)
+								aiAdjacencyMap[ii] = iNew;
+					}
+				}
+			}
+		}	
+		// Now set biomes to match adjacency. 
+		for (int i = 0; i < GC.getMap().numPlots(); i++)
+		{
+			// but skip -1 biomes; mb2c
+			if (GC.getGame().getPlotBiome(i) == -1)
+				continue;
+			//if (!GC.getMap().plotByIndex(i)->isWater() || GC.getMap().plotByIndex(i)->isAdjacentToLand()) // mb2c ocean plot biomes set above, but not coasts
+			GC.getGame().setPlotBiome(i, aiAdjacencyMap[i]); //mb3a adjacency for oceans
+			// size array here
+			std::vector<int> newVec;
+			while ((int)aiBiomeSizeArray.size() <= GC.getGame().getPlotBiome(i))
+				aiBiomeSizeArray.push_back(newVec);
+			aiBiomeSizeArray[GC.getGame().getPlotBiome(i)].push_back(i); // the way this is set up this SHOULD not have any empty arrays but I'm not positive
+		}
+	}
+	// mb6 I think having a separate size-flipping pass would be good. but need to make sure the size array is set up even if third passes aren't done. 
+	else if (GC.getDefineINT("MIN_BIOME_SIZE") > 1)
+	{
+		for (int i = 0; i < GC.getMap().numPlots(); i++)
+		{
+			if (GC.getGame().getPlotBiome(i) == -1)
+				continue;
+			if (GC.getGame().getPlotBiome(i) < 0) // means water in this case, so let's tack those biomes on top
+				GC.getGame().setPlotBiome(i, GC.getNumTerrainInfos() + (-1 * GC.getGame().getPlotBiome(i)));
+			std::vector<int> newVec;
+			while ((int)aiBiomeSizeArray.size() <= GC.getGame().getPlotBiome(i))
+				aiBiomeSizeArray.push_back(newVec);
+			aiBiomeSizeArray[GC.getGame().getPlotBiome(i)].push_back(i); // in this case these will be TerrainTypes. Might have a couple blank rows but that's no big deal. 
+		}
+	}
+	// Size pass
+	if (GC.getDefineINT("MIN_BIOME_SIZE") > 1)
+	{
+		int iSize = (int)aiBiomeSizeArray.size();
+		for (int s = 0; s < (int)aiBiomeSizeArray.size(); s++)
+		{
+			if ((int)aiBiomeSizeArray[s].size() < GC.getDefineINT("MIN_BIOME_SIZE"))
+			{
+				// need to do this until all are flipped or a certain cap is reached. 
+				int iCap = 100;
+				int iNumFlipped = 0;
+				// remove biome's tiles from list
+				int iSize = (int)aiBiomeSizeArray[s].size();
+				std::vector<int> biomeTiles = aiBiomeSizeArray[s];
+				aiBiomeSizeArray[s].clear();
+				while (iNumFlipped < iSize && iCap > 0)
+				{
+					iCap--;
+					// flip all of this biome's tiles to adjacent biomes. 
+					for (int i = 0; i < (int)biomeTiles.size(); i++)
+					{
+						int iAdjBiome = getMostAdjacentBiome(biomeTiles[i], true); //exclude own biome from this
+						if (iAdjBiome >= 0) // shouldn't be anything but -1 and positive at this point, but, who knows
+						{
+							GC.getGame().setPlotBiome(biomeTiles[i], iAdjBiome);
+							iNumFlipped++;
+							// add to new biome array
+							aiBiomeSizeArray[iAdjBiome].push_back(biomeTiles[i]);
+						}
+					}
+				}
+			}
+		}
+	}
+	// And finally, set up the biomes in CvGame. 
+	int iBiomeCount = 0;
+	for (int j = 0; j < (int)aiBiomeSizeArray.size(); j++)
+	{
+		if ((int)aiBiomeSizeArray[j].size() == 0)
+			continue;
+		TerrainTypes eTerrain = NO_TERRAIN;
+		int iBottomLatitude = 1000;
+		int iTopLatitude = -1000;
+		std::vector<int> adjBiomes;
+		std::vector<int> landAreas;
+		int iMax = 0;
+		ArrayEnumMap<TerrainTypes, int> aiTerrains;
+		for (int i = 0; i < (int)aiBiomeSizeArray[j].size(); i++)
+		{
+			TerrainTypes iIndex = GC.getMap().plotByIndex(aiBiomeSizeArray[j][i])->getTerrainType();
+			int iLatitude = GC.getMap().plotByIndex(aiBiomeSizeArray[j][i])->getLatitude();
+			aiTerrains[iIndex]++;
+			if (aiTerrains[iIndex] > iMax)
+			{
+				iMax = aiTerrains[iIndex];
+				eTerrain = iIndex;
+			}
+			if (iLatitude < iBottomLatitude)
+				iBottomLatitude = iLatitude;
+			if (iLatitude > iTopLatitude)
+				iTopLatitude = iLatitude;
+			FOR_EACH_ADJ_PLOT(*GC.getMap().plotByIndex(aiBiomeSizeArray[j][i]))
+			{
+				int iAdjBiome = GC.getGame().getPlotBiome(pAdj->plotNum());
+				bool bFound = false;
+				if ((int)adjBiomes.size() > 0)
+				{
+					for (int k = 0; k < (int)adjBiomes.size(); k++)
+					{
+						if (adjBiomes[k] == iAdjBiome)
+						{
+							bFound = true;
+							break;
+						}
+					}
+				}
+				if (bFound)
+					continue;
+				else
+					adjBiomes.push_back(iAdjBiome);
+			}
+			CvArea *pArea = GC.getMap().plotByIndex(aiBiomeSizeArray[j][i])->area();
+			if (GC.getMap().plotByIndex(aiBiomeSizeArray[j][i])->isWater())
+				continue; 
+			int iAreaID = pArea->getID();
+			bool bFound = false;
+			if ((int)landAreas.size() > 0)
+			{
+				for (int k = 0; k < (int)landAreas.size(); k++)
+				{
+					if (landAreas[k] == iAreaID)
+					{
+						bFound = true;
+						break;
+					}
+				}
+			}
+			if (bFound)
+				continue;
+			else
+				landAreas.push_back(iAreaID);
+		}
+		if (eTerrain != NO_TERRAIN && iBottomLatitude < 1000 && iTopLatitude > -1000) // i.e., we found stuff for the biome
+		{
+			GC.getGame().addBiome(eTerrain, iBottomLatitude, iTopLatitude);
+			for (int l = 0; l < (int)landAreas.size(); l++)
+				GC.getGame().addBiomeLandArea(iBiomeCount, landAreas[l]);
+			for (int l = 0; l < (int)adjBiomes.size(); l++)
+				GC.getGame().addAdjacentBiome(iBiomeCount, l);
+			iBiomeCount++;
+		}
+		else
+			FAssertMsg(false, "Probably some non-plot indices added to biome size array");
+
+	}
+	// That should be it! 
+}
+// counts terrains bordering this tile and returns the numerically highest present
+TerrainTypes CvMapGenerator::getMostAdjacentTerrain(int iPlotIndex)
+{
+	CvPlot* pPlot = GC.getMap().plotByIndex(iPlotIndex);
+	ArrayEnumMap<TerrainTypes, int> adjTerrainNums;
+	FOR_EACH_ADJ_PLOT2(pLoopPlot, *pPlot)
+	{
+		// Ignore coasts; coasts are non-biomes and just attached to whatever biome is nearby. 
+		if (pLoopPlot->isAdjacentToLand() && pLoopPlot->isWater())
+			continue;
+		// Also, if the center plot is a coast, ignore oceans. 
+		if (pPlot->isAdjacentToLand() && pPlot->isWater() && pLoopPlot->isWater())
+			continue;
+		TerrainTypes eAdjTerrain = pLoopPlot->getTerrainType();
+		adjTerrainNums[pLoopPlot->getTerrainType()] += 1;
+	}
+	// Now find numerically most adjacent. 
+	int iMax = 0;
+	TerrainTypes eMaxTerrain = NO_TERRAIN;
+	// If there is a tie, will consider the center tile, and if that can't break ties, just leave at -1 for now. 
+	std::vector<int> tiedTerrains; 
+	// Loop through terrains in list
+	FOR_EACH_ENUM2(Terrain, eTerrain)
+	{
+		// If current greater than max, update max
+		if (adjTerrainNums[eTerrain] > iMax)
+		{
+			iMax = adjTerrainNums[eTerrain];
+			eMaxTerrain = eTerrain;
+			// Previous ties no longer relevant, but current max is part of future ties. 
+			tiedTerrains.clear(); 
+			tiedTerrains.push_back(eMaxTerrain);
+		}
+		else if (adjTerrainNums[eTerrain] == iMax && iMax > 0) // don't consider zero lol
+			tiedTerrains.push_back(eTerrain);
+	}
+	// check tied terrains; if the center matches the terrain, that's the max. otherwise, no terrain is max. 
+	if ((int)tiedTerrains.size() > 1)
+	{
+		for (int i = 0; i < (int)tiedTerrains.size(); i++)
+		{
+			if (tiedTerrains[i] == pPlot->getTerrainType())
+				return pPlot->getTerrainType();
+		}
+		return NO_TERRAIN;
+	}
+	return eMaxTerrain;
+}
+//mb1.3
+// returns false if biome is -1 or if no adjacent terrains share same biome
+bool CvMapGenerator::isAdjacentToOwnBiome(int iPlotIndex, int iMinAdj)
+{
+	int iAdj = 0;
+	if (GC.getGame().getPlotBiome(iPlotIndex) == -1) 
+		return false;
+	CvPlot* pPlot = GC.getMap().plotByIndex(iPlotIndex);
+	FOR_EACH_ADJ_PLOT2(pLoopPlot, *pPlot)
+	{
+		if (pLoopPlot->isWater() && !pLoopPlot->isAdjacentToLand()) // skip ocean tiles, but coast is fine
+			continue;
+		if (GC.getGame().getPlotBiome(iPlotIndex) == GC.getGame().getPlotBiome(pLoopPlot->plotNum()))
+			iAdj++;
+	}
+	return (iAdj >= iMinAdj);
+}
+// returns the most common adjacent biome. This one only works before same-terrain biomes are separated. 
+// Basically the same as the terrain one, but it uses biomes. 
+int CvMapGenerator::getMostAdjacentBiome(int iPlotIndex, bool bExcludeOwn, bool bProbabilistic)
+{
+	CvPlot* pPlot = GC.getMap().plotByIndex(iPlotIndex);
+	std::vector<std::pair<int, int> > adjBiomeNums;
+	FOR_EACH_ADJ_PLOT2(pLoopPlot, *pPlot)
+	{
+		int iAdjBiome = GC.getGame().getPlotBiome(pLoopPlot->plotNum());
+		if (iAdjBiome == -1)
+			continue;
+		if (bExcludeOwn && iAdjBiome == GC.getGame().getPlotBiome(iPlotIndex)) 
+			continue;
+		if (!(pPlot->isWater() && !pPlot->isAdjacentToLand()) && pLoopPlot->isWater() && !pLoopPlot->isAdjacentToLand()) // if center is not deep ocean and adjacent is, skip it
+			continue;
+		bool bFound = false;
+		for (int k = 0; k < (int)adjBiomeNums.size(); k++)
+		{
+			if (adjBiomeNums[k].first == iAdjBiome)
+			{
+				bFound = true;
+				adjBiomeNums[k].second += 1;
+				break;
+			}
+		}
+		if (!bFound)
+		{
+			std::pair<int, int> biome = std::pair<int, int>(iAdjBiome, 1);
+			adjBiomeNums.push_back(biome);
+		}
+	}
+	int iMax = 0;
+	int iMaxBiome = -1;
+	if ((int)adjBiomeNums.size() == 0) // found no adjacent biomes that aren't -1 or coasts
+		return GC.getGame().getPlotBiome(iPlotIndex); // so just leave it as its own
+	std::vector<int> tiedBiomes; 
+	// Loop through terrains in list
+	for (int k = 0; k < (int)adjBiomeNums.size(); k++)
+	{
+		// If current greater than max, update max
+		if (adjBiomeNums[k].second > iMax)
+		{
+			iMax = adjBiomeNums[k].second;
+			iMaxBiome = adjBiomeNums[k].first; 
+			tiedBiomes.clear();
+			tiedBiomes.push_back(iMaxBiome);
+		}
+		else if (adjBiomeNums[k].second == iMax && iMax > 0) // don't consider zero lol
+		{
+			tiedBiomes.push_back(adjBiomeNums[k].first);
+		}
+	}
+	// now check the tied biomes. 
+	if ((int)tiedBiomes.size() > 0)
+	{
+		for (int i = 0; i < (int)tiedBiomes.size(); i++)
+		{
+			if (tiedBiomes[i] == GC.getGame().getPlotBiome(pPlot->plotNum()))
+				return tiedBiomes[i];
+		}
+		// If got to here that means center does not match tied biomes. 
+		if (bProbabilistic)
+			return tiedBiomes[SyncRandNum((int)tiedBiomes.size())];
+		return -1;
+	}
+	return iMaxBiome;
+}
+// merkava.mb END
 
 void CvMapGenerator::addLakes()
 {
@@ -182,54 +556,20 @@ void CvMapGenerator::addLakes()
 		return;
 
 	gDLL->NiTextOut("Adding Lakes...");
-	// <advc.129e>
-	int const iLAKE_PLOT_RAND = GC.getDefineINT("LAKE_PLOT_RAND");
-	int iLakeRollSides = iLAKE_PLOT_RAND;
-	TerrainTypes const eDesert = (TerrainTypes)GC.getDefineINT("BARREN_TERRAIN");
-	int iDesert = 0;
-	std::vector<std::pair<CvPlot*,bool> > apbCandidates;
-	FOR_EACH_ENUM(PlotNum)
+	int const iLAKE_PLOT_RAND = GC.getDefineINT("LAKE_PLOT_RAND"); // advc.opt
+	for (int i = 0; i < GC.getMap().numPlots(); i++)
 	{
-		CvPlot& p = GC.getMap().getPlotByIndex(eLoopPlotNum);
-		if (!p.isWater() && !p.isCoastalLand() && !p.isRiver() && // as in BtS
-			p.getPlotType() != PLOT_PEAK)
+		//gDLL->callUpdater(); // advc.opt: Not needed I reckon
+		CvPlot& p = GC.getMap().getPlotByIndex(i);
+		if (!p.isWater() && !p.isCoastalLand() && !p.isRiver())
 		{
-			bool bDesert = (p.getTerrainType() == eDesert);
-			apbCandidates.push_back(std::make_pair(&p, bDesert));
-			if (bDesert)
-				iDesert++;
+			if (MapRandNum(iLAKE_PLOT_RAND) == 0)
+				p.setPlotType(PLOT_OCEAN);
 		}
 	}
-	scaled rDesertProbMult = fixp(1/4.);
-	int const iCandidates = (int)apbCandidates.size();
-	if (iCandidates > 0)
-	{	// This keeps the expected number of lakes the same as in BtS
-		iLakeRollSides = (iLakeRollSides *
-				// Important to divide first, to avoid overflow.
-				((iDesert * rDesertProbMult + iCandidates - iDesert) / iCandidates))
-				.round();
-	}
-	gDLL->callUpdater(); // Moved out of the loop
-	std::vector<CvPlot*> apLakes; // advc.opt
-	for (int i = 0; i < iCandidates; i++)
-	{
-		CvPlot& p = *apbCandidates[i].first;
-		if (MapRandOneChanceIn(iLakeRollSides) &&
-			(!apbCandidates[i].second ||
-			MapRandSuccess(rDesertProbMult)))
-		{
-			apLakes.push_back(&p);
-		}
-	} // </advc.129e>
-	// <advc.opt> Recalc only once
-	for (size_t i = 0; i < apLakes.size(); i++)
-	{
-		bool bRecalc = (i + 1 == apLakes.size());
-		apLakes[i]->setPlotType(PLOT_OCEAN, bRecalc, bRecalc);
-	} // </advc.opt>
 }
 
-void CvMapGenerator::addRivers()
+void CvMapGenerator::addRivers()  // advc: refactored
 {
 	PROFILE_FUNC();
 
@@ -596,8 +936,6 @@ void CvMapGenerator::addBonuses()
 					addUniqueBonusType(eLoopBonus);
 				else addNonUniqueBonusType(eLoopBonus);
 			}
-			// advc.108c: Remember that this bonus gets handled by the map script
-			else GC.getMap().setBonusBalanced(eLoopBonus);
 		}
 	}
 }
@@ -937,7 +1275,7 @@ void CvMapGenerator::generateRandomMap()
 	   is called during map generation, tile yields aren't yet set. */
 	GC.getMap().computeShelves();
 	// <advc.108>
-	if (GC.getMap().isCustomMapOption(gDLL->getText("TXT_KEY_MAP_BALANCED")))
+	if (py.isAnyCustomMapOptionSetTo(gDLL->getText("TXT_KEY_MAP_BALANCED")))
 		GC.getGame().setStartingPlotNormalizationLevel(CvGame::NORMALIZE_HIGH);
 	// </advc.108>
 }
@@ -1067,6 +1405,15 @@ int CvMapGenerator::calculateNumBonusesToAdd(BonusTypes eBonus)
 {
 	CvBonusInfo const& kBonus = GC.getInfo(eBonus);
 	CvMap const& kMap = GC.getMap();
+
+	int iBaseCount = kBonus.getConstAppearance();
+	{
+		int iRand1 = MapRandNum(kBonus.getRandAppearance1());
+		int iRand2 = MapRandNum(kBonus.getRandAppearance2());
+		int iRand3 = MapRandNum(kBonus.getRandAppearance3());
+		int iRand4 = MapRandNum(kBonus.getRandAppearance4());
+		iBaseCount += iRand1 + iRand2 + iRand3 + iRand4;
+	}
 	bool const bIgnoreLatitude = GC.getPythonCaller()->isBonusIgnoreLatitude();
 
 	//int iLandTiles = 0; // advc: misleadingly named
@@ -1109,14 +1456,8 @@ int CvMapGenerator::calculateNumBonusesToAdd(BonusTypes eBonus)
 			per100(kBonus.getPercentPerPlayer());
 	/*	<advc.129> Same as in BtS for 8 players, a bit less for high player counts,
 		a bit more for small player counts. */
-	rFromPlayers.exponentiate(fixp(0.85));
-	rFromPlayers *= fixp(4/3.); // </advc.129>
-	int iMult = kBonus.getConstAppearance();
-	iMult +=
-			MapRandNum(kBonus.getRandAppearance1()) +
-			MapRandNum(kBonus.getRandAppearance2()) +
-			MapRandNum(kBonus.getRandAppearance3()) +
-			MapRandNum(kBonus.getRandAppearance4());
-	int iBonusCount = (iMult * (iFromTiles + rFromPlayers.round())) / 100;
+	rFromPlayers.exponentiate(fixp(0.8));
+	rFromPlayers *= fixp(1.5); // </advc.129>
+	int iBonusCount = (iBaseCount * (iFromTiles + rFromPlayers.round())) / 100;
 	return std::max(1, iBonusCount);
 }

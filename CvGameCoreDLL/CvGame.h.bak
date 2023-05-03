@@ -871,44 +871,7 @@ public:
 	// <advc.304>
 	BarbarianWeightMap& getBarbarianWeightMap() { return *m_pBarbarianWeightMap; }
 	BarbarianWeightMap const& getBarbarianWeightMap() const { return *m_pBarbarianWeightMap; }
-	// </advc.304>  
-	// merkava.mb0
-	int getPlotBiome(int iIndex) const { return (m_aiPlotBiomeMap == NULL ? -1 : m_aiPlotBiomeMap[iIndex]); }
-	int getPlotBiomeFromPos(int iX, int iY) const;  // merkava.mb2p
-	void setPlotBiome(int iPlot, int iBiome);
-	void resetPlotBiomeMap();
-	// mb2
-	/*int getBiomePlot(int iBiome, int i) const { return ((int)m_aiBiomePlotMap.size() <= 0 ? -1 : m_aiBiomePlotMap[iBiome][i]); }
-	void addPlotToBiome(int iBiome, int iPlot);
-	void resetBiomePlotMap(int iBiome);
-	void resetBiomePlotMaps();*/
-	// mb5
-	struct BiomeData
-	{
-		TerrainTypes eTerrain;
-		int iBottomLatitude;
-		int iTopLatitude;
-		std::vector<int> aiLandAreas;
-		std::vector<int> aiAdjBiomes;
-	};
-	BiomeData getBiomeData(int iBiome) const { return m_aBiomeDatas[iBiome];	}
-	TerrainTypes getBiomeTerrain(int iBiome) const { return m_aBiomeDatas[iBiome].eTerrain; }
-	bool isBiomeWithinLatitudes(int iBiome, int iHighest, int iLowest) const;
-	bool isLatitudeWithinBiome(int iLatitude, int iBiome) const;
-	void setBiomeTerrain(int iBiome, TerrainTypes eTerrain);
-	void setBiomeLatitudes(int iBiome, int iLower, int iHigher);
-	void addBiome(TerrainTypes eTerrain, int iBottomLatitude, int iTopLatitude);
-	void deleteBiome(int iBiome);
-	void deleteAllBiomes();
-	void addBiomeLandArea(int iBiome, int iAreaID);
-	void removeBiomeLandArea(int iBiome, int iAreaID);
-	void clearBiomeLandAreas(int iBiome);
-	bool isBiomeInLandArea(int iBiome, int iAreaID) const;
-	void addAdjacentBiome(int iBiome, int iAdjBiome);
-	void clearAdjacentBiomes(int iBiome);
-	bool isBiomesAdjacent(int iBiome1, int iBiome2) const;
-	// merkava.mb END
-	// <advc.703>
+	// </advc.304>  <advc.703>
 	RiseFall const& getRiseFall() const { return *m_pRiseFall; }
 	RiseFall& getRiseFall() { return *m_pRiseFall; }
 	// </advc.703>
@@ -1061,11 +1024,6 @@ protected:
 	// advc: Replacing a hash_map
 	ArrayEnumMap<VoteSourceTypes,ReligionTypes> m_aeVoteSourceReligion;
 	std::vector<EventTriggerTypes> m_aeInactiveTriggers;
-
-	int* m_aiPlotBiomeMap; //merkava.mb0
-	//std::vector<std::vector<int> > m_aiBiomePlotMap; //merkava.mb2
-	// merkava.mb5 
-	std::vector<BiomeData > m_aBiomeDatas;
 
 	/*  K-Mod. This is used to track which groups have been cycled through in the current turn.
 		Note: it does not need to be kept in sync for multiplayer games. */

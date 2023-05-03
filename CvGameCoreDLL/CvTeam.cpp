@@ -241,7 +241,7 @@ void CvTeam::addTeam(TeamTypes eTeam)
 	CvWString szBuffer(gDLL->getText("TXT_KEY_MISC_PLAYER_PERMANENT_ALLIANCE",
 			getReplayName().GetCString(), GET_TEAM(eTeam).getReplayName().GetCString()));
 	CvGame& kGame = GC.getGame();
-	kGame.addReplayMessage(REPLAY_MESSAGE_MAJOR_EVENT, getLeaderID(), szBuffer,
+	kGame.addReplayMessage(REPLAY_MESSAGE_MAJOR_EVENT, getLeaderID(), szBuffer, -1, -1,
 			GC.getColorType("HIGHLIGHT_TEXT"));
 
 	// K-Mod note: the cancel deals code use to be here. I've moved it lower down.
@@ -902,7 +902,7 @@ void CvTeam::processBuilding(BuildingTypes eBuilding, int iChange)
 
 void CvTeam::doTurn()
 {
-	PROFILE_FUNC();
+	PROFILE("CvTeam::doTurn()");
 
 	FAssert(isAlive());
 	FAssert(countWarEnemies() == m_iMajorWarEnemies); // advc.003m
@@ -1413,7 +1413,7 @@ void CvTeam::announceWar(TeamTypes eTarget, bool bPrimaryDoW,
 		szBuffer.append(gDLL->getText("TXT_KEY_MISC_WAR_VIA_EVENT"));
 	} // </advc.106g>
 	GC.getGame().addReplayMessage(REPLAY_MESSAGE_MAJOR_EVENT, getLeaderID(), szBuffer,
-			GC.getColorType("WARNING_TEXT"));
+			-1, -1, GC.getColorType("WARNING_TEXT"));
 }
 
 // advc: Cut from makePeace
@@ -1537,7 +1537,7 @@ void CvTeam::announcePeace(TeamTypes eTarget, TeamTypes eBroker,
 		szBuffer.append(gDLL->getText("TXT_KEY_MISC_PEACE_VIA_EVENT"));
 	} // </advc.106g>
 	GC.getGame().addReplayMessage(REPLAY_MESSAGE_MAJOR_EVENT, getLeaderID(), szBuffer,
-			GC.getColorType("HIGHLIGHT_TEXT"));
+			-1, -1, GC.getColorType("HIGHLIGHT_TEXT"));
 }
 
 /*	advc.106o: To be called on the observer, i.e. the recipient of a message about a
@@ -1608,24 +1608,8 @@ void CvTeam::meet(TeamTypes eTeam, bool bNewDiplo,
 	if (isHasMet(eTeam))
 		return;
 	CvTeam& kTeam = GET_TEAM(eTeam);
-	CvPlot const* pAt = makeHasMet(eTeam, bNewDiplo, pData);
-	CvPlot const* pOtherAt = kTeam.makeHasMet(getID(), bNewDiplo, pData);
-	// <advc.120l> (Not in makeHasMet b/c all the has-met data needs to be set first)
-	if (pData != NULL &&
-		BUGOption::isEnabled("Civ4lerts__EspionageReminder") &&
-		!GC.getGame().isOption(GAMEOPTION_NO_ESPIONAGE))
-	{
-		if (TeamIter<CIV_ALIVE,OTHER_KNOWN_TO>::count(getID()) > 1)
-		{
-			for (MemberIter itMember(getID()); itMember.hasNext(); ++itMember)
-				itMember->addEspionageReminderMsg(eTeam, pAt);
-		}
-		if (TeamIter<CIV_ALIVE,OTHER_KNOWN_TO>::count(eTeam) > 1)
-		{
-			for (MemberIter itMember(eTeam); itMember.hasNext(); ++itMember)
-				itMember->addEspionageReminderMsg(getID(), pOtherAt);
-		}
-	} // </advc.120l>
+	makeHasMet(eTeam, bNewDiplo, pData);
+	kTeam.makeHasMet(getID(), bNewDiplo, pData);
 
 	if (gTeamLogLevel >= 2 && GC.getGame().isFinalInitialized() && eTeam != getID() && isAlive() && GET_TEAM(eTeam).isAlive()) logBBAI("    Team %d (%S) meets team %d (%S)", getID(), GET_PLAYER(getLeaderID()).getCivilizationDescription(0), eTeam, GET_PLAYER(GET_TEAM(eTeam).getLeaderID()).getCivilizationDescription(0)); // BETTER_BTS_AI_MOD, AI logging, 02/20/10, jdog5000
 	// <advc.001> Moved from makeHasMet in order to get the attitude update right
@@ -2174,8 +2158,7 @@ int CvTeam::getTypicalUnitValue(UnitAITypes eUnitAI, DomainTypes eDomain) const
 
 
 int CvTeam::getResearchCost(TechTypes eTech,
-	bool bFreeBarbarianResearch, // advc.301: Replacing K-Mod's bGlobalModifiers
-	bool bTeamSizeModifiers) const // K-Mod
+	bool bGlobalModifiers, bool bTeamSizeModifiers) const // K-Mod: params added
 {
 	CvGame const& kGame = GC.getGame();
 	CvTechInfo const& kTech = GC.getInfo(eTech);
@@ -2199,64 +2182,60 @@ int CvTeam::getResearchCost(TechTypes eTech,
 	rModifier += per100(iTECH_COST_MODIFIER);
 	// </advc.910>
 	rModifier += GC.getGame().groundbreakingNormalizationModifier(eTech); // advc.groundbr
-	CvWorldInfo const& kWorld = GC.getInfo(GC.getMap().getWorldSize());
-	if (eTechEra > 0) // advc.910
+	if (bGlobalModifiers) // K-Mod
 	{
-		rCost *= per100(kWorld.getResearchPercent());
-		// <advc.910>
-		rCost *= per100(GC.getInfo(GC.getMap().getSeaLevel()).getResearchPercent());
-		if (kGame.isOption(GAMEOPTION_ALWAYS_PEACE) &&
-			!kGame.isOption(GAMEOPTION_ALWAYS_WAR))
+		CvWorldInfo const& kWorld = GC.getInfo(GC.getMap().getWorldSize());
+		if (eTechEra > 0) // advc.910
 		{
-			rCost *= per100(105);
+			rCost *= per100(kWorld.getResearchPercent());
+			// <advc.910>
+			rCost *= per100(GC.getInfo(GC.getMap().getSeaLevel()).getResearchPercent());
+			if (kGame.isOption(GAMEOPTION_ALWAYS_PEACE) &&
+				!kGame.isOption(GAMEOPTION_ALWAYS_WAR))
+			{
+				rCost *= per100(105);
+			}
 		}
+		else if (kGame.isOption(GAMEOPTION_NO_GOODY_HUTS))
+			rCost /= per100(105); // </advc.910>
+		rCost *= per100(GC.getInfo(kGame.getGameSpeedType()).getResearchPercent());
+		rCost *= per100(GC.getInfo(kGame.getStartEra()).getResearchPercent());
+		// <advc.308>
+		if(kGame.isOption(GAMEOPTION_RAGING_BARBARIANS) && kGame.getStartEra() == 0)
+		{
+			if (eTechEra == 1)
+				rModifier -= per100(14);
+			else if (eTechEra == 2)
+				rModifier -= per100(7);
+		}
+		if(kGame.getStartEra() == 0 && kGame.isOption(GAMEOPTION_NO_BARBARIANS) &&
+			eTechEra <= 1)
+		{
+			rModifier += per100(3);
+		} // </advc.308>
+		// <advc.550d>
+		if (kGame.isOption(GAMEOPTION_NO_TECH_TRADING) &&
+			eTechEra > 0 && !kTech.isRepeat())
+		{
+			static scaled const rTECH_COST_NOTRADE_MODIFIER = per100(
+					GC.getDefineINT("TECH_COST_NOTRADE_MODIFIER"));
+			scaled rNoTradeAdjustment =
+					(rTECH_COST_NOTRADE_MODIFIER + per100(5) *
+					(eTechEra - fixp(2.5)).abs().pow(fixp(1.5))) *
+					scaled::clamp(scaled(kWorld.getDefaultPlayers() - 2,
+					11 - eTechEra), 0, fixp(8/3.));
+			rNoTradeAdjustment.decreaseTo(0); // No Tech Trading can only lower tech costs
+			rModifier += rNoTradeAdjustment;
+		} // </advc.550d>
+		/*	<advc.708> Tech costs shouldn't (fully) be affected by the
+			player handicap adjustment */
+		if (kGame.isOption(GAMEOPTION_RISE_FALL))
+		{
+			rCost *= 1 - per100(GC.getDefineINT(
+					CvGlobals::RF_PLAYER_HANDICAP_ADJUSTMENT) * 3);
+		} // </advc.708>
 	}
-	else if (kGame.isOption(GAMEOPTION_NO_GOODY_HUTS))
-		rCost /= per100(105); // </advc.910>
-	// advc.301: Excluding, as in K-Mod, map-based modifiers.
-	scaled rPaceModifier = 1; // (for lack of a better name)
-	rPaceModifier *= per100(GC.getInfo(kGame.getGameSpeedType()).getResearchPercent());
-	rPaceModifier *= per100(GC.getInfo(kGame.getStartEra()).getResearchPercent());
-	// <advc.301> Merely dilute; bGlobalModifiers=false had ignored these (K-Mod).
-	if (bFreeBarbarianResearch)
-		rPaceModifier = (fixp(0.5) + rPaceModifier) / fixp(1.5);
-	/*	(Or rModifier*=...? I don't recall why I decided to let some of these apply
-		directly to rCost.) */
-	rCost *= rPaceModifier; // </advc.301>
-	// <advc.308>
-	if (kGame.isOption(GAMEOPTION_RAGING_BARBARIANS) && kGame.getStartEra() == 0)
-	{
-		if (eTechEra == 1)
-			rModifier -= per100(14);
-		else if (eTechEra == 2)
-			rModifier -= per100(7);
-	}
-	if (kGame.getStartEra() == 0 && kGame.isOption(GAMEOPTION_NO_BARBARIANS) &&
-		eTechEra <= 1)
-	{
-		rModifier += per100(3);
-	} // </advc.308>
-	// <advc.550d>
-	if (kGame.isOption(GAMEOPTION_NO_TECH_TRADING) &&
-		eTechEra > 0 && !kTech.isRepeat())
-	{
-		static scaled const rTECH_COST_NOTRADE_MODIFIER = per100(
-				GC.getDefineINT("TECH_COST_NOTRADE_MODIFIER"));
-		scaled rNoTradeAdjustment =
-				(rTECH_COST_NOTRADE_MODIFIER + per100(5) *
-				(eTechEra - fixp(2.5)).abs().pow(fixp(1.5))) *
-				scaled::clamp(scaled(kWorld.getDefaultPlayers() - 2,
-				11 - eTechEra), 0, fixp(8/3.));
-		rNoTradeAdjustment.decreaseTo(0); // No Tech Trading can only lower tech costs
-		rModifier += rNoTradeAdjustment;
-	} // </advc.550d>
-	/*	<advc.708> Tech costs shouldn't (fully) be affected by the
-		player handicap adjustment */
-	if (kGame.isOption(GAMEOPTION_RISE_FALL))
-	{
-		rCost *= 1 - per100(GC.getDefineINT(
-				CvGlobals::RF_PLAYER_HANDICAP_ADJUSTMENT) * 3);
-	} // </advc.708>
+
 	if (bTeamSizeModifiers) // K-Mod
 	{
 		rCost *= scaled::max(per100(100 +
@@ -2801,9 +2780,7 @@ void CvTeam::changeWarWeariness(TeamTypes eIndex, int iChange)
 }
 
 void CvTeam::changeWarWeariness(TeamTypes eOtherTeam, const CvPlot& kPlot, int iFactor)
-{	// <advc.300>
-	if (isBarbarian() || eOtherTeam == BARBARIAN_TEAM)
-		return; // </advc.300>
+{
 	int iOurCulture = kPlot.countFriendlyCulture(getID());
 	int iTheirCulture = kPlot.countFriendlyCulture(eOtherTeam);
 
@@ -2868,12 +2845,12 @@ void CvTeam::changeExtraMoves(DomainTypes eIndex, int iChange)
 	FAssert(getExtraMoves(eIndex) >= 0);
 }
 
-// advc.071: Now returns the location of the meeting, if any.
-CvPlot* CvTeam::makeHasMet(TeamTypes eOther, bool bNewDiplo,
+
+void CvTeam::makeHasMet(TeamTypes eOther, bool bNewDiplo,
 	FirstContactData* pData) // advc.071
 {
-	if (isHasMet(eOther))
-		return NULL;
+	if(isHasMet(eOther))
+		return;
 
 	makeHasSeen(eOther); // K-Mod
 	//m_abHasMet.set(eOther, true);
@@ -2901,7 +2878,7 @@ CvPlot* CvTeam::makeHasMet(TeamTypes eOther, bool bNewDiplo,
 	CvEventReporter::getInstance().firstContact(getID(), eOther);
 	// <advc.071> ^Moved EventReporter call up // advc.001n:
 	if(eOther == getID() || isBarbarian() || GET_TEAM(eOther).isBarbarian())
-		return NULL; // </advc.071>
+		return; // </advc.071>
 
 	// K-Mod: Initialize attitude cache for players on our team towards player's on their team.
 	// advc.001: Too early for that. Moved to caller (CvTeam::meet).
@@ -2910,7 +2887,7 @@ CvPlot* CvTeam::makeHasMet(TeamTypes eOther, bool bNewDiplo,
 		gDLL->UI().setDirty(Score_DIRTY_BIT, true);
 	// <advc.071>
 	bool bShowMessage = (isHuman() && pData != NULL);
-	if (bShowMessage || bNewDiplo)
+	if(bShowMessage || bNewDiplo)
 	{
 		int iOnFirstContact = 1;
 		// If met during the placement of free starting units, show only a diplo popup.
@@ -2940,84 +2917,78 @@ CvPlot* CvTeam::makeHasMet(TeamTypes eOther, bool bNewDiplo,
 		}
 	}
 	// <advc.071>
-	CvPlot* pAt1 = NULL;
-	CvPlot* pAt2 = NULL;
-	CvUnit const* pUnit1 = NULL;
-	CvUnit const* pUnit2 = NULL;
-	CvUnit const* pUnitMet = NULL;
-	CvPlot* pAt = NULL;
-	PlayerTypes ePlayerMet = NO_PLAYER;
-	if (pData != NULL)
+	if(bShowMessage)
 	{
-		FirstContactData const& kData = *pData;
-		pAt1 = GC.getMap().plot(kData.x1, kData.y1);
-		pAt2 = GC.getMap().plot(kData.x2, kData.y2);
-		pUnit1 = ::getUnit(kData.u1);
-		pUnit2 = ::getUnit(kData.u2);
-	}
-	if (pUnit1 != NULL && pUnit1->getTeam() == eOther)
-	{
-		ePlayerMet = pUnit1->getOwner();
-		if (pUnit1->getPlot().isVisible(getID()))
-			pUnitMet = pUnit1;
-	}
-	if (pUnit2 != NULL && pUnit2->getTeam() == eOther)
-	{
-		if (ePlayerMet == NO_PLAYER)
-			ePlayerMet = pUnit2->getOwner();
-		if (pUnit2->getPlot().isVisible(getID()))
-			pUnitMet = pUnit2;
-	}
-	if (pAt1 != NULL && pAt1->isOwned() && pAt1->getTeam() == eOther)
-	{
-		if (pAt1->isVisible(getID()))
-			pAt = pAt1;
-		if (ePlayerMet == NO_PLAYER)
-			ePlayerMet = pAt1->getOwner();
-	}
-	if (pAt2 != NULL && pAt2->isOwned() && pAt2->getTeam() == eOther)
-	{
-		if (pAt2->isVisible(getID()))
-			pAt = pAt2;
-		if (ePlayerMet == NO_PLAYER)
-			ePlayerMet = pAt2->getOwner();
-	}
-	if (ePlayerMet == NO_PLAYER)
-		ePlayerMet = GET_TEAM(eOther).getLeaderID();
-	if (pUnitMet != NULL && pUnitMet->getPlot().isVisible(getID()))
-		pAt = pUnitMet->plot();
-	if (pAt == NULL) // We can't see any of their tiles or units, but they see ours.
-	{
-		if (pAt1 != NULL && pAt1->isOwned() && pAt1->getTeam() == getID())
-			pAt = pAt1;
-		else if (pAt2 != NULL && pAt2->isOwned() && pAt2->getTeam() == getID())
-			pAt = pAt2;
-		else if (pUnit1 != NULL && pUnit1->getTeam() == getID())
+		FirstContactData fcData = *pData;
+		CvMap const& m = GC.getMap();
+		CvPlot const* pAt1 = m.plot(fcData.x1, fcData.y1);
+		CvPlot const* pAt2 = m.plot(fcData.x2, fcData.y2);
+		CvUnit const* pUnit1 = ::getUnit(fcData.u1);
+		CvUnit const* pUnit2 = ::getUnit(fcData.u2);
+		CvUnit const* pUnitMet = NULL;
+		CvPlot const* pAt = NULL;
+		PlayerTypes ePlayerMet = NO_PLAYER;
+		if (pUnit1 != NULL && pUnit1->getTeam() == eOther)
 		{
-			//pUnitMet = pUnit1; // Better not to show our own unit's icon
-			pAt = pUnit1->plot();
+			ePlayerMet = pUnit1->getOwner();
+			if (pUnit1->getPlot().isVisible(getID()))
+				pUnitMet = pUnit1;
 		}
-		else if (pUnit2 != NULL && pUnit2->getTeam() == getID())
+		if (pUnit2 != NULL && pUnit2->getTeam() == eOther)
 		{
-			//pUnitMet = pUnit2;
-			pAt = pUnit2->plot();
+			if (ePlayerMet == NO_PLAYER)
+				ePlayerMet = pUnit2->getOwner();
+			if (pUnit2->getPlot().isVisible(getID()))
+				pUnitMet = pUnit2;
 		}
-	}
-	if (!bShowMessage)
-		return pAt;
-	CvWString szMsg = gDLL->getText("TXT_KEY_MISC_TEAM_MET",
-			GET_PLAYER(ePlayerMet).getCivilizationAdjectiveKey());
-	ColorTypes ePlayerColor = GET_PLAYER(ePlayerMet).getPlayerTextColor();
-	LPCSTR icon = (pUnitMet == NULL ? GC.getInfo(GET_PLAYER(ePlayerMet).
-			getLeaderType()).getButton() : pUnitMet->getButton());
-	for (PlayerIter<HUMAN,MEMBER_OF> it(getID()); it.hasNext(); ++it)
-	{
-		gDLL->UI().addMessage(it->getID(), false, -1, szMsg, NULL,
-				MESSAGE_TYPE_MINOR_EVENT, icon, ePlayerColor,
-				pAt == NULL ? -1 : pAt->getX(), pAt == NULL ? -1 : pAt->getY(),
-				pAt != NULL, pAt != NULL);
-	}
-	return pAt; // </advc.071>
+		if (pAt1 != NULL && pAt1->isOwned() && pAt1->getTeam() == eOther)
+		{
+			if (pAt1->isVisible(getID()))
+				pAt = pAt1;
+			if (ePlayerMet == NO_PLAYER)
+				ePlayerMet = pAt1->getOwner();
+		}
+		if (pAt2 != NULL && pAt2->isOwned() && pAt2->getTeam() == eOther)
+		{
+			if (pAt2->isVisible(getID()))
+				pAt = pAt2;
+			if (ePlayerMet == NO_PLAYER)
+				ePlayerMet = pAt2->getOwner();
+		}
+		if (ePlayerMet == NO_PLAYER)
+			ePlayerMet = GET_TEAM(eOther).getLeaderID();
+		if (pUnitMet != NULL && pUnitMet->getPlot().isVisible(getID()))
+			pAt = pUnitMet->plot();
+		if (pAt == NULL) // We can't see any of their tiles or units, but they see ours.
+		{
+			if (pAt1 != NULL && pAt1->isOwned() && pAt1->getTeam() == getID())
+				pAt = pAt1;
+			else if (pAt2 != NULL && pAt2->isOwned() && pAt2->getTeam() == getID())
+				pAt = pAt2;
+			else if (pUnit1 != NULL && pUnit1->getTeam() == getID())
+			{
+				//pUnitMet = pUnit1; // Better not to show our own unit's icon
+				pAt = pUnit1->plot();
+			}
+			else if (pUnit2 != NULL && pUnit2->getTeam() == getID())
+			{
+				//pUnitMet = pUnit2;
+				pAt = pUnit2->plot();
+			}
+		}
+		CvWString szMsg = gDLL->getText("TXT_KEY_MISC_TEAM_MET",
+				GET_PLAYER(ePlayerMet).getCivilizationAdjectiveKey());
+		ColorTypes ePlayerColor = GET_PLAYER(ePlayerMet).getPlayerTextColor();
+		LPCSTR icon = (pUnitMet == NULL ? GC.getInfo(GET_PLAYER(ePlayerMet).
+				getLeaderType()).getButton() : pUnitMet->getButton());
+		for (PlayerIter<HUMAN,MEMBER_OF> it(getID()); it.hasNext(); ++it)
+		{
+			gDLL->UI().addMessage(it->getID(), false, -1, szMsg, NULL,
+					MESSAGE_TYPE_MINOR_EVENT, icon, ePlayerColor,
+					pAt == NULL ? -1 : pAt->getX(), pAt == NULL ? -1 : pAt->getY(),
+					pAt != NULL, pAt != NULL);
+		}
+	} // </advc.071>
 }
 
 // <advc.134a>
@@ -3197,10 +3168,9 @@ void CvTeam::setDefensivePact(TeamTypes eIndex, bool bNewValue)
 	CvTeam const& kOther = GET_TEAM(eIndex); // advc
 	if (bNewValue && !kOther.isDefensivePact(getID()))
 	{
-		CvWString szBuffer = gDLL->getText("TXT_KEY_MISC_PLAYERS_SIGN_DEFENSIVE_PACT",
-				getReplayName().GetCString(), kOther.getReplayName().GetCString());
-		GC.getGame().addReplayMessage(REPLAY_MESSAGE_MAJOR_EVENT,
-				getLeaderID(), szBuffer, GC.getColorType("HIGHLIGHT_TEXT"));
+		CvWString szBuffer = gDLL->getText("TXT_KEY_MISC_PLAYERS_SIGN_DEFENSIVE_PACT", getReplayName().GetCString(), kOther.getReplayName().GetCString());
+		GC.getGame().addReplayMessage(REPLAY_MESSAGE_MAJOR_EVENT, getLeaderID(), szBuffer,
+				-1, -1, GC.getColorType("HIGHLIGHT_TEXT"));
 		for (PlayerIter<MAJOR_CIV> it; it.hasNext(); ++it)
 		{
 			CvPlayer& kObs = *it;
@@ -3220,8 +3190,8 @@ void CvTeam::setDefensivePact(TeamTypes eIndex, bool bNewValue)
 	{
 		CvWString szBuffer = gDLL->getText("TXT_KEY_MISC_PLAYERS_CANCEL_DEFENSIVE_PACT",
 				getReplayName().GetCString(), kOther.getReplayName().GetCString());
-		GC.getGame().addReplayMessage(REPLAY_MESSAGE_MAJOR_EVENT,
-				getLeaderID(), szBuffer, GC.getColorType("HIGHLIGHT_TEXT"));
+		GC.getGame().addReplayMessage(REPLAY_MESSAGE_MAJOR_EVENT, getLeaderID(), szBuffer,
+				-1, -1, GC.getColorType("HIGHLIGHT_TEXT"));
 		for (PlayerIter<MAJOR_CIV,NOT_SAME_TEAM_AS> it(getID()); it.hasNext(); ++it)
 		{
 			CvPlayer& kObs = *it;
@@ -3239,7 +3209,10 @@ void CvTeam::setDefensivePact(TeamTypes eIndex, bool bNewValue)
 	} // </advc.106f>
 	// K-Mod. update attitude
 	if (GC.getGame().isFinalInitialized())
-		CvPlayerAI::AI_updateAttitudes(); // K-Mod end
+	{
+		for (PlayerAIIter<MAJOR_CIV> it; it.hasNext(); ++it)
+			it->AI_updateAttitude();
+	} // K-Mod end
 }
 
 
@@ -3478,15 +3451,15 @@ void CvTeam::setVassal(TeamTypes eMaster, bool bNewValue, bool bCapitulated)
 			if (bCapitulated)
 			{
 				szReplayMessage = gDLL->getText("TXT_KEY_MISC_CAPITULATE_AGREEMENT",
-						getReplayName().c_str(), GET_TEAM(eMaster).getReplayName().c_str());
+						getReplayName().GetCString(), GET_TEAM(eMaster).getReplayName().GetCString());
 			}
 			else
 			{
 				szReplayMessage = gDLL->getText("TXT_KEY_MISC_VASSAL_AGREEMENT",
-						getReplayName().c_str(), GET_TEAM(eMaster).getReplayName().c_str());
+						getReplayName().GetCString(), GET_TEAM(eMaster).getReplayName().GetCString());
 			}
 			GC.getGame().addReplayMessage(REPLAY_MESSAGE_MAJOR_EVENT, getLeaderID(), szReplayMessage,
-					GC.getColorType("HIGHLIGHT_TEXT"));
+					-1, -1, GC.getColorType("HIGHLIGHT_TEXT"));
 
 			for (PlayerIter<MAJOR_CIV> it; it.hasNext(); ++it)
 			{
@@ -3496,8 +3469,7 @@ void CvTeam::setVassal(TeamTypes eMaster, bool bNewValue, bool bCapitulated)
 					kObs.isSpectator()) // advc.127
 				{
 					gDLL->UI().addMessage(kObs.getID(), false, -1, szReplayMessage,
-							"AS2D_WELOVEKING", MESSAGE_TYPE_MAJOR_EVENT, NULL,
-							GC.getColorType("HIGHLIGHT_TEXT"),
+							"AS2D_WELOVEKING", MESSAGE_TYPE_MAJOR_EVENT, NULL, GC.getColorType("HIGHLIGHT_TEXT"),
 							// advc.127b:
 							getCapitalX(kObs.getTeam(), true), getCapitalY(kObs.getTeam(), true));
 				}
@@ -3517,16 +3489,16 @@ void CvTeam::setVassal(TeamTypes eMaster, bool bNewValue, bool bCapitulated)
 			if (m_bCapitulated)
 			{
 				szReplayMessage = gDLL->getText("TXT_KEY_MISC_SURRENDER_REVOLT",
-						getReplayName().c_str(), GET_TEAM(eMaster).getReplayName().c_str());
+						getReplayName().GetCString(), GET_TEAM(eMaster).getReplayName().GetCString());
 			}
 			else
 			{
 				szReplayMessage = gDLL->getText("TXT_KEY_MISC_VASSAL_REVOLT",
-						getReplayName().c_str(), GET_TEAM(eMaster).getReplayName().c_str());
+						getReplayName().GetCString(), GET_TEAM(eMaster).getReplayName().GetCString());
 			}
 
-			GC.getGame().addReplayMessage(REPLAY_MESSAGE_MAJOR_EVENT,
-					getLeaderID(), szReplayMessage, GC.getColorType("HIGHLIGHT_TEXT"));
+			GC.getGame().addReplayMessage(REPLAY_MESSAGE_MAJOR_EVENT, getLeaderID(), szReplayMessage,
+					-1, -1, GC.getColorType("HIGHLIGHT_TEXT"));
 
 			for (PlayerIter<MAJOR_CIV> it; it.hasNext(); ++it)
 			{
@@ -3675,7 +3647,6 @@ void CvTeam::assignVassal(TeamTypes eVassal, bool bSurrender) const
 
 void CvTeam::freeVassal(TeamTypes eVassal) const
 {
-	bool const bWasCapitulated = GET_TEAM(eVassal).isCapitulated(); // advc.130y
 	FOR_EACH_DEAL_VAR(pLoopDeal)
 	{
 		if (!pLoopDeal->isBetween(getID(), eVassal))
@@ -3691,9 +3662,7 @@ void CvTeam::freeVassal(TeamTypes eVassal) const
 		}
 	}
 	// <advc.130y>
-	if (isCapitulated() && // Master has just capitulated
-		bWasCapitulated && // Vassal had capitulated, now freed.
-		GET_PLAYER(GET_TEAM(eVassal).getLeaderID()).
+	if(isCapitulated() && GET_PLAYER(GET_TEAM(eVassal).getLeaderID()).
 		// Not thankful if still thankful to old master
 		AI_getMemoryAttitude(getLeaderID(), MEMORY_INDEPENDENCE) <= 0)
 	{
@@ -3735,10 +3704,10 @@ void CvTeam::queueWar(TeamTypes eAttackingTeam, TeamTypes eDefendingTeam,
 void CvTeam::triggerWars(bool bForceUpdateAttitude)
 {
 	bool bWarsDeclared = false;
-	if (bTriggeringWars)
+	if(bTriggeringWars)
 		return;
 	else bTriggeringWars = true;
-	while (!attacking_queue.empty())
+	while(!attacking_queue.empty())
 	{
 		GET_TEAM(attacking_queue.front()).declareWar(
 				defending_queue.front(), newdiplo_queue.front(),
@@ -3750,23 +3719,14 @@ void CvTeam::triggerWars(bool bForceUpdateAttitude)
 		primarydow_queue.pop();
 		bWarsDeclared = true;
 	}
-	if (bWarsDeclared /* advc: */ || bForceUpdateAttitude)
-		CvPlayerAI::AI_updateAttitudes(); // K-Mod
+	if(bWarsDeclared /* advc: */ || bForceUpdateAttitude)
+	{
+		// from declareWar (K-Mod code)
+		for (PlayerAIIter<MAJOR_CIV> it; it.hasNext(); ++it)
+			it->AI_updateAttitude();
+	}
 	bTriggeringWars = false;
 } // </kekm.26>
-
-// advc.130w: (Don't feel like caching this info right now)
-int CvTeam::getCapitulationTurn() const
-{
-	if (!isCapitulated())
-		return -1;
-	FOR_EACH_DEAL(pDeal)
-	{
-		if (pDeal->isVassalDeal() && pDeal->isBetween(getID(), getMasterTeam()))
-			return GC.getGame().getGameTurn() - pDeal->getAge();
-	}
-	return -1;
-}
 
 
 void CvTeam::changeRouteChange(RouteTypes eIndex, int iChange)
@@ -3928,7 +3888,7 @@ void CvTeam::changeProjectCount(ProjectTypes eProject, int iChange)
 				"TXT_KEY_MISC_COMPLETES_PROJECT", // </advc.008e>
 				getReplayName().GetCString(), kProject.getTextKeyWide());
 		GC.getGame().addReplayMessage(REPLAY_MESSAGE_MAJOR_EVENT, getLeaderID(), szBuffer,
-				GC.getColorType("HIGHLIGHT_TEXT"));
+				-1, -1, GC.getColorType("HIGHLIGHT_TEXT"));
 
 		for (PlayerIter<MAJOR_CIV> it; it.hasNext(); ++it)
 		{
@@ -4235,8 +4195,8 @@ void CvTeam::resetVictoryProgress()
 				gDLL->UI().addPopup(pInfo, kObs.getID());
 			}
 		}
-		GC.getGame().addReplayMessage(REPLAY_MESSAGE_MAJOR_EVENT,
-				getLeaderID(), szBuffer, GC.getColorType("HIGHLIGHT_TEXT"));
+		GC.getGame().addReplayMessage(REPLAY_MESSAGE_MAJOR_EVENT, getLeaderID(), szBuffer,
+				-1, -1, GC.getColorType("HIGHLIGHT_TEXT"));
 	}
 }
 
@@ -4581,7 +4541,7 @@ void CvTeam::setHasTech(TechTypes eTech, bool bNewValue, PlayerTypes ePlayer,
 					szBuffer = gDLL->getText("TXT_KEY_MISC_SOMEONE_FIRST_TO_TECH",
 							GET_PLAYER(ePlayer).getReplayName(), kTech.getTextKeyWide());
 					kGame.addReplayMessage(REPLAY_MESSAGE_MAJOR_EVENT, ePlayer, szBuffer,
-							GC.getColorType("HIGHLIGHT_TEXT"));
+							-1, -1, GC.getColorType("HIGHLIGHT_TEXT"));
 				} // advc.106
 			} // <advc.004>
 			if (bAnnounceFirst) // Cut, pasted, refactored from above
@@ -4737,7 +4697,7 @@ void CvTeam::setHasTech(TechTypes eTech, bool bNewValue, PlayerTypes ePlayer,
 			CvWString szBuffer = gDLL->getText("TXT_KEY_MISC_SOMEONE_FIRST_TO_TECH",
 					GET_PLAYER(ePlayer).getReplayName(), kTech.getTextKeyWide());
 			kGame.addReplayMessage(REPLAY_MESSAGE_MAJOR_EVENT, ePlayer, szBuffer,
-					GC.getColorType("ALT_HIGHLIGHT_TEXT"));
+					-1, -1, GC.getColorType("ALT_HIGHLIGHT_TEXT"));
 		} // </advc.106>
 	}
 
@@ -4914,13 +4874,10 @@ int CvTeam::getEspionageModifier(TeamTypes eTarget) const
 	/*	K-Mod. Scale the points modifier based on the teams' population.
 		(Note ESPIONAGE_SPENDING_MULTIPLIER is 100 in the default xml.) */
 	int iPopScale = 5 * GC.getInfo(GC.getMap().getWorldSize()).getTargetNumCities();
-	int const iOurPop = getTotalPopulation(false) + iPopScale;
-	int const iTargetPop = kTarget.getTotalPopulation(false) + iPopScale;
-	int const iPrecision = 1000; // advc.120k: was 10 (and was magic constant)
-	int iTargetPoints = iPrecision * kTarget.getEspionagePointsEver() / std::max(1, //iTargetPop
-			3 * iTargetPop + iOurPop); // advc.120k
-	int iOurPoints = iPrecision * getEspionagePointsEver() / std::max(1, //iOurPop
-			3 * iOurPop + iTargetPop); // advc.120k
+	int iTargetPoints = 10 * kTarget.getEspionagePointsEver() /
+			std::max(1, iPopScale + kTarget.getTotalPopulation(false));
+	int iOurPoints = 10 * getEspionagePointsEver() /
+			std::max(1, iPopScale + getTotalPopulation(false));
 	static int const iESPIONAGE_SPENDING_MULTIPLIER = GC.getDefineINT("ESPIONAGE_SPENDING_MULTIPLIER"); // advc.opt
 	return iESPIONAGE_SPENDING_MULTIPLIER *
 			std::max(1, 2 * iTargetPoints + iOurPoints) /
@@ -5096,33 +5053,23 @@ void CvTeam::setForceRevealedBonus(BonusTypes eBonus, bool bRevealed)
 	}
 }
 
-/*	(advc: Replaced some isHasTech checks with calls to this function - based on
-	Civ 4 Reimagined. In some cases, the force-reveal check was missing, which,
-	however, is only relevant for the "Man Named Jed" Oil event.) */
+
 bool CvTeam::isBonusRevealed(BonusTypes eBonus) const // K-Mod
 {
 	return (isHasTech(GC.getInfo(eBonus).getTechReveal()) || isForceRevealedBonus(eBonus));
 }
 
-/*	advc: Whether random discovery is possible. BtS doesn't check force-reveal
-	for that, and I'd like to keep it that way. (Though it makes no difference
-	for the current random events.) */
-bool CvTeam::canDiscoverBonus(BonusTypes eBonus) const
-{
-	return isHasTech(GC.getInfo(eBonus).getTechReveal());
-}
-
-// advc.108: Based on CvPlayer::initFreeUnits
+// <advc.108> Based on CvPlayer::initFreeUnits
 void CvTeam::revealSurroundingPlots(CvPlot const& kCenter, int iRange) const
 {
 	CvMap const& kMap = GC.getMap();
-	for (int i = 0; i < kMap.numPlots(); i++)
+	for(int i = 0; i < kMap.numPlots(); i++)
 	{
 		CvPlot& kPlot = kMap.getPlotByIndex(i);
-		if (plotDistance(&kPlot, &kCenter) <= iRange)
+		if(plotDistance(&kPlot, &kCenter) <= iRange)
 			kPlot.setRevealed(getID(), true, false, NO_TEAM, false);
 	}
-}
+} // </advc.108>
 
 int CvTeam::countNumHumanGameTurnActive() const
 {
@@ -5226,61 +5173,47 @@ void CvTeam::doBarbarianResearch()
 	CvPlayerAI const& kBarbPlayer = GET_PLAYER(BARBARIAN_PLAYER);
 	FOR_EACH_ENUM(Tech)
 	{
-		if (isHasTech(eLoopTech) || /* advc.307: */ (!bIgnorePrereqs &&
+		if (!isHasTech(eLoopTech) && /* advc.307: */ (bIgnorePrereqs ||
 			// K-Mod. Make no progress on techs until prereqs are researched.
-			!kBarbPlayer.canResearch(eLoopTech, false, true)))
+			kBarbPlayer.canResearch(eLoopTech, false, true)))
 		{
-			continue;
-		}
-		int iCount = 0;
-		int iHasTech = 0; // advc.307
-		TeamIter<CIV_ALIVE> it;
-		for (; it.hasNext(); ++it)
-		{
-			CvTeam const& kLoopTeam = *it;
-			if (kLoopTeam.isHasTech(eLoopTech) &&
-				kLoopTeam.isInContactWithBarbarians()) // advc.302
+			int iCount = 0;
+			int iHasTech = 0; // advc.307
+			TeamIter<CIV_ALIVE> it;
+			for (; it.hasNext(); ++it)
 			{
-				iCount++;
+				CvTeam const& kLoopTeam = *it;
+				if (kLoopTeam.isHasTech(eLoopTech) &&
+					kLoopTeam.isInContactWithBarbarians()) // advc.302
+				{
+					iCount++;
+				}
+				// <advc.307>
+				if (kLoopTeam.isHasTech(eLoopTech))
+					iHasTech++; // </advc.307>
+			} /* advc.302: Don't stop barb research entirely even when there is
+				 no contact with any civs */
+			iCount = std::max(iCount, iHasTech / 3);
+			if (iCount > 0)
+			{
+				int const iPossible = it.nextIndex();
+				/*  advc.307: In the late game, count all civs as having contact with
+					barbs if at least one of them has contact. Otherwise, New World barbs
+					catch up too slowly when colonized only by one or two civs. */
+				if (bNoBarbCities)
+					iCount = std::max(iCount, (2 * iHasTech) / 3);
+				static int const iBARBARIAN_FREE_TECH_PERCENT = GC.getDefineINT("BARBARIAN_FREE_TECH_PERCENT"); // advc.opt
+				//changeResearchProgress(eLoopTech, (getResearchCost(eLoopTech) * ((iBARBARIAN_FREE_TECH_PERCENT * iCount) / iPossible)) / 100, getLeaderID());
+				/*	K-Mod. Adjust research rate for game-speed & start-era -
+					but _not_ world-size. And fix the rounding error. */
+				int iBaseCost = (getResearchCost(eLoopTech, false) *
+						GC.getInfo(GC.getMap().getWorldSize()).getResearchPercent()) / 100;
+				changeResearchProgress(eLoopTech, std::max(1, iBaseCost *
+						iBARBARIAN_FREE_TECH_PERCENT * iCount /
+						(100 * iPossible)), kBarbPlayer.getID());
+				// K-Mod end
 			}
-			// <advc.307>
-			if (kLoopTeam.isHasTech(eLoopTech))
-				iHasTech++; // </advc.307>
-		} /* advc.302: Don't stop Barbarian research entirely even when there
-			 is no contact with any civs */
-		iCount = std::max(iCount, iHasTech / 3);
-		if (iCount <= 0)
-			continue;
-		int const iPossible = it.nextIndex();
-		/*  advc.307: In the late game, count all civs as having contact
-			with Barbarians if at least one of them has contact. Otherwise,
-			New World Barbarians catch up too slowly when colonized by only
-			one or two civs. */
-		if (bNoBarbCities)
-			iCount = std::max(iCount, (2 * iHasTech) / 3);
-		static scaled const rBARBARIAN_FREE_TECH_PERCENT = // advc.opt
-				per100(GC.getDefineINT("BARBARIAN_FREE_TECH_PERCENT")); // advc.301
-		scaled rFreePortion = rBARBARIAN_FREE_TECH_PERCENT *
-				// <advc.301>
-				(1 + per100(GC.getInfo(eLoopTech).get(
-				CvTechInfo::BarbarianFreeTechModifier)));
-		if (rFreePortion <= 0)
-			continue; // </advc.301>
-		//changeResearchProgress(eLoopTech, (getResearchCost(eLoopTech) * ((iTechPercent * iCount) / iPossible)) / 100, getLeaderID());
-		/*	<K-Mod> Adjust research rate for game-speed & start-era -
-			but _not_ world-size. And fix the rounding error. */
-		/*	advc.301, advc.910: Tell getResearchCost explicitly that this is for
-			Barbarian research, and let that function make the adjustments.
-			NB: By not - or only partially - adjusting the base cost to speed etc.,
-			the progress per turn, effectively, becomes adjusted.*/
-		int iBaseCost = getResearchCost(eLoopTech, true);
-				//* per100(GC.getInfo(GC.getMap().getWorldSize()).getResearchPercent());
-		changeResearchProgress(eLoopTech, scaled::clamp(
-				(iBaseCost * rFreePortion * iCount) / iPossible, 1,
-				// <advc.301> No overflow
-				std::max(1, getResearchCost(eLoopTech)
-				- getResearchProgress(eLoopTech))).uround(), // </advc.301>
-				kBarbPlayer.getID()); // </K-Mod>
+		}
 	}
 }
 
@@ -5433,9 +5366,9 @@ void CvTeam::testCircumnavigated()
 					getCapitalX(kObs.getTeam(), true), getCapitalY(kObs.getTeam(), true));
 		}
 		CvWString szBuffer(gDLL->getText("TXT_KEY_MISC_SOMEONE_CIRC_GLOBE",
-				getReplayName().c_str()));
-		GC.getGame().addReplayMessage(REPLAY_MESSAGE_MAJOR_EVENT,
-				getLeaderID(), szBuffer, GC.getColorType("HIGHLIGHT_TEXT"));
+				getReplayName().GetCString()));
+		GC.getGame().addReplayMessage(REPLAY_MESSAGE_MAJOR_EVENT, getLeaderID(), szBuffer,
+				-1, -1, GC.getColorType("HIGHLIGHT_TEXT"));
 	}
 }
 
@@ -5557,7 +5490,7 @@ void CvTeam::processTech(TechTypes eTech, int iChange,
 	if (kTech.isRiverTrade() /* advc.300: */ && !isBarbarian())
 		changeRiverTradeCount(iChange);
 	// <advc.500c>
-	if (kTech.get(CvTechInfo::NoFearForSafety))
+	if (kTech.isNoFearForSafety())
 		changeNoFearForSafetyCount(iChange); // </advc.500c>
 
 	FOR_EACH_ENUM(Building)
@@ -5921,9 +5854,7 @@ void CvTeam::read(FDataStreamBase* pStream)
 	// </advc.opt>
 	if (uiFlag >= 16)
 	{
-		if (uiFlag >= 19)
-			m_abCanLaunch.read(pStream);
-		else LegacyArrayEnumMap<VictoryTypes,bool>::convert(m_abCanLaunch, pStream);
+		m_abCanLaunch.read(pStream);
 		m_aiRouteChange.read(pStream);
 		m_aiProjectCount.read(pStream);
 	}
@@ -5991,11 +5922,7 @@ void CvTeam::read(FDataStreamBase* pStream)
 		}
 	} // </advc.opt>
 	if (uiFlag >= 16)
-	{
-		if (uiFlag >= 19)
-			m_abHasTech.read(pStream);
-		else LegacyArrayEnumMap<TechTypes,bool>::convert(m_abHasTech, pStream);
-	}
+		m_abHasTech.read(pStream);
 	else m_abHasTech.readArray<bool>(pStream);
 	// <advc.101>
 	if (uiFlag >= 10)
@@ -6010,9 +5937,7 @@ void CvTeam::read(FDataStreamBase* pStream)
 	} // </advc.101>
 	if (uiFlag >= 16)
 	{
-		if (uiFlag >= 19)
-			m_abNoTradeTech.read(pStream);
-		else LegacyArrayEnumMap<TechTypes,bool>::convert(m_abNoTradeTech, pStream);
+		m_abNoTradeTech.read(pStream);
 		m_aaiImprovementYieldChange.read(pStream);
 	}
 	else
@@ -6021,11 +5946,7 @@ void CvTeam::read(FDataStreamBase* pStream)
 		m_aaiImprovementYieldChange.readArray<int>(pStream);
 	}
 	if (uiFlag >= 16)
-	{
-		if (uiFlag >= 19)
-			m_abRevealedBonuses.read(pStream);
-		else LegacyArrayEnumMap<BonusTypes,bool>::convert(m_abRevealedBonuses, pStream);
-	}
+		m_abRevealedBonuses.read(pStream);
 	else
 	{
 		int iSize;
@@ -6096,8 +6017,7 @@ void CvTeam::write(FDataStreamBase* pStream)
 	//uiFlag = 15; // advc (for kekm.38)
 	//uiFlag = 16; // advc.enum: new enum map save behavior
 	//uiFlag = 17; // advc.130k
-	//uiFlag = 18; // advc.500c
-	uiFlag = 19; // advc.enum: Bugfix in bool-valued ArrayEnumMap
+	uiFlag = 18; // advc.500c
 	pStream->Write(uiFlag);
 
 	pStream->Write(m_iNumMembers);
@@ -6191,15 +6111,21 @@ void CvTeam::write(FDataStreamBase* pStream)
 	REPRO_TEST_END_WRITE();
 }
 
-// advc: Now forwards to CvPlayer, BtS implementation deleted.
+
 bool CvTeam::hasShrine(ReligionTypes eReligion) const
 {
-	for (MemberIter itMember(getID()); itMember.hasNext(); ++itMember)
+	bool bHasShrine = false;
+
+	if (eReligion != NO_RELIGION)
 	{
-		if (itMember->hasShrine(eReligion))
-			return true;
+		CvCity* pHolyCity = GC.getGame().getHolyCity(eReligion);
+
+		// if the holy city exists, and we own it
+		if (pHolyCity != NULL && GET_PLAYER(pHolyCity->getOwner()).getTeam() == getID())
+			bHasShrine = pHolyCity->hasShrine(eReligion);
 	}
-	return false;
+
+	return bHasShrine;
 }
 
 void CvTeam::getCompletedSpaceshipProjects(std::map<ProjectTypes, int>& mapProjects) const

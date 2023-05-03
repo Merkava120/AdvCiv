@@ -85,7 +85,7 @@ void CyInfoPythonInterface1()
 		.def("isIgnoreIrrigation", &CvTechInfo::isIgnoreIrrigation, "bool ()")
 		.def("isWaterWork", &CvTechInfo::isWaterWork, "bool ()")
 		.def("isRiverTrade", &CvTechInfo::isRiverTrade, "bool ()")
-		.def("isNoFearForSafety", &CvTechInfo::py_isNoFearForSafety, "bool ()") // advc.500c
+		.def("isNoFearForSafety", &CvTechInfo::isNoFearForSafety, "int ()") // advc.500c
 
 		.def("getQuote", &CvTechInfo::getQuote, "wstring ()")
 		.def("getSound", &CvTechInfo::getSound, "string ()")
@@ -188,7 +188,6 @@ void CyInfoPythonInterface1()
 		.def("getMissionType", &CvActionInfo::getMissionType, "int ()")
 		.def("getCommandType", &CvActionInfo::getCommandType, "int ()")
 		.def("getControlType", &CvActionInfo::getControlType, "int ()")
-		.def("getAutomateType", &CvActionInfo::getAutomateType, "int ()") // advc.004k
 
 		.def("isConfirmCommand", &CvActionInfo::isConfirmCommand, "bool ()")
 		.def("isVisible", &CvActionInfo::isVisible, "bool ()")

@@ -71,8 +71,6 @@ CvGame::CvGame() :
 	m_aiShrineBuilding = NULL;
 	m_aiShrineReligion = NULL;
 
-	m_aiPlotBiomeMap = NULL; // merkava.mb0
-
 	reset(NO_HANDICAP, true);
 }
 
@@ -91,7 +89,6 @@ CvGame::~CvGame()
 	SAFE_DELETE(m_pRiseFall); // advc.700
 	SAFE_DELETE(m_pSpah); // advc.250b
 	SAFE_DELETE(m_pBarbarianWeightMap); // advc.304
-	SAFE_DELETE(m_aiPlotBiomeMap); // merkava.mb0
 }
 
 void CvGame::init(HandicapTypes eHandicap)
@@ -5386,9 +5383,6 @@ void CvGame::toggleDebugMode()
 	GC.getMap().updateVisibility();
 	GC.getMap().updateSymbols();
 	GC.getMap().updateMinimapColor();
-	// merkava.mb1d
-	if (GC.getDefineINT("ADD_SIGNS_IN_DEBUG_MODE") > 0)
-		GC.getMap().addBiomeSigns(); // END
 	/*	advc.001w (note): updateVisibility does this more selectively
 		-- too selectively, unfortunately, in the special case of foreign spies. */
 	GC.getMap().setFlagsDirty(); // K-Mod
@@ -7891,132 +7885,6 @@ bool CvGame::isBarbarianCreationEra() const
 			eCurrentEra <= GET_PLAYER(BARBARIAN_PLAYER).getCurrentEra() + 1);
 }
 
-// merkava.mb
-// set biome mapping for a plot. Does not necessarily correlate with terrain types, hence it is an int
-void CvGame::setPlotBiome(int iPlot, int iBiome)
-{
-	if (m_aiPlotBiomeMap == NULL)
-		resetPlotBiomeMap();
-	m_aiPlotBiomeMap[iPlot] = iBiome;
-}
-// initializes the plot biome map to an array with length = numPlots
-void CvGame::resetPlotBiomeMap()
-{
-	if (m_aiPlotBiomeMap != NULL)
-	{
-		SAFE_DELETE(m_aiPlotBiomeMap);
-		m_aiPlotBiomeMap = NULL;
-	}
-	m_aiPlotBiomeMap = new int[GC.getMap().numPlots()];
-}
-int CvGame::getPlotBiomeFromPos(int iX, int iY) const
-{
-	return getPlotBiome((GC.getMap().plot(iX, iY)->plotNum()));
-}
-bool CvGame::isBiomeWithinLatitudes(int iBiome, int iHighest, int iLowest) const
-{
-	if (iBiome > (int)m_aBiomeDatas.size() || (int)m_aBiomeDatas.size() == 0)
-		return false;
-	int iTop = m_aBiomeDatas[iBiome].iTopLatitude;
-	int iBottom = m_aBiomeDatas[iBiome].iBottomLatitude;
-	return iTop > iHighest ? false : iBottom < iLowest ? false : true;		
-}
-bool CvGame::isLatitudeWithinBiome(int iLatitude, int iBiome) const
-{
-	if (iBiome > (int)m_aBiomeDatas.size() || (int)m_aBiomeDatas.size() == 0)
-		return false;
-	int iTop = m_aBiomeDatas[iBiome].iTopLatitude;
-	int iBottom = m_aBiomeDatas[iBiome].iBottomLatitude;
-	return iLatitude < iTop ? iLatitude > iBottom ? true : false : false;
-}
-void CvGame::setBiomeTerrain(int iBiome, TerrainTypes eTerrain)
-{
-	FAssertBounds(0, (int)m_aBiomeDatas.size(), iBiome);
-	m_aBiomeDatas[iBiome].eTerrain = eTerrain;
-}
-void CvGame::setBiomeLatitudes(int iBiome, int iLower, int iHigher)
-{
-	FAssertBounds(0, (int)m_aBiomeDatas.size(), iBiome);
-	m_aBiomeDatas[iBiome].iBottomLatitude = iLower;
-	m_aBiomeDatas[iBiome].iTopLatitude = iHigher;
-}
-void CvGame::addBiome(TerrainTypes eTerrain, int iBottomLatitude, int iTopLatitude)
-{
-	BiomeData newBiome;
-	newBiome.eTerrain = eTerrain;
-	newBiome.iBottomLatitude = iBottomLatitude;
-	newBiome.iTopLatitude = iTopLatitude;
-	m_aBiomeDatas.push_back(newBiome);
-}
-void CvGame::deleteBiome(int iBiome)
-{
-	FAssertBounds(0, (int)m_aBiomeDatas.size(), iBiome);
-	m_aBiomeDatas.erase(m_aBiomeDatas.begin() + iBiome);
-}
-void CvGame::deleteAllBiomes()
-{
-	m_aBiomeDatas.clear();
-}
-void CvGame::addBiomeLandArea(int iBiome, int iAreaID)
-{
-	FAssertBounds(0, (int)m_aBiomeDatas.size(), iBiome);
-	m_aBiomeDatas[iBiome].aiLandAreas.push_back(iAreaID);
-}
-void CvGame::removeBiomeLandArea(int iBiome, int iAreaID)
-{
-	FAssertBounds(0, (int)m_aBiomeDatas.size(), iBiome);
-	int iIndex = -1;
-	for (int i = 0; i < (int)m_aBiomeDatas[iBiome].aiLandAreas.size(); i++)
-	{
-		if (m_aBiomeDatas[iBiome].aiLandAreas[i] == iAreaID)
-		{
-			iIndex = i;
-			break;
-		}
-	}
-	if (iIndex != -1)
-		m_aBiomeDatas[iBiome].aiLandAreas.erase(m_aBiomeDatas[iBiome].aiLandAreas.begin() + iIndex);
-}
-void CvGame::clearBiomeLandAreas(int iBiome)
-{
-	FAssertBounds(0, (int)m_aBiomeDatas.size(), iBiome);
-	m_aBiomeDatas[iBiome].aiLandAreas.clear();
-}
-bool CvGame::isBiomeInLandArea(int iBiome, int iAreaID) const
-{
-	FAssertBounds(0, (int)m_aBiomeDatas.size(), iBiome);
-	bool bFound = false;
-	for (int i = 0; i < (int)m_aBiomeDatas[iBiome].aiLandAreas.size(); i++)
-	{
-		if (m_aBiomeDatas[iBiome].aiLandAreas[i] == iAreaID)
-		{
-			bFound = true;
-			break;
-		}
-	}
-	return bFound;
-}
-void CvGame::addAdjacentBiome(int iBiome, int iAdjBiome)
-{
-	FAssertBounds(0, (int)m_aBiomeDatas.size(), iBiome);
-	m_aBiomeDatas[iBiome].aiAdjBiomes.push_back(iAdjBiome);
-}
-void CvGame::clearAdjacentBiomes(int iBiome)
-{
-	FAssertBounds(0, (int)m_aBiomeDatas.size(), iBiome);
-	m_aBiomeDatas[iBiome].aiAdjBiomes.clear();
-}
-bool CvGame::isBiomesAdjacent(int iBiome1, int iBiome2) const
-{
-	FAssertBounds(0, (int)m_aBiomeDatas.size(), iBiome1);
-	for (int i = 0; i < (int)m_aBiomeDatas[iBiome1].aiAdjBiomes.size(); i++)
-	{
-		if (m_aBiomeDatas[iBiome1].aiAdjBiomes[i] == iBiome2)
-			return true;
-	}
-	return false;
-}
-// merkava.mb END
 // <advc.300>
 int CvGame::getBarbarianStartTurn() const
 {

@@ -29,6 +29,7 @@ public: // All the const functions are exposed to Python except for those relate
 	int getSeeThroughLevel() const { return m_iSeeThroughLevel; }
 	int getBuildModifier() const { return m_iBuildModifier; }
 	int getDefenseModifier() const { return m_iDefenseModifier; }
+	int getTemperature() const { return m_iTemperature; } // merkava.mb1t
 
 	bool isWater() const { return m_bWater; }
 	bool isImpassable() const { return m_bImpassable; }
@@ -56,6 +57,7 @@ protected:
 	int m_iSeeThroughLevel;
 	int m_iBuildModifier;
 	int m_iDefenseModifier;
+	int m_iTemperature; // merkava.mb1t
 
 	bool m_bWater;
 	bool m_bImpassable;
@@ -313,26 +315,9 @@ protected:
 //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 //  class : CvRouteInfo
 //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-class CvRouteInfo : /* <advc.tag> */ public CvXMLInfo
+class CvRouteInfo : public CvInfoBase
 {
-	typedef CvXMLInfo base_t;
-protected:
-	void addElements(ElementList& kElements) const
-	{
-		base_t::addElements(kElements);
-		kElements.addInt(AirBombDefense, "AirBombDefense"); // advc.255
-	}
-public:
-	enum IntElementTypes
-	{
-		AirBombDefense = base_t::NUM_INT_ELEMENT_TYPES, // advc.255
-		NUM_INT_ELEMENT_TYPES
-	};
-	int get(IntElementTypes e) const
-	{
-		return base_t::get(static_cast<base_t::IntElementTypes>(e));
-	}
-	// </advc.tag>
+	typedef CvInfoBase base_t;
 public: // All the const functions are exposed to Python except those added by mods
 	CvRouteInfo();
 	~CvRouteInfo();
@@ -343,7 +328,6 @@ public: // All the const functions are exposed to Python except those added by m
 	int getValue() const;
 	int getMovementCost() const { return m_iMovementCost; }
 	int getFlatMovementCost() const { return m_iFlatMovementCost; }
-	RouteTypes getRoutePillage() const { return m_eRoutePillage; } // advc.255
 	BonusTypes getPrereqBonus() const { return m_ePrereqBonus; }
 
 	int getYieldChange(int i) const;
@@ -358,7 +342,6 @@ public: // All the const functions are exposed to Python except those added by m
 	int py_getPrereqOrBonus(int i) const;
 	// </advc.003t>
 	bool read(CvXMLLoadUtility* pXML);
-	bool readPass2(CvXMLLoadUtility* pXML); // advc.255
 
 protected:
 	int m_iAdvancedStartCost;
@@ -367,7 +350,6 @@ protected:
 	int m_iValue;
 	int m_iMovementCost;
 	int m_iFlatMovementCost;
-	RouteTypes m_eRoutePillage; // advc.255
 	BonusTypes m_ePrereqBonus;
 
 	int* m_piYieldChange;

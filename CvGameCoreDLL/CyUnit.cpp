@@ -9,7 +9,6 @@
 #include "CvUnitAI.h" // advc.003u
 #include "CvArea.h"
 #include "CvPlot.h"
-#include "CvMap.h" // advc: For canAirBombAt
 
 CyUnit::CyUnit() : m_pUnit(NULL) {}
 // advc.003y: (see CyCity.cpp)
@@ -171,9 +170,7 @@ bool CyUnit::canAirPatrol(CyPlot* pPlot)
 
 bool CyUnit::canSeaPatrol(CyPlot* pPlot)
 {
-	return m_pUnit ? m_pUnit->canSeaPatrol(pPlot->getPlot(),
-			true) // advc.004k: For the same behavior as in K-Mod
-			: false;
+	return m_pUnit ? m_pUnit->canSeaPatrol(pPlot->getPlot()) : false;
 }
 
 bool CyUnit::canHeal(CyPlot* pPlot)
@@ -238,16 +235,9 @@ bool CyUnit::canAirBomb(CyPlot* pPlot)
 	return m_pUnit ? m_pUnit->canAirBomb(pPlot->getPlot()) : false;
 }
 
-// advc: Adjusted to changed param list of CvUnit::canAirBombAt
 bool CyUnit::canAirBombAt(CyPlot* pPlot, int iX, int iY)
 {
-	if (m_pUnit == NULL)
-		return false;
-	CvPlot const* pTarget = GC.getMap().plot(iX, iY);
-	if (pTarget == NULL)
-		return false;
-	return m_pUnit->canAirBombAt(*pTarget,
-			pPlot == NULL ? NULL : pPlot->getPlot());
+	return m_pUnit ? m_pUnit->canAirBombAt(pPlot->getPlot(), iX, iY) : false;
 }
 
 CyCity* CyUnit::bombardTarget(CyPlot* pPlot)
@@ -1210,10 +1200,7 @@ void CyUnit::setExperience(int iNewValue, int iMax)
 void CyUnit::changeExperience(int iChange, int iMax, bool bFromCombat, bool bInBorders, bool bUpdateGlobal)
 {
 	if (m_pUnit)
-	{
-		m_pUnit->changeExperience(iChange, iMax, bFromCombat, bInBorders, //bUpdateGlobal
-				bUpdateGlobal ? 100 : 0); // advc.312
-	}
+		m_pUnit->changeExperience(iChange, iMax, bFromCombat, bInBorders, bUpdateGlobal);
 }
 
 int CyUnit::getLevel()

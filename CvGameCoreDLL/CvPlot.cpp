@@ -379,7 +379,8 @@ void CvPlot::doImprovement()
 	{
 		FOR_EACH_ENUM(Bonus)
 		{
-			if (!GET_TEAM(kOwner.getTeam()).canDiscoverBonus(eLoopBonus))
+			CvBonusInfo const& kLoopBonus = GC.getInfo(eLoopBonus);
+			if (!GET_TEAM(kOwner.getTeam()).isHasTech(kLoopBonus.getTechReveal()))
 				continue;
 			/*if (GC.getInfo(getImprovementType()).getImprovementBonusDiscoverRand(eLoopBonus) > 0) { // BtS
 				if (SyncRandOneChanceIn(GC.getInfo(getImprovementType()).getImprovementBonusDiscoverRand(eLoopBonus))) {*/
@@ -392,7 +393,7 @@ void CvPlot::doImprovement()
 			//Afforess: check for valid terrains for this bonus before discovering it
 			if (!canHaveBonus(eLoopBonus), false, /* advc.129: */ true)
 				continue; // </advc.rom3>
-			iOdds *= GC.getGame().getSpeedPercent();
+			iOdds *= GC.getInfo(GC.getGame().getGameSpeedType()).getVictoryDelayPercent();
 			iOdds /= 100;
 			if (SyncRandOneChanceIn(iOdds))
 			{	// UNOFFICIAL_PATCH: END
@@ -401,9 +402,9 @@ void CvPlot::doImprovement()
 				if (pCity != NULL)
 				{
 					CvWString szBuffer = gDLL->getText("TXT_KEY_MISC_DISCOVERED_NEW_RESOURCE",
-							GC.getInfo(eLoopBonus).getTextKeyWide(), pCity->getNameKey());
+							kLoopBonus.getTextKeyWide(), pCity->getNameKey());
 					gDLL->UI().addMessage(kOwner.getID(), false, -1, szBuffer, *this,
-							"AS2D_DISCOVERBONUS", MESSAGE_TYPE_MINOR_EVENT, GC.getInfo(eLoopBonus).getButton());
+							"AS2D_DISCOVERBONUS", MESSAGE_TYPE_MINOR_EVENT, kLoopBonus.getButton());
 				}
 				break;
 			}
@@ -630,53 +631,46 @@ void CvPlot::updateCenterUnit()
 		return;
 	}
 
-	if (setCenterUnit(getSelectedUnit()))
-		return;
+	setCenterUnit(getSelectedUnit());
 
-	PlayerTypes const eActivePlayer = getActivePlayer();
+	/*if (getCenterUnit() == NULL) {
+		setCenterUnit(getBestDefender(getActivePlayer(), NO_PLAYER,
+				NULL, false, false, true));
+	}*/
+	PlayerTypes eActivePlayer = getActivePlayer();
+	if (getCenterUnit() == NULL)
+		setCenterUnit(getBestDefender(eActivePlayer));
 
-	//setCenterUnit(getBestDefender(eActivePlayer, NO_PLAYER, NULL, false, false, true))
-	/*	advc.001: karadoc had meant to disable this (see K-Mod comment below).
-		Perhaps he wasn't aware that the center unit is also the unit that gets
-		selected when the active player clicks on a tile. I am disabling the
-		code during AI turns (when the active player can't select units). */
-	if (!GC.getGame().isInBetweenTurns())
+	if (getCenterUnit() == NULL)
+	{	// <advc.028>
+		CvUnit* pBestDef = getBestDefender(NO_PLAYER, eActivePlayer,
+				gDLL->UI().getHeadSelectedUnit(), true,
+				false, true); // advc.061
+		if(pBestDef != NULL)
+			setCenterUnit(pBestDef); // </advc.028>
+	} // disabled by K-Mod. I don't think it's relevant whether or not the best defender can move.
+	/*  advc.001: Enabled again, instead disabled the one with bTestCanMove=true --
+		I think that's the one karadoc had meant to disable. */
+
+	if (getCenterUnit() == NULL)
 	{
-		DefenderFilters defFilters;
-		defFilters.m_bTestCanMove = true;
-		if (setCenterUnit(getBestDefender(eActivePlayer, defFilters)))
-			return;
+		//setCenterUnit(getBestDefender(NO_PLAYER, getActivePlayer(), gDLL->UI().getHeadSelectedUnit()));
+		// <advc.028> Replacing the above
+		CvUnit* pBestDef = getBestDefender(NO_PLAYER, eActivePlayer,
+				gDLL->UI().getHeadSelectedUnit(), false,
+				false, true); // advc.061
+		if(pBestDef != NULL)
+			setCenterUnit(pBestDef); // </advc.028>
 	}
-	if (setCenterUnit(getBestDefender(eActivePlayer)))
-		return;
+
+	if (getCenterUnit() == NULL)
 	{
-		//setCenterUnit(getBestDefender(NO_PLAYER, eActivePlayer, gDLL->UI().getHeadSelectedUnit(), true));
-		/*	disabled by K-Mod. I don't think it's relevant
-			whether or not the best defender can move. */
-		/*	advc.001: Restored the code (with some changes for advc.028).
-			This is not the code that karadoc had meant to disable. */
-		// <advc.028>
-		DefenderFilters defFilters(eActivePlayer, gDLL->UI().getHeadSelectedUnit(),
-				true);
-		defFilters.m_bTestVisible = true; // advc.061
-		if (setCenterUnit(getBestDefender(NO_PLAYER, defFilters)))
-			return; // </advc.028>
-	}
-	{
-		//setCenterUnit(getBestDefender(NO_PLAYER, eActivePlayer, gDLL->UI().getHeadSelectedUnit()));
-		// <advc.028>
-		DefenderFilters defFilters(eActivePlayer, gDLL->UI().getHeadSelectedUnit());
-		defFilters.m_bTestVisible = true; // advc.061
-		if (setCenterUnit(getBestDefender(NO_PLAYER, defFilters)))
-			return; // </advc.028>
-	}
-	{
-		//setCenterUnit(getBestDefender(NO_PLAYER, eActivePlayer));
-		// <advc.028>
-		DefenderFilters defFilters(eActivePlayer);
-		defFilters.m_bTestVisible = true; // advc.061
-		if (setCenterUnit(getBestDefender(NO_PLAYER, defFilters)))
-			return; // </advc.028>
+		//setCenterUnit(getBestDefender(NO_PLAYER, getActivePlayer()));
+		// <advc.028> Replacing the above
+		CvUnit* pBestDef = getBestDefender(NO_PLAYER, eActivePlayer, NULL, false,
+				false, true); // advc.061
+		if(pBestDef != NULL)
+			setCenterUnit(pBestDef); // </advc.028>
 	}
 }
 
@@ -1598,56 +1592,31 @@ bool CvPlot::isRiverSide() const
 }
 
 
-bool CvPlot::isRiverConnection(DirectionTypes eDir) const
+bool CvPlot::isRiverConnection(DirectionTypes eDirection) const
 {
-	// advc: Rewritten; had been implemented through switch(eDir).
-	int const iRot = (isCardinalDirection(eDir) ? 2 : 1);
-	return (isRiverCrossing(rotateDirClockw(eDir, iRot)) ||
-			isRiverCrossing(rotateDirCounterClockw(eDir, iRot)));
-	/*	advc.124b (note): Now that this function is only used for checking
-		river-to-sea connections, a crossing in eDir would mean that a river
-		runs along the coast. I think isRiverToRiverConnection will handle
-		that case, so we don't need to check isRiverCrossing(eDir) here.
-		(And such rivers don't really have to be supported anyway.) */
-}
-
-/*	advc.124b: Allows connections between separate rivers only
-	when one of the plots is adjacent to both rivers.
-	(Could cache the result in an EnumMap<DirectionTypes,bool> member, i.e.
-	in a single byte, but I doubt that performance is that crucial here.) */
-bool CvPlot::isRiverToRiverConnection(CvPlot const& kOther) const
-{
-	FAssert(stepDistance(this, &kOther) == 1);
-	/*	Alias. Want the param name to communicate a symmetrical relation,
-		but, internally, we work with a (single) DirectionTypes value. */
-	CvPlot const& kTo = kOther;
-	DirectionTypes const eDir = directionXY(*this, kTo);
-	// Always allow trade straight across the river
-	if (isRiverCrossing(eDir))
-		return true;
-	if (isCardinalDirection(eDir))
+	switch (eDirection)
 	{
-		DirectionTypes const ePerpClockw = rotateDirClockw(eDir, 2);
-		DirectionTypes const ePerpCounterClockw = rotateDirCounterClockw(eDir, 2);
-		if ((isRiverCrossing(ePerpClockw) && // as in BtS
-			(kTo.isRiverCrossing(ePerpClockw) ||
-			kTo.isRiverCrossing(rotateDirClockw(eDir, 3)))) ||
-			(isRiverCrossing(ePerpCounterClockw) && // as in BtS
-			(kTo.isRiverCrossing(ePerpCounterClockw) ||
-			kTo.isRiverCrossing(rotateDirCounterClockw(eDir, 3)))))
-		{
-			return true;
-		}
-		// Symmetrical to the additions above
-		return ((kTo.isRiverCrossing(ePerpClockw) &&
-				isRiverCrossing(rotateDirClockw(eDir))) ||
-				(kTo.isRiverCrossing(ePerpCounterClockw) &&
-				isRiverCrossing(rotateDirCounterClockw(eDir))));
+	case NO_DIRECTION: return false; // advc.opt (instead of checking it upfront)
+	case DIRECTION_NORTH:
+		return (isRiverCrossing(DIRECTION_EAST) || isRiverCrossing(DIRECTION_WEST));
+	case DIRECTION_NORTHEAST:
+		return (isRiverCrossing(DIRECTION_NORTH) || isRiverCrossing(DIRECTION_EAST));
+	case DIRECTION_EAST:
+		return (isRiverCrossing(DIRECTION_NORTH) || isRiverCrossing(DIRECTION_SOUTH));
+	case DIRECTION_SOUTHEAST:
+		return (isRiverCrossing(DIRECTION_SOUTH) || isRiverCrossing(DIRECTION_EAST));
+	case DIRECTION_SOUTH:
+		return (isRiverCrossing(DIRECTION_EAST) || isRiverCrossing(DIRECTION_WEST));
+	case DIRECTION_SOUTHWEST:
+		return (isRiverCrossing(DIRECTION_SOUTH) || isRiverCrossing(DIRECTION_WEST));
+	case DIRECTION_WEST:
+		return (isRiverCrossing(DIRECTION_NORTH) || isRiverCrossing(DIRECTION_SOUTH));
+	case DIRECTION_NORTHWEST:
+		return (isRiverCrossing(DIRECTION_NORTH) || isRiverCrossing(DIRECTION_WEST));
+	default:
+		FAssert(false);
+		return false;
 	}
-	return ((isRiverCrossing(rotateDirCounterClockw(eDir)) && // as in BtS
-			kTo.isRiverCrossing(rotateDirCounterClockw(eDir, 3))) ||
-			(isRiverCrossing(rotateDirClockw(eDir)) && // as in BtS
-			kTo.isRiverCrossing(rotateDirClockw(eDir, 3))));
 }
 
 
@@ -1947,8 +1916,9 @@ bool CvPlot::shouldProcessDisplacementPlot(int iDX, int iDY, //int iRange, // ad
 	if (fTheta >= -fSpread / 2 && fTheta <= fSpread / 2)
 		return true;
 	return false;
-	/*DirectionTypes eLeftDirection = ::rotateDirCounterClockw(eFacingDirection);
-	DirectionTypes eRightDirection = ::rotateDirClockw(eFacingDirection);
+
+	/*DirectionTypes eLeftDirection = GC.getTurnLeftDirection(eFacingDirection);
+	DirectionTypes eRightDirection = GC.getTurnRightDirection(eFacingDirection);
 	//test which sides of the line equation (cross product)
 	int iLeftSide = aaiDdisplacements[eLeftDirection][0] * iDY - aaiDisplacements[eLeftDirection][1] * iDX;
 	int iRightSide = displacements[eRightDirection][0] * iDY - displacements[rightDirection][1] * iDX;
@@ -2513,18 +2483,19 @@ int CvPlot::getFeatureProduction(BuildTypes eBuild, TeamTypes eTeam, CvCity** pp
 }
 
 
-CvUnit* CvPlot::getBestDefender(PlayerTypes eOwner,
-	/* <advc> */ DefenderFilters& kFilters) const
+CvUnit* CvPlot::getBestDefender(PlayerTypes eOwner, PlayerTypes eAttackingPlayer,
+	CvUnit const* pAttacker, bool bTestEnemy, bool bTestPotentialEnemy,
+	/* advc.028: */ bool bTestVisible,
+	bool bTestCanAttack, bool bTestAny) const // advc: new params (for CvPlot::hasDefender)
 {
-	PROFILE_FUNC();
-	// Ensure consistency of parameters
-	if (kFilters.m_pAttacker != NULL)
+	// <advc> Ensure consistency of parameters
+	if (pAttacker != NULL)
 	{
-		FAssert(kFilters.m_pAttacker->getOwner() == kFilters.m_eAttackingPlayer);
-		kFilters.m_eAttackingPlayer = kFilters.m_pAttacker->getOwner();
+		FAssert(pAttacker->getOwner() == eAttackingPlayer);
+		eAttackingPlayer = pAttacker->getOwner();
 	}
 	// isEnemy implies isPotentialEnemy
-	FAssert(!kFilters.m_bTestEnemy || !kFilters.m_bTestPotentialEnemy); // </advc>
+	FAssert(!bTestEnemy || !bTestPotentialEnemy); // </advc>
 	// BETTER_BTS_AI_MOD, Lead From Behind (UncutDragon), 02/21/10, jdog5000
 	int iBestUnitRank = -1;
 	CvUnit* pBestUnit = NULL;
@@ -2533,22 +2504,18 @@ CvUnit* CvPlot::getBestDefender(PlayerTypes eOwner,
 		CvUnit& kUnit = *pLoopUnit;
 		if (eOwner != NO_PLAYER && kUnit.getOwner() != eOwner)
 			continue;
-		if (kUnit.isCargo()) // advc: Was previously only checked with TestCanMove
-			continue;
-		if (kFilters.m_bTestCanMove && !kUnit.canMove())
+		if (kUnit.isCargo()) // advc: Was previously only checked with bTestCanMove - i.e. never.
 			continue;
 		// <advc> Moved the other conditions into CvUnit::canBeAttackedBy (new function)
-		if (kFilters.m_eAttackingPlayer == NO_PLAYER ||
-			kUnit.canBeAttackedBy(kFilters.m_eAttackingPlayer,
-			kFilters.m_pAttacker, kFilters.m_bTestEnemy, kFilters.m_bTestPotentialEnemy,
-			kFilters.m_bTestVisible, // advc.028
-			kFilters.m_bTestCanAttack))
+		if(eAttackingPlayer == NO_PLAYER || kUnit.canBeAttackedBy(eAttackingPlayer,
+			pAttacker, bTestEnemy, bTestPotentialEnemy, /* advc.028: */ bTestVisible,
+			bTestCanAttack))
 		{
-			if (kFilters.m_bTestAny)
+			if (bTestAny)
 				return &kUnit; // </advc>
-			if (kUnit.isBetterDefenderThan(pBestUnit, kFilters.m_pAttacker,
+			if (kUnit.isBetterDefenderThan(pBestUnit, pAttacker,
 				&iBestUnitRank, // UncutDragon
-				kFilters.m_bTestVisible)) // advc.061
+				bTestVisible)) // advc.061
 			{
 				pBestUnit = &kUnit;
 			}
@@ -2740,6 +2707,18 @@ int CvPlot::movementCost(CvUnit const& kUnit, CvPlot const& kFrom,
 }
 
 
+int CvPlot::getExtraMovePathCost() const
+{
+	return GC.getGame().getPlotExtraCost(getX(), getY());
+}
+
+
+void CvPlot::changeExtraMovePathCost(int iChange)
+{
+	GC.getGame().changePlotExtraCost(getX(), getY(), iChange);
+}
+
+
 bool CvPlot::isAdjacentOwned() const
 {
 	FOR_EACH_ADJ_PLOT(*this)
@@ -2864,7 +2843,7 @@ PlayerTypes CvPlot::calculateCulturalOwner(/* advc.099c: */ bool bIgnoreCultureR
 				iBestCulture = -1;
 			if (iCulture <= iBestCulture) // </advc.035>
 				continue;
-			if (bIgnoreCultureRange || // advc.099c
+			if (/* advc.099c: */ bIgnoreCultureRange ||
 				isWithinCultureRange(ePlayer))
 			{
 				if (iCulture > iBestCulture ||
@@ -3227,9 +3206,9 @@ bool CvPlot::isVisibleEnemyCityAttacker(PlayerTypes eDefender, TeamTypes eAssume
 	return false;
 }
 
-/*	advc (note): Some of the getPlotList... functions (available to the DLL
-	through CvDLLInterfaceIFaceBase) call this function, and it seems that
-	the EXE also exposes those to Python. */
+/*	advc (note): Not used internally. Some of the getPlotList... functions
+	(available to the DLL through CvDLLInterfaceIFaceBase) call it, and it seems
+	that the EXE also exposes it to Python. */
 int CvPlot::getNumVisibleUnits(PlayerTypes ePlayer) const
 {
 	return plotCount(PUF_isVisibleDebug, ePlayer);
@@ -3413,12 +3392,9 @@ bool CvPlot::isTradeNetworkConnected(CvPlot const& kOther, TeamTypes eTeam) cons
 	// <advc.opt> Moved up
 	bool const bNetworkTerrain = isNetworkTerrain(eTeam);
 	bool const bOtherNetworkTerrain = kOther.isNetworkTerrain(eTeam);
-	if (bNetworkTerrain && bOtherNetworkTerrain /*&&
-		// (BtS doesn't check for isthmi, and I guess that's OK.)
-		!GC.getMap().isSeparatedByIsthmus(*this, kOther)*/)
-	{
+	if (bNetworkTerrain && bOtherNetworkTerrain)
 		return true; // </advc.opt>
-	}
+
 	if (isRoute() /* advc.124: */ && getRevealedRouteType(eTeam) != NO_ROUTE)
 	{
 		if (kOther.isRoute() &&
@@ -3439,10 +3415,13 @@ bool CvPlot::isTradeNetworkConnected(CvPlot const& kOther, TeamTypes eTeam) cons
 		if (GET_TEAM(eTeam).isRevealedCityTrade(kOther)) // advc.124
 			return true;
 
-		if (kOther.isRiverNetwork(eTeam) &&
-			kOther.isRiverConnection(directionXY(kOther, *this)))
+		if (kOther.isRiverNetwork(eTeam))
 		{
-			return true;
+			/*	advc (comment): Could argue that the river direction should matter here.
+				If a river flows away from a water plot, then, at least graphically,
+				they're not quite connected. (Same goes for the isRiverNetwork branch below.) */
+			if (kOther.isRiverConnection(directionXY(kOther, *this)))
+				return true;
 		}
 		/*	<advc.124> Case 1: kOther has a route and this plot has network terrain.
 			(Note: The isCityRadius check is just for performance.) */
@@ -3461,14 +3440,14 @@ bool CvPlot::isTradeNetworkConnected(CvPlot const& kOther, TeamTypes eTeam) cons
 
 	if (isRiverNetwork(eTeam))
 	{
-		if (bOtherNetworkTerrain &&
-			isRiverConnection(directionXY(*this, kOther)))
+		if (bOtherNetworkTerrain)
 		{
-			return true;
+			if (isRiverConnection(directionXY(*this, kOther)))
+				return true;
 		}
-		/*if (isRiverConnection(directionXY(*this, kOther)) ||
-			kOther.isRiverConnection(directionXY(kOther, *this)))*/
-		if (isRiverToRiverConnection(kOther)) // advc.124b
+
+		if (isRiverConnection(directionXY(*this, kOther)) ||
+			kOther.isRiverConnection(directionXY(kOther, *this)))
 		{
 			if (kOther.isRiverNetwork(eTeam))
 				return true;
@@ -4073,7 +4052,7 @@ void CvPlot::setOwner(PlayerTypes eNewValue, bool bCheckUnits, bool bUpdatePlotG
 	if(getOwner() == eNewValue)
 		return;
 	PlayerTypes eOldOwner = getOwner(); // advc.ctr
-	GC.getGame().addReplayMessage(*this, REPLAY_MESSAGE_PLOT_OWNER_CHANGE, eNewValue);
+	GC.getGame().addReplayMessage(REPLAY_MESSAGE_PLOT_OWNER_CHANGE, eNewValue, (char*)NULL, getX(), getY());
 
 	CvCity* pOldCity = getPlotCity();
 	if (pOldCity != NULL)  // advc: Removed some assertions and NULL/NO_... checks in this block
@@ -4117,8 +4096,8 @@ void CvPlot::setOwner(PlayerTypes eNewValue, bool bCheckUnits, bool bUpdatePlotG
 		szBuffer = gDLL->getText("TXT_KEY_MISC_CITY_REVOLTS_JOINS", pOldCity->getNameKey(),
 				GET_PLAYER(eNewValue).getCivilizationDescriptionKey(),
 				szOldOwnerDescr); // advc.101
-		GC.getGame().addReplayMessage(*this, REPLAY_MESSAGE_MAJOR_EVENT,
-				getOwner(), szBuffer);
+		GC.getGame().addReplayMessage(REPLAY_MESSAGE_MAJOR_EVENT, getOwner(),
+				szBuffer, getX(), getY());
 				// advc.106: Use ALT_HIGHLIGHT for research-related stuff now
 				//,GC.getColorType("ALT_HIGHLIGHT_TEXT")
 		FAssert(pOldCity->getOwner() != eNewValue);
@@ -4473,10 +4452,6 @@ void CvPlot::setPlotType(PlotTypes eNewValue, bool bRecalculate, bool bRebuildGr
 	if (bRebuildGraphics && GC.IsGraphicsInitialized())
 	{
 		//Update terrain graphical
-		/*	advc (note): Calling RebuildAllPlots here would get rid of artifacts
-			in terrain surfaces - but it's too slow. Just rebuilding surrounding
-			plots doesn't do the trick; there's sth. else, apparently, that
-			RebuildAllPlots does. (Or perhaps a delayed RebuildPlot call would do?) */
 		gDLL->getEngineIFace()->RebuildPlot(getX(), getY(), true, true);
 		//gDLL->getEngineIFace()->SetDirty(MinimapTexture_DIRTY_BIT, true); //minimap does a partial update
 		//gDLL->getEngineIFace()->SetDirty(GlobeTexture_DIRTY_BIT, true);
@@ -4645,11 +4620,11 @@ BonusTypes CvPlot::getNonObsoleteBonusType(TeamTypes eTeam,
 	bool bCheckConnected) const // K-Mod
 {
 	FAssert(eTeam != NO_TEAM);
-	FAssertMsg(GET_TEAM(eTeam).isAlive(), "advc.064d: OK if eTeam has just died"); // K-Mod
+	FAssert(GET_TEAM(eTeam).isAlive()); // K-Mod
 
 	BonusTypes eBonus = getBonusType(eTeam);
 	if (eBonus == NO_BONUS)
-		return NO_BONUS;
+		return NO_BONUS; // advc
 	if (GET_TEAM(eTeam).isBonusObsolete(eBonus))
 		return NO_BONUS;
 
@@ -4825,7 +4800,7 @@ void CvPlot::setImprovementType(ImprovementTypes eNewValue,
 
 void CvPlot::setRouteType(RouteTypes eNewValue, bool bUpdatePlotGroups)
 {
-	if (getRouteType() == eNewValue)
+	if(getRouteType() == eNewValue)
 		return;
 
 	bool const bOldRoute = isRoute(); // XXX is this right???
@@ -5157,27 +5132,27 @@ int CvPlot::calculateNatureYield(YieldTypes eYield, TeamTypes eTeam, bool bIgnor
 	bool bIgnoreHills) const // advc.300
 {
 	// advc.016: Cut from calculateYield
-	int iYieldRate = GC.getMap().getPlotExtraYield(*this, eYield);
+	int iYield = GC.getGame().getPlotExtraYield(getX(), getY(), eYield);
 	if (isImpassable())
 	{
 		//return 0;
 		/*  advc.016: Impassable tiles with extra yields can be worked -
 			as in BtS. This allows Python modders to make peaks workable. */
-		return iYieldRate;
+		return iYield;
 	}
-	iYieldRate += GC.getInfo(getTerrainType()).getYield(eYield);
+	iYield += GC.getInfo(getTerrainType()).getYield(eYield);
 	bool const bHills = (isHills() /* advc.300 */ && !bIgnoreHills);
 	if (bHills)
-		iYieldRate += GC.getInfo(eYield).getHillsChange();
+		iYield += GC.getInfo(eYield).getHillsChange();
 	else if (isPeak())
-		iYieldRate += GC.getInfo(eYield).getPeakChange();
+		iYield += GC.getInfo(eYield).getPeakChange();
 	else if (isLake())
-		iYieldRate += GC.getInfo(eYield).getLakeChange();
+		iYield += GC.getInfo(eYield).getLakeChange();
 	if (eTeam != NO_TEAM)
 	{
 		BonusTypes eBonus = getBonusType(eTeam);
 		if (eBonus != NO_BONUS)
-			iYieldRate += GC.getInfo(eBonus).getYieldChange(eYield);
+			iYield += GC.getInfo(eBonus).getYieldChange(eYield);
 	}
 	if (isRiver())
 	{
@@ -5189,12 +5164,12 @@ int CvPlot::calculateNatureYield(YieldTypes eYield, TeamTypes eTeam, bool bIgnor
 		int iRivers = 1;
 		/*if(isConnectRiverSegments()) // Disabled for now
 			iRivers++;*/
-		iYieldRate += iRivers * iYieldPerRiver; // </advc.500a>
+		iYield += iRivers * iYieldPerRiver; // </advc.500a>
 	}
 
 	if (bHills)
 	{
-		iYieldRate += ((bIgnoreFeature || !isFeature()) ?
+		iYield += ((bIgnoreFeature || !isFeature()) ?
 				GC.getInfo(getTerrainType()).getHillsYieldChange(eYield) :
 				GC.getInfo(getFeatureType()).getHillsYieldChange(eYield));
 	}
@@ -5202,10 +5177,10 @@ int CvPlot::calculateNatureYield(YieldTypes eYield, TeamTypes eTeam, bool bIgnor
 	if (!bIgnoreFeature)
 	{
 		if (isFeature())
-			iYieldRate += GC.getInfo(getFeatureType()).getYieldChange(eYield);
+			iYield += GC.getInfo(getFeatureType()).getYieldChange(eYield);
 	}
 
-	return std::max(0, iYieldRate);
+	return std::max(0, iYield);
 }
 
 
@@ -5515,21 +5490,6 @@ int CvPlot::calculateTeamCulturePercent(TeamTypes eTeam) const
 	return iTeamCulturePercent;
 }
 
-// kekm.7 (advc): Including vassals or master
-int CvPlot::calculateFriendlyCulturePercent(TeamTypes eTeam) const
-{
-	// Dead teams don't have vassal/ master relationships
-	if (!GET_TEAM(eTeam).isAlive())
-		return calculateTeamCulturePercent(eTeam);
-	int iR = 0;
-	for (PlayerIter<ALIVE,NOT_A_RIVAL_OF> itPlayer(eTeam);
-		itPlayer.hasNext(); ++itPlayer)
-	{
-		iR += calculateCulturePercent(itPlayer->getID());
-	}
-	return iR;
-}
-
 
 void CvPlot::setCulture(PlayerTypes eIndex, int iNewValue, bool bUpdate,
 	bool bUpdatePlotGroups)
@@ -5769,8 +5729,6 @@ void CvPlot::updatePlotGroup(PlayerTypes ePlayer, bool bRecalculate,
 		if (bRecalculate)
 		{
 			bool bConnected = false;
-			/*	advc (note): These trade network checks need to be consistent
-				with the plot count performed in CvPlotGroup::recalculatePlots */
 			if (isTradeNetwork(eTeam))
 			{
 				bConnected = true;
@@ -6140,29 +6098,30 @@ bool CvPlot::isRevealed(TeamTypes eTeam, bool bDebug) const
 }
 
 
-void CvPlot::setRevealed(TeamTypes eTeam, bool bNewValue, bool bTerrainOnly,
-	TeamTypes eFromTeam, bool bUpdatePlotGroup)
+void CvPlot::setRevealed(TeamTypes eTeam, bool bNewValue, bool bTerrainOnly, TeamTypes eFromTeam, bool bUpdatePlotGroup)
 {
 	FAssertBounds(0, MAX_TEAMS, eTeam);
 
 	CvCity* pCity = getPlotCity();
-	bool const bOldValue = isRevealed(eTeam); // advc.124
+	bool bOldValue = isRevealed(eTeam); // advc.124
 	if (bOldValue != bNewValue)
 	{
 		m_abRevealed.set(eTeam, bNewValue);
 		getArea().changeNumRevealedTiles(eTeam, isRevealed(eTeam) ? 1 : -1);
-	}
-	// <advc.124> Need to update plot group if any revealed info changes
+	}  // <advc.124> Need to update plot group if any revealed info changes
 	if (bUpdatePlotGroup &&
-		!(bOldValue != bNewValue ||
+		(bOldValue != bNewValue ||
 		getRevealedOwner(eTeam) != getOwner() ||
 		getRevealedImprovementType(eTeam) != getImprovementType() ||
 		getRevealedRouteType(eTeam) != getRouteType() ||
-		(pCity != NULL && !pCity->isRevealed(eTeam))))
+		(pCity != NULL && !pCity->isRevealed(eTeam)))) // </advc.124>
 	{
-		bUpdatePlotGroup = false;
+		for (MemberIter itMember(eTeam); itMember.hasNext(); ++itMember)
+		{
+			updatePlotGroup(itMember->getID());
+		}
 	}
-	if (bOldValue != bNewValue) // </advc.124>
+	if (bOldValue != bNewValue) // advc.124
 	{
 		if (eTeam == getActiveTeam())
 		{
@@ -6192,8 +6151,10 @@ void CvPlot::setRevealed(TeamTypes eTeam, bool bNewValue, bool bTerrainOnly,
 
 		if (pCity != NULL)
 			pCity->setRevealed(eTeam, false);
+		return; // advc
 	}
-	else if (eFromTeam == NO_TEAM)
+
+	if (eFromTeam == NO_TEAM)
 	{
 		setRevealedOwner(eTeam, getOwner());
 		setRevealedImprovementType(eTeam, getImprovementType());
@@ -6216,14 +6177,6 @@ void CvPlot::setRevealed(TeamTypes eTeam, bool bNewValue, bool bTerrainOnly,
 		if (pCity != NULL && pCity->isRevealed(eFromTeam))
 			pCity->setRevealed(eTeam, true);
 	}
-	// <advc.124> Moved down; all revealed status changes need to be applied first.
-	if (bUpdatePlotGroup)
-	{
-		for (MemberIter itMember(eTeam); itMember.hasNext(); ++itMember)
-		{
-			updatePlotGroup(itMember->getID());
-		}
-	} // </advc.124>
 }
 
 
@@ -6331,7 +6284,7 @@ bool CvPlot::changeBuildProgress(BuildTypes eBuild, int iChange,
 		setImprovementType(kBuild.getImprovement());
 
 	if (kBuild.getRoute() != NO_ROUTE)
-		setRouteType(kBuild.getRoute());
+		setRouteType(kBuild.getRoute(), true);
 
 	if (isFeature() && kBuild.isFeatureRemove(getFeatureType()))
 	{
@@ -6711,21 +6664,18 @@ CvUnit* CvPlot::getDebugCenterUnit() const
 	return pCenterUnit;
 }
 
-/*	advc: Return false if center unit set to NULL, true otherwise.
-	This is convenient for updateCenterUnit. */
-bool CvPlot::setCenterUnit(CvUnit* pNewValue)
+
+void CvPlot::setCenterUnit(CvUnit* pNewValue)
 {
-	bool bRet = (pNewValue != NULL);
 	CvUnit* pOldValue = getCenterUnit();
 	if (pOldValue == pNewValue)
-		return bRet;
+		return; // advc
 
 	m_pCenterUnit = pNewValue;
 	updateMinimapColor();
 	setFlagDirty(true);
 	if (getCenterUnit() != NULL)
 		getCenterUnit()->setInfoBarDirty(true);
-	return bRet;
 }
 
 
@@ -6871,7 +6821,8 @@ void CvPlot::doFeature()
 		if (iProbability > 0)
 		{	//if (SyncRandNum(10000) < iProbability)
 			// UNOFFICIAL_PATCH, Gamespeed scaling, 03/04/10, jdog5000
-			int iRoll = 100 * GC.getGame().getSpeedPercent();
+			int iRoll = (10000 * GC.getInfo(GC.getGame().getGameSpeedType()).
+					getVictoryDelayPercent()) / 100;
 			if (SyncRandNum(iRoll) < iProbability) // UNOFFICIAL_PATCH: END
 				setFeatureType(NO_FEATURE);
 		}
@@ -6913,7 +6864,8 @@ void CvPlot::doFeature()
 			{
 				//if (SyncRandNum(10000) < iProbability)
 				// UNOFFICIAL_PATCH, Gamespeed scaling, 03/04/10, jdog5000: START
-				int iRoll = 100 * GC.getGame().getSpeedPercent();
+				int iRoll = (10000 * GC.getInfo(GC.getGame().getGameSpeedType()).
+						getVictoryDelayPercent()) / 100;
 				if (syncRand().get(iRoll, "CvPlot::doFeature",
 					getX(), getY()) < iProbability) // advc.007: Log coordinates
 				// UNOFFICIAL_PATCH: END
@@ -6923,7 +6875,7 @@ void CvPlot::doFeature()
 					if (pCity != NULL &&
 						/*	advc.106: K-Mod had added an isVisible check,
 							but features aren't affected by fog of war. */
-						isRevealed(pCity->getTeam()))
+						isRevealed(TEAMID(pCity->getOwner())))
 					{
 						// Tell the owner of this city.
 						CvWString szBuffer(gDLL->getText("TXT_KEY_MISC_FEATURE_GROWN_NEAR_CITY",
@@ -7070,32 +7022,29 @@ void CvPlot::processArea(CvArea& kArea, int iChange)
 	// advc.opt:
 	/*if (getImprovementType() != NO_IMPROVEMENT)
 		kArea.changeNumImprovements(getImprovementType(), iChange);*/
-	bool const bAnyUnit = (m_units.getLength() > 0); // advc.opt
-	FOR_EACH_ENUM2(Player, ePlayer)
+
+	for (int i = 0; i < MAX_PLAYERS; i++)
 	{
+		PlayerTypes ePlayer = (PlayerTypes)i;
 		if (GET_PLAYER(ePlayer).getStartingPlot() == this)
 			kArea.changeNumStartingPlots(iChange);
-		// <advc.opt>
-		if (!bAnyUnit)
-			continue; // </advc.opt>
 		kArea.changePower(ePlayer, getUnitPower(ePlayer) * iChange);
 		kArea.changeUnitsPerPlayer(ePlayer, plotCount(PUF_isPlayer, ePlayer) * iChange);
 		// advc: No longer kept track of
 		//kArea.changeAnimalsPerPlayer(ePlayer, plotCount(PUF_isAnimal, -1, -1, ePlayer) * iChange);
-		FOR_EACH_ENUM(UnitAI)
+		for (int j = 0; j < NUM_UNITAI_TYPES; j++)
 		{
-			kArea.changeNumAIUnits(ePlayer, eLoopUnitAI,
-					plotCount(PUF_isUnitAIType, eLoopUnitAI, -1, ePlayer) * iChange);
+			UnitAITypes eUnitAI = (UnitAITypes)j;
+			kArea.changeNumAIUnits(ePlayer, eUnitAI,
+					plotCount(PUF_isUnitAIType, eUnitAI, -1, ePlayer) * iChange);
 		}
 	}
-	if (m_abRevealed.isAnyNonDefault()) // advc.opt
+	FOR_EACH_ENUM(Team)
 	{
-		FOR_EACH_ENUM(Team)
-		{
-			if (isRevealed(eLoopTeam))
-				kArea.changeNumRevealedTiles(eLoopTeam, iChange);
-		}
+		if (isRevealed(eLoopTeam))
+			kArea.changeNumRevealedTiles(eLoopTeam, iChange);
 	}
+
 	CvCity* pCity = getPlotCity();
 	if (pCity == NULL)
 		return;
@@ -7113,9 +7062,9 @@ void CvPlot::processArea(CvArea& kArea, int iChange)
 		processArea call with iChange=1 would then lead to an incorrect
 		city count. I think this can only happen in a scenario with preplaced
 		cities though, and I'm not sure what to do about it. */
-	if (pWaterArea != NULL)
+	if(pWaterArea != NULL)
 	{
-		if (iChange > 0 || (iChange < 0 &&
+		if(iChange > 0 || (iChange < 0 &&
 			// See comment in CvCity::kill
 			pWaterArea->getCitiesPerPlayer(getOwner()) > 0, true))
 		{
@@ -7124,8 +7073,9 @@ void CvPlot::processArea(CvArea& kArea, int iChange)
 	} // </advc.030b>
 	kArea.changePopulationPerPlayer(pCity->getOwner(), pCity->getPopulation() * iChange);
 
-	FOR_EACH_ENUM2(Building, eBuilding)
+	for (int i = 0; i < GC.getNumBuildingInfos(); i++)
 	{
+		BuildingTypes eBuilding = (BuildingTypes)i;
 		int const iTotalChange = iChange * pCity->getNumActiveBuilding(eBuilding);
 		if (iTotalChange <= 0)
 			continue;
@@ -7149,10 +7099,10 @@ void CvPlot::processArea(CvArea& kArea, int iChange)
 		kArea.changeNumTrainAIUnits(pCity->getOwner(), eLoopUnitAI,
 				pCity->getNumTrainUnitAI(eLoopUnitAI) * iChange);
 	}
-	FOR_EACH_ENUM(Player)
+	for (int i = 0; i < MAX_PLAYERS; i++)
 	{
-		if (kArea.AI_getTargetCity(eLoopPlayer) == pCity)
-			kArea.AI_setTargetCity(eLoopPlayer, NULL);
+		if (kArea.AI_getTargetCity((PlayerTypes)i) == pCity)
+			kArea.AI_setTargetCity((PlayerTypes)i, NULL);
 	}
 }
 
@@ -7980,16 +7930,16 @@ void CvPlot::applyEvent(EventTypes eEvent)
 	if (kEvent.getRouteChange() > 0)
 	{
 		if (NO_ROUTE != kEvent.getRoute())
-			setRouteType((RouteTypes)kEvent.getRoute());
+			setRouteType((RouteTypes)kEvent.getRoute(), true);
 	}
 	else if (kEvent.getRouteChange() < 0)
-		setRouteType(NO_ROUTE);
+		setRouteType(NO_ROUTE, true);
 
-	FOR_EACH_ENUM(Yield)
+	for (int i = 0; i < NUM_YIELD_TYPES; ++i)
 	{
-		int iChange = kEvent.getPlotExtraYield(eLoopYield);
+		int iChange = kEvent.getPlotExtraYield(i);
 		if (iChange != 0)
-			GC.getMap().setPlotExtraYield(*this, eLoopYield, iChange);
+			GC.getGame().setPlotExtraYield(m_iX, m_iY, (YieldTypes)i, iChange);
 	}
 }
 
@@ -8383,16 +8333,15 @@ void CvPlot::killRandomUnit(PlayerTypes eOwner, DomainTypes eDomain)
 }
 
 
-// BETTER_BTS_AI_MOD, Lead From Behind (UncutDragon), 02/21/10, jdog5000:
+// BETTER_BTS_AI_MOD, Lead From Behind (UncutDragon), 02/21/10, jdog5000: START
 bool CvPlot::hasDefender(bool bTestCanAttack, PlayerTypes eOwner, PlayerTypes eAttackingPlayer,
 	CvUnit const* pAttacker, bool bTestEnemy, bool bTestPotentialEnemy) const
 {
 	/*  advc: BBAI had repeated parts of getBestDefender here. To avoid that, I've moved
 		bTestAttack into getBestDefender and gave that function a "bTestAny" param. */
-	CvPlot::DefenderFilters defFilters(eAttackingPlayer, pAttacker, bTestEnemy,
-			bTestPotentialEnemy, false, bTestCanAttack, /*bTestAny=*/true);
-	return (getBestDefender(eOwner, defFilters) != NULL);
-}
+	return (getBestDefender(eOwner, eAttackingPlayer, pAttacker, bTestEnemy,
+			bTestPotentialEnemy, false, bTestCanAttack, /*bTestAny=*/true) != NULL);
+} // BETTER_BTS_AI_MOD: END
 
 // <advc.500a>
 #if 0 // disabled for now

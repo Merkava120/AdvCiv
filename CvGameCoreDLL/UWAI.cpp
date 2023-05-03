@@ -5,11 +5,7 @@
 #include "CoreAI.h"
 #include "CvMap.h"
 
-UWAI::UWAI() : m_bEnabled(false), m_bInBackground(false)
-{
-	FAssertMsg(CvGlobals::getInstance().getGamePointer() == NULL,
-			"Accidental creation of another instance?");
-}
+UWAI::UWAI() : m_bEnabled(false), m_bInBackground(false) {}
 
 
 void UWAI::invalidateUICache()
@@ -118,14 +114,11 @@ void UWAI::applyPersonalityWeight()
 		return;
 	std::vector<std::vector<int*>*> personalityMatrix;
 	int iMembers = -1;
-	/*	Hack to make this function compatible with unallocated
-		CvLeaderHeadInfo member arrays */
-	static int aiDevNull[100] = {};
 	FOR_EACH_ENUM(LeaderHead)
 	{
-		CvLeaderHeadInfo& kLeader = GC.getInfo(eLoopLeaderHead);
-		if (std::strcmp(kLeader.getType(), "LEADER_BARBARIAN") == 0)
+		if(eLoopLeaderHead == GET_PLAYER(BARBARIAN_PLAYER).getLeaderType())
 			continue;
+		CvLeaderHeadInfo& kLeader = GC.getInfo(eLoopLeaderHead);
 		/*  Basically serialize CvLeaderHeadInfo to avoid writing any more code
 			per member variable than necessary. Tempting to use CvLeaderHeadInfo::
 			write(FDataStreamBase*) for this, but some members have to be excluded. */
@@ -163,7 +156,6 @@ void UWAI::applyPersonalityWeight()
 			&kLeader.m_iFavoriteCivicAttitudeDivisor, &kLeader.m_iFavoriteCivicAttitudeChangeLimit,
 			&kLeader.m_iDemandTributeAttitudeThreshold, &kLeader.m_iNoGiveHelpAttitudeThreshold,
 			&kLeader.m_iTechRefuseAttitudeThreshold, &kLeader.m_iStrategicBonusRefuseAttitudeThreshold,
-			&kLeader.m_iCityRefuseAttitudeThreshold, &kLeader.m_iNativeCityRefuseAttitudeThreshold, // advc.ctr
 			&kLeader.m_iHappinessBonusRefuseAttitudeThreshold, &kLeader.m_iHealthBonusRefuseAttitudeThreshold,
 			&kLeader.m_iMapRefuseAttitudeThreshold,
 			&kLeader.m_iDeclareWarRefuseAttitudeThreshold, &kLeader.m_iDeclareWarThemRefuseAttitudeThreshold,
@@ -172,43 +164,26 @@ void UWAI::applyPersonalityWeight()
 			&kLeader.m_iOpenBordersRefuseAttitudeThreshold, &kLeader.m_iDefensivePactRefuseAttitudeThreshold,
 			&kLeader.m_iPermanentAllianceRefuseAttitudeThreshold, &kLeader.m_iVassalRefuseAttitudeThreshold,
 			&kLeader.m_iVassalPowerModifier, &kLeader.m_iFreedomAppreciation,
-			&kLeader.m_iLoveOfPeace,
 		};
 		int const iPrimitiveMembers = ARRAYSIZE(aiPrimitiveMembers);
 		std::vector<int*>* paiPersonalityVector = new std::vector<int*>(
 				aiPrimitiveMembers, aiPrimitiveMembers + iPrimitiveMembers);
-		int* aiFlavorValue = (kLeader.m_piFlavorValue == NULL ? aiDevNull :
-				kLeader.m_piFlavorValue);
 		FOR_EACH_ENUM(Flavor)
-			paiPersonalityVector->push_back(&aiFlavorValue[eLoopFlavor]);
-		int* aiContactRand = (kLeader.m_piContactRand == NULL ? aiDevNull :
-				kLeader.m_piContactRand);
+			paiPersonalityVector->push_back(&kLeader.m_piFlavorValue[eLoopFlavor]);
 		FOR_EACH_ENUM(Contact)
-			paiPersonalityVector->push_back(&aiContactRand[eLoopContact]);
-		int* aiContactDelay = (kLeader.m_piContactDelay == NULL ? aiDevNull :
-				kLeader.m_piContactDelay);
+			paiPersonalityVector->push_back(&kLeader.m_piContactRand[eLoopContact]);
 		FOR_EACH_ENUM(Contact)
-			paiPersonalityVector->push_back(&aiContactDelay[eLoopContact]);
-		int* aiMemoryDecayRand = (kLeader.m_piMemoryDecayRand == NULL ? aiDevNull :
-				kLeader.m_piMemoryDecayRand);
+			paiPersonalityVector->push_back(&kLeader.m_piContactDelay[eLoopContact]);
 		FOR_EACH_ENUM(Memory)
-			paiPersonalityVector->push_back(&aiMemoryDecayRand[eLoopMemory]);
-		int* aiMemoryAttitudePercent = (kLeader.m_piMemoryAttitudePercent == NULL ? aiDevNull :
-				kLeader.m_piMemoryAttitudePercent);
+			paiPersonalityVector->push_back(&kLeader.m_piMemoryDecayRand[eLoopMemory]);
 		FOR_EACH_ENUM(Memory)
-			paiPersonalityVector->push_back(&aiMemoryAttitudePercent[eLoopMemory]);
-		int* aiNoWarAttitudeProb = (kLeader.m_piNoWarAttitudeProb == NULL ? aiDevNull :
-				kLeader.m_piNoWarAttitudeProb);
+			paiPersonalityVector->push_back(&kLeader.m_piMemoryAttitudePercent[eLoopMemory]);
 		FOR_EACH_ENUM(Attitude)
-			paiPersonalityVector->push_back(&aiNoWarAttitudeProb[eLoopAttitude]);
-		int* aiUnitAIWeightModifier = (kLeader.m_piUnitAIWeightModifier == NULL ? aiDevNull :
-				kLeader.m_piUnitAIWeightModifier);
+			paiPersonalityVector->push_back(&kLeader.m_piNoWarAttitudeProb[eLoopAttitude]);
 		FOR_EACH_ENUM(UnitAI)
-			paiPersonalityVector->push_back(&aiUnitAIWeightModifier[eLoopUnitAI]);
-		int* aiImprovementWeightModifier = (kLeader.m_piImprovementWeightModifier == NULL ? aiDevNull :
-				kLeader.m_piImprovementWeightModifier);
+			paiPersonalityVector->push_back(&kLeader.m_piUnitAIWeightModifier[eLoopUnitAI]);
 		FOR_EACH_ENUM(Improvement)
-			paiPersonalityVector->push_back(&aiImprovementWeightModifier[eLoopImprovement]);
+			paiPersonalityVector->push_back(&kLeader.m_piImprovementWeightModifier[eLoopImprovement]);
 		personalityMatrix.push_back(paiPersonalityVector);
 		FAssert(iMembers == -1 || iMembers == paiPersonalityVector->size());
 		iMembers = (int)paiPersonalityVector->size();
