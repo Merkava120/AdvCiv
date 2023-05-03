@@ -26,7 +26,7 @@
 //#undef max
 //#undef min
 #include <MMSystem.h>
-#ifdef _DEBUG
+#if defined _DEBUG && !defined USE_MEMMANAGER
 	#define USE_MEMMANAGER
 	#include <crtdbg.h>
 #endif
@@ -85,7 +85,6 @@
 #include "CvDefines.h"
 #include "CvRandom.h"
 #include "CvEnums.h" // (advc.enum: includes CvEnumMacros.h)
-#include "ModName.h" // advc.106i
 #include "CvGlobals.h"
 #include "EnumTraits.h"
 #include "IntegerConversion.h" // advc

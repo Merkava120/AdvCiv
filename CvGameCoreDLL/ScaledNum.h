@@ -325,10 +325,6 @@ public:
 	{
 		return fromRational<27182818,10000000>().pow(*this);
 	}
-	void exponentiate(int iExp)
-	{
-		*this = pow(iExp);
-	}
 	void exponentiate(ScaledNum rExp)
 	{
 		*this = pow(rExp);
@@ -586,9 +582,8 @@ public:
 	}
 
 private:
-	template<bool bBY_SCALE>
-	struct mulDivHelper // Wrapper struct to work around limitations of function templates
-	{
+	/*	Doesn't depend on any ScaledNum template param. Make it global? Would have to be in
+		a namespace in order to avoid confusion with MulDiv (WinBase.h). */
 	template<typename MultiplicandType, typename MultiplierType, typename DivisorType>
 	static typename choose_int_type
 		< typename choose_int_type<MultiplicandType,MultiplierType>::type, DivisorType >::type
@@ -608,7 +603,7 @@ private:
 			if (sizeof(MultiplierType) == 4 || sizeof(MultiplicandType) == 4)
 			{
 				/*	For multiplying signed int, MulDiv (WinBase.h) is fastest.
-					NB: Rounds to nearest, can't take advantage of bBY_SCALE. */
+					NB: rounds to nearest. */
 				i = MulDiv(static_cast<int>(multiplicand),
 						static_cast<int>(multiplier),
 						static_cast<int>(divisor));
@@ -620,9 +615,7 @@ private:
 				i *= multiplier;
 				/*	Rounding to nearest here would add a branch instruction.
 					To force rounding, call mulDivRound. */
-				if (bBY_SCALE)
-					i /= SCALE;
-				else i /= divisor;
+				i /= divisor;
 			}
 			return static_cast<ReturnType>(i);
 		}
@@ -633,38 +626,21 @@ private:
 					unsigned __int64, unsigned int>::type ProductType;
 			ProductType n = multiplicand;
 			n *= multiplier;
-			// Will round to nearest b/c it's almost free
-			if (bBY_SCALE)
-			{
-				n += SCALE / 2u; 
-				n /= SCALE;
-			}
-			else
-			{
-				n += divisor / 2u; 
-				n /= divisor;
-			}
+			n += divisor / 2u; // Rounding to nearest is almost free
+			n /= divisor;
 			return static_cast<ReturnType>(n);
 		}
 	}
-	};
-	// Wrappers around the helper struct, for type inference and readable syntax.
-	template<typename MultiplicandType, typename MultiplierType, typename DivisorType>
-	static typename choose_int_type
-		< typename choose_int_type<MultiplicandType,MultiplierType>::type, DivisorType >::type
-	mulDiv(MultiplicandType multiplicand, MultiplierType multiplier, DivisorType divisor)
-	{	// (Don't know if divisor is a power of 2, and a runtime check isn't worth it.)
-		return mulDivHelper<false>::mulDiv(multiplicand, multiplier, divisor);
-	}
+
 	template<typename MultiplicandType, typename MultiplierType>
 	static typename choose_int_type
 		< typename choose_int_type<IntType,MultiplierType>::type, MultiplicandType >::type
 	mulDivByScale(MultiplicandType multiplicand, MultiplierType multiplier)
 	{
-		/*	Tbd.: Try using SSE2 intrinsics when SCALE is a power of 2,
-			i.e. when SCALE & (SCALE - 1) == 0. Currently, an int division is
-			executed unless the types have fewer than 4 byte. */
-		return mulDivHelper<true>::mulDiv(multiplicand, multiplier, SCALE);
+		/*	For now, forwarding is sufficient. Tbd.: Try using SSE2 intrinsics
+			when SCALE is a power of 2, i.e. when SCALE & (SCALE - 1) == 0.
+			(Wouldn't want to check this when the divisor isn't known at compile time.) */
+		return mulDiv(multiplicand, multiplier, SCALE);
 	}
 
 	template<typename MultiplierType, typename DivisorType>
@@ -752,8 +728,7 @@ private:
 		/*	Factorize the base into powers of 2 and, as the last factor, the base divided
 			by the product of the 2-bases. */
 		ScaledNum<iSCALE,uint> rProductOfPowersOfTwo(1);
-		// Will need this as IntType, but our ceil functions return int.
-		int iBaseDiv = 1;
+		IntType nBaseDiv = 1;
 		// Look up approximate result of 2^rExpFrac in precomputed table
 		#ifdef SCALED_NUM_EXTRA_ASSERTS
 			FAssertBounds(0, 129, rExpFrac.m_i);
@@ -764,18 +739,18 @@ private:
 		/*	Tbd.: Try replacing this loop with _BitScanReverse (using the /EHsc compiler flag).
 			Or perhaps not available in MSVC03? See: github.com/danaj/Math-Prime-Util/pull/10/
 			*/
-		{	//while (iBaseDiv < *this) // Would result in expensive overflow handling
-			int const iCeil = ceil();
-			while (iBaseDiv < iCeil)
+		{	//while (nBaseDiv < *this) // Would result in expensive overflow handling
+			IntType const nCeil = ceil();
+			while (nBaseDiv < nCeil)
 			{
-				iBaseDiv *= 2;
+				nBaseDiv *= 2;
 				// This is expensive b/c it will generally use 64 bit :(
 				rProductOfPowersOfTwo *= rPowOfTwo;
 			}
-		} // Ex.: iBaseDiv=8 and rProductOfPowersOfTwo=1270/1024, approximating (2^0.1)^3.
+		} // Ex.: nBaseDiv=8 and rProductOfPowersOfTwo=1270/1024, approximating (2^0.1)^3.
 		ScaledNum<256,uint> rLastFactor(1);
-		// Look up approximate result of ((*this)/iBaseDiv)^rExpFrac in precomputed table
-		int iLastBaseTimes64 = (ScaledNum<64,uint>(*this / iBaseDiv)).m_i; // Ex.: 42/64 approximating 5.2/8
+		// Look up approximate result of ((*this)/nBaseDiv)^rExpFrac in precomputed table
+		int iLastBaseTimes64 = (ScaledNum<64,uint>(*this / nBaseDiv)).m_i; // Ex.: 42/64 approximating 5.2/8
 		#ifdef SCALED_NUM_EXTRA_ASSERTS
 			FAssertBounds(0, 64+1, iLastBaseTimes64);
 		#endif
@@ -1043,8 +1018,7 @@ ScaledNum_T& ScaledNum_T::operator-=(ScaledNum rOther)
 		FAssert(rOther >= 0 || m_i <= INTMAX + rOther.m_i);
 		FAssert(rOther <= 0 || m_i >= INTMIN + rOther.m_i);
 	#endif
-	// Signedness may differ here
-	m_i = static_cast<IntType>(m_i - rOther.m_i);
+	m_i -= rOther.m_i;
 	return *this;
 }
 

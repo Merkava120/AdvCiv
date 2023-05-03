@@ -231,53 +231,10 @@ protected:
 //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 //  class : CvGameSpeedInfo
 //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-class CvGameSpeedInfo : /* <advc.tag> */ public CvXMLInfo
+class CvGameSpeedInfo : public CvInfoBase
 {
-	typedef CvXMLInfo base_t;
-protected:
-	void addElements(ElementList& kElements) const
-	{
-		base_t::addElements(kElements);
-		// <advc.130r>
-		kElements.addInt(AIMemoryRandPercent, "AIMemoryRandPercent", 100);
-		kElements.addInt(AIContactRandPercent, "AIContactRandPercent", 100);
-		kElements.addInt(AIContactDelayPercent, "AIContactDelayPercent", 100);
-		// </advc.130r>
-		// advc.130k:
-		kElements.addInt(FullTradeCreditPercent, "FullTradeCreditPercent", 100);
-		// advc.101:
-		kElements.addInt(RevoltDivPercent, "RevoltDivPercent", 100);
-		// advc.173:
-		kElements.addInt(ReligionSpreadDivPercent, "ReligionSpreadDivPercent", 100);
-		// <advc.252>
-		kElements.addInt(EventRollSidesPercent, "EventRollSidesPercent", 100);
-		kElements.addInt(VoteIntervalPercent, "VoteIntervalPercent", 100);
-		kElements.addInt(UnitCostPercent, "UnitCostPercent", 100);
-		kElements.addInt(ExtraFreeOutsideUnits, "ExtraFreeOutsideUnits", 100);
-		// </advc.252>
-	}
-public:
-	enum IntElementTypes
-	{	// <advc.130r>
-		AIMemoryRandPercent = CvXMLInfo::NUM_INT_ELEMENT_TYPES,
-		AIContactRandPercent,
-		AIContactDelayPercent, // </advc.130r>
-		FullTradeCreditPercent, // advc.130k
-		RevoltDivPercent, // advc.101
-		ReligionSpreadDivPercent, // advc.173
-		// <advc.252>
-		EventRollSidesPercent,
-		VoteIntervalPercent,
-		UnitCostPercent,
-		ExtraFreeOutsideUnits, // </advc.252>
-		NUM_INT_ELEMENT_TYPES
-	};
-	int get(IntElementTypes e) const
-	{
-		return base_t::get(static_cast<base_t::IntElementTypes>(e));
-	} // </advc.tag>
-
-	// All the const functions are exposed to Python except those added by mods
+	typedef CvInfoBase base_t;
+public: // The const functions are exposed to Python
 	CvGameSpeedInfo();
 	~CvGameSpeedInfo();
 
@@ -366,28 +323,11 @@ protected:
 //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 //  class : CvVictoryInfo
 //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-class CvVictoryInfo : /* <advc.tag> */ public CvXMLInfo
+class CvVictoryInfo : public CvInfoBase
 {
-	typedef CvXMLInfo base_t;
-protected:
-	void addElements(ElementList& kElements) const
-	{
-		base_t::addElements(kElements);
-		kElements.addInt(LandPercentLead, "LandPercentLead"); // advc.254
-	}
-public:
-	enum IntElementTypes
-	{
-		LandPercentLead = CvXMLInfo::NUM_INT_ELEMENT_TYPES, // advc.254
-		NUM_INT_ELEMENT_TYPES
-	};
-	int get(IntElementTypes e) const
-	{
-		return base_t::get(static_cast<base_t::IntElementTypes>(e));
-	} // </advc.tag>
-
+	typedef CvInfoBase base_t;
+public: // The const functions are exposed to Python
 	CvVictoryInfo();
-	// The const functions are exposed to Python ...
 
 	int getPopulationPercentLead() const;
 	int getLandPercent() const;
@@ -440,17 +380,11 @@ protected:
 		/*	(Didn't have this framework when I implemented change advc.251,
 			otherwise, I would've used it for that too.) */
 		kElements.addInt(ForeignCultureStrength, "ForeignCultureStrength"); // advc.101
-		// <advc.313>
-		kElements.addInt(BarbarianCityAttackBonus, "BarbarianCityAttackBonus", -25);
-		kElements.addInt(SeaBarbarianBonus, "SeaBarbarianBonus", -10);
-		kElements.addInt(SeaBarbarianExtraMoves, "SeaBarbarianExtraMoves", -1);
-		// </advc.313>
 	}
 public:
 	enum IntElementTypes
 	{
 		ForeignCultureStrength = base_t::NUM_INT_ELEMENT_TYPES, // advc.101
-		BarbarianCityAttackBonus, SeaBarbarianBonus, SeaBarbarianExtraMoves, // advc.313
 		NUM_INT_ELEMENT_TYPES
 	};
 	int get(IntElementTypes e) const
@@ -640,28 +574,12 @@ protected:
 //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 //  class : CvWorldInfo
 //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-class CvWorldInfo : /* <advc.tag> */ public CvXMLInfo
+class CvWorldInfo : public CvInfoBase
 {
-	typedef CvXMLInfo base_t;
-protected:
-	void addElements(ElementList& kElements) const
-	{
-		base_t::addElements(kElements);
-		kElements.addInt(UnitCostPercent, "UnitCostPercent", 100); // advc.252
-	}
-public:
-	enum IntElementTypes
-	{
-		UnitCostPercent = CvXMLInfo::NUM_INT_ELEMENT_TYPES, // advc.252
-		NUM_INT_ELEMENT_TYPES
-	};
-	int get(IntElementTypes e) const
-	{
-		return base_t::get(static_cast<base_t::IntElementTypes>(e));
-	} // </advc.tag>
- 
+	typedef CvInfoBase base_t;
+public: // All the const functions are exposed to Python
 	CvWorldInfo();
-	// All the const functions are exposed to Python ...
+
 	DllExport int getDefaultPlayers() const { return m_iDefaultPlayers; }
 	int getUnitNameModifier() const;
 	int getTargetNumCities() const { return m_iTargetNumCities; }

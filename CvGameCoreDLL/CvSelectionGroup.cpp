@@ -210,7 +210,8 @@ void CvSelectionGroup::doTurn()
 				setActivityType(ACTIVITY_AWAKE); // time to wake up!
 			}
 		}
-	} // K-Mod end
+	}
+	// K-Mod end
 
 	// do unit's turns (checking for damage)
 	bool bHurt = false;
@@ -339,59 +340,36 @@ bool CvSelectionGroup::showMoves(/* advc.102: */ CvPlot const& kFromPlot) const
 	static bool const bShowShips = GC.getDefineBOOL("SHOW_FRIENDLY_SEA_MOVES");
 	// Also refers to Executives; those have the same Unit AI.
 	static bool const bShowMissionaries = GC.getDefineBOOL("SHOW_FRIENDLY_MISSIONARY_MOVES");
-	CvPlot const& kToPlot = getPlot();
-	PlayerTypes const eFromOwner = kFromPlot.getOwner();
-	PlayerTypes const eToOwner = kToPlot.getOwner();
-	PlayerTypes const eGroupOwner = getOwner();
-	DomainTypes const eGroupDomain = getDomainType();
-	bool const bAwayFromHome = (eGroupOwner != eToOwner ||
-			eGroupOwner != eFromOwner);
-	bool const bWaterPatrol = (getDomainType() == DOMAIN_SEA &&
-			AI().AI_getMissionAIType() == MISSIONAI_PATROL);
-	// </advc.102>  <advc.102b>
-	int const iFriendlyStackThresh = BUGOption::getValue(
-			"MainInterface__ShowFriendlyMovesThresh", 0); // </advc.102b>
-	for (PlayerIter<HUMAN> itHuman; itHuman.hasNext(); ++itHuman)
+	// </advc.102>
+	for (PlayerIter<HUMAN> it; it.hasNext(); ++it)
 	{
+		CvPlayer& kLoopPlayer = *it;
 		CvUnit const* pHeadUnit = getHeadUnit();
 		if(pHeadUnit == NULL)
 			continue;
-		if (pHeadUnit->isEnemy(itHuman->getTeam()))
+		if (pHeadUnit->isEnemy(kLoopPlayer.getTeam()))
 		{
-			if (itHuman->isOption(PLAYEROPTION_SHOW_ENEMY_MOVES))
+			if (kLoopPlayer.isOption(PLAYEROPTION_SHOW_ENEMY_MOVES))
 				return true;
 			continue;
 		}
-		if(!itHuman->isOption(PLAYEROPTION_SHOW_FRIENDLY_MOVES))
+		if(!kLoopPlayer.isOption(PLAYEROPTION_SHOW_FRIENDLY_MOVES))
 			continue;
-		// <advc.102b>
-		if (iFriendlyStackThresh > 0)
-		{
-			int iPlotCount = 0;
-			if (kToPlot.isVisible(itHuman->getTeam()))
-			{
-				iPlotCount += kToPlot.plotCount(
-						PUF_isVisible, itHuman->getID(), -1, eGroupOwner, NO_TEAM,
-						PUF_canDefend);
-			}
-			// Treat all but one unit as having already arrived
-			if (canDefend())
-				iPlotCount += getNumUnits() - 1;
-			// Assume that cargo is full
-			if (eGroupDomain == DOMAIN_SEA) // just to save time
-				iPlotCount += getCargoSpace();
-			if (iPlotCount < iFriendlyStackThresh)
-				continue;
-		} // </advc.102b>
 		// <advc.102> Hide uninteresting friendly moves
-		TeamTypes const eObs = itHuman->getTeam();
-		bool const bInSpectatorsBorders = ((eFromOwner != NO_PLAYER &&
+		PlayerTypes eGroupOwner = m_eOwner;
+		TeamTypes eObs = kLoopPlayer.getTeam();
+		CvPlot const& kToPlot = *plot();
+		PlayerTypes eFromOwner = kFromPlot.getOwner();
+		PlayerTypes eToOwner = kToPlot.getOwner();
+		bool bAwayFromHome = (eGroupOwner != eToOwner || eGroupOwner != eFromOwner);
+		bool bInSpectatorsBorders = ((eFromOwner != NO_PLAYER &&
 				eObs == TEAMID(eFromOwner)) || (eToOwner != NO_PLAYER &&
 				eObs == TEAMID(eToOwner)));
-		bool const bEnteringOrLeaving = (getPlot().isVisible(eObs) !=
-				kFromPlot.isVisible(eObs));
+		bool bEnteringOrLeaving = (getPlot().isVisible(eObs) != kFromPlot.isVisible(eObs));
+		bool bSeaPatrol = (getDomainType() == DOMAIN_SEA &&
+				AI().AI_getMissionAIType() == MISSIONAI_PATROL);
 		// Just to avoid cycling through the units
-		if(bInSpectatorsBorders && (bEnteringOrLeaving || !bWaterPatrol))
+		if(bInSpectatorsBorders && (bEnteringOrLeaving || !bSeaPatrol))
 			return true;
 		if(bShowWorkers && bShowShips && bShowMissionaries)
 			return true;
@@ -410,7 +388,7 @@ bool CvSelectionGroup::showMoves(/* advc.102: */ CvPlot const& kFromPlot) const
 			bool bWorker = (u.AI_getUnitAIType() == UNITAI_WORKER ||
 					u.AI_getUnitAIType() == UNITAI_WORKER_SEA);
 			bool bNonTransportShip = (bSeaUnit && !u.isHuman() &&
-					(u.cargoSpace() <= 1 || bWaterPatrol));
+					(u.cargoSpace() <= 1 || bSeaPatrol));
 			bool bMissionary = (u.AI_getUnitAIType() == UNITAI_MISSIONARY);
 			if(!bMissionary && bAwayFromHome && (!bSeaUnit ||
 				!bNonTransportShip || bShowShips || bEnteringOrLeaving))
@@ -698,6 +676,45 @@ CvPlot* CvSelectionGroup::lastMissionPlot() const
 				return pTargetUnit->plot();
 			break;
 		}
+		case MISSION_SKIP:
+		case MISSION_SLEEP:
+		case MISSION_FORTIFY:
+		case MISSION_PLUNDER:
+		case MISSION_AIRPATROL:
+		case MISSION_SEAPATROL:
+		case MISSION_HEAL:
+		case MISSION_SENTRY_HEAL: // advc.004l
+		case MISSION_SENTRY:
+		case MISSION_AIRLIFT:
+		case MISSION_NUKE:
+		case MISSION_RECON:
+		case MISSION_PARADROP:
+		case MISSION_AIRBOMB:
+		case MISSION_BOMBARD:
+		case MISSION_RANGE_ATTACK:
+		case MISSION_PILLAGE:
+		case MISSION_SABOTAGE:
+		case MISSION_DESTROY:
+		case MISSION_STEAL_PLANS:
+		case MISSION_FOUND:
+		case MISSION_SPREAD:
+		case MISSION_SPREAD_CORPORATION:
+		case MISSION_JOIN:
+		case MISSION_CONSTRUCT:
+		case MISSION_DISCOVER:
+		case MISSION_HURRY:
+		case MISSION_TRADE:
+		case MISSION_GREAT_WORK:
+		case MISSION_INFILTRATE:
+		case MISSION_GOLDEN_AGE:
+		case MISSION_BUILD:
+		case MISSION_LEAD:
+		case MISSION_ESPIONAGE:
+		case MISSION_DIE_ANIMATION:
+			break;
+		default:
+			FAssert(false);
+			break;
 		}
 		pMissionNode = prevMissionQueueNode(pMissionNode);
 	}
@@ -796,12 +813,7 @@ void CvSelectionGroup::startMission()
 				attacking units that they can't see. */
 			if (isHuman() && !GC.getMap().getPlot(
 				headMissionQueueNode()->m_data.iData1,
-				headMissionQueueNode()->m_data.iData2).isVisible(getTeam()) &&
-				/*	<advc> Future-proofing. OK to accidentally run into an
-					unseen enemy in an adjacent plot. */
-				stepDistance(getX(), getY(),
-				headMissionQueueNode()->m_data.iData1,
-				headMissionQueueNode()->m_data.iData2) > 1) // </advc>
+				headMissionQueueNode()->m_data.iData2).isVisible(getTeam()))
 			{
 				headMissionQueueNode()->m_data.eFlags |= MOVE_NO_ATTACK;
 			}
@@ -892,17 +904,13 @@ void CvSelectionGroup::startMission()
 		case MISSION_PILLAGE:
 		{	// <advc> K-Mod code moved into subroutine
 			CvUnit* pUnit;
-			// Human units should pillage at most once per command
-			std::vector<int> aiHasPillaged;
-			while ((pUnit = AI().AI_bestUnitForMission(MISSION_PILLAGE,
-				NULL, &aiHasPillaged)) != NULL) // </advc>
+			while ((pUnit = AI().AI_bestUnitForMission(MISSION_PILLAGE)) != NULL) // </advc>
 			{	// <K-Mod>
 				if (pUnit->pillage())
 				{
 					bAction = true;
-					if (!AI_isControlled())
-						aiHasPillaged.push_back(pUnit->getID());
-					// AI groups might want to reconsider their action after pillaging
+					/*	AI groups might want to reconsider their action after pillaging.
+						advc (note): Only relevant when pillaging upgraded improvements. */
 					if (!isHuman() && canAllMove())
 						break;
 				} // </K-Mod>
@@ -931,13 +939,13 @@ void CvSelectionGroup::startMission()
 		}
 		case MISSION_AIRBOMB:
 		{
-			CvPlot& kMissionPlot = GC.getMap().getPlot(
+			CvPlot const& kMissionPlot = GC.getMap().getPlot(
 					headMissionQueueNode()->m_data.iData1,
 					headMissionQueueNode()->m_data.iData2);
 			bool bIntercepted = false;
 			CvUnit* pUnit;
 			while ((pUnit = AI().AI_bestUnitForMission(MISSION_AIRBOMB, &kMissionPlot)) != NULL &&
-				pUnit->airBomb(kMissionPlot, &bIntercepted))
+				pUnit->airBomb(kMissionPlot.getX(), kMissionPlot.getY(), &bIntercepted))
 			{
 				bAction = true;
 				if (bIntercepted && !bStackAttack)
@@ -1212,7 +1220,7 @@ void CvSelectionGroup::startMission()
 			{
 				deleteMissionQueueNode(headMissionQueueNode());
 				// K-Mod
-				if (headMissionQueueNode() != NULL)
+				if (headMissionQueueNode())
 					activateHeadMission();
 				// K-Mod end
 				if (isActiveOwned() && IsSelected())
@@ -1225,11 +1233,7 @@ void CvSelectionGroup::startMission()
 			else if (getActivityType() == ACTIVITY_MISSION)
 				continueMission();
 			// K-Mod
-			else if (isActiveOwned() && IsSelected() && //!canAnyMove()
-				/*	advc.001: Mission won't start unless all can move.
-					Need to cycle if mission not started. BtS already
-					gets this wrong. */
-				!canAllMove())
+			else if (isActiveOwned() && IsSelected() && !canAnyMove())
 			{
 				GC.getGame().cycleSelectionGroups_delayed(kOwner.
 						isOption(PLAYEROPTION_QUICK_MOVES) ? 1 : 2, true);
@@ -1253,7 +1257,6 @@ void CvSelectionGroup::continueMission()
 // return true if we are ready to take another step
 bool CvSelectionGroup::continueMission_bulk(int iSteps)
 {
-	PROFILE_FUNC(); // advc (This covers more ground than pushMission)
 	FAssert(!isBusy());
 	FAssert(getOwner() != NO_PLAYER);
 	FAssert(getActivityType() == ACTIVITY_MISSION);
@@ -1886,7 +1889,7 @@ bool CvSelectionGroup::canDoInterfaceMode(InterfaceModeTypes eInterfaceMode)
 			break;
 
 		case INTERFACEMODE_AIRBOMB:
-			if (pUnit->canAirBomb())
+			if (pUnit->canAirBomb(pUnit->plot()))
 				return true;
 			break;
 
@@ -1942,11 +1945,8 @@ bool CvSelectionGroup::canDoInterfaceModeAt(InterfaceModeTypes eInterfaceMode, C
 				return true;
 			break;
 		case INTERFACEMODE_NUKE:
-			if (pUnit->canNukeAt(pUnit->getPlot(), pPlot->getX(), pPlot->getY(),
-				pUnit->getTeam())) // kekm.7 (advc)
-			{
+			if (pUnit->canNukeAt(pUnit->getPlot(), pPlot->getX(), pPlot->getY()))
 				return true;
-			}
 			break;
 		case INTERFACEMODE_RECON:
 			if (pUnit->canReconAt(pUnit->plot(), pPlot->getX(), pPlot->getY()))
@@ -1957,7 +1957,7 @@ bool CvSelectionGroup::canDoInterfaceModeAt(InterfaceModeTypes eInterfaceMode, C
 				return true;
 			break;
 		case INTERFACEMODE_AIRBOMB:
-			if (pUnit->canAirBombAt(*pPlot))
+			if (pUnit->canAirBombAt(pUnit->plot(), pPlot->getX(), pPlot->getY()))
 				return true;
 			break;
 		case INTERFACEMODE_RANGE_ATTACK:
@@ -2205,15 +2205,6 @@ int CvSelectionGroup::getCargo() const
 	return iCargoCount;
 }
 
-// advc.102b: Cargo capacity, whether used or not.
-int CvSelectionGroup::getCargoSpace() const
-{
-	int iSpace = 0;
-	FOR_EACH_UNIT_IN(pUnit, *this)
-		iSpace += pUnit->cargoSpace();
-	return iSpace;
-}
-
 // K-Mod:
 int CvSelectionGroup::cargoSpaceAvailable(SpecialUnitTypes eSpecialCargo,
 	DomainTypes eDomainCargo) const
@@ -2319,11 +2310,11 @@ bool CvSelectionGroup::canMoveInto(CvPlot const& kPlot, bool bAttack) const
 
 
 bool CvSelectionGroup::canMoveOrAttackInto(CvPlot const& kPlot, bool bDeclareWar,
-	bool bCheckMoves, bool bAssumeVisible) const // K-Mod
+		bool bCheckMoves, bool bAssumeVisible) const // K-Mod
 {
 	if (getNumUnits() <= 0)
 		return false;
-	bool const bVisible = (bAssumeVisible || kPlot.isVisible(getHeadTeam())); // K-Mod
+	bool const bVisible = bAssumeVisible || kPlot.isVisible(getHeadTeam()); // K-Mod
 	FOR_EACH_UNIT_IN(pUnit, *this)
 	{
 		//if (pUnit->canMoveOrAttackInto(pPlot, bDeclareWar))
@@ -3268,7 +3259,7 @@ bool CvSelectionGroup::readyForMission() const
 	// direct attack is a special case...    sorry about that.
 	bool bCheckMoves = true;
 
-	if (kData.eMissionType == MISSION_MOVE_TO && (kData.eFlags & MOVE_DIRECT_ATTACK))
+	if (kData.eMissionType == MISSION_MOVE_TO && kData.eFlags & MOVE_DIRECT_ATTACK)
 	{
 		if (canAnyMove())
 			bCheckMoves = false;
@@ -3365,7 +3356,7 @@ bool CvSelectionGroup::canDoMission(MissionTypes eMission, int iData1, int iData
 			break;
 
 		case MISSION_SEAPATROL:
-			if (!bValid && pUnit->canSeaPatrol(pPlot, true))
+			if (!bValid && pUnit->canSeaPatrol(pPlot))
 			{
 				if (!bCheckMoves)
 					return true;
@@ -3402,8 +3393,7 @@ bool CvSelectionGroup::canDoMission(MissionTypes eMission, int iData1, int iData
 			break;
 
 		case MISSION_NUKE:
-			if (pUnit->canNukeAt(*pPlot, iData1, iData2,
-				pUnit->getTeam()) && // kekm.7 (advc)
+			if (pUnit->canNukeAt(*pPlot, iData1, iData2) &&
 				(!bCheckMoves || pUnit->canMove()))
 			{
 				return true;
@@ -3428,7 +3418,7 @@ bool CvSelectionGroup::canDoMission(MissionTypes eMission, int iData1, int iData
 			break;
 
 		case MISSION_AIRBOMB:
-			if (pUnit->canAirBombAt(GC.getMap().getPlot(iData1, iData2), pPlot) &&
+			if (pUnit->canAirBombAt(pPlot, iData1, iData2) &&
 				(!bCheckMoves || pUnit->canMove()))
 			{
 				return true;

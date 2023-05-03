@@ -33,10 +33,10 @@ int stepCost(FAStarNode* parent, FAStarNode* node, int data, void const* pointer
 BOOL routeValid(FAStarNode* parent, FAStarNode* node, int data, void const* pointer, FAStar* finder);
 // BorderFinder
 BOOL borderValid(FAStarNode* parent, FAStarNode* node, int data, void const* pointer, FAStar* finder);
-// AreaFinder ... (advc.030: Unused unless PASSABLE_AREAS GlobalDefine is set)
+// AreaFinder ...
 BOOL areaValid(FAStarNode* parent, FAStarNode* node, int data, void const* pointer, FAStar* finder);
 BOOL joinArea(FAStarNode* parent, FAStarNode* node, int data, void const* pointer, FAStar* finder);
-// PlotGroupFinder ... (advc.pf: Now likely unused)
+// PlotGroupFinder ...
 BOOL plotGroupValid(FAStarNode* parent, FAStarNode* node, int data, void const* pointer, FAStar* finder);
 BOOL countPlotGroup(FAStarNode* parent, FAStarNode* node, int data, void const* pointer, FAStar* finder);
 // IrrigatedFinder ...

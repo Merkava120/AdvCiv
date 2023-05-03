@@ -1326,10 +1326,7 @@ SimulationStep* InvasionGraph::Node::step(scaled rArmyPortionDefender,
 		rTypicalGarrisonPow = fixp(3.25); // That's a Warrior
 	}
 	// Fewer rallies if all spread thin
-	int iRallied = ((rPowerPerGarrison *
-			// Humans are better at rallying
-			(GET_PLAYER(kDefender.m_ePlayer).isHuman() ? fixp(1.3) : 1)) /
-			rTypicalGarrisonPow).uround();
+	int iRallied = (rPowerPerGarrison / rTypicalGarrisonPow).uround();
 	// Upper bound for rallies based on importance of city
 	int iRallyBound = 0;
 	if (bUniformGarrisons)
@@ -2212,7 +2209,7 @@ void InvasionGraph::simulateComponent(Node& kStart)
 	{
 	#if !DISABLE_UWAI_REPORT
 		m_kReport.log("*Cycle*");
-		std::string szMsg;
+		std::string szMsg = "";
 		for (size_t i = 0; i < aCycle.size(); i++)
 		{
 			szMsg += m_kReport.leaderName(aCycle[i]->getPlayer());

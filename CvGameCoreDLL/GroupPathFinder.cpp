@@ -73,9 +73,7 @@ bool GroupStepMetric::canStepThrough(CvPlot const& kPlot, CvSelectionGroup const
 		if (iPathTurns > 1 || iMoves == 0)
 		{
 			if (!(eFlags & MOVE_IGNORE_DANGER) &&
-				(!kGroup.canFight() ||
-				(eFlags & MOVE_AVOID_DANGER)) && // advc.031d
-				!kGroup.alwaysInvisible() &&
+				!kGroup.canFight() && !kGroup.alwaysInvisible() &&
 				GET_PLAYER(kGroup.getHeadOwner()).AI_isAnyPlotDanger(kPlot))
 			{
 				return false;
@@ -166,9 +164,7 @@ bool GroupStepMetric::isValidDest(CvPlot const& kPlot, CvSelectionGroup const& k
 			}
 		}
 		if (!(eFlags & MOVE_IGNORE_DANGER) &&
-			(!kGroup.canFight() ||
-			(eFlags & MOVE_AVOID_DANGER)) && // advc.031d
-			!kGroup.alwaysInvisible() &&
+			!kGroup.canFight() && !kGroup.alwaysInvisible() &&
 			GET_PLAYER(kGroup.getHeadOwner()).AI_isAnyPlotDanger(kPlot))
 		{
 			return false;
@@ -199,8 +195,7 @@ bool GroupStepMetric::isValidDest(CvPlot const& kPlot, CvSelectionGroup const& k
 						pCargoUnit->getGroup()->canMoveOrAttackInto(kPlot,
 						//(kGroup.AI().AI_isDeclareWar(kPlot) || (eFlags & MOVE_DECLARE_WAR)))
 						// K-Mod. The new AI must be explicit about declaring war.
-						eFlags & MOVE_DECLARE_WAR, false, //bAIControl
-						!kGroup.isHuman())) // advc.001 (see below)
+						eFlags & MOVE_DECLARE_WAR, false, bAIControl))
 					{
 						bValid = true;
 						break;
@@ -217,9 +212,7 @@ bool GroupStepMetric::isValidDest(CvPlot const& kPlot, CvSelectionGroup const& k
 			if (!kGroup.canMoveOrAttackInto(kPlot,
 				//pSelectionGroup->AI_isDeclareWar(pToPlot) || (eFlags & MOVE_DECLARE_WAR))
 				// K-Mod. The new AI must be explicit about declaring war.
-				eFlags & MOVE_DECLARE_WAR, false, //bAIControl
-				// advc.001: Automated human units shouldn't be all-seeing
-				!kGroup.isHuman()))
+				eFlags & MOVE_DECLARE_WAR, false, bAIControl))
 			{
 				return false;
 			}
@@ -495,8 +488,9 @@ int GroupStepMetric::cost(CvPlot const& kFrom, CvPlot const& kTo,
 						std::max(0, GC.getInfo(kTo.getFeatureType()).getTurnDamage())) /
 						GC.getMAX_HIT_POINTS();
 			}
-			if (GC.getMap().getPlotExtraCost(kTo) > 0)
-				iWorstCost += (PATH_MOVEMENT_WEIGHT * GC.getMap().getPlotExtraCost(kTo));
+
+			if (kTo.getExtraMovePathCost() > 0)
+				iWorstCost += (PATH_MOVEMENT_WEIGHT * kTo.getExtraMovePathCost());
 		}
 
 		// defence modifiers
@@ -510,7 +504,7 @@ int GroupStepMetric::cost(CvPlot const& kFrom, CvPlot const& kTo,
 		FOR_EACH_UNIT_IN(pGroupUnit, kGroup)
 		{
 			if (!pGroupUnit->canFight())
-				continue;
+				continue; // advc
 			iDefenceCount++;
 			if (pGroupUnit->canDefend(&kTo))
 			{

@@ -855,7 +855,6 @@ m_iAdvancedStartCostIncrease(0),
 m_iValue(0),
 m_iMovementCost(0),
 m_iFlatMovementCost(0),
-m_eRoutePillage(NO_ROUTE), // advc.255
 m_ePrereqBonus(NO_BONUS),
 m_piYieldChange(NULL),
 m_piTechMovementChange(NULL)
@@ -893,7 +892,6 @@ int CvRouteInfo::getTechMovementChange(int i) const
 	FAssertBounds(0, GC.getNumTechInfos(), i);
 	return m_piTechMovementChange ? m_piTechMovementChange[i] : 0; // advc.003t
 }
-
 // advc.003t: Calls from Python aren't going to respect the bounds
 int CvRouteInfo::py_getPrereqOrBonus(int i) const
 {
@@ -953,16 +951,6 @@ bool CvRouteInfo::read(CvXMLLoadUtility* pXML)
 
 	return true;
 }
-
-// advc.255:
-bool CvRouteInfo::readPass2(CvXMLLoadUtility* pXML)
-{
-	CvString szTextVal;
-	pXML->GetChildXmlValByName(szTextVal, "RoutePillage", "");
-	m_eRoutePillage = (RouteTypes)GC.getInfoTypeForString(szTextVal);
-	return true;
-}
-
 
 CvImprovementInfo::CvImprovementInfo() :
 m_iAdvancedStartCost(0),

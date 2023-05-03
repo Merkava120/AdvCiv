@@ -92,7 +92,7 @@ bool CvAutomateInfo::read(CvXMLLoadUtility* pXML)
 }
 
 CvActionInfo::CvActionInfo() :
-m_iSubID(-1),
+m_iOriginalIndex(-1),
 m_eSubType(NO_ACTIONSUBTYPE)
 {}
 
@@ -104,7 +104,7 @@ int CvActionInfo::getMissionData() const
 		ACTIONSUBTYPE_SPECIALIST == m_eSubType	||
 		ACTIONSUBTYPE_BUILDING == m_eSubType)
 	{
-		return m_iSubID;
+		return m_iOriginalIndex;
 	}
 	return -1;
 }
@@ -115,11 +115,11 @@ int CvActionInfo::getCommandData() const
 	{
 	case ACTIONSUBTYPE_PROMOTION:
 	case ACTIONSUBTYPE_UNIT:
-		return m_iSubID;
+		return m_iOriginalIndex;
 	case ACTIONSUBTYPE_COMMAND:
-		return GC.getInfo((CommandTypes)m_iSubID).getAutomate();
+		return GC.getInfo((CommandTypes)m_iOriginalIndex).getAutomate();
 	case ACTIONSUBTYPE_AUTOMATE:
-		return GC.getInfo((AutomateTypes)m_iSubID).getAutomate();
+		return GC.getInfo((AutomateTypes)m_iOriginalIndex).getAutomate();
 	default:
 		return -1;
 	}
@@ -130,9 +130,9 @@ int CvActionInfo::getAutomateType() const
 	switch(getSubType())
 	{
 	case ACTIONSUBTYPE_COMMAND:
-		return GC.getInfo((CommandTypes)m_iSubID).getAutomate();
+		return GC.getInfo((CommandTypes)m_iOriginalIndex).getAutomate();
 	case ACTIONSUBTYPE_AUTOMATE:
-		return GC.getInfo((AutomateTypes)m_iSubID).getAutomate();
+		return GC.getInfo((AutomateTypes)m_iOriginalIndex).getAutomate();
 	default:
 		return NO_AUTOMATE;
 	}
@@ -141,7 +141,7 @@ int CvActionInfo::getAutomateType() const
 int CvActionInfo::getInterfaceModeType() const
 {
 	if (ACTIONSUBTYPE_INTERFACEMODE == m_eSubType)
-		return m_iSubID;
+		return m_iOriginalIndex;
 
 	return NO_INTERFACEMODE;
 }
@@ -151,17 +151,17 @@ int CvActionInfo::getMissionType() const
 	switch(getSubType())
 	{
 	case ACTIONSUBTYPE_BUILD:
-		return (MissionTypes)GC.getInfo((BuildTypes)m_iSubID).getMissionType();
+		return (MissionTypes)GC.getInfo((BuildTypes)m_iOriginalIndex).getMissionType();
 	case ACTIONSUBTYPE_RELIGION:
-		return GC.getInfo((ReligionTypes)m_iSubID).getMissionType();
+		return GC.getInfo((ReligionTypes)m_iOriginalIndex).getMissionType();
 	case ACTIONSUBTYPE_CORPORATION:
-		return GC.getInfo((CorporationTypes)m_iSubID).getMissionType();
+		return GC.getInfo((CorporationTypes)m_iOriginalIndex).getMissionType();
 	case ACTIONSUBTYPE_SPECIALIST:
-		return (MissionTypes)GC.getInfo((SpecialistTypes)m_iSubID).getMissionType();
+		return (MissionTypes)GC.getInfo((SpecialistTypes)m_iOriginalIndex).getMissionType();
 	case ACTIONSUBTYPE_BUILDING:
-		return GC.getInfo((BuildingTypes)m_iSubID).getMissionType();
+		return GC.getInfo((BuildingTypes)m_iOriginalIndex).getMissionType();
 	case ACTIONSUBTYPE_MISSION:
-		return (MissionTypes)m_iSubID;
+		return (MissionTypes)m_iOriginalIndex;
 	default:
 		return NO_MISSION;
 	}
@@ -172,13 +172,13 @@ int CvActionInfo::getCommandType() const
 	switch(getSubType())
 	{
 	case ACTIONSUBTYPE_PROMOTION:
-		return (CommandTypes)GC.getInfo((PromotionTypes)m_iSubID).getCommandType();
+		return (CommandTypes)GC.getInfo((PromotionTypes)m_iOriginalIndex).getCommandType();
 	case ACTIONSUBTYPE_UNIT:
-		return (CommandTypes)GC.getInfo((UnitTypes)m_iSubID).getCommandType();
+		return (CommandTypes)GC.getInfo((UnitTypes)m_iOriginalIndex).getCommandType();
 	case ACTIONSUBTYPE_AUTOMATE:
-		return (CommandTypes)GC.getInfo((AutomateTypes)m_iSubID).getCommand();
+		return (CommandTypes)GC.getInfo((AutomateTypes)m_iOriginalIndex).getCommand();
 	case ACTIONSUBTYPE_COMMAND:
-		return (CommandTypes)m_iSubID;
+		return (CommandTypes)m_iOriginalIndex;
 	default:
 		return NO_COMMAND;
 	}
@@ -187,19 +187,19 @@ int CvActionInfo::getCommandType() const
 int CvActionInfo::getControlType() const
 {
 	if (ACTIONSUBTYPE_CONTROL == m_eSubType)
-		return m_iSubID;
+		return m_iOriginalIndex;
 
 	return -1;
 }
 
-int CvActionInfo::getSubID() const
+int CvActionInfo::getOriginalIndex() const
 {
-	return m_iSubID;
+	return m_iOriginalIndex;
 }
 
-void CvActionInfo::setSubID(int i)
+void CvActionInfo::setOriginalIndex(int i)
 {
-	m_iSubID = i;
+	m_iOriginalIndex = i;
 }
 
 bool CvActionInfo::isConfirmCommand() const
@@ -207,9 +207,9 @@ bool CvActionInfo::isConfirmCommand() const
 	switch(getSubType()) // advc (replacing if/else)
 	{
 	case ACTIONSUBTYPE_COMMAND:
-		return GC.getInfo((CommandTypes)m_iSubID).getConfirmCommand();
+		return GC.getInfo((CommandTypes)m_iOriginalIndex).getConfirmCommand();
 	case ACTIONSUBTYPE_AUTOMATE:
-		return GC.getInfo((AutomateTypes)m_iSubID).getConfirmCommand();
+		return GC.getInfo((AutomateTypes)m_iOriginalIndex).getConfirmCommand();
 	default:
 		return false;
 	}
@@ -222,13 +222,13 @@ bool CvActionInfo::isVisible() const
 	case ACTIONSUBTYPE_CONTROL:
 		return false;
 	case ACTIONSUBTYPE_COMMAND:
-		return GC.getInfo((CommandTypes)m_iSubID).getVisible();
+		return GC.getInfo((CommandTypes)m_iOriginalIndex).getVisible();
 	case ACTIONSUBTYPE_AUTOMATE:
-		return GC.getInfo((AutomateTypes)m_iSubID).getVisible();
+		return GC.getInfo((AutomateTypes)m_iOriginalIndex).getVisible();
 	case ACTIONSUBTYPE_MISSION:
-		return GC.getInfo((MissionTypes)m_iSubID).getVisible();
+		return GC.getInfo((MissionTypes)m_iOriginalIndex).getVisible();
 	case ACTIONSUBTYPE_INTERFACEMODE:
-		return GC.getInfo((InterfaceModeTypes)m_iSubID).getVisible();
+		return GC.getInfo((InterfaceModeTypes)m_iOriginalIndex).getVisible();
 	default:
 		return true;
 	}
@@ -246,7 +246,7 @@ void CvActionInfo::setSubType(ActionSubTypes eSubType)
 
 CvHotkeyInfo* CvActionInfo::getHotkeyInfo() const
 {
-	int const iData = m_iSubID;
+	int const iData = m_iOriginalIndex;
 	switch(getSubType())
 	{
 		case ACTIONSUBTYPE_INTERFACEMODE:

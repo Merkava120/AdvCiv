@@ -26,12 +26,11 @@ class CvInterface;
 class FProfiler;
 class CvDLLUtilityIFaceBase;
 class CvPythonCaller; // advc.003y
-class CvDLLLogger; // advc
+class CvDLLLogger;
 class CvRandom;
 class CvGame; // advc.003u
 class CvGameAI;
 class CvAgents; // advc.agent
-class ModName; // advc.106i
 class CvInitCore;
 class CvStatsReporter;
 class CvDLLInterfaceIFaceBase;
@@ -129,7 +128,8 @@ public:
 	FAStar& getBorderFinder() const { return *m_borderFinder; }
 	DllExport FAStar& getAreaFinder() { CvGlobals const& kThis = *this; return kThis.getAreaFinder(); }
 	FAStar& getAreaFinder() const { return *m_areaFinder; }
-	DllExport FAStar& getPlotGroupFinder();
+	DllExport FAStar& getPlotGroupFinder() { CvGlobals const& kThis = *this; return kThis.getPlotGroupFinder(); }
+	FAStar& getPlotGroupFinder() const { return *m_plotGroupFinder; }
 	//NiPoint3& getPt3Origin(); // advc.003j: unused
 	//NiPoint3& getPt3CameraDir(); // advc.003j: unused
 	DllExport bool& getLogging() { return m_bLogging; }
@@ -174,8 +174,18 @@ public:
 	int const* getCityPlotY() const { return m_aiCityPlotY; }
 	int const* getCityPlotPriority() const { return m_aiCityPlotPriority; }
 	int maxCityPlotPriority() const { return m_iMaxCityPlotPriority; } // advc
-	/*	(advc: Unused getTurnLeftDirection, getTurnRightDirection deleted,
-		replacement rotateDir in CvGameCoreUtils.) */
+	DirectionTypes const* getTurnLeftDirection() const { return m_aeTurnLeftDirection; }
+	DirectionTypes getTurnLeftDirection(int i) const
+	{
+		FAssertBounds(0, NUM_DIRECTION_TYPES, i);
+		return m_aeTurnLeftDirection[i];
+	}
+	DirectionTypes const* getTurnRightDirection() const { return m_aeTurnRightDirection; }
+	DirectionTypes getTurnRightDirection(int i) const
+	{
+		FAssertBounds(0, NUM_DIRECTION_TYPES, i);
+		return m_aeTurnRightDirection[i];
+	}
 
 	//
 	// Global Infos
@@ -314,9 +324,9 @@ public:
 	{
 		return (int)m_paWorldInfo.size();
 	}
-	CvWorldInfo& getWorldInfo(int iWorld) const
+	CvWorldInfo& getWorldInfo(WorldSizeTypes eWorld) const // deprecated
 	{
-		return getInfo(static_cast<WorldSizeTypes>(iWorld));
+		return getInfo(eWorld);
 	}
 #pragma endregion InfoAccessors
 	// </advc.enum>
@@ -389,15 +399,12 @@ public:
 	// advc: Need a const version
 	FVariableSystem const* getDefinesVarSystem() const { return m_VarSystem; }
 	void cacheGlobals();
-	bool isCachingDone() const { return (m_aiGlobalDefinesCache != NULL); } // advc.003c
 
 	// ***** EXPOSED TO PYTHON *****
-	int getDefineINT(char const* szName) const
+	DllExport int getDefineINT(char const* szName) const
 	{
 		return getDefineINT(szName, 0); // advc.opt: Call the BBAI version
 	}
-	// advc: Separate function for external calls (exported through .def file)
-	int getDefineINTExternal(char const* szName) const;
 	// BETTER_BTS_AI_MOD, Efficiency, Options, 02/21/10, jdog5000:
 	int getDefineINT(char const* szName, int iDefault) const;
 	// <advc>
@@ -451,7 +458,6 @@ public:
 		/* <advc.ctr> */ \
 		DO(CITY_TRADE_CULTURE_THRESH) \
 		DO(NATIVE_CITY_CULTURE_THRESH) /* </advc.ctr> */ \
-		DO(CITY_NUKE_CULTURE_THRESH) /* advc (for kekm.7) */ \
 		DO(TREAT_REVEALED_BUILDINGS_AS_VISIBLE) /* advc.045 */ \
 		DO(DOUBLE_OBSOLETE_BUILDING_COMMERCE) /* advc.098 */ \
 		/* <advc.094> */ \
@@ -508,7 +514,6 @@ public:
 		DO(NUKE_UNIT_DAMAGE_BASE) \
 		DO(NUKE_UNIT_DAMAGE_RAND_1) \
 		DO(NUKE_UNIT_DAMAGE_RAND_2) \
-		DO(EVENT_MESSAGE_STAGGER_TIME) \
 		/* </advc.opt> */ \
 		DO(PATH_DAMAGE_WEIGHT) \
 		DO(HILLS_EXTRA_DEFENSE) \
@@ -561,8 +566,7 @@ public:
 		DO(TRUE_STARTS_SANITIZE_SCENARIOS) /* advc.tsl */ \
 		DO(RF_PLAYER_HANDICAP_ADJUSTMENT) /* advc.708 */ \
 		DO(BASE_UNIT_CAPTURE_CHANCE) /* advc.010 */ \
-		DO(DOW_UNIT_CAPTURE_CHANCE) /* advc.010 */ \
-		DO(SHOW_ODDS_IN_COMBAT_MESSAGES) /* advc.048 */
+		DO(DOW_UNIT_CAPTURE_CHANCE) /* advc.010 */
 	#define MAKE_ENUMERATOR(VAR) VAR,
 	enum GlobalDefines
 	{
@@ -597,9 +601,6 @@ public:
 	int getCOMBAT_DIE_SIDES() const { return getDefineINT(COMBAT_DIE_SIDES); }
 	int getCOMBAT_DAMAGE() const { return getDefineINT(COMBAT_DAMAGE); }
 	// BETTER_BTS_AI_MOD: END
-	/*	advc.004k: Future-proofing. This could be a global define, but, so far,
-		1 is the only supported value. */
-	int getMAX_SEA_PATROL_RANGE() const { return 1; }
 	/*  <advc.opt> (TextVals can't be loaded by cacheGlobals. Hence also won't be
 		updated when a setDefine... function is called.) */
 	ImprovementTypes getRUINS_IMPROVEMENT() const
@@ -664,7 +665,6 @@ public:
 	DllExport float getUNIT_MULTISELECT_DISTANCE() { CvGlobals const& kThis = *this; return kThis.getUNIT_MULTISELECT_DISTANCE(); }
 	float getUNIT_MULTISELECT_DISTANCE() const { return m_fUNIT_MULTISELECT_DISTANCE; }
 	void updateCameraStartDistance(bool bReset); // advc.004m  (exposed to Python)
-	void updateCityCamDist(); // advc.004m
 
 	DllExport int getUSE_FINISH_TEXT_CALLBACK();
 	// advc.003y: Moved the other callback getters to CvPythonCaller
@@ -695,9 +695,8 @@ public:
 
 	DllExport void setDLLIFace(CvDLLUtilityIFaceBase* pDll);
 	CvDLLUtilityIFaceBase* getDLLIFace() const { return m_pDLL; } // advc: const
-	DllExport CvDLLUtilityIFaceBase* getDLLIFaceNonInl();
-	ModName const& getModName() const { return m_modName; } // advc.106i
 
+	DllExport CvDLLUtilityIFaceBase* getDLLIFaceNonInl();
 	DllExport void setDLLProfiler(FProfiler* prof);
 	FProfiler* getDLLProfiler();
 	DllExport void enableDLLProfiler(bool bEnable);
@@ -797,7 +796,7 @@ public:
 	int getNUM_COMMERCE_TYPES() const;*/ // advc
 
 	void deleteInfoArrays();
-
+	bool isCachingDone() const; // advc.003c
 	void setHoFScreenUp(bool b); // advc.106i
 
 protected:
@@ -814,9 +813,8 @@ protected:
 	bool m_bZoomOut;
 	bool m_bZoomIn;
 	bool m_bLoadGameFromFile;*/ // advc.003j: Unused; not even written.
-	ModName m_modName; // advc.106i
 
-	FMPIManager* m_pFMPMgr;
+	FMPIManager * m_pFMPMgr;
 
 	CvRandomExtended* m_asyncRand; // advc.007c (was CvRandom)
 	CvPythonCaller* m_pPythonCaller; // advc.003y
@@ -864,9 +862,8 @@ protected:
 	int m_aiCityPlotPriority[NUM_CITY_PLOTS];
 	int m_iMaxCityPlotPriority; // advc
 	CityPlotTypes m_aaeXYCityPlot[CITY_PLOTS_DIAMETER][CITY_PLOTS_DIAMETER];
-	// advc: Can calculate these on the fly just fine (also: were unused)
-	/*DirectionTypes m_aeTurnLeftDirection[NUM_DIRECTION_TYPES];
-	DirectionTypes m_aeTurnRightDirection[NUM_DIRECTION_TYPES];*/
+	DirectionTypes m_aeTurnLeftDirection[NUM_DIRECTION_TYPES];
+	DirectionTypes m_aeTurnRightDirection[NUM_DIRECTION_TYPES];
 	DirectionTypes m_aaeXYDirection[DIRECTION_DIAMETER][DIRECTION_DIAMETER];
 
 
@@ -962,7 +959,6 @@ private:
 	// advc.006:
 	void handleUnknownTypeString(char const* szType, bool bHideAssert, bool bFromPython) const;
 	//void addToInfosVectors(void* infoVector); // advc.enum (no longer used)
-	void updateModName(); // advc.106i
 };
 
 extern CvGlobals gGlobals;	// for debugging

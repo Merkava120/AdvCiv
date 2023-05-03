@@ -29,13 +29,11 @@ public:
 
 	void doTurn();
 	void doTurnPost(); // advc.029
-	void updateCombat(bool bQuick = false, /* advc.004c: */ bool* pbIntercepted = NULL,
-			bool bSeaPatrol = false); // advc.004k
+	void updateCombat(bool bQuick = false, /* advc.004c: */ bool* pbIntercepted = NULL);
 	void updateAirCombat(bool bQuick = false);
 	bool updateAirStrike(CvPlot& kPlot, bool bQuick, bool bFinish);
 
 	bool isActionRecommended(int iAction);
-	void onActiveSelection(); // advc
 	void updateFoundingBorder(bool bForceClear = false) const; // advc.004h
 
 	bool isUnowned() const; // advc.061
@@ -90,8 +88,7 @@ public:
 	bool isPlotValid(CvPlot const& kPlot) const;											// Exposed to Python (via CyPlot::isFriendlyCity)
 	bool isRevealedPlotValid(CvPlot const& kPlot) const; // </advc>
 	bool isInvasionMove(CvPlot const& kFrom, CvPlot const& kTo) const; // advc.162
-	void attack(CvPlot* pPlot, bool bQuick, /* advc.004c: */ bool* pbIntercepted = NULL,
-			bool bSeaPatrol = false); // advc
+	void attack(CvPlot* pPlot, bool bQuick, /* advc.004c: */ bool* pbIntercepted = NULL);
 	void attackForDamage(CvUnit *pDefender, int attackerDamageChange, int defenderDamageChange);
 	void fightInterceptor(CvPlot const& kPlot, bool bQuick);
 	void move(CvPlot& kPlot, bool bShow, // advc: 1st param was CvPlot* (not const b/c of possible feature change)
@@ -129,10 +126,7 @@ public:
 	bool canAirPatrol(const CvPlot* pPlot) const;															// Exposed to Python
 	void airCircle(bool bStart);
 
-	bool canSeaPatrol(CvPlot const* pPlot																	// Exposed to Python
-			= NULL, bool bCheckActivity = false) const; // advc
-	bool isSeaPatrolling() const; // advc
-	bool canReachBySeaPatrol(CvPlot const& kDest, CvPlot const* pFrom = NULL) const; // advc.004k
+	bool canSeaPatrol(const CvPlot* pPlot) const;															// Exposed to Python
 
 	bool canHeal(const CvPlot* pPlot) const;																// Exposed to Python
 	bool canSentryHeal(const CvPlot* pPlot) const; // advc.004l
@@ -148,29 +142,22 @@ public:
 	bool canAirliftAt(const CvPlot* pPlot, int iX, int iY) const;											// Exposed to Python
 	bool airlift(int iX, int iY);
 
-	bool isNukeVictim(const CvPlot* pPlot, TeamTypes eTeam,													// Exposed to Python
-			TeamTypes eObs = NO_TEAM) const; // kekm.7 (advc)
+	bool isNukeVictim(const CvPlot* pPlot, TeamTypes eTeam) const;											// Exposed to Python
 	bool canNuke(CvPlot const* pFrom) const { return (nukeRange() != -1); }									// Exposed to Python
-	bool canNukeAt(CvPlot const& kFrom, int iX, int iY,														// Exposed to Python
-			TeamTypes eObs = NO_TEAM) const; // kekm.7 (advc)
+	bool canNukeAt(CvPlot const& kFrom, int iX, int iY) const;												// Exposed to Python
 	bool nuke(int iX, int iY);
 	// <advc.650>
-	int nukeInterceptionChance(CvPlot const& kTarget, TeamTypes eObs = NO_TEAM,
-			TeamTypes* pBestTeam = NULL,
+	int nukeInterceptionChance(CvPlot const& kTarget, TeamTypes* pBestTeam = NULL,
 			EagerEnumMap<TeamTypes,bool> const* pTeamsAffected = NULL) const;
 	// <advc.650>
 	bool canRecon(const CvPlot* pPlot) const;																// Exposed to Python
 	bool canReconAt(const CvPlot* pPlot, int iX, int iY) const;												// Exposed to Python
 	bool recon(int iX, int iY);
-	// <advc> Param lists changed for these two
-	bool canAirBomb(CvPlot const* pFrom = NULL) const;														// Exposed to Python
-	bool canAirBombAt(CvPlot const& kTarget, CvPlot const* pFrom = NULL) const; // </advc>					// Exposed to Python
-	// <advc.255>
-	enum StructureTypes { NO_STRUCTURE, STRUCTURE_IMPROVEMENT, STRUCTURE_ROUTE };
-	StructureTypes getDestructibleStructureAt(CvPlot const& kTarget,
-			bool bTestVisibility) const; // </advc.255>
+
+	bool canAirBomb(const CvPlot* pPlot) const;																// Exposed to Python
+	bool canAirBombAt(const CvPlot* pPlot, int iX, int iY) const;											// Exposed to Python
 	int airBombDefenseDamage(CvCity const& kCity) const; // advc
-	bool airBomb(CvPlot& kTarget, /* advc.004c: */ bool* pbIntercepted = NULL);
+	bool airBomb(int iX, int iY, /* advc.004c: */ bool* pbIntercepted = NULL);
 
 	bool canAirStrike(CvPlot const& kPlot) const; // (advc.004c: was protected)
 
@@ -331,13 +318,6 @@ public:
 	}
 
 	bool isBarbarian() const;																				// Exposed to Python
-	// advc.313:
-	bool isKnownSeaBarbarian() const
-	{
-		return (isBarbarian() && getDomainType() == DOMAIN_SEA &&
-				// Future-proof for Barbarian Privateers
-				!m_pUnitInfo->isHiddenNationality());
-	}
 	bool isHuman() const;																					// Exposed to Python
 
 	int visibilityRange() const;																			// Exposed to Python
@@ -351,6 +331,21 @@ public:
 	{
 		return std::max(0, maxMoves() - getMoves());
 	}
+	// merkava120.fintac
+	int shotsLeft() const
+	{
+		return m_iShotsLeft;
+	}
+	void takeShot() 
+	{
+		m_iShotsLeft--;
+	}
+	void resetShots()
+	{
+		m_iShotsLeft = getUnitInfo().getShotsPerTurn();
+	}
+	// merkava120 end
+	
 	DllExport bool canMove() const;																			// Exposed to Python
 	DllExport bool hasMoved() const																			// Exposed to Python
 	{
@@ -448,10 +443,14 @@ public:
 	int maxCombatStr(CvPlot const* pPlot = NULL, CvUnit const* pAttacker = NULL,							// Exposed to Python
 			CombatDetails* pCombatDetails = NULL,
 			bool bGarrisonStrength = false) const; // advc.500b
+	int getCombatModifier(CombatDetails* pCombatDetails, const CvUnit* pAttacker, const CvPlot* pPlot, bool bGarrisonStrength, bool bAttackingUnknownDefender, const CvPlot* pAttackedPlot) const;
 	int currCombatStr(CvPlot const* pPlot = NULL, CvUnit const* pAttacker = NULL,							// Exposed to Python
 		CombatDetails* pCombatDetails = NULL) const
 	{
-		return ((maxCombatStr(pPlot, pAttacker, pCombatDetails) * currHitPoints()) / maxHitPoints());
+		// merkava120.tc the scaling is stopped at a global define now
+		int iMinHitpoints = std::max(currHitPoints() * 100 / maxHitPoints(), GC.getDefineINT("HITPOINTS_STRENGTH_THRESHOLD"));
+		return ((maxCombatStr(pPlot, pAttacker, pCombatDetails) * iMinHitpoints / 100));
+		// merkava120 END
 	}
 	int currFirepower(const CvPlot* pPlot = NULL, const CvUnit* pAttacker = NULL) const						// Exposed to Python
 	{
@@ -479,7 +478,7 @@ public:
 	// <advc>
 	bool canBeAttackedBy(PlayerTypes eAttackingPlayer,
 			CvUnit const* pAttacker, bool bTestEnemy, bool bTestPotentialEnemy,
-			bool bTestVisible, bool bTestCanAttack) const; // </advc>
+			bool bTestVisible, bool bTestCanAttack, bool bRanged = false) const; // </advc> // merkava120.tc specifying ranged
 	bool isBetterDefenderThan(const CvUnit* pDefender, const CvUnit* pAttacker) const;						// Exposed to Python
 
 	int airBaseCombatStr() const																			// Exposed to Python
@@ -489,7 +488,9 @@ public:
 	int airMaxCombatStr(const CvUnit* pOther) const;														// Exposed to Python
 	int airCurrCombatStr(const CvUnit* pOther) const														// Exposed to Python
 	{
-		return ((airMaxCombatStr(pOther) * currHitPoints()) / maxHitPoints());
+		// merkava120.tc hitpoints only affect strength down to a threshold set in global defines
+		int iMinHitpoints = std::min(currHitPoints() * 100 / maxHitPoints(), GC.getDefineINT("HITPOINTS_STRENGTH_THRESHOLD"));
+		return ((airMaxCombatStr(pOther) * iMinHitpoints / 100));
 	}
 	DllExport float airMaxCombatStrFloat(const CvUnit* pOther) const;										// Exposed to Python
 	DllExport float airCurrCombatStrFloat(const CvUnit* pOther) const;										// Exposed to Python
@@ -690,9 +691,7 @@ public:
 	int getExperience() const { return m_iExperience; }														// Exposed to Python
 	void setExperience(int iNewValue, int iMax = -1);														// Exposed to Python
 	void changeExperience(int iChange, int iMax = -1, bool bFromCombat = false,								// Exposed to Python
-			bool bInBorders = false, //bool bUpdateGlobal = false
-			int iGlobalPercent = 0); // advc.312
-	int getGlobalXPPercent() const; // advc.312
+			bool bInBorders = false, bool bUpdateGlobal = false);
 
 	int getLevel() const { return m_iLevel; }																// Exposed to Python
 	void setLevel(int iNewValue);
@@ -1113,15 +1112,13 @@ protected:
 	int m_iHotKeyNumber;
 	int m_iDamage;
 	int m_iMoves;
+	int m_iShotsLeft; // merkava120.fintac
 	int m_iExperience;
 	int m_iLevel;
 	int m_iCargo;
 	int m_iCargoCapacity;
 	int m_iAttackPlotX;
 	int m_iAttackPlotY;
-	// <advc.048c>
-	int m_iAttackOdds;
-	int m_iPreCombatHP; // </advc.048c>
 	int m_iCombatTimer;
 	int m_iCombatFirstStrikes;
 	//int m_iCombatDamage; // advc.003j: unused
@@ -1209,7 +1206,7 @@ protected:
 	bool pillageRoute();
 	// </advc.111>
 	bool canAdvance(const CvPlot* pPlot, int iThreshold) const;
-	void collateralCombat(const CvPlot* pPlot, CvUnit const* pSkipUnit = NULL);
+	void collateralCombat(const CvPlot* pPlot, CvUnit const* pSkipUnit = NULL, bool bRanged = false);
 	void flankingStrikeCombat(const CvPlot* pPlot, int iAttackerStrength,
 			int iAttackerFirepower, int iDefenderOdds, int iDefenderDamage,
 			CvUnit const* pSkipUnit = NULL);
@@ -1225,16 +1222,11 @@ protected:
 	bool verifyRoundsValid(const CvBattleDefinition & battleDefinition) const;
 	void increaseBattleRounds(CvBattleDefinition & battleDefinition) const;
 	int computeWaveSize(bool bRangedRound, int iAttackerMax, int iDefenderMax) const;
-	bool isCombatVisible(const CvUnit* pDefender,
-			bool bSeaPatrol = false) const; // advc.004k
+	bool isCombatVisible(const CvUnit* pDefender) const;
 	//void resolveCombat(CvUnit* pDefender, CvPlot* pPlot, CvBattleDefinition& kBattle);
 	void resolveCombat(CvUnit* pDefender, CvPlot* pPlot, bool bVisible); // K-Mod
 	void addAttackSuccessMessages(CvUnit const& kDefender, bool bFought) const; // advc.010
 	void addDefenseSuccessMessages(CvUnit const& kDefender) const; // advc
-	void addWithdrawalMessages(CvUnit const& kDefender) const; // advc
-	// <advc.048c>
-	void setHasBeenDefendedAgainstMessage(CvWString& kBuffer, CvUnit const& kDefender,
-			int iAttackSuccess) const; // </advc.048c>
 	bool suppressStackAttackSound(CvUnit const& kDefender) const; // advc.002l
 	void resolveAirCombat(CvUnit* pInterceptor, CvPlot* pPlot, CvAirMissionDefinition& kBattle);
 	void checkRemoveSelectionAfterAttack();
@@ -1249,10 +1241,6 @@ private:
 struct CombatDetails											// Exposed to Python
 {
 	int iExtraCombatPercent;
-	/*	advc.313 (note): Not sure what these suffixes are supposed to abbreviate.
-		I'll be assuming "T" for "This", meaning the defender, and then:
-		"TA" = "This is Animal", "AA" = "Attacker is Animal",
-		"TB" = "This is Barbarian", "AB" = "Attacker is Barbarian". */
 	int iAnimalCombatModifierTA;
 	int iAIAnimalCombatModifierTA;
 	int iAnimalCombatModifierAA;
@@ -1261,10 +1249,6 @@ struct CombatDetails											// Exposed to Python
 	int iAIBarbarianCombatModifierTB;
 	int iBarbarianCombatModifierAB;
 	int iAIBarbarianCombatModifierAB;
-	// <advc.313>
-	int iBarbarianCityAttackModifier;
-	int iSeaBarbarianModifierTB;
-	int iSeaBarbarianModifierAB; // </advc.313>
 	int iPlotDefenseModifier;
 	int iFortifyModifier;
 	int iCityDefenseModifier;
@@ -1276,7 +1260,7 @@ struct CombatDetails											// Exposed to Python
 	int iTerrainDefenseModifier;
 	int iCityAttackModifier;
 	int iDomainDefenseModifier;
-	//int iCityBarbarianDefenseModifier; // advc.313: replaced above
+	int iCityBarbarianDefenseModifier;
 	int iClassDefenseModifier;
 	int iClassAttackModifier;
 	int iCombatModifierT;
@@ -1303,8 +1287,8 @@ struct CombatDetails											// Exposed to Python
 	{
 		/*	Not nice - but we mustn't zero the string, and we don't want to
 			repeat all the int members. */
-		ZeroMemory(this, 41 * sizeof(int));
-		BOOST_STATIC_ASSERT(sizeof(CombatDetails) == 41 * sizeof(int) + 2 * sizeof(PlayerTypes) + sizeof(std::wstring));
+		ZeroMemory(this, 39 * sizeof(int));
+		BOOST_STATIC_ASSERT(sizeof(CombatDetails) == 39 * sizeof(int) + 2 * sizeof(PlayerTypes) + sizeof(std::wstring));
 		this->eOwner = eOwner;
 		this->eVisualOwner = eVisualOwner;
 		this->sUnitName = sUnitName;

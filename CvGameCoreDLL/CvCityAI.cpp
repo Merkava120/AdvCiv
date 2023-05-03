@@ -50,7 +50,6 @@ CvCityAI::CvCityAI() // advc.003u: Merged with AI_reset
 	m_iCityValPercent = 0; // advc.139
 
 	m_bForceEmphasizeCulture = false;
-	m_bStrongEmphasis = false; // advc.131d
 	m_bAssignWorkDirty = false;
 	m_eSafety = CITYSAFETY_SAFE; // advc.139
 }
@@ -114,7 +113,7 @@ void CvCityAI::AI_doTurn()
 }
 
 // (Most of this function has been rewritten for K-Mod)
-void CvCityAI::AI_assignWorkingPlots(/* advc.131d: */ bool bEmphasize)
+void CvCityAI::AI_assignWorkingPlots()
 {
 	PROFILE_FUNC();
 
@@ -240,7 +239,7 @@ void CvCityAI::AI_assignWorkingPlots(/* advc.131d: */ bool bEmphasize)
 
 	// if automated, look for better choices than the current ones
 	if (!isHuman() || isCitizensAutomated())
-		AI_juggleCitizens(/* advc.131d: */ bEmphasize);
+		AI_juggleCitizens();
 
 	// at this point, we should not be over the limit
 	FAssert((getWorkingPopulation() + getSpecialistPopulation()) <= (totalFreeSpecialists() + getPopulation()));
@@ -1171,13 +1170,13 @@ void CvCityAI::AI_chooseProduction()
  	int iTotalFloatingDefenders = (isBarbarian() ? 0 :
 			kPlayer.AI_getTotalFloatingDefenders(kArea));
 
-	// advc: Replacing raw vector of pairs "floatingDefenderTypes"
-	UnitAIWeightMap floatingDefenderWeight;
-	floatingDefenderWeight.set(UNITAI_CITY_DEFENSE, 125);
-	floatingDefenderWeight.set(UNITAI_CITY_COUNTER, 100);
-	//floatingDefenderWeight.set(UNITAI_CITY_SPECIAL, 0);
-	floatingDefenderWeight.set(UNITAI_RESERVE, 100);
-	floatingDefenderWeight.set(UNITAI_COLLATERAL, 80); // K-Mod, down from 100.
+	UnitTypeWeightArray floatingDefenderTypes;
+	floatingDefenderTypes.reserve(4);
+	floatingDefenderTypes.push_back(std::make_pair(UNITAI_CITY_DEFENSE, 125));
+	floatingDefenderTypes.push_back(std::make_pair(UNITAI_CITY_COUNTER, 100));
+	//floatingDefenderTypes.push_back(std::make_pair(UNITAI_CITY_SPECIAL, 0));
+	floatingDefenderTypes.push_back(std::make_pair(UNITAI_RESERVE, 100));
+	floatingDefenderTypes.push_back(std::make_pair(UNITAI_COLLATERAL, 80)); // K-Mod, down from 100
 
 	if (iTotalFloatingDefenders < (iNeededFloatingDefenders + 1) / (bGetBetterUnits ? 3 : 2))
 	{
@@ -1189,7 +1188,7 @@ void CvCityAI::AI_chooseProduction()
 				iTotalFloatingDefenders * (2*iUnitSpending + iMaxUnitSpending) /
 				std::max(1, 3*iMaxUnitSpending))
 			{
-				if (AI_chooseLeastRepresentedUnit(floatingDefenderWeight))
+				if (AI_chooseLeastRepresentedUnit(floatingDefenderTypes))
 				{
 					if (gCityLogLevel >= 2) logBBAI("      City %S uses choose floating defender 1", getName().GetCString());
 					return;
@@ -1204,17 +1203,16 @@ void CvCityAI::AI_chooseProduction()
 	// The normal unit selection function should know what kind of units we should be building...
 	if (bLandWar && iWarSuccessRating < -10 && iEnemyPowerPerc - iWarSuccessRating > 150)
 	{
-		UnitAIWeightMap defensiveWeight; // advc: Was vector of pairs "defensiveTypes"
-		defensiveWeight.set(UNITAI_COUNTER, 100);
-		defensiveWeight.set(UNITAI_ATTACK, 100);
-		defensiveWeight.set(UNITAI_RESERVE, 60);
-		//defensiveWeight.push_back(std::make_pair(UNITAI_COLLATERAL, 60));
-		defensiveWeight.set(UNITAI_COLLATERAL, 80);
-		if (bDanger || (iTotalFloatingDefenders <
-			(5*iNeededFloatingDefenders) / (bGetBetterUnits ? 6 : 4)))
+		UnitTypeWeightArray defensiveTypes;
+		defensiveTypes.push_back(std::make_pair(UNITAI_COUNTER, 100));
+		defensiveTypes.push_back(std::make_pair(UNITAI_ATTACK, 100));
+		defensiveTypes.push_back(std::make_pair(UNITAI_RESERVE, 60));
+		//defensiveTypes.push_back(std::make_pair(UNITAI_COLLATERAL, 60));
+		defensiveTypes.push_back(std::make_pair(UNITAI_COLLATERAL, 80));
+		if (bDanger || (iTotalFloatingDefenders < (5*iNeededFloatingDefenders)/(bGetBetterUnits ? 6 : 4)))
 		{
-			defensiveWeight.set(UNITAI_CITY_DEFENSE, 200);
-			defensiveWeight.set(UNITAI_CITY_COUNTER, 50);
+			defensiveTypes.push_back(std::make_pair(UNITAI_CITY_DEFENSE, 200));
+			defensiveTypes.push_back(std::make_pair(UNITAI_CITY_COUNTER, 50));
 		}
 		int iOdds = iBuildUnitProb;
 		if (iWarSuccessRating < -50)
@@ -1226,7 +1224,7 @@ void CvCityAI::AI_chooseProduction()
 		if (bDanger)
 			iOdds += 10;
 
-		if (AI_chooseLeastRepresentedUnit(defensiveWeight, iOdds))
+		if (AI_chooseLeastRepresentedUnit(defensiveTypes, iOdds))
 		{
 			if (gCityLogLevel >= 2) logBBAI("      City %S uses choose losing extra defense with odds %d", getName().GetCString(), iOdds);
 			return;
@@ -1325,7 +1323,8 @@ void CvCityAI::AI_chooseProduction()
 		iAreaBestFoundValue < iMinFoundValue * 2 &&
 		// <advc.017>
 		!kPlayer.AI_isDoStrategy(AI_STRATEGY_ECONOMY_FOCUS) &&
-		// (Maybe check CvTeamAI::AI_isLandTarget?)
+		/*	(And exclude Barbarians? Should perhaps also check
+			CvTeamAI::AI_isLandTarget ...) */
 		kArea.getNumCities() > kTeam.countNumCitiesByArea(kArea))
 		// </advc.017>
 	{	//Building city hunting stack.
@@ -1370,7 +1369,7 @@ void CvCityAI::AI_chooseProduction()
 				{
 					if (AI_chooseUnit(UNITAI_ATTACK_CITY))
 					{
-						if (gCityLogLevel >= 2) logBBAI("      City %S chooses to start city attack stack", getName().GetCString());
+						if (gCityLogLevel >= 2) logBBAI("      City %S uses choose start city attack stack", getName().GetCString());
 						return;
 					}
 				}
@@ -1379,53 +1378,11 @@ void CvCityAI::AI_chooseProduction()
 				{
 					if (AI_chooseUnit(UNITAI_ATTACK))
 					{
-						if (gCityLogLevel >= 2) logBBAI("      City %S chooses to add to city attack stack", getName().GetCString());
+						if (gCityLogLevel >= 2) logBBAI("      City %S uses choose add to city attack stack", getName().GetCString());
 						return;
 					}
 				}
 			}
-			/*	<advc.300> The above won't enable the AI to take Barbarian cities;
-				perhaps it was intended to, if so, I think it's far off the mark.
-				It might be helpful for giving the AI an appetite for warfare, so
-				I'm going to keep it. Now, to at least sometimes conquer Barbarians: */
-			if (!kPlayer.AI_isFocusWar())
-			{
-				int iNeededCityAtt = (kPlayer.AI_neededCityAttackersVsBarbarians()
-						/*	Safety margin; some may well be guarding cities or
-							have trouble reaching the main stack. */
-						* fixp(4/3.)).uceil();
-				/*	Even go 1 above the safety margin eventually - in case that
-					the Barbarians have unusually many defenders. */
-				if (iAttackCityCount <= iNeededCityAtt)
-				{
-					scaled rProb = kPlayer.AI_barbarianTargetCityScore(getArea());
-					if (rProb > 0) // to save time
-					{
-						if (iAttackCityCount >= iNeededCityAtt)
-							rProb /= scaled::max(1, 6 - kPlayer.AI_getCurrEraFactor());
-						else
-						{
-							/*	Inertia - the more attackers we still need, the less
-								we're inclined to train any. */
-							scaled rDiv = iNeededCityAtt - iAttackCityCount;
-							rDiv.exponentiate(std::max(fixp(0.5),
-									2 - kPlayer.AI_getCurrEraFactor() / 2));
-							rProb /= rDiv;
-						}
-						/*	The iOdds param causes a re-roll after every production turn.
-							Perhaps that should be amended. For now, avoid using it. */
-						std::vector<int> aiInputs;
-						aiInputs.push_back(getID());
-						aiInputs.push_back(iAttackCityCount);
-						if (scaled::hash(aiInputs, getOwner()) < rProb &&
-							AI_chooseUnit(UNITAI_ATTACK_CITY))
-						{
-							if (gCityLogLevel >= 2) logBBAI("      City %S trains city attacker vs. Barbarians", getName().GetCString());
-							return;
-						}
-					}
-				}
-			} // </advc.300>
 		}
 	}
 
@@ -1721,13 +1678,12 @@ void CvCityAI::AI_chooseProduction()
 
 		if (bDefenseWar || (bLandWar && iWarSuccessRating < -30))
 		{
-			UnitAIWeightMap panicDefenderWeight; // advc: Was vector of pairs "defensiveTypes"
-			panicDefenderWeight.set(UNITAI_RESERVE, 100);
-			panicDefenderWeight.set(UNITAI_COUNTER, 100);
-			panicDefenderWeight.set(UNITAI_COLLATERAL, 100);
-			panicDefenderWeight.set(UNITAI_ATTACK, 100);
-			if (AI_chooseLeastRepresentedUnit(panicDefenderWeight,
-				(bGetBetterUnits ? 40 : 60) - iWarSuccessRating/3))
+			UnitTypeWeightArray panicDefenderTypes;
+			panicDefenderTypes.push_back(std::make_pair(UNITAI_RESERVE, 100));
+			panicDefenderTypes.push_back(std::make_pair(UNITAI_COUNTER, 100));
+			panicDefenderTypes.push_back(std::make_pair(UNITAI_COLLATERAL, 100));
+			panicDefenderTypes.push_back(std::make_pair(UNITAI_ATTACK, 100));
+			if (AI_chooseLeastRepresentedUnit(panicDefenderTypes, (bGetBetterUnits ? 40 : 60) - iWarSuccessRating/3))
 			{
 				if (gCityLogLevel >= 2) logBBAI("      City %S uses choose panic defender", getName().GetCString());
 				return;
@@ -1915,9 +1871,12 @@ void CvCityAI::AI_chooseProduction()
 						break;
 					}
 				}
-				if (!bAssaultTargetFound)
+				if(!bAssaultTargetFound)
 					pAssaultWaterArea = NULL;
-				if (bAssaultTargetFound && // </advc.030b>
+				if(bAssaultTargetFound && // </advc.030b>
+					/*	BBAI TODO: faster to switch to checking path for some selection group?
+						^advc: That's a can of worms, and unnecessary.
+						See comment in  AI_isHasPathToEnemyCity. */
 					!GET_TEAM(getTeam()).AI_isHasPathToEnemyCity(getPlot()))
 				{
 					bBuildAssault = true;
@@ -2130,14 +2089,16 @@ void CvCityAI::AI_chooseProduction()
 				iTrainInvaderChance /= (5 - getPopulation());
 			}
 
-			UnitAIWeightMap invaderWeight; // advc: Was vector of pairs "defensiveTypes"
-			invaderWeight.set(UNITAI_ATTACK_CITY, 110); // was 100
-			invaderWeight.set(UNITAI_COUNTER, 40); // was 50
-			invaderWeight.set(UNITAI_ATTACK, 50); // was 40
+			UnitTypeWeightArray invaderTypes;
+			invaderTypes.push_back(std::make_pair(UNITAI_ATTACK_CITY, 110)); // was 100
+			invaderTypes.push_back(std::make_pair(UNITAI_COUNTER, 40)); // was 50
+			invaderTypes.push_back(std::make_pair(UNITAI_ATTACK, 50)); // was 40
 			if (kPlayer.AI_isDoStrategy(AI_STRATEGY_AIR_BLITZ))
-				invaderWeight.set(UNITAI_PARADROP, 20);
+			{
+				invaderTypes.push_back(std::make_pair(UNITAI_PARADROP, 20));
+			}
 
-			if (AI_chooseLeastRepresentedUnit(invaderWeight, iTrainInvaderChance))
+			if (AI_chooseLeastRepresentedUnit(invaderTypes, iTrainInvaderChance))
 			{
 				if (!bCultureCity && iUnitsToTransport >=
 					iLocalTransports*iBestSeaAssaultCapacity)
@@ -2150,7 +2111,8 @@ void CvCityAI::AI_chooseProduction()
 		}
 	}
 
-	UnitAIWeightMap airWeight; // advc: Was vector of pairs "airUnitTypes"
+	UnitTypeWeightArray airUnitTypes;
+
 	int iAircraftNeed = 0;
 	int iAircraftHave = 0;
 	UnitTypes eBestAttackAircraft = NO_UNIT;
@@ -2160,26 +2122,20 @@ void CvCityAI::AI_chooseProduction()
 	{
 		if (bLandWar || bAssault || iFreeAirExperience > 0 || SyncRandOneChanceIn(3))
 		{
-			int iBestAirValue = kPlayer.AI_bestCityUnitAIValue(
-					UNITAI_ATTACK_AIR, this, &eBestAttackAircraft);
-			int iBestMissileValue = kPlayer.AI_bestCityUnitAIValue(
-					UNITAI_MISSILE_AIR, this, &eBestMissile);
+			int iBestAirValue = kPlayer.AI_bestCityUnitAIValue(UNITAI_ATTACK_AIR, this, &eBestAttackAircraft);
+			int iBestMissileValue = kPlayer.AI_bestCityUnitAIValue(UNITAI_MISSILE_AIR, this, &eBestMissile);
 			if ((iBestAirValue + iBestMissileValue) > 0)
 			{
-				iAircraftHave = kPlayer.AI_totalUnitAIs(UNITAI_ATTACK_AIR) +
-						kPlayer.AI_totalUnitAIs(UNITAI_DEFENSE_AIR) +
-						kPlayer.AI_totalUnitAIs(UNITAI_MISSILE_AIR);
+				iAircraftHave = kPlayer.AI_totalUnitAIs(UNITAI_ATTACK_AIR) + kPlayer.AI_totalUnitAIs(UNITAI_DEFENSE_AIR) + kPlayer.AI_totalUnitAIs(UNITAI_MISSILE_AIR);
 				if (NO_UNIT != eBestAttackAircraft)
 				{
 					iAircraftNeed = (2 + kPlayer.getNumCities() *
 							(3 * GC.getInfo(eBestAttackAircraft).getAirCombat())) /
 							(2 * std::max(1, kGame.getBestLandUnitCombat()));
-					int iBestDefenseValue = kPlayer.AI_bestCityUnitAIValue(
-							UNITAI_DEFENSE_AIR, this);
+					int iBestDefenseValue = kPlayer.AI_bestCityUnitAIValue(UNITAI_DEFENSE_AIR, this);
 					if (iBestDefenseValue > 0)
-					{	// <K-Mod>
-						iAircraftNeed = std::max(iAircraftNeed,
-								kPlayer.AI_getTotalAirDefendersNeeded()); // </K-Mod>
+					{
+						iAircraftNeed = std::max(iAircraftNeed, kPlayer.AI_getTotalAirDefendersNeeded()); // K-Mod
 						if (iBestAirValue > iBestDefenseValue)
 							iAircraftNeed = iAircraftNeed*3/2;
 					}
@@ -2207,17 +2163,21 @@ void CvCityAI::AI_chooseProduction()
 					iAircraftNeed += 1;
 				}
 
-				airWeight.set(UNITAI_ATTACK_AIR, bAirBlitz ? 125 : 80);
-				airWeight.set(UNITAI_DEFENSE_AIR, /*bLandBlitz ? 100 : 100*/ 100); // advc: huh?
+				airUnitTypes.push_back(std::make_pair(UNITAI_ATTACK_AIR, bAirBlitz ? 125 : 80));
+				airUnitTypes.push_back(std::make_pair(UNITAI_DEFENSE_AIR,
+						//bLandBlitz ? 100 : 100
+						100)); // advc: huh?
 				if (iBestMissileValue > 0)
-					airWeight.set(UNITAI_MISSILE_AIR, bAssault ? 60 : 40);
+				{
+					airUnitTypes.push_back(std::make_pair(UNITAI_MISSILE_AIR, bAssault ? 60 : 40));
+				}
 
-				//airWeight.set(UNITAI_ICBM, 20);
-				airWeight.set(UNITAI_ICBM, 20 * iNukeWeight / 100); // K-Mod
+				//airUnitTypes.push_back(std::make_pair(UNITAI_ICBM, 20));
+				airUnitTypes.push_back(std::make_pair(UNITAI_ICBM, 20 * iNukeWeight / 100)); // K-Mod
 
 				if (iAircraftHave * 2 < iAircraftNeed)
 				{
-					if (AI_chooseLeastRepresentedUnit(airWeight))
+					if (AI_chooseLeastRepresentedUnit(airUnitTypes))
 					{
 						if (gCityLogLevel >= 2) logBBAI("      City %S uses build least represented air", getName().GetCString());
 						return;
@@ -2385,29 +2345,28 @@ void CvCityAI::AI_chooseProduction()
 				return;
 			}
 
-			UnitAIWeightMap invaderWeight; // advc: Was vector of pairs "invaderTypes"
-			invaderWeight.set(UNITAI_ATTACK_CITY,// 100
+			UnitTypeWeightArray invaderTypes;
+			invaderTypes.push_back(std::make_pair(UNITAI_ATTACK_CITY,// 100
 					// <advc.081>
-					bNavalSiege ? 96 : 100);
+					bNavalSiege ? 96 : 100));
 			if(bNavalSiege)
-				invaderWeight.set(UNITAI_ATTACK_SEA, 8);
+				invaderTypes.push_back(std::make_pair(UNITAI_ATTACK_SEA, 8));
 			if(bAssaultAlongCoast) {
-				invaderWeight.set(UNITAI_ASSAULT_SEA, 8 -
-						(bNavalSiege ? 4 : 0));
+				invaderTypes.push_back(std::make_pair(UNITAI_ASSAULT_SEA, 8 -
+						(bNavalSiege ? 4 : 0)));
 			} // </advc.081>
-			invaderWeight.set(UNITAI_COUNTER, 50);
-			invaderWeight.set(UNITAI_ATTACK, 40);
-			invaderWeight.set(UNITAI_PARADROP,
+			invaderTypes.push_back(std::make_pair(UNITAI_COUNTER, 50));
+			invaderTypes.push_back(std::make_pair(UNITAI_ATTACK, 40));
+			invaderTypes.push_back(std::make_pair(UNITAI_PARADROP,
 					(kPlayer.AI_isDoStrategy(AI_STRATEGY_AIR_BLITZ) ? 30 : 20) /
-					(bAssault ? 2 : 1));
+					(bAssault ? 2 : 1)));
 			//if (!bAssault)
 			//if (!bAssault && !bCrushStrategy) // K-Mod
 			if(!bCrushStrategy) // advc: !bAssault already guaranteed
 			{
-				if (kPlayer.AI_totalAreaUnitAIs(kArea, UNITAI_PILLAGE) <=
-					(iNumCitiesInArea + 1) / 2)
+				if (kPlayer.AI_totalAreaUnitAIs(kArea, UNITAI_PILLAGE) <= (iNumCitiesInArea + 1) / 2)
 				{
-					invaderWeight.set(UNITAI_PILLAGE, 30);
+					invaderTypes.push_back(std::make_pair(UNITAI_PILLAGE, 30));
 				}
 			}
 			// K-Mod - get more siege units for crush
@@ -2433,7 +2392,7 @@ void CvCityAI::AI_chooseProduction()
 					(!GC.getInfo(eCityAttackUnit).getUnitAIType(UNITAI_ATTACK_CITY) &&
 					kPlayer.AI_bestCityUnitAIValue(UNITAI_ATTACK_CITY, this, &eCityAttackUnit) <= 110))
 				iTrainInvaderChance /= 2;*/ // </cdtw.8>
-			if (AI_chooseLeastRepresentedUnit(invaderWeight, iTrainInvaderChance))
+			if (AI_chooseLeastRepresentedUnit(invaderTypes, iTrainInvaderChance))
 				return;
 		}
 	}
@@ -2506,10 +2465,9 @@ void CvCityAI::AI_chooseProduction()
 		FErrorMsg("AI_bestSpreadUnit should provide a valid unit when it returns true");
 	}
 
-	if (!bUnitExempt && iTotalFloatingDefenders < iNeededFloatingDefenders &&
-		(!bFinancialTrouble || bLandWar))
+	if (!bUnitExempt && iTotalFloatingDefenders < iNeededFloatingDefenders && (!bFinancialTrouble || bLandWar))
 	{
-		if (AI_chooseLeastRepresentedUnit(floatingDefenderWeight, 50))
+		if (AI_chooseLeastRepresentedUnit(floatingDefenderTypes, 50))
 		{
 			if (gCityLogLevel >= 2) logBBAI("      City %S uses choose floating defender 2", getName().GetCString());
 			return;
@@ -2608,7 +2566,7 @@ void CvCityAI::AI_chooseProduction()
 			int iOdds = 33;
 			if (iFreeAirExperience > 0 || iProductionRank <= 1 + kPlayer.getNumCities() / 2)
 				iOdds = -1;
-			if (AI_chooseLeastRepresentedUnit(airWeight, iOdds))
+			if (AI_chooseLeastRepresentedUnit(airUnitTypes, iOdds))
 				return;
 		}
 	}
@@ -4408,7 +4366,7 @@ int CvCityAI::AI_buildingValue(BuildingTypes eBuilding, int iFocusFlags,
 				scaled rCivicOptionValue;
 				/*	Should actually be 4(!), but I don't think it's good for game balance
 					to make the AI that interested in the Pyramids. */
-				scaled const rScaleAdjustment = fixp(2.5);
+				scaled const rScaleAdjustment = fixp(1.9);
 				scaled rCurrentCivicValue = rScaleAdjustment *
 						kOwner.AI_civicValue(kOwner.getCivics(eCivicOption));
 				scaled rBestNewCivicValue = scaled::min(0, rCurrentCivicValue);
@@ -4959,7 +4917,7 @@ int CvCityAI::AI_buildingValue(BuildingTypes eBuilding, int iFocusFlags,
 							else eTowardThem = kOwner.AI_getAttitude(kBrother.getID());
 						}
 						bool bTheyAhead = (kGame.getPlayerRank(kBrother.getID()) <
-								std::min<int>(kGame.getPlayerRank(kOwner.getID()),
+								std::min(kGame.getPlayerRank(kOwner.getID()),
 								iEverAlive / 2));
 						// Don't care if they benefit from ReligionYield then
 						if(!bTheyAhead && eTowardThem <= ATTITUDE_CAUTIOUS &&
@@ -6784,17 +6742,17 @@ int CvCityAI::AI_neededDefenders(/* advc.139: */ bool bIgnoreEvac,
 			getArea().getAreaAIType(getTeam()) == AREAAI_MASSING);
 	bool const bDefenseWar = (getArea().getAreaAIType(getTeam()) == AREAAI_DEFENSIVE);
 	CvGame const& kGame = GC.getGame();
-	CvPlayerAI const& kOwner = GET_PLAYER(getOwner());
 	int iDefenders = 1;
 	if (isBarbarian())
 	{
 		iDefenders = GC.getInfo(kGame.getHandicapType()).getBarbarianInitialDefenders();
-		// advc.300: Numerator was pop+2
-		iDefenders += (getPopulation() + kOwner.getCurrentEra()) / 7;
+		iDefenders += (getPopulation() + 2) / 7;
 		return iDefenders;
 	} // advc.003n: Switched the order of these two branches
 	if (!GET_TEAM(getTeam()).AI_isWarPossible())
 		return iDefenders;
+
+	CvPlayerAI const& kOwner = GET_PLAYER(getOwner());
 
 	if (hasActiveWorldWonder() || isCapital() || isHolyCity())
 	{
@@ -6908,10 +6866,9 @@ int CvCityAI::AI_minDefenders() const
 			the training modifier decreases as the game progresses, so things get
 			a little fuzzy (which is fine with me). */
 		scaled rExtraDefenderEraFactor = fixp(2.5);
-		scaled rTrainModifier = kOwner.trainingModifierFromHandicap() /
-				kOwner.AI_trainUnitSpeedAdustment(); // advc.253
-		if (rTrainModifier < 1)
-			rExtraDefenderEraFactor *= SQR(rTrainModifier);
+		scaled rHandicapModifier = kOwner.trainingModifierFromHandicap();
+		if (rHandicapModifier < 1)
+			rExtraDefenderEraFactor *= SQR(rHandicapModifier);
 		if (kOwner.AI_getCurrEraFactor() > rExtraDefenderEraFactor)
 		{	// </advc.107>
 			iDefenders++;
@@ -6982,7 +6939,7 @@ int CvCityAI::AI_neededCultureDefenders() const
 	CvPlayerAI const& kOwner = GET_PLAYER(getOwner());
 	if (getPlot().calculateCulturePercent(kOwner.getID()) >= 50)
 		return 0; // To save time
-	PlayerTypes const eCulturalOwner = calculateCulturalOwner();
+	PlayerTypes eCulturalOwner = calculateCulturalOwner();
 	if(eCulturalOwner == kOwner.getID() || revoltProbability(true, true) <= 0)
 		return 0;
 
@@ -6993,8 +6950,7 @@ int CvCityAI::AI_neededCultureDefenders() const
 		rTargetProb = 0;
 	else if (getNumRevolts(eCulturalOwner) > 0)
 		rTargetProb /= 4;
-	int const iCultureStr = cultureStrength(eCulturalOwner,
-			false, true); // advc.023
+	int const iCultureStr = cultureStrength(eCulturalOwner);
 	// Based on the formula in CvCity::revoltProbability
 	scaled rTargetGarrisonStr = iCultureStr - iCultureStr * rTargetProb /
 			scaled::max(per100(1), getRevoltTestProbability());
@@ -7274,59 +7230,48 @@ bool CvCityAI::AI_isEmphasize(EmphasizeTypes eIndex) const
 
 void CvCityAI::AI_setEmphasize(EmphasizeTypes eIndex, bool bNewValue)
 {
-	FAssert(eIndex >= 0);
-	FAssert(eIndex < GC.getNumEmphasizeInfos());
+	FAssertMsg(eIndex >= 0, "eIndex is expected to be non-negative (invalid Index)");
+	FAssertMsg(eIndex < GC.getNumEmphasizeInfos(), "eIndex is expected to be within maximum bounds (invalid Index)");
 
-	if (AI_isEmphasize(eIndex) == bNewValue)
-		return;
-
-	m_pbEmphasize[eIndex] = bNewValue;
-	/*	advc.131d: Re-evaluate whether strong emphasis is appropriate each time that
-		emphasis settings change */
-	m_bStrongEmphasis = false;
-
-	if (GC.getInfo(eIndex).isAvoidGrowth())
+	if (AI_isEmphasize(eIndex) != bNewValue)
 	{
-		m_iEmphasizeAvoidGrowthCount += (AI_isEmphasize(eIndex) ? 1 : -1);
-		FAssert(AI_getEmphasizeAvoidGrowthCount() >= 0);
-	}
+		m_pbEmphasize[eIndex] = bNewValue;
 
-	if (GC.getInfo(eIndex).isGreatPeople())
-	{
-		m_iEmphasizeGreatPeopleCount += (AI_isEmphasize(eIndex) ? 1 : -1);
-		FAssert(AI_getEmphasizeGreatPeopleCount() >= 0);
-	}
-
-	FOR_EACH_ENUM(Yield)
-	{
-		if (GC.getInfo(eIndex).getYieldChange(eLoopYield))
+		if (GC.getInfo(eIndex).isAvoidGrowth())
 		{
-			m_aiEmphasizeYieldCount[eLoopYield] += (AI_isEmphasize(eIndex) ? 1 : -1);
-			FAssert(AI_getEmphasizeYieldCount(eLoopYield) >= 0);
+			m_iEmphasizeAvoidGrowthCount += (AI_isEmphasize(eIndex) ? 1 : -1);
+			FAssert(AI_getEmphasizeAvoidGrowthCount() >= 0);
 		}
-	}
 
-	FOR_EACH_ENUM(Commerce)
-	{
-		if (GC.getInfo(eIndex).getCommerceChange(eLoopCommerce))
+		if (GC.getInfo(eIndex).isGreatPeople())
 		{
-			m_aiEmphasizeCommerceCount[eLoopCommerce] += (AI_isEmphasize(eIndex) ? 1 : -1);
-			FAssert(AI_getEmphasizeCommerceCount(eLoopCommerce) >= 0);
+			m_iEmphasizeGreatPeopleCount += (AI_isEmphasize(eIndex) ? 1 : -1);
+			FAssert(AI_getEmphasizeGreatPeopleCount() >= 0);
 		}
+
+		FOR_EACH_ENUM(Yield)
+		{
+			if (GC.getInfo(eIndex).getYieldChange(eLoopYield))
+			{
+				m_aiEmphasizeYieldCount[eLoopYield] += (AI_isEmphasize(eIndex) ? 1 : -1);
+				FAssert(AI_getEmphasizeYieldCount(eLoopYield) >= 0);
+			}
+		}
+
+		FOR_EACH_ENUM(Commerce)
+		{
+			if (GC.getInfo(eIndex).getCommerceChange(eLoopCommerce))
+			{
+				m_aiEmphasizeCommerceCount[eLoopCommerce] += (AI_isEmphasize(eIndex) ? 1 : -1);
+				FAssert(AI_getEmphasizeCommerceCount(eLoopCommerce) >= 0);
+			}
+		}
+
+		AI_assignWorkingPlots();
+
+		if (isActiveOwned() && isCitySelected())
+			gDLL->UI().setDirty(SelectionButtons_DIRTY_BIT, true);
 	}
-
-	AI_assignWorkingPlots(/* advc.131d: */ bNewValue);
-	if (isActiveOwned() && isCitySelected())
-		gDLL->UI().setDirty(SelectionButtons_DIRTY_BIT, true);
-}
-
-// advc.131d:
-void CvCityAI::AI_setStrongEmphasis(bool bStrongEmphasis)
-{
-	if (m_bStrongEmphasis == bStrongEmphasis)
-		return;
-	m_bStrongEmphasis = bStrongEmphasis;
-	AI_assignWorkingPlots();
 }
 
 // advc.003j: Added in BtS, was never used as far as I can tell.
@@ -7751,21 +7696,18 @@ void CvCityAI::AI_getYieldMultipliers(int &iFoodMultiplier, int &iProductionMult
 		}*/ // moved lower
 		if (AI_isEmphasizeYield(YIELD_PRODUCTION))
 		{
-			iProductionMultiplier *= 130 // was 140
-					+ (AI_isStrongEmphasis() ? 25 : 0); // advc.131d
+			iProductionMultiplier *= 130; // was 140
 			iProductionMultiplier /= 100;
 			// K-Mod
 			if (!AI_isEmphasizeYield(YIELD_COMMERCE))
 			{
-				iCommerceMultiplier *= 80
-						- (AI_isStrongEmphasis() ? 13 : 0); // advc.131d
+				iCommerceMultiplier *= 80;
 				iCommerceMultiplier /= 100;
 			} // K-Mod end
 		}
 		if (AI_isEmphasizeYield(YIELD_COMMERCE))
 		{
-			iCommerceMultiplier *= 140
-					+ (AI_isStrongEmphasis() ? 33 : 0); // advc.131d
+			iCommerceMultiplier *= 140;
 			iCommerceMultiplier /= 100;
 		}
 	}
@@ -7838,8 +7780,7 @@ void CvCityAI::AI_getYieldMultipliers(int &iFoodMultiplier, int &iProductionMult
 
 	if (isHuman() && AI_isEmphasizeYield(YIELD_FOOD))
 	{
-		iFoodMultiplier *= 140
-				+ (AI_isStrongEmphasis() ? 33 : 0); // advc.131d
+		iFoodMultiplier *= 140;
 		iFoodMultiplier /= 100;
 	}
 	// K-Mod end
@@ -7870,12 +7811,12 @@ int CvCityAI::AI_getImprovementValue(CvPlot const& kPlot, ImprovementTypes eImpr
 		FOR_EACH_ENUM(Build)
 		{
 			if (GC.getInfo(eLoopBuild).getImprovement() != eImprovement)
-				continue;
+				continue; // advc
 			if (kOwner.canBuild(kPlot, eLoopBuild, false))
 			{
 				int iValue = 10000;
 				iValue /= (GC.getInfo(eLoopBuild).getTime() + 1);
-				// XXX feature production???  // (advc: I think the chop decision in AI_updateBestBuild will handle that)
+				// XXX feature production???  // advc: I think the chop decision (AI_updateBestBuild) will handle that
 				if (iValue > iBestTempBuildValue)
 				{
 					iBestTempBuildValue = iValue;
@@ -8365,7 +8306,6 @@ int CvCityAI::AI_countBestBuilds(CvArea const& kArea) const
 // Note: this function has been somewhat mangled by K-Mod
 void CvCityAI::AI_updateBestBuild()
 {
-	PROFILE_FUNC(); // advc
 	CvPlayerAI& kOwner = GET_PLAYER(getOwner()); // K-Mod
 
 	int iFoodMultiplier, iProductionMultiplier, iCommerceMultiplier, iDesiredFoodChange;
@@ -9222,7 +9162,7 @@ void CvCityAI::AI_doEmphasize()
 	}
 }
 
-bool CvCityAI::AI_chooseUnit(UnitAITypes eUnitAI, /* BBAI: */ int iOdds)
+bool CvCityAI::AI_chooseUnit(UnitAITypes eUnitAI, int iOdds)
 {
 	UnitTypes eBestUnit;
 	if (eUnitAI != NO_UNITAI)
@@ -9246,14 +9186,13 @@ bool CvCityAI::AI_chooseUnit(UnitAITypes eUnitAI, /* BBAI: */ int iOdds)
 			SyncRandNum(100) < iOdds)*/ // BtS
 		// K-Mod. boost the odds based on our completion percentage.
 		if (iOdds < 0 || SyncRandSuccess100(iOdds +
-			/*	advc.131: Coefficient was 100. Should we re-roll at all once
-				production has been started? Same issue in AI_chooseBuilding. */
-			(250 * getUnitProduction(eBestUnit)) /
+			(100 * getUnitProduction(eBestUnit)) /
 			std::max(1, getProductionNeeded(eBestUnit)))) // K-Mod end
 		{
 			pushOrder(ORDER_TRAIN, eBestUnit, eUnitAI);
 			return true;
 		}
+		//FAssert(eUnitAI != UNITAI_SETTLE); // advc.031b: To test how often Settlers are delayed due to low SettlerPriority
 	}
 
 	return false;
@@ -9290,23 +9229,25 @@ bool CvCityAI::AI_chooseDefender()
 	return false;
 }
 
-// advc: Param was vector of pairs "allowedTypes"
-bool CvCityAI::AI_chooseLeastRepresentedUnit(UnitAIWeightMap const& kWeights,
-	int iOdds) // BBAI
-{
-	std::vector<std::pair<int, UnitAITypes> > bestTypes; // K-Mod (replacing multimap)
-	FOR_EACH_NON_DEFAULT_PAIR(kWeights, UnitAI, int)
+bool CvCityAI::AI_chooseLeastRepresentedUnit(UnitTypeWeightArray &allowedTypes, int iOdds)
+{	/*std::multimap<int, UnitAITypes, std::greater<int> > bestTypes;
+ 	std::multimap<int, UnitAITypes, std::greater<int> >::iterator best_it;*/ // BtS
+	std::vector<std::pair<int, UnitAITypes> > bestTypes; // K-Mod
+	UnitTypeWeightArray::iterator it;
+	for (it = allowedTypes.begin(); it != allowedTypes.end(); ++it)
 	{
-		UnitAITypes const eUnitAI = perUnitAIVal.first;
-		int iValue = perUnitAIVal.second;
+		int iValue = it->second;
 		iValue *= 750 + syncRand().get(250, "AI choose least represented unit",
-				eUnitAI); // advc.007
-		iValue /= 1 + GET_PLAYER(getOwner()).AI_totalAreaUnitAIs(getArea(), eUnitAI);
-		bestTypes.push_back(std::make_pair(iValue, eUnitAI)); // K-Mod
+				it->first); // advc.007
+		iValue /= 1 + GET_PLAYER(getOwner()).AI_totalAreaUnitAIs(getArea(), it->first);
+		//bestTypes.insert(std::make_pair(iValue, it->first));
+		bestTypes.push_back(std::make_pair(iValue, it->first)); // K-Mod
 	}
-	// <K-Mod>
+
+	// K-Mod
 	std::sort(bestTypes.begin(), bestTypes.end(), std::greater<std::pair<int, UnitAITypes> >());
-	std::vector<std::pair<int, UnitAITypes> >::iterator best_it; // </K-Mod>
+	std::vector<std::pair<int, UnitAITypes> >::iterator best_it;
+	// K-Mod end
  	for (best_it = bestTypes.begin(); best_it != bestTypes.end(); ++best_it)
  	{
 		if (AI_chooseUnit(best_it->second, iOdds))
@@ -9463,8 +9404,7 @@ bool CvCityAI::AI_bestSpreadUnit(bool bMissionary, bool bExecutive, int iBaseCha
 	return (*eBestSpreadUnit != NULL);
 }
 
-bool CvCityAI::AI_chooseBuilding(int iFocusFlags, int iMaxTurns, int iMinThreshold,
-	int iOdds) // BBAI
+bool CvCityAI::AI_chooseBuilding(int iFocusFlags, int iMaxTurns, int iMinThreshold, int iOdds)
 {
 	BuildingTypes eBestBuilding = NO_BUILDING; // advc
 	eBestBuilding = AI_bestBuildingThreshold(iFocusFlags, iMaxTurns, iMinThreshold);
@@ -9477,8 +9417,7 @@ bool CvCityAI::AI_chooseBuilding(int iFocusFlags, int iMaxTurns, int iMinThresho
 		int iRand=0;
 		if (iOdds < 0 ||
 			(iRand = SyncRandNum(100)) < iOdds ||
-			// advc.131: Coefficient was 100; cf. CvCityAI::AI_chooseUnit.
-			iRand < iOdds + (250 * getBuildingProduction(eBestBuilding)) /
+			iRand < iOdds + (100*getBuildingProduction(eBestBuilding)) /
 			std::max(1, getProductionNeeded(eBestBuilding)))
 		// K-Mod end
 		{
@@ -9707,7 +9646,7 @@ bool CvCityAI::AI_removeWorstCitizen(SpecialistTypes eIgnoreSpecialist)
 }
 
 // This function has been completely rewritten for K-Mod - original code deleted
-void CvCityAI::AI_juggleCitizens(/* advc.131d: */ bool bEmphasize)
+void CvCityAI::AI_juggleCitizens()
 {
 	PROFILE_FUNC();
 
@@ -9737,7 +9676,6 @@ void CvCityAI::AI_juggleCitizens(/* advc.131d: */ bool bEmphasize)
 	std::vector<std::pair<bool, int> > new_jobs; // jobs assigned by this juggling process
 
 	bool bDone = false;
-	bool bAnyNewJobTaken = false; // advc.131d
 	int iCycles = 0;
 	do
 	{
@@ -9872,7 +9810,6 @@ void CvCityAI::AI_juggleCitizens(/* advc.131d: */ bool bEmphasize)
 		}
 		else
 		{
-			bAnyNewJobTaken = true; // advc.131d
 			// remove the current job
 			if (worked_it->second.first)
 			{
@@ -9909,13 +9846,7 @@ void CvCityAI::AI_juggleCitizens(/* advc.131d: */ bool bEmphasize)
 		}
 		iCycles++;
 	} while (!bDone);
-	// <advc.131d>
-	if (bEmphasize && isHuman() && !bAnyNewJobTaken && !AI_isStrongEmphasis())
-	{
-		/*	The player probably wanted there to be a change.
-			Let's try harder. */
-		AI_setStrongEmphasis(true);
-	} // </advc.131d>
+
 	// Record keeping, to test efficiency.
 #ifdef LOG_JUGGLE_CITIZENS
 	{
@@ -10220,8 +10151,8 @@ int CvCityAI::AI_yieldValue(int* piYields, int* piCommerceYields, bool bRemove,
 	const int iBaseProductionValue = 8;
 	const int iBaseCommerceValue = 4;
 
-	bool const bEmphasizeFood = AI_isEmphasizeYield(YIELD_FOOD);
-	bool const bFoodIsProduction = isFoodProduction();
+	bool bEmphasizeFood = AI_isEmphasizeYield(YIELD_FOOD);
+	bool bFoodIsProduction = isFoodProduction();
 	//bool bCanPopRush = GET_PLAYER(getOwner()).canPopRush();
 
 	// a kludge to handle the NULL yields easily.
@@ -10229,15 +10160,12 @@ int CvCityAI::AI_yieldValue(int* piYields, int* piCommerceYields, bool bRemove,
 	if (piYields == NULL)
 		piYields = aiZeroYields;
 
-	int const iBaseProductionModifier = getBaseYieldRateModifier(YIELD_PRODUCTION);
-	int const iExtraProductionModifier = getProductionModifier();
-	int iProductionTimes100 = piYields[YIELD_PRODUCTION] *
-			(iBaseProductionModifier + iExtraProductionModifier);
-	int const iCommerceYieldTimes100 = piYields[YIELD_COMMERCE] *
-			getBaseYieldRateModifier(YIELD_COMMERCE);
-	int const iFoodYieldTimes100 = piYields[YIELD_FOOD] *
-			getBaseYieldRateModifier(YIELD_FOOD);
-	int const iFoodYield = iFoodYieldTimes100/100;
+	int iBaseProductionModifier = getBaseYieldRateModifier(YIELD_PRODUCTION);
+	int iExtraProductionModifier = getProductionModifier();
+	int iProductionTimes100 = piYields[YIELD_PRODUCTION] * (iBaseProductionModifier + iExtraProductionModifier);
+	int iCommerceYieldTimes100 = piYields[YIELD_COMMERCE] * getBaseYieldRateModifier(YIELD_COMMERCE);
+	int iFoodYieldTimes100 = piYields[YIELD_FOOD] * getBaseYieldRateModifier(YIELD_FOOD);
+	int iFoodYield = iFoodYieldTimes100/100;
 
 	int iValue = 0; // total value
 
@@ -10267,7 +10195,7 @@ int CvCityAI::AI_yieldValue(int* piYields, int* piCommerceYields, bool bRemove,
 			// (Should we still use this with bWorkerOptimization?)
 			int iCommerceWeight = kOwner.AI_commerceWeight(eCommerce, this);
 			if (AI_isEmphasizeCommerce(eCommerce))
-				iCommerceWeight *= 2 + /* advc.131d: */ (AI_isStrongEmphasis() ? 1 : 0);
+				iCommerceWeight *= 2;
 			if (!bWorkerOptimization && eCommerce == COMMERCE_CULTURE &&
 				getCultureLevel() <= 1)
 			{
@@ -10347,10 +10275,8 @@ int CvCityAI::AI_yieldValue(int* piYields, int* piCommerceYields, bool bRemove,
 			iGrowthValue = AI_growthValuePerFood();
 		// <k146>
 		if (bEmphasizeFood)
-		{
-			iGrowthValue += 8 // in addition to other effects.
-					+ (AI_isStrongEmphasis() ? 3 : 0); // advc.131d
-		} // </k146>
+			iGrowthValue += 8; // in addition to other effects.
+		// </k146>
 		// tiny food factor, to ensure that even when we don't want to grow,
 		// we still prefer more food if everything else is equal
 		iValue += bFoodIsProduction ? 0 : (iFoodYieldTimes100+50)/100;
@@ -10486,12 +10412,6 @@ int CvCityAI::AI_yieldValue(int* piYields, int* piCommerceYields, bool bRemove,
 					//If we are emphasize food, pay less heed to caps.
 					iHealthLevel += 5;
 					iFutureHappy += 3; // k146: was +=2
-					// <advc.131d>
-					if (AI_isStrongEmphasis())
-					{
-						iHealthLevel++;
-						iFutureHappy++;
-					} // </advc.131d>
 				}
 
 				bool const bBarFull = (iFoodLevel + iAdjustedFoodPerTurn >
@@ -10512,15 +10432,9 @@ int CvCityAI::AI_yieldValue(int* piYields, int* piCommerceYields, bool bRemove,
 					if (iPopulation < 3 && iHappinessLevel+iFutureHappy > 0)
 						iPopToGrow = std::max(iPopToGrow, 1); // </k146>
 					if (AI_isEmphasizeYield(YIELD_PRODUCTION) || AI_isEmphasizeGreatPeople())
-					{
-						iPopToGrow = std::min(iPopToGrow, 2
-								- (AI_isStrongEmphasis() ? 1 : 0)); // advc.131d
-					}
+						iPopToGrow = std::min(iPopToGrow, 2);
 					else if (AI_isEmphasizeYield(YIELD_COMMERCE))
-					{
-						iPopToGrow = std::min(iPopToGrow, 3
-								- (AI_isStrongEmphasis() ? 1 : 0)); // advc.131d
-					}
+						iPopToGrow = std::min(iPopToGrow, 3);
 				}
 
 				// if we have growth pontential, then get the food bar close to full
@@ -10683,30 +10597,27 @@ int CvCityAI::AI_yieldValue(int* piYields, int* piCommerceYields, bool bRemove,
 		Added safeguards to make sure commerce is counted, even if just a tiny amount. */
 	if (AI_isEmphasizeYield(YIELD_PRODUCTION))
 	{
-		int const iMultPercent = 140 // was 130
-				+ (AI_isStrongEmphasis() ? 25 : 0); // advc.131d
-		iProductionValue *= iMultPercent;
+		iProductionValue *= 140; // was 130
 		iProductionValue /= 100;
+
 		if (isFoodProduction())
 		{
-			iFoodValue *= iMultPercent;
+			iFoodValue *= 140; // was 130
 			iFoodValue /= 100;
 		}
 	}
 	else if (iProductionValue > 0 && AI_isEmphasizeYield(YIELD_COMMERCE))
 	{
-		iProductionValue *= 75
-				- (AI_isStrongEmphasis() ? 8 : 0); // advc.131d
+		iProductionValue *= 75;
 		iProductionValue /= 100;
-		iProductionValue = std::max(1, iProductionValue);
+		iProductionValue = std::max(1,iProductionValue);
 	}
 
 	if (AI_isEmphasizeYield(YIELD_FOOD))
 	{
 		if (!isFoodProduction())
 		{
-			iFoodValue *= 130
-					+ (AI_isStrongEmphasis() ? 15 : 0); // advc.131d
+			iFoodValue *= 130;
 			iFoodValue /= 100;
 		}
 	}
@@ -10719,14 +10630,12 @@ int CvCityAI::AI_yieldValue(int* piYields, int* piCommerceYields, bool bRemove,
 
 	if (AI_isEmphasizeYield(YIELD_COMMERCE))
 	{
-		iCommerceValue *= 140 // was 130
-				+ (AI_isStrongEmphasis() ? 17 : 0); // advc.131d
+		iCommerceValue *= 140; // was 130
 		iCommerceValue /= 100;
 	}
 	else if (iCommerceValue > 0 && AI_isEmphasizeYield(YIELD_PRODUCTION))
 	{
-		iCommerceValue *= 75 // was 60
-				- (AI_isStrongEmphasis() ? 15 : 0); // advc.131d
+		iCommerceValue *= 75; // was 60
 		iCommerceValue /= 100;
 		iCommerceValue = std::max(1, iCommerceValue);
 	}
@@ -10887,12 +10796,12 @@ int CvCityAI::AI_jobChangeValue(std::pair<bool, int> new_job, std::pair<bool, in
 	if (new_job.second >= 0 && !new_job.first)
 	{
 		iImprovementsValue += AI_specialPlotImprovementValue(
-				*getCityIndexPlot((CityPlotTypes)new_job.second));
+				getCityIndexPlot((CityPlotTypes)new_job.second));
 	}
 	if (old_job.second >= 0 && !old_job.first)
 	{
 		iImprovementsValue -= AI_specialPlotImprovementValue(
-				*getCityIndexPlot((CityPlotTypes)old_job.second));
+				getCityIndexPlot((CityPlotTypes)old_job.second));
 	}
 	iTotalValue += iImprovementsValue;
 
@@ -11173,29 +11082,33 @@ bool CvCityAI::AI_timeWeightedImprovementYields(CvPlot const& kPlot, Improvement
 
 /*	K-Mod. Value for working a plot in addition to its yields.
 	(Returns ~400x commerce per turn.) */
-int CvCityAI::AI_specialPlotImprovementValue(CvPlot const& kPlot) const
+int CvCityAI::AI_specialPlotImprovementValue(CvPlot* pPlot) const
 {
-	ImprovementTypes const eImprovement = kPlot.getImprovementType();
-	if (eImprovement == NO_IMPROVEMENT)
-		return 0;
+	FAssert(pPlot);
 	int iValue = 0;
-	if (GC.getInfo(eImprovement).getImprovementUpgrade() != NO_IMPROVEMENT)
+
+	ImprovementTypes eImprovement = pPlot->getImprovementType();
+	if (eImprovement != NO_IMPROVEMENT)
 	{
-		/*	Prefer plots that are close to upgrading, but
-			not over immediate yield differences. (kludge) */
-		iValue += kPlot.getUpgradeProgress() /
-				std::max(1, GC.getGame().getImprovementUpgradeTime(eImprovement));
-	}
-	/*	small value bonus for the possibility of popping new resources.
-		(cf. CvGame::doFeature) */
-	if (kPlot.getBonusType(getTeam()) == NO_BONUS)
-	{
-		FOR_EACH_ENUM(Bonus)
+		if (GC.getInfo(eImprovement).getImprovementUpgrade() != NO_IMPROVEMENT)
 		{
-			if (GET_TEAM(getTeam()).canDiscoverBonus(eLoopBonus) &&
-				GC.getInfo(eImprovement).getImprovementBonusDiscoverRand(eLoopBonus) > 0)
+			/*	Prefer plots that are close to upgrading, but
+				not over immediate yield differences. (kludge) */
+			iValue += pPlot->getUpgradeProgress() /
+					std::max(1, GC.getGame().getImprovementUpgradeTime(eImprovement));
+		}
+
+		/*	small value bonus for the possibility of popping new resources.
+			(cf. CvGame::doFeature) */
+		if (pPlot->getBonusType(getTeam()) == NO_BONUS)
+		{
+			FOR_EACH_ENUM(Bonus)
 			{
-				iValue += 20;
+				if (GET_TEAM(getTeam()).isHasTech(GC.getInfo(eLoopBonus).getTechReveal()))
+				{
+					if (GC.getInfo(eImprovement).getImprovementBonusDiscoverRand(eLoopBonus) > 0)
+						iValue += 20;
+				}
 			}
 		}
 	}
@@ -11314,12 +11227,9 @@ int CvCityAI::AI_buildUnitProb(bool bDraft)
 	if (bDraft)
 		iXPWeight /= 2;
 	r += per100(iXPWeight);
+	bool bGreatlyReduced = false;
 	// </advc.017>
 	CvPlayerAI const& kOwner = GET_PLAYER(getOwner());
-	// <advc.253>
-	if (kOwner.AI_getCurrEraFactor() >= 1)
-		r *= kOwner.AI_trainUnitSpeedAdustment(); // <advc.253>
-	bool bGreatlyReduced = false; // advc.017
 	// BETTER_BTS_AI_MOD, 05/29/10, jdog5000: City AI, Barbarian AI
 	if (!isBarbarian() && kOwner.AI_isFinancialTrouble())
 	{
@@ -12086,7 +11996,7 @@ void CvCityAI::AI_buildGovernorChooseProduction()
 		return;
 }
 
-/*	K-Mod: This is a chunk of code that I moved out of AI_chooseProduction.
+/*	K-Mod. This is a chunk of code that I moved out of AI_chooseProduction.
 	The only reason I've moved it is to reduce clutter in the other function. */
 void CvCityAI::AI_barbChooseProduction()
 {
@@ -12167,13 +12077,13 @@ void CvCityAI::AI_barbChooseProduction()
 				getDomainFreeExperience(DOMAIN_LAND);
 		iBuildUnitProb += (3 * iFreeLandExperience);
 	}
-	//bool bRepelColonists = false; // advc.300: no longer used
+	bool bRepelColonists = false;
 	if (getArea().getNumCities() > getArea().getCitiesPerPlayer(BARBARIAN_PLAYER) + 2)
 	{
 		if (getArea().getCitiesPerPlayer(BARBARIAN_PLAYER) > getArea().getNumCities()/3)
 		{
-			//bRepelColonists = true;
 			// New world scenario with invading colonists ... fight back!
+			bRepelColonists = true;
 			iBuildUnitProb += 8*(getArea().getNumCities() - getArea().getCitiesPerPlayer(BARBARIAN_PLAYER));
 		}
 	}
@@ -12181,12 +12091,10 @@ void CvCityAI::AI_barbChooseProduction()
 	if (!bDanger && !SyncRandSuccess100(iBuildUnitProb))
 	{
 		int iBarbarianFlags = 0;
-		if (getPopulation() < 4)
-			iBarbarianFlags |= BUILDINGFOCUS_FOOD;
+		if (getPopulation() < 4) iBarbarianFlags |= BUILDINGFOCUS_FOOD;
 		iBarbarianFlags |= BUILDINGFOCUS_PRODUCTION;
 		iBarbarianFlags |= BUILDINGFOCUS_EXPERIENCE;
-		if (getPopulation() > 3)
-			iBarbarianFlags |= BUILDINGFOCUS_DEFENSE;
+		if (getPopulation() > 3) iBarbarianFlags |= BUILDINGFOCUS_DEFENSE;
 
 		if (AI_chooseBuilding(iBarbarianFlags, 15))
 		{
@@ -12263,34 +12171,18 @@ void CvCityAI::AI_barbChooseProduction()
 		}
 	}
 
-	UnitAIWeightMap unitAIWeight; // advc: Was vector of pairs "barbarianTypes"
-	unitAIWeight.set(UNITAI_ATTACK, //125
-			// <advc.300>
-			std::max(65, 100 - 15 *
-			getPlot().plotCount(PUF_isUnitAIType, UNITAI_ATTACK, -1, getOwner())));
-	AreaAITypes const eAreaAI = getArea().getAreaAIType(getTeam()); // </advc.300>
-	unitAIWeight.set(UNITAI_ATTACK_CITY,
-			//bRepelColonists ? 100 : 50
-			/*	advc.300: (Note that naval invaders for existing transports have
-				already been considered above) */
-			eAreaAI == AREAAI_OFFENSIVE ? 100 : (eAreaAI != AREAAI_ASSAULT ? 60 : 30));
-	unitAIWeight.set(UNITAI_COUNTER, //100
-			// <advc.300>
-			std::max(25, 100 - 20 *
-			getPlot().plotCount(PUF_isUnitAIType, UNITAI_COUNTER, -1, getOwner())));
-			// </advc.300>
-	unitAIWeight.set(UNITAI_CITY_DEFENSE, //50
-			// <advc.300>
-			25 + 10 * std::max(0,
-			GC.getInfo(GC.getGame().getHandicapType()).getBarbarianInitialDefenders() -
-			getPlot().plotCount(PUF_isMissionAIType, MISSIONAI_GUARD_CITY, -1, getOwner())));
-			// </advc.300>
-	if (AI_chooseLeastRepresentedUnit(unitAIWeight))
+	UnitTypeWeightArray barbarianTypes;
+	barbarianTypes.push_back(std::make_pair(UNITAI_ATTACK, 125));
+	barbarianTypes.push_back(std::make_pair(UNITAI_ATTACK_CITY, (bRepelColonists ? 100 : 50)));
+	barbarianTypes.push_back(std::make_pair(UNITAI_COUNTER, 100));
+	barbarianTypes.push_back(std::make_pair(UNITAI_CITY_DEFENSE, 50));
+
+	if (AI_chooseLeastRepresentedUnit(barbarianTypes))
 		return;
 
 	if (AI_chooseUnit())
 		return;
-}
+} // K-Mod end
 
 
 int CvCityAI::AI_calculateWaterWorldPercent()
@@ -13618,9 +13510,6 @@ void CvCityAI::read(FDataStreamBase* pStream)
 	pStream->Read(NUM_YIELD_TYPES, m_aiEmphasizeYieldCount);
 	pStream->Read(NUM_COMMERCE_TYPES, m_aiEmphasizeCommerceCount);
 	pStream->Read(&m_bForceEmphasizeCulture);
-	// <advc.131d>
-	if (uiFlag >= 9)
-		pStream->Read(&m_bStrongEmphasis); // </advc.131d>
 	pStream->Read(NUM_CITY_PLOTS, m_aiBestBuildValue);
 	pStream->Read(NUM_CITY_PLOTS, (int*)m_aeBestBuild);
 	// <advc.opt>
@@ -13679,7 +13568,7 @@ void CvCityAI::read(FDataStreamBase* pStream)
 void CvCityAI::write(FDataStreamBase* pStream)
 {
 	CvCity::write(pStream);
-	uint uiFlag;
+	uint uiFlag;;
 	//uiFlag = 1; // K-Mod: m_aiConstructionValue
 	//uiFlag = 2; // K-Mod: m_iCultureWeight
 	//uiFlag = 3; // advc.139: m_bEvacuate
@@ -13687,8 +13576,7 @@ void CvCityAI::write(FDataStreamBase* pStream)
 	//uiFlag = 5; // advc.003u: Move m_bChooseProductionDirty to CvCity
 	//uiFlag = 6; // advc.opt: Per-player meta data for closeness cache
 	//uiFlag = 7; // advc.139: m_bSafe, m_iCityValPercent
-	//uiFlag = 9; // advc.139: m_eSafety
-	uiFlag = 9; // advc.131d
+	uiFlag = 8; // advc.139: m_eSafety
 	pStream->Write(uiFlag);
 	REPRO_TEST_BEGIN_WRITE(CvString::format("CityAI(%d,%d)", getX(), getY()));
 	pStream->Write(m_iEmphasizeAvoidGrowthCount);
@@ -13702,7 +13590,6 @@ void CvCityAI::write(FDataStreamBase* pStream)
 	pStream->Write(NUM_YIELD_TYPES, m_aiEmphasizeYieldCount);
 	pStream->Write(NUM_COMMERCE_TYPES, m_aiEmphasizeCommerceCount);
 	pStream->Write(m_bForceEmphasizeCulture);
-	pStream->Write(m_bStrongEmphasis); // advc.131d
 	pStream->Write(NUM_CITY_PLOTS, m_aiBestBuildValue);
 	pStream->Write(NUM_CITY_PLOTS, (int*)m_aeBestBuild);
 	pStream->Write(m_eBestBuild); // advc.opt

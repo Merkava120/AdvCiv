@@ -16,7 +16,6 @@
 #include "CvPlotGroup.h"
 #include "CvFractal.h"
 #include "CvMapGenerator.h"
-#include "DepthFirstPlotSearch.h" // advc.030
 #include "GroupPathFinder.h"
 #include "FAStarFunc.h"
 #include "FAStarNode.h"
@@ -84,8 +83,7 @@ void CvMap::uninit()
 }
 
 // Initializes data members that are serialized.
-void CvMap::reset(CvMapInitData const* pInitInfo,
-	bool bResetPlotExtraData) // advc.enum (only needed for legacy saves)
+void CvMap::reset(CvMapInitData* pInitInfo)
 {
 	uninit();
 
@@ -95,8 +93,7 @@ void CvMap::reset(CvMapInitData const* pInitInfo,
 			GC.getInfo(GC.getInitCore().getWorldSize()).getGridWidth() : 0; //todotw:tcells wide
 	m_iGridHeight = (GC.getInitCore().getWorldSize() != NO_WORLDSIZE) ?
 			GC.getInfo(GC.getInitCore().getWorldSize()).getGridHeight() : 0;
-	// advc.137: (Ignore CvLandscapeInfos::getPlotsPerCellX/Y)
-	int iPlotsPerCell = 2;
+
 	// allow grid size override
 	if (pInitInfo != NULL)
 	{
@@ -108,54 +105,17 @@ void CvMap::reset(CvMapInitData const* pInitInfo,
 		WorldSizeTypes eWorldSize = GC.getInitCore().getWorldSize();
 		if (eWorldSize != NO_WORLDSIZE)
 		{
-			CvWorldInfo const& kWorldSz = GC.getInfo(eWorldSize);
-			// <advc.165>
-			int iPlotNumPercent;
-			if (GC.getPythonCaller()->mapPlotsPercent(eWorldSize, iPlotNumPercent))
-			{
-				scaled rTargetAspectRatio(kWorldSz.getGridWidth(),
-						kWorldSz.getGridHeight());
-				// (The number of cells is proportional to the number of plots)
-				scaled rTargetCells = m_iGridWidth * m_iGridHeight
-						* per100(iPlotNumPercent);
-				scaled rTargetHeight = (rTargetCells / rTargetAspectRatio).sqrt();
-				scaled rTargetWidth = rTargetCells / rTargetHeight;
-				m_iGridWidth = rTargetWidth.uround();
-				m_iGridHeight = rTargetHeight.uround();
-			}
-			else // </advc.165>
 			// check map script for grid size override
-			if (GC.getPythonCaller()->mapGridDimensions(eWorldSize,
-				m_iGridWidth, m_iGridHeight))
-			{	// <advc.137>
-				// If a map sets custom dimensions, then we can't change the scale.
-				iPlotsPerCell = 4;
-			}
-			// Undo aspect ratio changes for Continents
-			else if (!GC.getInitCore().getScenario() &&
-				GC.getInitCore().getMapScriptName() == CvWString("Continents"))
-			{
-				scaled rModAspectRatio(kWorldSz.getGridWidth(),
-						kWorldSz.getGridHeight());
-				scaled rHStretch = fixp(1.6) / rModAspectRatio;
-				m_iGridWidth = (m_iGridWidth * rHStretch).uround();
-				m_iGridHeight = (m_iGridHeight / rHStretch).uround();
-			} // </advc.137>
+			GC.getPythonCaller()->mapGridDimensions(eWorldSize, m_iGridWidth, m_iGridHeight);
 		}
 
 		// convert to plot dimensions
-	#if 0
 		if (GC.getNumLandscapeInfos() > 0)
 		{	/*  advc.003x: A bit of code moved into new CvGlobals functions
 				in order to remove the dependency of CvMap on CvLandscapeInfos */
 			m_iGridWidth *= GC.getLandscapePlotsPerCellX();
 			m_iGridHeight *= GC.getLandscapePlotsPerCellY();
 		}
-	#endif
-		/*	<advc.137> The landscape-based multipliers (4) are too coarse.
-			I'm not seeing graphical artifacts; seems fine to use 2 instead. */
-		m_iGridWidth *= iPlotsPerCell;
-		m_iGridHeight *= iPlotsPerCell; // </advc.137>
 	}
 	updateNumPlots(); // advc.opt
 
@@ -172,6 +132,7 @@ void CvMap::reset(CvMapInitData const* pInitInfo,
 		// Check map script for latitude override (map script beats ini file)
 		GC.getPythonCaller()->mapLatitudeExtremes(m_iTopLatitude, m_iBottomLatitude);
 	}
+
 	m_iTopLatitude = std::min(m_iTopLatitude, 90);
 	m_iTopLatitude = std::max(m_iTopLatitude, -90);
 	m_iBottomLatitude = std::min(m_iBottomLatitude, 90);
@@ -179,6 +140,7 @@ void CvMap::reset(CvMapInitData const* pInitInfo,
 	FAssert(m_iTopLatitude >= m_iBottomLatitude); // advc
 
 	m_iNextRiverID = 0;
+
 	//
 	// set wrapping
 	//
@@ -197,10 +159,7 @@ void CvMap::reset(CvMapInitData const* pInitInfo,
 
 	m_aiNumBonus.reset();
 	m_aiNumBonusOnLand.reset();
-	m_aebBalancedBonuses.reset(); // advc.108c
-	// <advc.enum>
-	if (bResetPlotExtraData)
-		resetPlotExtraData(); // </advc.enum>
+
 	m_areas.removeAll();
 }
 
@@ -209,7 +168,7 @@ void CvMap::setup()
 {
 	PROFILE_FUNC();
 
-	CvDLLFAStarIFaceBase& kAStar = *gDLL->getFAStarIFace();
+	CvDLLFAStarIFaceBase& kAStar = *gDLL->getFAStarIFace(); // advc
 	kAStar.Initialize(&GC.getPathFinder(),
 			getGridWidth(),	getGridHeight(),isWrapX(),	isWrapY(),
 			pathDestValid,	pathHeuristic,	pathCost,	pathValid,
@@ -234,8 +193,10 @@ void CvMap::setup()
 			getGridWidth(), getGridHeight(), isWrapX(), isWrapY(),
 			NULL,			NULL,			NULL,		areaValid,
 			NULL,			joinArea,		NULL);
-	/*	(PlotGroupFinder now probably unused, gets instantiated,
-		if necessary, by CvGlobals::getPlotGroupFinder.) */
+	kAStar.Initialize(&GC.getPlotGroupFinder(),
+			getGridWidth(), getGridHeight(), isWrapX(), isWrapY(),
+			NULL,			NULL,			NULL,		plotGroupValid,
+			NULL,			countPlotGroup,	NULL);
 	// advc (note): IrrigatedFinder gets instantiated in updateIrrigated
 	// <advc.pf>
 	CvSelectionGroup::initPathFinder();
@@ -288,7 +249,6 @@ void CvMap::erasePlots()
 {
 	for (int i = 0; i < numPlots(); i++)
 		plotByIndex(i)->erase();
-	resetPlotExtraData(); // advc.004j
 	m_replayTexture.clear(); // advc.106n
 }
 
@@ -516,38 +476,6 @@ void CvMap::updateYield()
 	for (int i = 0; i < numPlots(); i++)
 		getPlotByIndex(i).updateYield();
 }
-
-// <advc.enum> Moved from CvGame
-void CvMap::setPlotExtraYield(CvPlot& kPlot, YieldTypes eYield, int iChange)
-{
-	m_aeiPlotExtraYield.set(kPlot.plotNum(), eYield, iChange);
-	kPlot.updateYield();
-}
-
-
-void CvMap::changePlotExtraCost(CvPlot& kPlot, int iChange)
-{
-	m_aiPlotExtraCost.add(kPlot.plotNum(), iChange);
-}
-
-
-void CvMap::setPlotExtraYield(PlotNumTypes ePlot, YieldTypes eYield, int iChange)
-{
-	m_aeiPlotExtraYield.set(ePlot, eYield, iChange);
-}
-
-
-void CvMap::changePlotExtraCost(PlotNumTypes ePlot, int iChange)
-{
-	m_aiPlotExtraCost.add(ePlot, iChange);
-}
-
-
-void CvMap::resetPlotExtraData()
-{
-	m_aeiPlotExtraYield.reset();
-	m_aiPlotExtraCost.reset();
-} // </advc.enum>
 
 
 void CvMap::verifyUnitValidPlot()
@@ -836,7 +764,7 @@ int CvMap::numPlotsExternal() const // advc.inl
 }
 
 
-int CvMap::pointXToPlotX(float fX) const
+int CvMap::pointXToPlotX(float fX) /* advc: */ const
 {
 	float fWidth, fHeight;
 	gDLL->getEngineIFace()->GetLandscapeGameDimensions(fWidth, fHeight);
@@ -844,7 +772,7 @@ int CvMap::pointXToPlotX(float fX) const
 }
 
 
-float CvMap::plotXToPointX(int iX) const
+float CvMap::plotXToPointX(int iX) /* advc: */ const
 {
 	float fWidth, fHeight;
 	gDLL->getEngineIFace()->GetLandscapeGameDimensions(fWidth, fHeight);
@@ -852,7 +780,7 @@ float CvMap::plotXToPointX(int iX) const
 }
 
 
-int CvMap::pointYToPlotY(float fY) const
+int CvMap::pointYToPlotY(float fY) /* advc: */ const
 {
 	float fWidth, fHeight;
 	gDLL->getEngineIFace()->GetLandscapeGameDimensions(fWidth, fHeight);
@@ -860,7 +788,7 @@ int CvMap::pointYToPlotY(float fY) const
 }
 
 
-float CvMap::plotYToPointY(int iY) const
+float CvMap::plotYToPointY(int iY) /* advc: */ const
 {
 	float fWidth, fHeight;
 	gDLL->getEngineIFace()->GetLandscapeGameDimensions(fWidth, fHeight);
@@ -909,7 +837,7 @@ int CvMap::maxTypicalDistance() const
 	if(isWrapY())
 		iWraps++;
 	CvWorldInfo const& kWorld = GC.getInfo(getWorldSize());
-	scaled r = (kWorld.getGridWidth() * kWorld.getGridHeight() * rCivRatio.sqrt() *
+	scaled r = (kWorld.getGridWidth() * kWorld.getGridHeight() * rCivRatio *
 			rSeaLvlModifier).sqrt() * fixp(3.5) - 5 * iWraps;
 	return std::max(1, r.round());
 }
@@ -917,7 +845,7 @@ int CvMap::maxTypicalDistance() const
 
 void CvMap::changeLandPlots(int iChange)
 {
-	m_iLandPlots += iChange;
+	m_iLandPlots = (m_iLandPlots + iChange);
 	FAssert(getLandPlots() >= 0);
 }
 
@@ -1002,9 +930,7 @@ CvWString CvMap::getNonDefaultCustomMapOptionDesc(int iOption) const
 	Checks for an exact match ignoring case unless bCheckContains is set to true
 	or bIgnoreCase to false.
 	So that the DLL can implement special treatment for particular custom map options
-	(that may or may not be present in only one particular map script).
-	Translations will have to be handled by the caller (by generating szOptionsValue
-	through gDLL->getText). */
+	(that may or may not be present in only one particular map script). */
 bool CvMap::isCustomMapOption(char const* szOptionsValue, bool bCheckContains,
 	bool bIgnoreCase) const
 {
@@ -1028,15 +954,6 @@ bool CvMap::isCustomMapOption(char const* szOptionsValue, bool bCheckContains,
 		}
 	}
 	return false;
-}
-
-/*	For convenience, especially when working with translated strings
-	(which use wide characters). */
-bool CvMap::isCustomMapOption(CvWString szOptionsValue, bool bCheckContains,
-	bool bIgnoreCase) const
-{
-	CvString szNarrow(szOptionsValue);
-	return isCustomMapOption(szNarrow.c_str());
 }
 
 
@@ -1118,9 +1035,7 @@ void CvMap::recalculateAreas(/* advc.opt: */bool bUpdateIsthmuses)
 			getPlotByIndex(i).updateAnyIsthmus();
 	} // </advc.opt>
 	for (int i = 0; i < numPlots(); i++)
-	{	// advc.opt: Don't update the old areas, we're about to delete them.
-		getPlotByIndex(i).setArea(NULL, false);
-	}
+		getPlotByIndex(i).setArea(NULL);
 	m_areas.removeAll();
 	calculateAreas();
 }
@@ -1155,8 +1070,6 @@ void CvMap::updateIrrigated(CvPlot& kPlot)
 	if (!GC.getGame().isFinalInitialized())
 		return;
 
-	/*	advc.opt (note): Perhaps better to use singleton (at CvGlobals) for this?
-		Might avoid repeated memory allocation that way. */
 	FAStar* pIrrigatedFinder = gDLL->getFAStarIFace()->create();
 	if (kPlot.isIrrigated())
 	{
@@ -1225,11 +1138,12 @@ void CvMap::invalidateBorderDangerCache(TeamTypes eTeam)
 // read object from a stream. used during load
 void CvMap::read(FDataStreamBase* pStream)
 {
+	CvMapInitData defaultMapData;
+
+	reset(&defaultMapData);
+
 	uint uiFlag=0;
 	pStream->Read(&uiFlag);
-
-	CvMapInitData defaultMapData;
-	reset(&defaultMapData, /* advc.enum: */ uiFlag >= 7);
 
 	pStream->Read(&m_iGridWidth);
 	pStream->Read(&m_iGridHeight);
@@ -1260,15 +1174,6 @@ void CvMap::read(FDataStreamBase* pStream)
 		m_aiNumBonus.readArray<int>(pStream);
 		m_aiNumBonusOnLand.readArray<int>(pStream);
 	}
-	// <advc.108c>
-	if (uiFlag >= 6)
-		m_aebBalancedBonuses.read(pStream); // </advc.108c>
-	// <advc.enum>
-	if (uiFlag >= 7)
-	{
-		m_aeiPlotExtraYield.read(pStream);
-		m_aiPlotExtraCost.read(pStream);
-	} // </advc.enum>
 	// <advc.304>
 	if (uiFlag >= 5)
 		GC.getGame().getBarbarianWeightMap().getActivityMap().read(pStream);
@@ -1325,9 +1230,7 @@ void CvMap::write(FDataStreamBase* pStream)
 	//uiFlag = 2; // advc.opt: CvPlot::m_bAnyIsthmus
 	//uiFlag = 3; // advc.opt: m_ePlots
 	//uiFlag = 4; // advc.enum: new enum map save behavior
-	//uiFlag = 5; // advc.304: Barbarian weight map
-	//uiFlag = 6; // advc.108c
-	uiFlag = 7; // advc.enum: Extra plot yields, costs moved from CvGame
+	uiFlag = 5; // advc.304: Barbarian weight map
 	pStream->Write(uiFlag);
 
 	pStream->Write(m_iGridWidth);
@@ -1345,12 +1248,6 @@ void CvMap::write(FDataStreamBase* pStream)
 	FAssertMsg((0 < GC.getNumBonusInfos()), "GC.getNumBonusInfos() is not greater than zero but an array is being allocated");
 	m_aiNumBonus.write(pStream);
 	m_aiNumBonusOnLand.write(pStream);
-	/*	advc.108c (Player might save on turn 0, then reload and regenerate the map.
-		Therefore this info needs to be saved.) */
-	m_aebBalancedBonuses.write(pStream);
-	// <advc.enum>
-	m_aeiPlotExtraYield.write(pStream);
-	m_aiPlotExtraCost.write(pStream); // </advc.enum>
 	/*	advc.304: Serialize this for CvGame b/c the map size isn't known
 		when CvGame gets deserialized. (kludge) */
 	GC.getGame().getBarbarianWeightMap().getActivityMap().write(pStream);
@@ -1423,7 +1320,7 @@ void CvMap::calculateAreas()
 			based on areas. Also, some scenarios don't call CvGame::
 			setInitialItems; these only get the initial calculation based on
 			land, sea and peaks (not ice). */
-		calculateAreas_dfs();
+		calculateAreas_030();
 		calculateReprAreas();
 		return;
 	} // </advc.030>
@@ -1445,50 +1342,27 @@ void CvMap::calculateAreas()
 }
 
 // <advc.030>
-class CvAreaAggregator : public PlotVisitor<>
+void CvMap::calculateAreas_030()
 {
-protected:
-	CvMap& m_kMap;
-	CvArea& m_kArea;
-public:
-	CvAreaAggregator(CvMap& kMap, CvArea& kArea) : m_kMap(kMap), m_kArea(kArea) {}
-	bool isVisited(CvPlot const& kPlot) const
+	for(int iPass = 0; iPass <= 1; iPass++)
 	{
-		return (kPlot.area() != NULL);
-	}
-	bool canVisit(CvPlot const& kFrom, CvPlot const& kPlot) const
-	{
-		return (kFrom.isWater() == kPlot.isWater() &&
-				!m_kMap.isSeparatedByIsthmus(kFrom, kPlot) &&
-				/*	At an impassable plot, continue only to other impassables
-					so that mountain ranges and ice packs end up in one area. */
-				(!kFrom.isImpassable() || kPlot.isImpassable()));
-	}
-	bool visit(CvPlot& kPlot)
-	{
-		kPlot.setArea(&m_kArea);
-		return true;
-	}
-};
-
-void CvMap::calculateAreas_dfs()
-{
-	for (int iPass = 0; iPass <= 1; iPass++)
-	{
-		FOR_EACH_ENUM(PlotNum)
+		for(int i = 0; i < numPlots(); i++)
 		{
-			CvPlot& kPlot = getPlotByIndex(eLoopPlotNum);
-			if (kPlot.area() != NULL)
+			CvPlot& p = getPlotByIndex(i);
+			if(iPass == 0)
+			{
+				/*  Second pass for impassables; can't handle
+					all-peak/ice areas otherwise. */
+				if(p.isImpassable())
+					continue;
+			}
+			if(p.area() != NULL)
 				continue;
-			/*	Second pass for impassables; can't handle
-				all-peak/ice areas otherwise. */
-			if (iPass == 0 && kPlot.isImpassable())
-				continue;
-			FAssert(iPass == 0 || kPlot.isImpassable());
-			CvArea& kArea = *addArea();
-			kArea.init(kPlot.isWater());
-			CvAreaAggregator aggr(*this, kArea);
-			DepthFirstPlotSearch<CvAreaAggregator> dfs(kPlot, aggr);
+			FAssert(iPass == 0 || p.isImpassable());
+			CvArea& a = *addArea();
+			a.init(p.isWater());
+			p.setArea(&a);
+			calculateAreas_DFS(p);
 			gDLL->callUpdater(); // Allow UI to update
 		}
 	}
@@ -1500,10 +1374,10 @@ void CvMap::updateLakes()
 	// CvArea::getNumTiles no longer sufficient for identifying lakes
 	FOR_EACH_AREA_VAR(a)
 		a->updateLake();
-	for (int i = 0; i < numPlots(); i++)
+	for(int i = 0; i < numPlots(); i++)
 	{
 		CvPlot& kPlot = getPlotByIndex(i);
-		if (kPlot.isLake())
+		if(kPlot.isLake())
 			kPlot.updateYield();
 	}
 	computeShelves(); // advc.300
@@ -1554,6 +1428,38 @@ void CvMap::calculateReprAreas()
 		}
 	} while(iReprChanged > 0);
 	updateLakes();
+}
+
+
+void CvMap::calculateAreas_DFS(CvPlot const& kStart)
+{
+	/*  Explicit stack b/c memory can be an issue if a map has dimensions
+		considerably larger than Huge and very large areas.
+		I've run out of memory with a recursive implementation (with an attached
+		debugger) after about 20000 calls on a 148x148 map generated by LPlate2's
+		Eyeball Planet script. With the stack, at least the Release build should
+		be pretty safe. */
+	std::stack<CvPlot const*> stack;
+	stack.push(&kStart);
+	while(!stack.empty())
+	{
+		CvPlot const& p = *stack.top();
+		stack.pop();
+		FOR_EACH_ADJ_PLOT_VAR2(pAdjacent, p)
+		{
+			CvPlot& q = *pAdjacent;
+			if(q.area() == NULL && p.isWater() == q.isWater() &&
+				!isSeparatedByIsthmus(p, q) &&
+				/*  Depth-first search that doesn't continue at impassables
+					except to other impassables so that mountain ranges and
+					ice packs end up in one CvArea. */
+				(!p.isImpassable() || q.isImpassable()))
+			{
+				q.setArea(p.area());
+				stack.push(&q);
+			}
+		}
+	}
 } // </advc.030>
 
 // <advc.300>
@@ -1572,24 +1478,17 @@ void CvMap::getShelves(CvArea const& kArea, std::vector<Shelf*>& kShelves) const
 
 void CvMap::computeShelves()
 {
-	if (m_shelves.empty() && getLandPlots() <= 0)
-		return; // Map still being generated, no need to waste time.
-	/*	NB: First call that gets here normally still has no shallow water.
-		But that's not guaranteed, so we have to see for ourselves. */
 	for (std::map<Shelf::Id,Shelf*>::iterator it = m_shelves.begin();
 		it != m_shelves.end(); ++it)
 	{
 		SAFE_DELETE(it->second);
 	}
 	m_shelves.clear();
-	FOR_EACH_ENUM(PlotNum)
+	for (int i = 0; i < numPlots(); i++)
 	{
-		CvPlot& p = getPlotByIndex(eLoopPlotNum);
-		if (p.getTerrainType() != GC.getWATER_TERRAIN(true) ||
-			p.isImpassable() || p.isLake() || !p.isHabitable())
-		{
+		CvPlot& p = getPlotByIndex(i);
+		if (!p.isWater() || p.isLake() || p.isImpassable() || !p.isHabitable())
 			continue;
-		}
 		// Add plot to shelves of all adjacent land areas
 		std::set<int> adjLands;
 		FOR_EACH_ADJ_PLOT(p)

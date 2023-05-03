@@ -2,7 +2,6 @@
 #include "BarbarianWeightMap.h"
 #include "PlotRadiusIterator.h"
 #include "CvGame.h"
-#include "CvInfo_GameOption.h"
 
 // advc.304: New implementation file; see comment in header.
 
@@ -48,8 +47,7 @@ void BarbarianActivityMap::decay()
 		m_map.reset(); // free memory
 		return;
 	}
-	int const iDecayPercent = (15 * 200) /
-			(GC.getInfo(GC.getGame().getGameSpeedType()).getBarbPercent() + 100);
+	int const iDecayPercent = 15;
 	FOR_EACH_NON_DEFAULT_PAIR(m_map, PlotNum, int)
 	{
 		perPlotNumVal.second *= 100 - iDecayPercent;

@@ -151,33 +151,45 @@ void VoteTriggeredData::write(FDataStreamBase* pStream)
 	pStream->WriteString(kVoteOption.szText);
 }
 
-// advc.enum: Obsolete
-/*void PlotExtraYield::read(FDataStreamBase* pStream) {
+void PlotExtraYield::read(FDataStreamBase* pStream)
+{
 	pStream->Read(&m_iX);
 	pStream->Read(&m_iY);
 	m_aeExtraYield.clear();
-	FOR_EACH_ENUM(Yield) {
-		int iYield; pStream->Read(&iYield);
+	for (int i = 0; i < NUM_YIELD_TYPES; ++i)
+	{
+		int iYield;
+		pStream->Read(&iYield);
 		m_aeExtraYield.push_back(iYield);
 	}
 }
-void PlotExtraYield::write(FDataStreamBase* pStream) {
+
+void PlotExtraYield::write(FDataStreamBase* pStream)
+{
 	pStream->Write(m_iX);
 	pStream->Write(m_iY);
 	for (int i = 0; i < NUM_YIELD_TYPES; ++i)
+	{
 		pStream->Write(m_aeExtraYield[i]);
+	}
 }
-void PlotExtraCost::read(FDataStreamBase* pStream) {
+
+void PlotExtraCost::read(FDataStreamBase* pStream)
+{
 	pStream->Read(&m_iX);
 	pStream->Read(&m_iY);
 	pStream->Read(&m_iCost);
 }
-void PlotExtraCost::write(FDataStreamBase* pStream) {
+
+void PlotExtraCost::write(FDataStreamBase* pStream)
+{
 	pStream->Write(m_iX);
 	pStream->Write(m_iY);
 	pStream->Write(m_iCost);
 }
-void BuildingYieldChange::read(FDataStreamBase* pStream) {
+
+// advc.enum: Obsolete
+/*void BuildingYieldChange::read(FDataStreamBase* pStream) {
 	pStream->Read((int*)&eBuildingClass);
 	pStream->Read((int*)&eYield);
 	pStream->Read(&iChange);
@@ -574,7 +586,7 @@ PBGameSetupData::PBGameSetupData()
 	}
 }
 
-// advc.071:
+// <advc.071>
 FirstContactData::FirstContactData(CvPlot const* pAt1, CvPlot const* pAt2,
 	CvUnit const* pUnit1, CvUnit const* pUnit2)
 {
@@ -601,4 +613,4 @@ FirstContactData::FirstContactData(CvPlot const* pAt1, CvPlot const* pAt2,
 		u2.eOwner = pUnit2->getOwner();
 		u2.iID = pUnit2->getID();
 	}
-}
+} // </advc.071>

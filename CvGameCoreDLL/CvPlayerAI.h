@@ -35,7 +35,6 @@ public:
 	// Only for the EXE:
 	DllExport static CvPlayerAI& getPlayerNonInl(PlayerTypes ePlayer);
 	DllExport static bool areStaticsInitialized();
-	static void AI_updateAttitudes(); // advc
 	// <advc> Moved from CvDefines
 	static int const DANGER_RANGE = 4;
 	static int const BORDER_DANGER_RANGE = 2; // </advc>
@@ -207,7 +206,7 @@ public:
 	bool AI_demandRebukedWar(PlayerTypes ePlayer) const;
 	bool AI_hasTradedWithTeam(TeamTypes eTeam) const;
 
-	void AI_updateAttitude(); // K-Mod (toward all other players)
+	void AI_updateAttitude(); // K-Mod (for all players)
 	void AI_updateAttitude(PlayerTypes ePlayer,		// K-Mod
 			bool bUpdateWorstEnemy = true); // advc.130e
 	void AI_changeCachedAttitude(PlayerTypes ePlayer, int iChange); // K-Mod
@@ -218,7 +217,6 @@ public:
 	}
 	int AI_getAttitudeVal(PlayerTypes ePlayer, bool bForced = true) const;
 	static AttitudeTypes AI_getAttitudeFromValue(int iAttitudeVal);
-	void AI_updateExpansionistHate(); // advc.130w
 
 	int AI_calculateStolenCityRadiusPlots(PlayerTypes ePlayer,
 			bool bOnlyNonWorkable = false) const; // advc.147
@@ -454,13 +452,7 @@ public:
 	// <advc.139>
 	void AI_attackMadeAgainst(CvUnit const& kDefender);
 	void AI_humanEnemyStackMovedInTerritory(CvPlot const& kFrom, CvPlot const& kTo);
-	// </advc.139>  advc:
-	int AI_neededCityAttackers(/* advc.104p: */ CvArea const& kArea,
-			int iHash = -1) const;
-	// <advc.300>
-	scaled AI_neededCityAttackersVsBarbarians() const;
-	int AI_estimateBarbarianGarrisonSize() const;
-	scaled AI_barbarianTargetCityScore(CvArea const& kArea) const; // </advc.300>
+	// </advc.139>
 
 	CivicTypes AI_bestCivic(CivicOptionTypes eCivicOption, int* iBestValue = 0) const;
 	int AI_civicValue(CivicTypes eCivic) const;						// Exposed to Python
@@ -714,7 +706,6 @@ public:
 	// k146: Used in conjuction with canTrain
 	bool AI_haveResourcesToTrain(UnitTypes eUnit) const;
 	UnitTypes AI_getBestAttackUnit() const; // advc.079
-	scaled AI_trainUnitSpeedAdustment() const; // advc.253
 
 	// <advc.104>
 	UWAI::Player& uwai() { return *m_pUWAI; }
@@ -732,9 +723,8 @@ public:
 	bool AI_isUnitNeedingOpenBorders(TeamTypes eTarget) const; // advc.124
 	bool AI_isDefenseFocusOnBarbarians(CvArea const& kArea) const; // advc.300
 	bool AI_hasSharedPrimaryArea(PlayerTypes eOther) const; // advc
-	// <advc.130r>
-	int AI_getContactDelay(ContactTypes eContact) const;
-	bool AI_contactRoll(ContactTypes eContact, scaled rMult = 1); // </advc.130r>
+
+	int AI_getContactDelay(ContactTypes eContact) const; // advc.130r
 	// <advc.104m>
 	bool AI_proposeEmbargo(PlayerTypes eHuman);
 	bool AI_contactReligion(PlayerTypes eHuman);
@@ -808,7 +798,6 @@ protected:
 	int* m_aiPeacetimeGrantValue;
 	int* m_aiGoldTradedTo;
 	int* m_aiAttitudeExtra;
-	ArrayEnumMap<PlayerTypes,scaled> m_arExpansionistHate; // advc.130w
 	// <advc.079>
 	mutable UnitTypes m_aeLastBrag[MAX_CIV_PLAYERS];
 	mutable TeamTypes m_aeLastWarn[MAX_CIV_PLAYERS]; // </advc.079>
@@ -858,6 +847,7 @@ protected:
 	void AI_proposeWarTrade(PlayerTypes eAIPlayer); // </advc>
 
 	int AI_rivalPactAttitude(PlayerTypes ePlayer, bool bVassalPacts) const; // advc.130t
+	scaled AI_expansionistHate(PlayerTypes ePlayer) const; //advc.130w
 
 	bool AI_canBeAttackedBy(CvUnit const& u) const; // advc.315
 
@@ -941,6 +931,7 @@ protected:
 	int AI_knownRankDifference(PlayerTypes eOther, scaled& rOutrankingBothRatio) const;
 	// advc.042: Relies on caller to reset GC.getBorderFinder()
 	bool AI_isUnimprovedBonus(CvPlot const& p, CvPlot const* pFromPlot, bool bCheckPath) const;
+	void AI_updateCityAttitude(CvPlot const& kCityPlot); // advc.130w
 	int AI_neededExplorers_bulk(CvArea const& kArea) const; // advc.opt
 	// BETTER_BTS_AI_MOD, Victory Strategy AI, 03/17/10, jdog5000: START
 	// (advc: moved here from the public section)

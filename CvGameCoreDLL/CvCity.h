@@ -235,10 +235,7 @@ public:
 	bool isNoMaintenance() const; //advc
 	bool isHolyCity(ReligionTypes eReligion) const;																// Exposed to Python
 	bool isHolyCity() const;																					// Exposed to Python
-	bool hasShrine(ReligionTypes eReligion) const
-	{	// advc.enum: Replacing implementation based on a cache at CvGame
-		return (m_aiShrine.get(eReligion) > 0);
-	}
+	bool hasShrine(ReligionTypes eReligion) const;
 	bool isHeadquarters(CorporationTypes eCorp) const;															// Exposed to Python
 	bool isHeadquarters() const;																				// Exposed to Python
 	void setHeadquarters(CorporationTypes eCorp);
@@ -300,7 +297,6 @@ public:
 	static int cultureDistance(int iDX, int iDY); // advc: static												// Exposed to Python
 	enum GrievanceTypes { GRIEVANCE_HURRY, GRIEVANCE_CONSCRIPT, GRIEVANCE_RELIGION }; // advc.101
 	int cultureStrength(PlayerTypes ePlayer,																	// Exposed to Python
-			bool bIgnoreWar = false, bool bIgnoreOccupation = false, // advc.023
 			std::vector<GrievanceTypes>* paGrievances = NULL) const; // advc.101
 	int cultureGarrison(PlayerTypes ePlayer) const;																// Exposed to Python
 	PlayerTypes calculateCulturalOwner() const; // advc.099c
@@ -797,7 +793,11 @@ public:
 	int getBuildingCommerceByBuilding(CommerceTypes eCommerce, BuildingTypes eBuilding) const;					// Exposed to Python
 	void updateBuildingCommerce();
 	void updateBuildingCommerce(CommerceTypes eCommerce); // advc.opt
-	// BUG - Building Additional Commerce - start (advc: unused getAdditionalCommerceByBuilding removed)
+	// BUG - Building Additional Commerce - start
+	int getAdditionalCommerceByBuilding(CommerceTypes eCommerce, BuildingTypes eBuilding) const
+	{
+		return getAdditionalCommerceTimes100ByBuilding(eCommerce, eBuilding) / 100;
+	}
 	int getAdditionalCommerceTimes100ByBuilding(CommerceTypes eCommerce, BuildingTypes eBuilding) const;
 	int getAdditionalBaseCommerceRateByBuilding(CommerceTypes eCommerce, BuildingTypes eBuilding) const;
 	int getAdditionalBaseCommerceRateByBuildingImpl(CommerceTypes eCommerce, BuildingTypes eBuilding) const;
@@ -889,7 +889,6 @@ public:
 	// K-Mod: (advc.ctr: exposed to Python)
 	bool canCultureFlip(PlayerTypes eToPlayer /* <advc.101> */ = NO_PLAYER,
 			bool bCheckPriorRevolts = true) const; // </advc.101>
-	bool isMartialLaw(PlayerTypes eRevoltPlayer) const; // advc.023
 	int calculateCulturePercent(PlayerTypes ePlayer) const;														// Exposed to Python
 	int calculateTeamCulturePercent(TeamTypes eTeam) const;														// Exposed to Python
 	void setCulture(PlayerTypes ePlayer, int iNewValue, bool bPlots, bool bUpdatePlotGroups);					// Exposed to Python
@@ -1015,8 +1014,7 @@ public:
 	}
 	void setUnitProductionTime(UnitTypes eUnit, int iNewValue);
 	void changeUnitProductionTime(UnitTypes eUnit, int iChange);
-	/*	BULL - Production Decay - start (advc.094 -
-		NB: defined through IMPLEMENT_BUG_PRODUCTION_DECAY_GETTERS macro) */
+	// BULL - Production Decay - start (advc.094)
 	bool isBuildingProductionDecay(BuildingTypes eBuilding) const;												// Exposed to Python
 	int getBuildingProductionDecay(BuildingTypes eBuilding) const;												// Exposed to Python
 	int getBuildingProductionDecayTurns(BuildingTypes eBuilding) const;											// Exposed to Python
@@ -1471,7 +1469,6 @@ protected:
 	ListEnumMap<ImprovementTypes,int,char> m_aiImprovementFreeSpecialists;
 	ArrayEnumMap<ReligionTypes,int,char> m_aiReligionInfluence;
 	ArrayEnumMap<ReligionTypes,int,char> m_aiStateReligionHappiness;
-	ArrayEnumMap<ReligionTypes,int,char> m_aiShrine; // advc.enum
 	ArrayEnumMap<UnitCombatTypes,int,char> m_aiUnitCombatFreeExperience;
 	ListEnumMap<PromotionTypes,int,char> m_aiFreePromotionCount;
 

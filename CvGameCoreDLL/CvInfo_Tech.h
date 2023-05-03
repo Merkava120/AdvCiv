@@ -4,37 +4,9 @@
 #define CV_INFO_TECH_H
 
 // advc.003x: Cut from CvInfos.h. Just CvTechInfo b/c I want to precompile this one.
-class CvTechInfo : /* <advc.tag> */ public CvXMLInfo
+class CvTechInfo : public CvInfoBase
 {
-	typedef CvXMLInfo base_t;
-protected:
-	void addElements(ElementList& kElements) const
-	{
-		base_t::addElements(kElements);
-		kElements.addBool(NoFearForSafety, "NoFearForSafety"); // advc.500c
-		kElements.addInt(BarbarianFreeTechModifier, "BarbarianFreeTechModifier"); // advc.301
-	}
-public:
-	enum IntElementTypes
-	{
-		BarbarianFreeTechModifier = base_t::NUM_INT_ELEMENT_TYPES, // advc.301
-		NUM_INT_ELEMENT_TYPES
-	};
-	int get(IntElementTypes e) const
-	{
-		return base_t::get(static_cast<base_t::IntElementTypes>(e));
-	}
-	enum BoolElementTypes
-	{
-		NoFearForSafety = base_t::NUM_BOOL_ELEMENT_TYPES, // advc.500c
-		NUM_BOOL_ELEMENT_TYPES
-	};
-	PY_IS_ELEMENT(NoFearForSafety)
-	bool get(BoolElementTypes e) const
-	{
-		return base_t::get(static_cast<base_t::BoolElementTypes>(e));
-	}
-	// </advc.tag>
+	typedef CvInfoBase base_t;
 	friend class CvXMLLoadUtility;
 public: // advc: All the const functions are exposed to Python except those added by mods
 	CvTechInfo();
@@ -79,6 +51,8 @@ public: // advc: All the const functions are exposed to Python except those adde
 	bool isIgnoreIrrigation() const { return m_bIgnoreIrrigation; }
 	bool isWaterWork() const { return m_bWaterWork; }
 	bool isRiverTrade() const { return m_bRiverTrade; }
+	// advc.500c:
+	bool isNoFearForSafety() const { return m_bNoFearForSafety; }
 
 	std::wstring getQuote() const;
 	const TCHAR* getSound() const;
@@ -161,6 +135,7 @@ protected:
 	bool m_bIgnoreIrrigation;
 	bool m_bWaterWork;
 	bool m_bRiverTrade;
+	bool m_bNoFearForSafety; // advc.500c
 
 	CvString m_szQuoteKey;
 	CvString m_szSound;

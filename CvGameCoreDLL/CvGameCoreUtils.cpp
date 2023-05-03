@@ -90,6 +90,19 @@ DirectionTypes cardinalDirectionToDirection(CardinalDirectionTypes eCard)
 	return NO_DIRECTION;
 }
 
+bool isCardinalDirection(DirectionTypes eDirection)
+{
+	switch (eDirection)
+	{
+	case DIRECTION_EAST:
+	case DIRECTION_NORTH:
+	case DIRECTION_SOUTH:
+	case DIRECTION_WEST:
+		return true;
+	}
+	return false;
+}
+
 DirectionTypes estimateDirection(int iDX, int iDY)
 {
 	const int displacementSize = 8;
@@ -408,6 +421,18 @@ void setListHelp(CvWStringBuffer& szBuffer, wchar const* szStart, wchar const* s
 	szBuffer.append(szItem);
 	iLastListID = iListID; // advc: And deleted this line from every call location
 } // </advc>
+
+// advc:
+CvWString getModName()
+{
+	CvWString szModName(gDLL->getModName(false));
+	size_t posMods = szModName.find(L"Mods");
+	if (posMods == CvWString::npos)
+		return szModName;
+	// Skip over "Mods" plus the path separator. And chop off the separator at the end.
+	return szModName.substr(posMods + 5, szModName.length() - posMods - 6);
+}
+
 
 bool PUF_isGroupHead(CvUnit const* pUnit, int iDummy1, int iDummy2)
 {
@@ -786,49 +811,48 @@ int intHash(std::vector<int> const& kInputs, PlayerTypes ePlayer)
 }
 
 
-int getTurnYearForGame(int iGameTurn, int iStartYear, CalendarTypes eCalendar,
-	GameSpeedTypes eSpeed)
+int getTurnYearForGame(int iGameTurn, int iStartYear, CalendarTypes eCalendar, GameSpeedTypes eSpeed)
 {
 	return getTurnMonthForGame(iGameTurn, iStartYear, eCalendar, eSpeed) /
 			std::max(1, GC.getNumMonthInfos()); // advc: max
 }
 
 
-int getTurnMonthForGame(int iGameTurn, int iStartYear, CalendarTypes eCalendar,
-	GameSpeedTypes eSpeed)
+int getTurnMonthForGame(int iGameTurn, int iStartYear, CalendarTypes eCalendar, GameSpeedTypes eSpeed)
 {
 	int iTurnMonth = iStartYear * GC.getNumMonthInfos();
+
 	switch (eCalendar)
 	{
 	case CALENDAR_DEFAULT:
 	{
 		int iTurnCount = 0;
-		for (int i = 0; i < GC.getInfo(eSpeed).getNumTurnIncrements(); i++)
+
+		for (int iI = 0; iI < GC.getInfo(eSpeed).getNumTurnIncrements(); iI++)
 		{
-			GameTurnInfo const& kGameTurn = GC.getInfo(eSpeed).getGameTurnInfo(i);
-			if (iGameTurn > iTurnCount + kGameTurn.iNumGameTurnsPerIncrement)
+			if (iGameTurn > iTurnCount + GC.getInfo(eSpeed).getGameTurnInfo(iI).iNumGameTurnsPerIncrement)
 			{
-				iTurnMonth += kGameTurn.iMonthIncrement *
-						kGameTurn.iNumGameTurnsPerIncrement;
-				iTurnCount += kGameTurn.iNumGameTurnsPerIncrement;
+				iTurnMonth += (GC.getInfo(eSpeed).getGameTurnInfo(iI).iMonthIncrement *
+						GC.getInfo(eSpeed).getGameTurnInfo(iI).iNumGameTurnsPerIncrement);
+				iTurnCount += GC.getInfo(eSpeed).getGameTurnInfo(iI).iNumGameTurnsPerIncrement;
 			}
 			else
 			{
-				iTurnMonth += kGameTurn.iMonthIncrement * (iGameTurn - iTurnCount);
-				iTurnCount += iGameTurn - iTurnCount;
+				iTurnMonth += (GC.getInfo(eSpeed).getGameTurnInfo(iI).iMonthIncrement * (iGameTurn - iTurnCount));
+				iTurnCount += (iGameTurn - iTurnCount);
 				break;
 			}
 		}
+
 		if (iGameTurn > iTurnCount)
 		{
-			iTurnMonth += GC.getInfo(eSpeed).getGameTurnInfo(
-					GC.getInfo(eSpeed).getNumTurnIncrements() - 1).
-					iMonthIncrement * (iGameTurn - iTurnCount);
+			iTurnMonth += (GC.getInfo(eSpeed).getGameTurnInfo(GC.getInfo(eSpeed).getNumTurnIncrements() - 1).iMonthIncrement *
+					(iGameTurn - iTurnCount));
 		}
 		break;
 	}
 	case CALENDAR_BI_YEARLY:
-		iTurnMonth += 2 * iGameTurn * GC.getNumMonthInfos();
+		iTurnMonth += (2 * iGameTurn * GC.getNumMonthInfos());
 		break;
 
 	case CALENDAR_YEARS:
@@ -837,8 +861,7 @@ int getTurnMonthForGame(int iGameTurn, int iStartYear, CalendarTypes eCalendar,
 		break;
 
 	case CALENDAR_SEASONS:
-		iTurnMonth += (iGameTurn * GC.getNumMonthInfos()) /
-				std::max(1, GC.getNumSeasonInfos()); // advc: max
+		iTurnMonth += (iGameTurn * GC.getNumMonthInfos()) / std::max(1, GC.getNumSeasonInfos()); // advc: max
 		break;
 
 	case CALENDAR_MONTHS:
@@ -846,8 +869,7 @@ int getTurnMonthForGame(int iGameTurn, int iStartYear, CalendarTypes eCalendar,
 		break;
 
 	case CALENDAR_WEEKS:
-		iTurnMonth += iGameTurn /
-				std::max(1, GC.getDefineINT("WEEKS_PER_MONTHS")); // advc: max
+		iTurnMonth += iGameTurn / std::max(1, GC.getDefineINT("WEEKS_PER_MONTHS")); // advc: max
 		break;
 
 	default:
