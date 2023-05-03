@@ -33,6 +33,8 @@
 	<!-- advc.012 -->
 	<ElementType name="iRivalDefense" content="textOnly" dt:type="int"/>
 	<ElementType name="Button" content="textOnly"/>
+	<!-- merkava.mb1t-->
+	<ElementType name="iTemperature" content="textOnly"/>
 	<ElementType name="FootstepAudioType" content="textOnly"/>
 	<ElementType name="FootstepAudioScript" content="textOnly"/>
 	<ElementType name="FootstepSound" content="eltOnly">
@@ -50,6 +52,8 @@
 		<element type="Civilopedia"/>
 		<element type="Help" minOccurs="0"/>
 		<element type="ArtDefineTag"/>
+		<!-- merkava.mb1t -->
+		<element type="iTemperature" minOccurs="0"/>
 		<element type="Yields"/>
 		<element type="RiverYieldChange"/>
 		<element type="HillsYieldChange"/>

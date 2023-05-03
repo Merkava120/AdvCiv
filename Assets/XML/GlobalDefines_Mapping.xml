@@ -1,0 +1,59 @@
+<?xml version="1.0"?>
+<!-- Sid Meier's Civilization 4 -->
+<!-- Copyright Firaxis Games 2005 -->
+<Civ4Defines xmlns="x-schema:CIV4GlobalDefinesSchema.xml">
+	<!-- Biome Adjustments (mb1.3) -->
+	<!-- The biome mapper runs through tiles and sorts them into 'biomes' based on what terrains they are adjacent to. 
+		Then it takes a second pass through the tiles to check if any are adjacent to LESS than this number of tiles sharing their biome, 
+		and flips those tiles to the most common adjacent biome. 
+		Default value of 1 means the second pass flips any tile that is adjacent to zero tiles sharing its biome. -->
+	<Define> 
+		<DefineName>SECOND_PASS_MINIMUM_ADJACENT</DefineName>
+		<iDefineIntVal>2</iDefineIntVal> 
+	</Define>
+	<!-- change to 1 to put bonuses corresponding to the current biome number on every tile when you hit Ctrl Z. 
+	NOTE: This will also apply when you open Worldbuilder. -->
+	<Define>
+		<DefineName>ADD_SIGNS_IN_DEBUG_MODE</DefineName>
+		<iDefineIntVal>0</iDefineIntVal> 
+	</Define>
+	<!-- change to 1 to put units corresponding to latitude biomes on each ocean tile when you hit Ctrl Z. 
+		NOTE: This also applies when you open Worldbuilder, and if you're using Zlatko's formations it's pretty intense. -->
+	<Define>
+		<DefineName>ADD_UNITS_IN_DEBUG_MODE</DefineName>
+		<iDefineIntVal>0</iDefineIntVal> 
+	</Define>
+	<!-- set to 0 to skip the second pass (to debug the first pass only); default is 2 - one to start and one to get rid of extra weird ones. 
+		If you're having trouble with isolated terrains and it's not because of the other passes you can turn this up but it does take longer. -->
+	<Define> 
+		<DefineName>NUM_SECOND_PASSES</DefineName>
+		<iDefineIntVal>2</iDefineIntVal> 
+	</Define>
+	<!-- the third pass splits biomes by what they are adjacent to, so only tiles touching each other are part of the same biome -->
+	<Define>
+		<DefineName>DO_THIRD_PASS</DefineName>
+		<iDefineIntVal>1</iDefineIntVal>
+	</Define>
+	<!-- the third pass splits non-coastal water into biomes based on X latitude groups. -->
+	<Define>
+		<DefineName>NUM_LATITUDE_GROUPS</DefineName>
+		<iDefineIntVal>5</iDefineIntVal>
+	</Define>
+	<!-- what is the minimum size of a biome? biomes smaller than this will be flipped to adjacent biomes -->
+	<Define>
+		<DefineName>MIN_BIOME_SIZE</DefineName>
+		<iDefineIntVal>1</iDefineIntVal>
+	</Define>
+	<!-- UNUSED YET -->
+	<!-- Defines to determine what the real latitude of the top/bottom few rows are (mb1tL) -->
+	<!-- Number of cold tiles in a row for it to be considered polar. Cold means temperature -1 or less -->
+	<Define> 
+		<DefineName>POLE_COLD_TILES</DefineName>
+		<iDefineIntVal>0</iDefineIntVal> 
+	</Define>
+	<!-- number of rows to check -->
+	<Define> 
+		<DefineName>CHECK_NUM_ROWS</DefineName>
+		<iDefineIntVal>0</iDefineIntVal> 
+	</Define>
+</Civ4Defines>

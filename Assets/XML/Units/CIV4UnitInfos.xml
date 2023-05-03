@@ -165,10 +165,10 @@
 			<iAsset>1</iAsset>
 			<iPower>1</iPower>
 			<UnitMeshGroups>
-				<iGroupSize>3</iGroupSize>
+				<iGroupSize>7</iGroupSize>
 				<fMaxSpeed>1.75</fMaxSpeed>
 				<fPadTime>1</fPadTime>
-				<iMeleeWaveSize>3</iMeleeWaveSize>
+				<iMeleeWaveSize>7</iMeleeWaveSize>
 				<iRangedWaveSize>0</iRangedWaveSize>
 				<UnitMeshGroup>
 					<iRequired>3</iRequired>
@@ -336,13 +336,13 @@
 			<iAsset>1</iAsset>
 			<iPower>1</iPower>
 			<UnitMeshGroups>
-				<iGroupSize>3</iGroupSize>
+				<iGroupSize>7</iGroupSize>
 				<fMaxSpeed>1.75</fMaxSpeed>
 				<fPadTime>1</fPadTime>
-				<iMeleeWaveSize>3</iMeleeWaveSize>
+				<iMeleeWaveSize>7</iMeleeWaveSize>
 				<iRangedWaveSize>0</iRangedWaveSize>
 				<UnitMeshGroup>
-					<iRequired>3</iRequired>
+					<iRequired>7</iRequired>
 					<EarlyArtDefineTag>ART_DEF_UNIT_BEAR</EarlyArtDefineTag>
 				</UnitMeshGroup>
 			</UnitMeshGroups>
@@ -507,10 +507,10 @@
 			<iAsset>1</iAsset>
 			<iPower>1</iPower>
 			<UnitMeshGroups>
-				<iGroupSize>3</iGroupSize>
+				<iGroupSize>7</iGroupSize>
 				<fMaxSpeed>1.75</fMaxSpeed>
 				<fPadTime>1</fPadTime>
-				<iMeleeWaveSize>3</iMeleeWaveSize>
+				<iMeleeWaveSize>7</iMeleeWaveSize>
 				<iRangedWaveSize>0</iRangedWaveSize>
 				<UnitMeshGroup>
 					<iRequired>3</iRequired>
@@ -687,10 +687,10 @@
 			<iAsset>1</iAsset>
 			<iPower>1</iPower>
 			<UnitMeshGroups>
-				<iGroupSize>3</iGroupSize>
+				<iGroupSize>7</iGroupSize>
 				<fMaxSpeed>1.75</fMaxSpeed>
 				<fPadTime>1</fPadTime>
-				<iMeleeWaveSize>3</iMeleeWaveSize>
+				<iMeleeWaveSize>7</iMeleeWaveSize>
 				<iRangedWaveSize>0</iRangedWaveSize>
 				<UnitMeshGroup>
 					<iRequired>3</iRequired>
@@ -858,25 +858,25 @@
 			<iAsset>4</iAsset>
 			<iPower>0</iPower>
 			<UnitMeshGroups>
-				<iGroupSize>4</iGroupSize>
+				<iGroupSize>28</iGroupSize>
 				<fMaxSpeed>1.75</fMaxSpeed>
 				<fPadTime>1</fPadTime>
-				<iMeleeWaveSize>4</iMeleeWaveSize>
+				<iMeleeWaveSize>7</iMeleeWaveSize>
 				<iRangedWaveSize>0</iRangedWaveSize>
 				<UnitMeshGroup>
-					<iRequired>1</iRequired>
+					<iRequired>7</iRequired>
 					<EarlyArtDefineTag>ART_DEF_UNIT_SETTLER_MALE</EarlyArtDefineTag>
 				</UnitMeshGroup>
 				<UnitMeshGroup>
-					<iRequired>1</iRequired>
+					<iRequired>7</iRequired>
 					<EarlyArtDefineTag>ART_DEF_UNIT_SETTLER_FEMALE</EarlyArtDefineTag>
 				</UnitMeshGroup>
 				<UnitMeshGroup>
-					<iRequired>2</iRequired>
+					<iRequired>14</iRequired>
 					<EarlyArtDefineTag>ART_DEF_UNIT_SETTLER_CHILD</EarlyArtDefineTag>
 				</UnitMeshGroup>
 			</UnitMeshGroups>
-			<FormationType>FORMATION_TYPE_DEFAULT</FormationType>
+			<FormationType>FORMATION_TYPE_GROUND_NEW</FormationType>
 			<HotKey/>
 			<bAltDown>0</bAltDown>
 			<bShiftDown>0</bShiftDown>
@@ -891,7 +891,8 @@
 			<Type>UNIT_WORKER</Type>
 			<UniqueNames/>
 			<Special>NONE</Special>
-			<Capture>UNITCLASS_WORKER</Capture>
+			<!-- advc.010: was UNITCLASS_WORKER -->
+			<Capture>NONE</Capture>
 			<Combat>NONE</Combat>
 			<Domain>DOMAIN_LAND</Domain>
 			<DefaultUnitAI>UNITAI_WORKER</DefaultUnitAI>
@@ -1118,10 +1119,10 @@
 			<iAsset>2</iAsset>
 			<iPower>0</iPower>
 			<UnitMeshGroups>
-				<iGroupSize>2</iGroupSize>
+				<iGroupSize>14</iGroupSize>
 				<fMaxSpeed>1.75</fMaxSpeed>
 				<fPadTime>1</fPadTime>
-				<iMeleeWaveSize>2</iMeleeWaveSize>
+				<iMeleeWaveSize>14</iMeleeWaveSize>
 				<iRangedWaveSize>0</iRangedWaveSize>
 				<UnitMeshGroup>
 					<iRequired>2</iRequired>
@@ -1129,7 +1130,7 @@
 					<LateArtDefineTag>ART_DEF_UNIT_WORKERMODERN</LateArtDefineTag>
 				</UnitMeshGroup>
 			</UnitMeshGroups>
-			<FormationType>FORMATION_TYPE_DEFAULT</FormationType>
+			<FormationType>FORMATION_TYPE_GROUND_NEW</FormationType>
 			<HotKey/>
 			<bAltDown>0</bAltDown>
 			<bShiftDown>0</bShiftDown>
@@ -1144,7 +1145,8 @@
 			<Type>UNIT_INDIAN_FAST_WORKER</Type>
 			<UniqueNames/>
 			<Special>NONE</Special>
-			<Capture>UNITCLASS_WORKER</Capture>
+			<!-- advc.010: was UNITCLASS_WORKER -->
+			<Capture>NONE</Capture>
 			<Combat>NONE</Combat>
 			<Domain>DOMAIN_LAND</Domain>
 			<DefaultUnitAI>UNITAI_WORKER</DefaultUnitAI>
@@ -1373,17 +1375,17 @@
 			<iAsset>2</iAsset>
 			<iPower>0</iPower>
 			<UnitMeshGroups>
-				<iGroupSize>2</iGroupSize>
+				<iGroupSize>14</iGroupSize>
 				<fMaxSpeed>1.75</fMaxSpeed>
 				<fPadTime>1</fPadTime>
-				<iMeleeWaveSize>2</iMeleeWaveSize>
+				<iMeleeWaveSize>14</iMeleeWaveSize>
 				<iRangedWaveSize>0</iRangedWaveSize>
 				<UnitMeshGroup>
 					<iRequired>2</iRequired>
 					<EarlyArtDefineTag>ART_DEF_UNIT_INDIAN_FAST_WORKER</EarlyArtDefineTag>
 				</UnitMeshGroup>
 			</UnitMeshGroups>
-			<FormationType>FORMATION_TYPE_DEFAULT</FormationType>
+			<FormationType>FORMATION_TYPE_GROUND_NEW</FormationType>
 			<HotKey/>
 			<bAltDown>0</bAltDown>
 			<bShiftDown>0</bShiftDown>
@@ -1551,17 +1553,17 @@
 			<iAsset>1</iAsset>
 			<iPower>0</iPower>
 			<UnitMeshGroups>
-				<iGroupSize>2</iGroupSize>
+				<iGroupSize>14</iGroupSize>
 				<fMaxSpeed>1.75</fMaxSpeed>
 				<fPadTime>1</fPadTime>
-				<iMeleeWaveSize>2</iMeleeWaveSize>
+				<iMeleeWaveSize>7</iMeleeWaveSize>
 				<iRangedWaveSize>0</iRangedWaveSize>
 				<UnitMeshGroup>
 					<iRequired>2</iRequired>
 					<EarlyArtDefineTag>ART_DEF_UNIT_SCOUT</EarlyArtDefineTag>
 				</UnitMeshGroup>
 			</UnitMeshGroups>
-			<FormationType>FORMATION_TYPE_DEFAULT</FormationType>
+			<FormationType>FORMATION_TYPE_GROUND_NEW</FormationType>
 			<HotKey/>
 			<bAltDown>0</bAltDown>
 			<bShiftDown>0</bShiftDown>
@@ -1725,17 +1727,17 @@
 			<iAsset>2</iAsset>
 			<iPower>2</iPower>
 			<UnitMeshGroups>
-				<iGroupSize>2</iGroupSize>
+				<iGroupSize>14</iGroupSize>
 				<fMaxSpeed>1.75</fMaxSpeed>
 				<fPadTime>1</fPadTime>
-				<iMeleeWaveSize>2</iMeleeWaveSize>
+				<iMeleeWaveSize>7</iMeleeWaveSize>
 				<iRangedWaveSize>0</iRangedWaveSize>
 				<UnitMeshGroup>
 					<iRequired>2</iRequired>
 					<EarlyArtDefineTag>ART_DEF_UNIT_EXPLORER</EarlyArtDefineTag>
 				</UnitMeshGroup>
 			</UnitMeshGroups>
-			<FormationType>FORMATION_TYPE_DEFAULT</FormationType>
+			<FormationType>FORMATION_TYPE_GROUND_NEW</FormationType>
 			<HotKey/>
 			<bAltDown>0</bAltDown>
 			<bShiftDown>0</bShiftDown>
@@ -1897,10 +1899,10 @@
 			<iAsset>2</iAsset>
 			<iPower>0</iPower>
 			<UnitMeshGroups>
-				<iGroupSize>1</iGroupSize>
+				<iGroupSize>7</iGroupSize>
 				<fMaxSpeed>1.75</fMaxSpeed>
 				<fPadTime>1</fPadTime>
-				<iMeleeWaveSize>1</iMeleeWaveSize>
+				<iMeleeWaveSize>7</iMeleeWaveSize>
 				<iRangedWaveSize>0</iRangedWaveSize>
 				<UnitMeshGroup>
 					<iRequired>1</iRequired>
@@ -1908,7 +1910,7 @@
 					<LateArtDefineTag>ART_DEF_UNIT_SPY</LateArtDefineTag>
 				</UnitMeshGroup>
 			</UnitMeshGroups>
-			<FormationType>FORMATION_TYPE_DEFAULT</FormationType>
+			<FormationType>FORMATION_TYPE_GROUND_NEW</FormationType>
 			<HotKey/>
 			<bAltDown>0</bAltDown>
 			<bShiftDown>0</bShiftDown>
@@ -2069,18 +2071,18 @@
 			<iAsset>3</iAsset>
 			<iPower>0</iPower>
 			<UnitMeshGroups>
-				<iGroupSize>1</iGroupSize>
+				<iGroupSize>7</iGroupSize>
 				<fMaxSpeed>1.75</fMaxSpeed>
 				<fPadTime>1</fPadTime>
-				<iMeleeWaveSize>1</iMeleeWaveSize>
-				<iRangedWaveSize>1</iRangedWaveSize>
+				<iMeleeWaveSize>7</iMeleeWaveSize>
+				<iRangedWaveSize>7</iRangedWaveSize>
 				<UnitMeshGroup>
 					<iRequired>1</iRequired>
 					<EarlyArtDefineTag>ART_DEF_UNIT_CEO_1</EarlyArtDefineTag>
 					<LateArtDefineTag>ART_DEF_UNIT_CEO_1</LateArtDefineTag>
 				</UnitMeshGroup>
 			</UnitMeshGroups>
-			<FormationType>FORMATION_TYPE_DEFAULT</FormationType>
+			<FormationType>FORMATION_TYPE_GROUND_NEW</FormationType>
 			<HotKey/>
 			<bAltDown>0</bAltDown>
 			<bShiftDown>0</bShiftDown>
@@ -2236,18 +2238,18 @@
 			<iAsset>3</iAsset>
 			<iPower>0</iPower>
 			<UnitMeshGroups>
-				<iGroupSize>1</iGroupSize>
+				<iGroupSize>7</iGroupSize>
 				<fMaxSpeed>1.75</fMaxSpeed>
 				<fPadTime>1</fPadTime>
-				<iMeleeWaveSize>1</iMeleeWaveSize>
-				<iRangedWaveSize>1</iRangedWaveSize>
+				<iMeleeWaveSize>7</iMeleeWaveSize>
+				<iRangedWaveSize>7</iRangedWaveSize>
 				<UnitMeshGroup>
 					<iRequired>1</iRequired>
 					<EarlyArtDefineTag>ART_DEF_UNIT_CEO_2</EarlyArtDefineTag>
 					<LateArtDefineTag>ART_DEF_UNIT_CEO_2</LateArtDefineTag>
 				</UnitMeshGroup>
 			</UnitMeshGroups>
-			<FormationType>FORMATION_TYPE_DEFAULT</FormationType>
+			<FormationType>FORMATION_TYPE_GROUND_NEW</FormationType>
 			<HotKey/>
 			<bAltDown>0</bAltDown>
 			<bShiftDown>0</bShiftDown>
@@ -2403,18 +2405,18 @@
 			<iAsset>3</iAsset>
 			<iPower>0</iPower>
 			<UnitMeshGroups>
-				<iGroupSize>1</iGroupSize>
+				<iGroupSize>7</iGroupSize>
 				<fMaxSpeed>1.75</fMaxSpeed>
 				<fPadTime>1</fPadTime>
-				<iMeleeWaveSize>1</iMeleeWaveSize>
-				<iRangedWaveSize>1</iRangedWaveSize>
+				<iMeleeWaveSize>7</iMeleeWaveSize>
+				<iRangedWaveSize>7</iRangedWaveSize>
 				<UnitMeshGroup>
 					<iRequired>1</iRequired>
 					<EarlyArtDefineTag>ART_DEF_UNIT_CEO_3</EarlyArtDefineTag>
 					<LateArtDefineTag>ART_DEF_UNIT_CEO_3</LateArtDefineTag>
 				</UnitMeshGroup>
 			</UnitMeshGroups>
-			<FormationType>FORMATION_TYPE_DEFAULT</FormationType>
+			<FormationType>FORMATION_TYPE_GROUND_NEW</FormationType>
 			<HotKey/>
 			<bAltDown>0</bAltDown>
 			<bShiftDown>0</bShiftDown>
@@ -2570,18 +2572,18 @@
 			<iAsset>3</iAsset>
 			<iPower>0</iPower>
 			<UnitMeshGroups>
-				<iGroupSize>1</iGroupSize>
+				<iGroupSize>7</iGroupSize>
 				<fMaxSpeed>1.75</fMaxSpeed>
 				<fPadTime>1</fPadTime>
-				<iMeleeWaveSize>1</iMeleeWaveSize>
-				<iRangedWaveSize>1</iRangedWaveSize>
+				<iMeleeWaveSize>7</iMeleeWaveSize>
+				<iRangedWaveSize>7</iRangedWaveSize>
 				<UnitMeshGroup>
 					<iRequired>1</iRequired>
 					<EarlyArtDefineTag>ART_DEF_UNIT_CEO_4</EarlyArtDefineTag>
 					<LateArtDefineTag>ART_DEF_UNIT_CEO_4</LateArtDefineTag>
 				</UnitMeshGroup>
 			</UnitMeshGroups>
-			<FormationType>FORMATION_TYPE_DEFAULT</FormationType>
+			<FormationType>FORMATION_TYPE_GROUND_NEW</FormationType>
 			<HotKey/>
 			<bAltDown>0</bAltDown>
 			<bShiftDown>0</bShiftDown>
@@ -2737,18 +2739,18 @@
 			<iAsset>3</iAsset>
 			<iPower>0</iPower>
 			<UnitMeshGroups>
-				<iGroupSize>1</iGroupSize>
+				<iGroupSize>7</iGroupSize>
 				<fMaxSpeed>1.75</fMaxSpeed>
 				<fPadTime>1</fPadTime>
-				<iMeleeWaveSize>1</iMeleeWaveSize>
-				<iRangedWaveSize>1</iRangedWaveSize>
+				<iMeleeWaveSize>7</iMeleeWaveSize>
+				<iRangedWaveSize>7</iRangedWaveSize>
 				<UnitMeshGroup>
 					<iRequired>1</iRequired>
 					<EarlyArtDefineTag>ART_DEF_UNIT_CEO_5</EarlyArtDefineTag>
 					<LateArtDefineTag>ART_DEF_UNIT_CEO_5</LateArtDefineTag>
 				</UnitMeshGroup>
 			</UnitMeshGroups>
-			<FormationType>FORMATION_TYPE_DEFAULT</FormationType>
+			<FormationType>FORMATION_TYPE_GROUND_NEW</FormationType>
 			<HotKey/>
 			<bAltDown>0</bAltDown>
 			<bShiftDown>0</bShiftDown>
@@ -2904,18 +2906,18 @@
 			<iAsset>3</iAsset>
 			<iPower>0</iPower>
 			<UnitMeshGroups>
-				<iGroupSize>1</iGroupSize>
+				<iGroupSize>7</iGroupSize>
 				<fMaxSpeed>1.75</fMaxSpeed>
 				<fPadTime>1</fPadTime>
-				<iMeleeWaveSize>1</iMeleeWaveSize>
-				<iRangedWaveSize>1</iRangedWaveSize>
+				<iMeleeWaveSize>7</iMeleeWaveSize>
+				<iRangedWaveSize>7</iRangedWaveSize>
 				<UnitMeshGroup>
 					<iRequired>1</iRequired>
 					<EarlyArtDefineTag>ART_DEF_UNIT_CEO_6</EarlyArtDefineTag>
 					<LateArtDefineTag>ART_DEF_UNIT_CEO_6</LateArtDefineTag>
 				</UnitMeshGroup>
 			</UnitMeshGroups>
-			<FormationType>FORMATION_TYPE_DEFAULT</FormationType>
+			<FormationType>FORMATION_TYPE_GROUND_NEW</FormationType>
 			<HotKey/>
 			<bAltDown>0</bAltDown>
 			<bShiftDown>0</bShiftDown>
@@ -3071,18 +3073,18 @@
 			<iAsset>3</iAsset>
 			<iPower>0</iPower>
 			<UnitMeshGroups>
-				<iGroupSize>1</iGroupSize>
+				<iGroupSize>7</iGroupSize>
 				<fMaxSpeed>1.75</fMaxSpeed>
 				<fPadTime>1</fPadTime>
-				<iMeleeWaveSize>1</iMeleeWaveSize>
-				<iRangedWaveSize>1</iRangedWaveSize>
+				<iMeleeWaveSize>7</iMeleeWaveSize>
+				<iRangedWaveSize>7</iRangedWaveSize>
 				<UnitMeshGroup>
 					<iRequired>1</iRequired>
 					<EarlyArtDefineTag>ART_DEF_UNIT_CEO_7</EarlyArtDefineTag>
 					<LateArtDefineTag>ART_DEF_UNIT_CEO_7</LateArtDefineTag>
 				</UnitMeshGroup>
 			</UnitMeshGroups>
-			<FormationType>FORMATION_TYPE_DEFAULT</FormationType>
+			<FormationType>FORMATION_TYPE_GROUND_NEW</FormationType>
 			<HotKey/>
 			<bAltDown>0</bAltDown>
 			<bShiftDown>0</bShiftDown>
@@ -3239,17 +3241,17 @@
 			<iAsset>2</iAsset>
 			<iPower>0</iPower>
 			<UnitMeshGroups>
-				<iGroupSize>1</iGroupSize>
+				<iGroupSize>7</iGroupSize>
 				<fMaxSpeed>1.75</fMaxSpeed>
 				<fPadTime>1</fPadTime>
-				<iMeleeWaveSize>1</iMeleeWaveSize>
+				<iMeleeWaveSize>7</iMeleeWaveSize>
 				<iRangedWaveSize>0</iRangedWaveSize>
 				<UnitMeshGroup>
 					<iRequired>1</iRequired>
 					<EarlyArtDefineTag>ART_DEF_UNIT_JEWISH_MISSIONARY</EarlyArtDefineTag>
 				</UnitMeshGroup>
 			</UnitMeshGroups>
-			<FormationType>FORMATION_TYPE_DEFAULT</FormationType>
+			<FormationType>FORMATION_TYPE_GROUND_NEW</FormationType>
 			<HotKey/>
 			<bAltDown>0</bAltDown>
 			<bShiftDown>0</bShiftDown>
@@ -3406,17 +3408,17 @@
 			<iAsset>2</iAsset>
 			<iPower>0</iPower>
 			<UnitMeshGroups>
-				<iGroupSize>1</iGroupSize>
+				<iGroupSize>7</iGroupSize>
 				<fMaxSpeed>1.75</fMaxSpeed>
 				<fPadTime>1</fPadTime>
-				<iMeleeWaveSize>1</iMeleeWaveSize>
+				<iMeleeWaveSize>7</iMeleeWaveSize>
 				<iRangedWaveSize>0</iRangedWaveSize>
 				<UnitMeshGroup>
 					<iRequired>1</iRequired>
 					<EarlyArtDefineTag>ART_DEF_UNIT_CHRISTIAN_MISSIONARY</EarlyArtDefineTag>
 				</UnitMeshGroup>
 			</UnitMeshGroups>
-			<FormationType>FORMATION_TYPE_DEFAULT</FormationType>
+			<FormationType>FORMATION_TYPE_GROUND_NEW</FormationType>
 			<HotKey/>
 			<bAltDown>0</bAltDown>
 			<bShiftDown>0</bShiftDown>
@@ -3573,17 +3575,17 @@
 			<iAsset>2</iAsset>
 			<iPower>0</iPower>
 			<UnitMeshGroups>
-				<iGroupSize>1</iGroupSize>
+				<iGroupSize>7</iGroupSize>
 				<fMaxSpeed>1.75</fMaxSpeed>
 				<fPadTime>1</fPadTime>
-				<iMeleeWaveSize>1</iMeleeWaveSize>
+				<iMeleeWaveSize>7</iMeleeWaveSize>
 				<iRangedWaveSize>0</iRangedWaveSize>
 				<UnitMeshGroup>
 					<iRequired>1</iRequired>
 					<EarlyArtDefineTag>ART_DEF_UNIT_ISLAMIC_MISSIONARY</EarlyArtDefineTag>
 				</UnitMeshGroup>
 			</UnitMeshGroups>
-			<FormationType>FORMATION_TYPE_DEFAULT</FormationType>
+			<FormationType>FORMATION_TYPE_GROUND_NEW</FormationType>
 			<HotKey/>
 			<bAltDown>0</bAltDown>
 			<bShiftDown>0</bShiftDown>
@@ -3740,17 +3742,17 @@
 			<iAsset>2</iAsset>
 			<iPower>0</iPower>
 			<UnitMeshGroups>
-				<iGroupSize>1</iGroupSize>
+				<iGroupSize>7</iGroupSize>
 				<fMaxSpeed>1.75</fMaxSpeed>
 				<fPadTime>1</fPadTime>
-				<iMeleeWaveSize>1</iMeleeWaveSize>
+				<iMeleeWaveSize>7</iMeleeWaveSize>
 				<iRangedWaveSize>0</iRangedWaveSize>
 				<UnitMeshGroup>
 					<iRequired>1</iRequired>
 					<EarlyArtDefineTag>ART_DEF_UNIT_HINDU_MISSIONARY</EarlyArtDefineTag>
 				</UnitMeshGroup>
 			</UnitMeshGroups>
-			<FormationType>FORMATION_TYPE_DEFAULT</FormationType>
+			<FormationType>FORMATION_TYPE_GROUND_NEW</FormationType>
 			<HotKey/>
 			<bAltDown>0</bAltDown>
 			<bShiftDown>0</bShiftDown>
@@ -3907,17 +3909,17 @@
 			<iAsset>2</iAsset>
 			<iPower>0</iPower>
 			<UnitMeshGroups>
-				<iGroupSize>1</iGroupSize>
+				<iGroupSize>7</iGroupSize>
 				<fMaxSpeed>1.75</fMaxSpeed>
 				<fPadTime>1</fPadTime>
-				<iMeleeWaveSize>1</iMeleeWaveSize>
+				<iMeleeWaveSize>7</iMeleeWaveSize>
 				<iRangedWaveSize>0</iRangedWaveSize>
 				<UnitMeshGroup>
 					<iRequired>1</iRequired>
 					<EarlyArtDefineTag>ART_DEF_UNIT_BUDDHIST_MISSIONARY</EarlyArtDefineTag>
 				</UnitMeshGroup>
 			</UnitMeshGroups>
-			<FormationType>FORMATION_TYPE_DEFAULT</FormationType>
+			<FormationType>FORMATION_TYPE_GROUND_NEW</FormationType>
 			<HotKey/>
 			<bAltDown>0</bAltDown>
 			<bShiftDown>0</bShiftDown>
@@ -4074,17 +4076,17 @@
 			<iAsset>2</iAsset>
 			<iPower>0</iPower>
 			<UnitMeshGroups>
-				<iGroupSize>1</iGroupSize>
+				<iGroupSize>7</iGroupSize>
 				<fMaxSpeed>1.75</fMaxSpeed>
 				<fPadTime>1</fPadTime>
-				<iMeleeWaveSize>1</iMeleeWaveSize>
+				<iMeleeWaveSize>7</iMeleeWaveSize>
 				<iRangedWaveSize>0</iRangedWaveSize>
 				<UnitMeshGroup>
 					<iRequired>1</iRequired>
 					<EarlyArtDefineTag>ART_DEF_UNIT_CONFUCIAN_MISSIONARY</EarlyArtDefineTag>
 				</UnitMeshGroup>
 			</UnitMeshGroups>
-			<FormationType>FORMATION_TYPE_DEFAULT</FormationType>
+			<FormationType>FORMATION_TYPE_GROUND_NEW</FormationType>
 			<HotKey/>
 			<bAltDown>0</bAltDown>
 			<bShiftDown>0</bShiftDown>
@@ -4241,17 +4243,17 @@
 			<iAsset>2</iAsset>
 			<iPower>0</iPower>
 			<UnitMeshGroups>
-				<iGroupSize>1</iGroupSize>
+				<iGroupSize>7</iGroupSize>
 				<fMaxSpeed>1.75</fMaxSpeed>
 				<fPadTime>1</fPadTime>
-				<iMeleeWaveSize>1</iMeleeWaveSize>
+				<iMeleeWaveSize>7</iMeleeWaveSize>
 				<iRangedWaveSize>0</iRangedWaveSize>
 				<UnitMeshGroup>
 					<iRequired>1</iRequired>
 					<EarlyArtDefineTag>ART_DEF_UNIT_TAOIST_MISSIONARY</EarlyArtDefineTag>
 				</UnitMeshGroup>
 			</UnitMeshGroups>
-			<FormationType>FORMATION_TYPE_DEFAULT</FormationType>
+			<FormationType>FORMATION_TYPE_GROUND_NEW</FormationType>
 			<HotKey/>
 			<bAltDown>0</bAltDown>
 			<bShiftDown>0</bShiftDown>
@@ -4421,17 +4423,17 @@
 			<iAsset>1</iAsset>
 			<iPower>2</iPower>
 			<UnitMeshGroups>
-				<iGroupSize>3</iGroupSize>
+				<iGroupSize>28</iGroupSize>
 				<fMaxSpeed>1.75</fMaxSpeed>
 				<fPadTime>1</fPadTime>
-				<iMeleeWaveSize>3</iMeleeWaveSize>
+				<iMeleeWaveSize>7</iMeleeWaveSize>
 				<iRangedWaveSize>0</iRangedWaveSize>
 				<UnitMeshGroup>
 					<iRequired>8</iRequired>
 					<EarlyArtDefineTag>ART_DEF_UNIT_WARRIOR</EarlyArtDefineTag>
 				</UnitMeshGroup>
 			</UnitMeshGroups>
-			<FormationType>FORMATION_TYPE_DEFAULT</FormationType>
+			<FormationType>FORMATION_TYPE_GROUND_NEW</FormationType>
 			<HotKey/>
 			<bAltDown>0</bAltDown>
 			<bShiftDown>0</bShiftDown>
@@ -4613,17 +4615,17 @@
 			<iAsset>1</iAsset>
 			<iPower>2</iPower>
 			<UnitMeshGroups>
-				<iGroupSize>3</iGroupSize>
+				<iGroupSize>28</iGroupSize>
 				<fMaxSpeed>1.75</fMaxSpeed>
 				<fPadTime>1</fPadTime>
-				<iMeleeWaveSize>3</iMeleeWaveSize>
-				<iRangedWaveSize>0</iRangedWaveSize>
+				<iMeleeWaveSize>7</iMeleeWaveSize>
+				<iRangedWaveSize>7</iRangedWaveSize>
 				<UnitMeshGroup>
 					<iRequired>3</iRequired>
 					<EarlyArtDefineTag>ART_DEF_UNIT_INCAN_QUECHUA</EarlyArtDefineTag>
 				</UnitMeshGroup>
 			</UnitMeshGroups>
-			<FormationType>FORMATION_TYPE_DEFAULT</FormationType>
+			<FormationType>FORMATION_TYPE_GROUND_NEW</FormationType>
 			<HotKey/>
 			<bAltDown>0</bAltDown>
 			<bShiftDown>0</bShiftDown>
@@ -4799,17 +4801,17 @@
 			<iAsset>2</iAsset>
 			<iPower>6</iPower>
 			<UnitMeshGroups>
-				<iGroupSize>3</iGroupSize>
+				<iGroupSize>28</iGroupSize>
 				<fMaxSpeed>1.75</fMaxSpeed>
 				<fPadTime>1</fPadTime>
-				<iMeleeWaveSize>3</iMeleeWaveSize>
+				<iMeleeWaveSize>7</iMeleeWaveSize>
 				<iRangedWaveSize>0</iRangedWaveSize>
 				<UnitMeshGroup>
-					<iRequired>3</iRequired>
+					<iRequired>7</iRequired>
 					<EarlyArtDefineTag>ART_DEF_UNIT_SWORDSMAN</EarlyArtDefineTag>
 				</UnitMeshGroup>
 			</UnitMeshGroups>
-			<FormationType>FORMATION_TYPE_DEFAULT</FormationType>
+			<FormationType>FORMATION_TYPE_GROUND_NEW</FormationType>
 			<HotKey/>
 			<bAltDown>0</bAltDown>
 			<bShiftDown>0</bShiftDown>
@@ -4983,17 +4985,17 @@
 			<!-- advc.104e: was 6 -->
 			<iPower>5</iPower>
 			<UnitMeshGroups>
-				<iGroupSize>3</iGroupSize>
+				<iGroupSize>28</iGroupSize>
 				<fMaxSpeed>1.75</fMaxSpeed>
 				<fPadTime>1</fPadTime>
-				<iMeleeWaveSize>3</iMeleeWaveSize>
+				<iMeleeWaveSize>7</iMeleeWaveSize>
 				<iRangedWaveSize>0</iRangedWaveSize>
 				<UnitMeshGroup>
-					<iRequired>3</iRequired>
+					<iRequired>7</iRequired>
 					<EarlyArtDefineTag>ART_DEF_UNIT_AZTEC_JAGUAR</EarlyArtDefineTag>
 				</UnitMeshGroup>
 			</UnitMeshGroups>
-			<FormationType>FORMATION_TYPE_DEFAULT</FormationType>
+			<FormationType>FORMATION_TYPE_GROUND_NEW</FormationType>
 			<HotKey/>
 			<bAltDown>0</bAltDown>
 			<bShiftDown>0</bShiftDown>
@@ -5173,17 +5175,17 @@
 			<iAsset>2</iAsset>
 			<iPower>6</iPower>
 			<UnitMeshGroups>
-				<iGroupSize>3</iGroupSize>
+				<iGroupSize>28</iGroupSize>
 				<fMaxSpeed>1.75</fMaxSpeed>
 				<fPadTime>1</fPadTime>
-				<iMeleeWaveSize>3</iMeleeWaveSize>
+				<iMeleeWaveSize>7</iMeleeWaveSize>
 				<iRangedWaveSize>0</iRangedWaveSize>
 				<UnitMeshGroup>
-					<iRequired>3</iRequired>
+					<iRequired>7</iRequired>
 					<EarlyArtDefineTag>ART_DEF_UNIT_CELTIC_BARBARIAN</EarlyArtDefineTag>
 				</UnitMeshGroup>
 			</UnitMeshGroups>
-			<FormationType>FORMATION_TYPE_DEFAULT</FormationType>
+			<FormationType>FORMATION_TYPE_GROUND_NEW</FormationType>
 			<HotKey/>
 			<bAltDown>0</bAltDown>
 			<bShiftDown>0</bShiftDown>
@@ -5375,17 +5377,17 @@
 			<!-- advc.907a: was 7 -->
 			<iPower>7</iPower>
 			<UnitMeshGroups>
-				<iGroupSize>3</iGroupSize>
+				<iGroupSize>28</iGroupSize>
 				<fMaxSpeed>1.75</fMaxSpeed>
 				<fPadTime>1</fPadTime>
-				<iMeleeWaveSize>3</iMeleeWaveSize>
+				<iMeleeWaveSize>7</iMeleeWaveSize>
 				<iRangedWaveSize>0</iRangedWaveSize>
 				<UnitMeshGroup>
-					<iRequired>3</iRequired>
+					<iRequired>7</iRequired>
 					<EarlyArtDefineTag>ART_DEF_UNIT_ROME_PRAETORIAN</EarlyArtDefineTag>
 				</UnitMeshGroup>
 			</UnitMeshGroups>
-			<FormationType>FORMATION_TYPE_DEFAULT</FormationType>
+			<FormationType>FORMATION_TYPE_GROUND_NEW</FormationType>
 			<HotKey/>
 			<bAltDown>0</bAltDown>
 			<bShiftDown>0</bShiftDown>
@@ -5583,17 +5585,17 @@
 				 way off in that case). -->
 			<iPower>5</iPower>
 			<UnitMeshGroups>
-				<iGroupSize>3</iGroupSize>
+				<iGroupSize>28</iGroupSize>
 				<fMaxSpeed>1.75</fMaxSpeed>
 				<fPadTime>1</fPadTime>
-				<iMeleeWaveSize>3</iMeleeWaveSize>
+				<iMeleeWaveSize>7</iMeleeWaveSize>
 				<iRangedWaveSize>0</iRangedWaveSize>
 				<UnitMeshGroup>
-					<iRequired>3</iRequired>
+					<iRequired>7</iRequired>
 					<EarlyArtDefineTag>ART_DEF_UNIT_AXEMAN</EarlyArtDefineTag>
 				</UnitMeshGroup>
 			</UnitMeshGroups>
-			<FormationType>FORMATION_TYPE_DEFAULT</FormationType>
+			<FormationType>FORMATION_TYPE_GROUND_NEW</FormationType>
 			<HotKey/>
 			<bAltDown>0</bAltDown>
 			<bShiftDown>0</bShiftDown>
@@ -5782,17 +5784,17 @@
 			<iAsset>2</iAsset>
 			<iPower>6</iPower>
 			<UnitMeshGroups>
-				<iGroupSize>3</iGroupSize>
+				<iGroupSize>28</iGroupSize>
 				<fMaxSpeed>1.75</fMaxSpeed>
 				<fPadTime>1</fPadTime>
-				<iMeleeWaveSize>3</iMeleeWaveSize>
+				<iMeleeWaveSize>7</iMeleeWaveSize>
 				<iRangedWaveSize>0</iRangedWaveSize>
 				<UnitMeshGroup>
-					<iRequired>3</iRequired>
+					<iRequired>7</iRequired>
 					<EarlyArtDefineTag>ART_DEF_UNIT_GREEK_PHALANX</EarlyArtDefineTag>
 				</UnitMeshGroup>
 			</UnitMeshGroups>
-			<FormationType>FORMATION_TYPE_DEFAULT</FormationType>
+			<FormationType>FORMATION_TYPE_GROUND_NEW</FormationType>
 			<HotKey/>
 			<bAltDown>0</bAltDown>
 			<bShiftDown>0</bShiftDown>
@@ -5976,17 +5978,17 @@
 			<iAsset>2</iAsset>
 			<iPower>6</iPower>
 			<UnitMeshGroups>
-				<iGroupSize>3</iGroupSize>
+				<iGroupSize>28</iGroupSize>
 				<fMaxSpeed>1.75</fMaxSpeed>
 				<fPadTime>1</fPadTime>
-				<iMeleeWaveSize>3</iMeleeWaveSize>
+				<iMeleeWaveSize>7</iMeleeWaveSize>
 				<iRangedWaveSize>0</iRangedWaveSize>
 				<UnitMeshGroup>
-					<iRequired>3</iRequired>
+					<iRequired>7</iRequired>
 					<EarlyArtDefineTag>ART_DEF_UNIT_SUMERIAN_VULTURE</EarlyArtDefineTag>
 				</UnitMeshGroup>
 			</UnitMeshGroups>
-			<FormationType>FORMATION_TYPE_DEFAULT</FormationType>
+			<FormationType>FORMATION_TYPE_GROUND_NEW</FormationType>
 			<HotKey/>
 			<bAltDown>0</bAltDown>
 			<bShiftDown>0</bShiftDown>
@@ -6166,17 +6168,17 @@
 			<!-- advc.104: Was 6; see change to Axeman -->
 			<iPower>5</iPower>
 			<UnitMeshGroups>
-				<iGroupSize>3</iGroupSize>
+				<iGroupSize>28</iGroupSize>
 				<fMaxSpeed>1.75</fMaxSpeed>
 				<fPadTime>1</fPadTime>
-				<iMeleeWaveSize>3</iMeleeWaveSize>
+				<iMeleeWaveSize>7</iMeleeWaveSize>
 				<iRangedWaveSize>0</iRangedWaveSize>
 				<UnitMeshGroup>
-					<iRequired>3</iRequired>
+					<iRequired>7</iRequired>
 					<EarlyArtDefineTag>ART_DEF_UNIT_NATIVE_AMERICA_DOG_SOLDIER</EarlyArtDefineTag>
 				</UnitMeshGroup>
 			</UnitMeshGroups>
-			<FormationType>FORMATION_TYPE_DEFAULT</FormationType>
+			<FormationType>FORMATION_TYPE_GROUND_NEW</FormationType>
 			<HotKey/>
 			<bAltDown>0</bAltDown>
 			<bShiftDown>0</bShiftDown>
@@ -6374,17 +6376,17 @@
 			<!-- advc.104e: was 9 -->
 			<iPower>8</iPower>
 			<UnitMeshGroups>
-				<iGroupSize>3</iGroupSize>
+				<iGroupSize>28</iGroupSize>
 				<fMaxSpeed>1.75</fMaxSpeed>
 				<fPadTime>1</fPadTime>
-				<iMeleeWaveSize>3</iMeleeWaveSize>
+				<iMeleeWaveSize>7</iMeleeWaveSize>
 				<iRangedWaveSize>0</iRangedWaveSize>
 				<UnitMeshGroup>
-					<iRequired>3</iRequired>
+					<iRequired>7</iRequired>
 					<EarlyArtDefineTag>ART_DEF_UNIT_MACEMAN</EarlyArtDefineTag>
 				</UnitMeshGroup>
 			</UnitMeshGroups>
-			<FormationType>FORMATION_TYPE_DEFAULT</FormationType>
+			<FormationType>FORMATION_TYPE_GROUND_NEW</FormationType>
 			<HotKey/>
 			<bAltDown>0</bAltDown>
 			<bShiftDown>0</bShiftDown>
@@ -6576,17 +6578,17 @@
 			<iAsset>2</iAsset>
 			<iPower>9</iPower>
 			<UnitMeshGroups>
-				<iGroupSize>3</iGroupSize>
+				<iGroupSize>28</iGroupSize>
 				<fMaxSpeed>1.75</fMaxSpeed>
 				<fPadTime>1</fPadTime>
-				<iMeleeWaveSize>3</iMeleeWaveSize>
-				<iRangedWaveSize>3</iRangedWaveSize>
+				<iMeleeWaveSize>7</iMeleeWaveSize>
+				<iRangedWaveSize>7</iRangedWaveSize>
 				<UnitMeshGroup>
-					<iRequired>3</iRequired>
+					<iRequired>7</iRequired>
 					<EarlyArtDefineTag>ART_DEF_UNIT_JAPAN_SAMURAI</EarlyArtDefineTag>
 				</UnitMeshGroup>
 			</UnitMeshGroups>
-			<FormationType>FORMATION_TYPE_DEFAULT</FormationType>
+			<FormationType>FORMATION_TYPE_GROUND_NEW</FormationType>
 			<HotKey/>
 			<bAltDown>0</bAltDown>
 			<bShiftDown>0</bShiftDown>
@@ -6788,17 +6790,17 @@
 			<!-- advc.104e: was 10 -->
 			<iPower>9</iPower>
 			<UnitMeshGroups>
-				<iGroupSize>3</iGroupSize>
+				<iGroupSize>28</iGroupSize>
 				<fMaxSpeed>1.75</fMaxSpeed>
 				<fPadTime>1</fPadTime>
-				<iMeleeWaveSize>3</iMeleeWaveSize>
+				<iMeleeWaveSize>7</iMeleeWaveSize>
 				<iRangedWaveSize>0</iRangedWaveSize>
 				<UnitMeshGroup>
-					<iRequired>3</iRequired>
+					<iRequired>7</iRequired>
 					<EarlyArtDefineTag>ART_DEF_UNIT_VIKING_BESERKER</EarlyArtDefineTag>
 				</UnitMeshGroup>
 			</UnitMeshGroups>
-			<FormationType>FORMATION_TYPE_DEFAULT</FormationType>
+			<FormationType>FORMATION_TYPE_GROUND_NEW</FormationType>
 			<HotKey/>
 			<bAltDown>0</bAltDown>
 			<bShiftDown>0</bShiftDown>
@@ -6982,17 +6984,17 @@
 			<iAsset>2</iAsset>
 			<iPower>4</iPower>
 			<UnitMeshGroups>
-				<iGroupSize>3</iGroupSize>
+				<iGroupSize>28</iGroupSize>
 				<fMaxSpeed>1.75</fMaxSpeed>
 				<fPadTime>1</fPadTime>
-				<iMeleeWaveSize>3</iMeleeWaveSize>
+				<iMeleeWaveSize>7</iMeleeWaveSize>
 				<iRangedWaveSize>0</iRangedWaveSize>
 				<UnitMeshGroup>
-					<iRequired>3</iRequired>
+					<iRequired>7</iRequired>
 					<EarlyArtDefineTag>ART_DEF_UNIT_SPEARMAN</EarlyArtDefineTag>
 				</UnitMeshGroup>
 			</UnitMeshGroups>
-			<FormationType>FORMATION_TYPE_DEFAULT</FormationType>
+			<FormationType>FORMATION_TYPE_GROUND_NEW</FormationType>
 			<HotKey/>
 			<bAltDown>0</bAltDown>
 			<bShiftDown>0</bShiftDown>
@@ -7175,17 +7177,17 @@
 			<iAsset>2</iAsset>
 			<iPower>4</iPower>
 			<UnitMeshGroups>
-				<iGroupSize>3</iGroupSize>
+				<iGroupSize>28</iGroupSize>
 				<fMaxSpeed>1.75</fMaxSpeed>
 				<fPadTime>1</fPadTime>
-				<iMeleeWaveSize>3</iMeleeWaveSize>
+				<iMeleeWaveSize>7</iMeleeWaveSize>
 				<iRangedWaveSize>0</iRangedWaveSize>
 				<UnitMeshGroup>
-					<iRequired>3</iRequired>
+					<iRequired>7</iRequired>
 					<EarlyArtDefineTag>ART_DEF_UNIT_ZULU_SPEARMAN</EarlyArtDefineTag>
 				</UnitMeshGroup>
 			</UnitMeshGroups>
-			<FormationType>FORMATION_TYPE_DEFAULT</FormationType>
+			<FormationType>FORMATION_TYPE_GROUND_NEW</FormationType>
 			<HotKey/>
 			<bAltDown>0</bAltDown>
 			<bShiftDown>0</bShiftDown>
@@ -7368,17 +7370,17 @@
 			<iAsset>2</iAsset>
 			<iPower>4</iPower>
 			<UnitMeshGroups>
-				<iGroupSize>3</iGroupSize>
+				<iGroupSize>28</iGroupSize>
 				<fMaxSpeed>1.75</fMaxSpeed>
 				<fPadTime>1</fPadTime>
-				<iMeleeWaveSize>3</iMeleeWaveSize>
+				<iMeleeWaveSize>7</iMeleeWaveSize>
 				<iRangedWaveSize>0</iRangedWaveSize>
 				<UnitMeshGroup>
-					<iRequired>3</iRequired>
+					<iRequired>7</iRequired>
 					<EarlyArtDefineTag>ART_DEF_UNIT_MAYA_HOLKAN</EarlyArtDefineTag>
 				</UnitMeshGroup>
 			</UnitMeshGroups>
-			<FormationType>FORMATION_TYPE_DEFAULT</FormationType>
+			<FormationType>FORMATION_TYPE_GROUND_NEW</FormationType>
 			<HotKey/>
 			<bAltDown>0</bAltDown>
 			<bShiftDown>0</bShiftDown>
@@ -7556,17 +7558,17 @@
 			<iAsset>2</iAsset>
 			<iPower>6</iPower>
 			<UnitMeshGroups>
-				<iGroupSize>3</iGroupSize>
+				<iGroupSize>28</iGroupSize>
 				<fMaxSpeed>1.75</fMaxSpeed>
 				<fPadTime>1</fPadTime>
-				<iMeleeWaveSize>3</iMeleeWaveSize>
+				<iMeleeWaveSize>7</iMeleeWaveSize>
 				<iRangedWaveSize>0</iRangedWaveSize>
 				<UnitMeshGroup>
-					<iRequired>3</iRequired>
+					<iRequired>7</iRequired>
 					<EarlyArtDefineTag>ART_DEF_UNIT_PIKEMAN</EarlyArtDefineTag>
 				</UnitMeshGroup>
 			</UnitMeshGroups>
-			<FormationType>FORMATION_TYPE_DEFAULT</FormationType>
+			<FormationType>FORMATION_TYPE_GROUND_NEW</FormationType>
 			<HotKey/>
 			<bAltDown>0</bAltDown>
 			<bShiftDown>0</bShiftDown>
@@ -7753,17 +7755,17 @@
 			<iAsset>2</iAsset>
 			<iPower>6</iPower>
 			<UnitMeshGroups>
-				<iGroupSize>3</iGroupSize>
+				<iGroupSize>28</iGroupSize>
 				<fMaxSpeed>1.75</fMaxSpeed>
 				<fPadTime>1</fPadTime>
-				<iMeleeWaveSize>3</iMeleeWaveSize>
+				<iMeleeWaveSize>7</iMeleeWaveSize>
 				<iRangedWaveSize>0</iRangedWaveSize>
 				<UnitMeshGroup>
-					<iRequired>3</iRequired>
+					<iRequired>7</iRequired>
 					<EarlyArtDefineTag>ART_DEF_UNIT_HOLY_ROMAN_LANDSKNECHT</EarlyArtDefineTag>
 				</UnitMeshGroup>
 			</UnitMeshGroups>
-			<FormationType>FORMATION_TYPE_DEFAULT</FormationType>
+			<FormationType>FORMATION_TYPE_GROUND_NEW</FormationType>
 			<HotKey/>
 			<bAltDown>0</bAltDown>
 			<bShiftDown>0</bShiftDown>
@@ -7932,17 +7934,17 @@
 			<iAsset>3</iAsset>
 			<iPower>9</iPower>
 			<UnitMeshGroups>
-				<iGroupSize>3</iGroupSize>
+				<iGroupSize>28</iGroupSize>
 				<fMaxSpeed>1.75</fMaxSpeed>
 				<fPadTime>1</fPadTime>
-				<iMeleeWaveSize>3</iMeleeWaveSize>
+				<iMeleeWaveSize>7</iMeleeWaveSize>
 				<iRangedWaveSize>0</iRangedWaveSize>
 				<UnitMeshGroup>
-					<iRequired>3</iRequired>
+					<iRequired>7</iRequired>
 					<EarlyArtDefineTag>ART_DEF_UNIT_MUSKETMAN</EarlyArtDefineTag>
 				</UnitMeshGroup>
 			</UnitMeshGroups>
-			<FormationType>FORMATION_TYPE_RANGED</FormationType>
+			<FormationType>FORMATION_TYPE_NEW_RANGED</FormationType>
 			<HotKey/>
 			<bAltDown>0</bAltDown>
 			<bShiftDown>0</bShiftDown>
@@ -8116,17 +8118,17 @@
 			<iAsset>3</iAsset>
 			<iPower>9</iPower>
 			<UnitMeshGroups>
-				<iGroupSize>3</iGroupSize>
+				<iGroupSize>28</iGroupSize>
 				<fMaxSpeed>1.75</fMaxSpeed>
 				<fPadTime>1</fPadTime>
-				<iMeleeWaveSize>3</iMeleeWaveSize>
+				<iMeleeWaveSize>7</iMeleeWaveSize>
 				<iRangedWaveSize>0</iRangedWaveSize>
 				<UnitMeshGroup>
-					<iRequired>3</iRequired>
+					<iRequired>7</iRequired>
 					<EarlyArtDefineTag>ART_DEF_UNIT_FRENCH_MUSKETEER</EarlyArtDefineTag>
 				</UnitMeshGroup>
 			</UnitMeshGroups>
-			<FormationType>FORMATION_TYPE_RANGED</FormationType>
+			<FormationType>FORMATION_TYPE_NEW_RANGED</FormationType>
 			<HotKey/>
 			<bAltDown>0</bAltDown>
 			<bShiftDown>0</bShiftDown>
@@ -8308,17 +8310,17 @@
 			<iAsset>3</iAsset>
 			<iPower>9</iPower>
 			<UnitMeshGroups>
-				<iGroupSize>3</iGroupSize>
+				<iGroupSize>28</iGroupSize>
 				<fMaxSpeed>1.75</fMaxSpeed>
 				<fPadTime>1</fPadTime>
-				<iMeleeWaveSize>3</iMeleeWaveSize>
+				<iMeleeWaveSize>7</iMeleeWaveSize>
 				<iRangedWaveSize>0</iRangedWaveSize>
 				<UnitMeshGroup>
-					<iRequired>3</iRequired>
+					<iRequired>7</iRequired>
 					<EarlyArtDefineTag>ART_DEF_UNIT_OTTOMAN_JANISSARY</EarlyArtDefineTag>
 				</UnitMeshGroup>
 			</UnitMeshGroups>
-			<FormationType>FORMATION_TYPE_RANGED</FormationType>
+			<FormationType>FORMATION_TYPE_NEW_RANGED</FormationType>
 			<HotKey/>
 			<bAltDown>0</bAltDown>
 			<bShiftDown>0</bShiftDown>
@@ -8487,25 +8489,25 @@
 			<iAsset>3</iAsset>
 			<iPower>9</iPower>
 			<UnitMeshGroups>
-				<iGroupSize>3</iGroupSize>
+				<iGroupSize>28</iGroupSize>
 				<fMaxSpeed>1.75</fMaxSpeed>
 				<fPadTime>1</fPadTime>
-				<iMeleeWaveSize>3</iMeleeWaveSize>
-				<iRangedWaveSize>0</iRangedWaveSize>
+				<iMeleeWaveSize>7</iMeleeWaveSize>
+				<iRangedWaveSize>14</iRangedWaveSize>
 				<UnitMeshGroup>
-					<iRequired>1</iRequired>
+					<iRequired>9</iRequired>
 					<EarlyArtDefineTag>ART_DEF_UNIT_ETHIOPIAN_OROMO_WARRIOR_ORANGE</EarlyArtDefineTag>
 				</UnitMeshGroup>
 				<UnitMeshGroup>
-					<iRequired>1</iRequired>
+					<iRequired>9</iRequired>
 					<EarlyArtDefineTag>ART_DEF_UNIT_ETHIOPIAN_OROMO_WARRIOR_BLUE</EarlyArtDefineTag>
 				</UnitMeshGroup>
 				<UnitMeshGroup>
-					<iRequired>1</iRequired>
+					<iRequired>9</iRequired>
 					<EarlyArtDefineTag>ART_DEF_UNIT_ETHIOPIAN_OROMO_WARRIOR_GREEN</EarlyArtDefineTag>
 				</UnitMeshGroup>
 			</UnitMeshGroups>
-			<FormationType>FORMATION_TYPE_DEFAULT</FormationType>
+			<FormationType>FORMATION_TYPE_GROUND_NEW</FormationType>
 			<HotKey/>
 			<bAltDown>0</bAltDown>
 			<bShiftDown>0</bShiftDown>
@@ -8698,17 +8700,17 @@
 			<iAsset>3</iAsset>
 			<iPower>14</iPower>
 			<UnitMeshGroups>
-				<iGroupSize>3</iGroupSize>
+				<iGroupSize>28</iGroupSize>
 				<fMaxSpeed>1.75</fMaxSpeed>
 				<fPadTime>1</fPadTime>
-				<iMeleeWaveSize>3</iMeleeWaveSize>
+				<iMeleeWaveSize>7</iMeleeWaveSize>
 				<iRangedWaveSize>0</iRangedWaveSize>
 				<UnitMeshGroup>
-					<iRequired>3</iRequired>
+					<iRequired>7</iRequired>
 					<EarlyArtDefineTag>ART_DEF_UNIT_RIFLEMAN</EarlyArtDefineTag>
 				</UnitMeshGroup>
 			</UnitMeshGroups>
-			<FormationType>FORMATION_TYPE_RANGED</FormationType>
+			<FormationType>FORMATION_TYPE_NEW_RANGED</FormationType>
 			<HotKey/>
 			<bAltDown>0</bAltDown>
 			<bShiftDown>0</bShiftDown>
@@ -8896,17 +8898,17 @@
 			<iAsset>3</iAsset>
 			<iPower>14</iPower>
 			<UnitMeshGroups>
-				<iGroupSize>3</iGroupSize>
+				<iGroupSize>28</iGroupSize>
 				<fMaxSpeed>1.75</fMaxSpeed>
 				<fPadTime>1</fPadTime>
-				<iMeleeWaveSize>3</iMeleeWaveSize>
+				<iMeleeWaveSize>7</iMeleeWaveSize>
 				<iRangedWaveSize>0</iRangedWaveSize>
 				<UnitMeshGroup>
-					<iRequired>3</iRequired>
+					<iRequired>7</iRequired>
 					<EarlyArtDefineTag>ART_DEF_UNIT_ENGLISH_REDCOAT</EarlyArtDefineTag>
 				</UnitMeshGroup>
 			</UnitMeshGroups>
-			<FormationType>FORMATION_TYPE_RANGED</FormationType>
+			<FormationType>FORMATION_TYPE_NEW_RANGED</FormationType>
 			<HotKey/>
 			<bAltDown>0</bAltDown>
 			<bShiftDown>0</bShiftDown>
@@ -9089,17 +9091,17 @@
 			<iAsset>3</iAsset>
 			<iPower>12</iPower>
 			<UnitMeshGroups>
-				<iGroupSize>3</iGroupSize>
+				<iGroupSize>28</iGroupSize>
 				<fMaxSpeed>1.75</fMaxSpeed>
 				<fPadTime>1</fPadTime>
-				<iMeleeWaveSize>3</iMeleeWaveSize>
+				<iMeleeWaveSize>7</iMeleeWaveSize>
 				<iRangedWaveSize>0</iRangedWaveSize>
 				<UnitMeshGroup>
-					<iRequired>3</iRequired>
+					<iRequired>7</iRequired>
 					<EarlyArtDefineTag>ART_DEF_UNIT_GRENADIER</EarlyArtDefineTag>
 				</UnitMeshGroup>
 			</UnitMeshGroups>
-			<FormationType>FORMATION_TYPE_DEFAULT</FormationType>
+			<FormationType>FORMATION_TYPE_GROUND_NEW</FormationType>
 			<HotKey/>
 			<bAltDown>0</bAltDown>
 			<bShiftDown>0</bShiftDown>
@@ -9273,17 +9275,17 @@
 			<iAsset>3</iAsset>
 			<iPower>14</iPower>
 			<UnitMeshGroups>
-				<iGroupSize>3</iGroupSize>
+				<iGroupSize>28</iGroupSize>
 				<fMaxSpeed>1.75</fMaxSpeed>
 				<fPadTime>1</fPadTime>
-				<iMeleeWaveSize>3</iMeleeWaveSize>
+				<iMeleeWaveSize>7</iMeleeWaveSize>
 				<iRangedWaveSize>0</iRangedWaveSize>
 				<UnitMeshGroup>
-					<iRequired>3</iRequired>
+					<iRequired>7</iRequired>
 					<EarlyArtDefineTag>ART_DEF_UNIT_AT_INFANTRY</EarlyArtDefineTag>
 				</UnitMeshGroup>
 			</UnitMeshGroups>
-			<FormationType>FORMATION_TYPE_DEFAULT</FormationType>
+			<FormationType>FORMATION_TYPE_GROUND_NEW</FormationType>
 			<HotKey/>
 			<bAltDown>0</bAltDown>
 			<bShiftDown>0</bShiftDown>
@@ -9477,17 +9479,17 @@
 			<!-- advc.104e: was 20 -->
 			<iPower>22</iPower>
 			<UnitMeshGroups>
-				<iGroupSize>3</iGroupSize>
+				<iGroupSize>28</iGroupSize>
 				<fMaxSpeed>1.75</fMaxSpeed>
 				<fPadTime>1</fPadTime>
-				<iMeleeWaveSize>3</iMeleeWaveSize>
+				<iMeleeWaveSize>7</iMeleeWaveSize>
 				<iRangedWaveSize>0</iRangedWaveSize>
 				<UnitMeshGroup>
-					<iRequired>3</iRequired>
+					<iRequired>7</iRequired>
 					<EarlyArtDefineTag>ART_DEF_UNIT_INFANTRY</EarlyArtDefineTag>
 				</UnitMeshGroup>
 			</UnitMeshGroups>
-			<FormationType>FORMATION_TYPE_RANGED</FormationType>
+			<FormationType>FORMATION_TYPE_NEW_RANGED</FormationType>
 			<HotKey/>
 			<bAltDown>0</bAltDown>
 			<bShiftDown>0</bShiftDown>
@@ -9661,17 +9663,17 @@
 			<iAsset>4</iAsset>
 			<iPower>18</iPower>
 			<UnitMeshGroups>
-				<iGroupSize>3</iGroupSize>
+				<iGroupSize>28</iGroupSize>
 				<fMaxSpeed>1.75</fMaxSpeed>
 				<fPadTime>1</fPadTime>
-				<iMeleeWaveSize>3</iMeleeWaveSize>
+				<iMeleeWaveSize>7</iMeleeWaveSize>
 				<iRangedWaveSize>0</iRangedWaveSize>
 				<UnitMeshGroup>
-					<iRequired>3</iRequired>
+					<iRequired>7</iRequired>
 					<EarlyArtDefineTag>ART_DEF_UNIT_SAM_INFANTRY</EarlyArtDefineTag>
 				</UnitMeshGroup>
 			</UnitMeshGroups>
-			<FormationType>FORMATION_TYPE_DEFAULT</FormationType>
+			<FormationType>FORMATION_TYPE_GROUND_NEW</FormationType>
 			<HotKey/>
 			<bAltDown>0</bAltDown>
 			<bShiftDown>0</bShiftDown>
@@ -9844,17 +9846,17 @@
 			<iAsset>5</iAsset>
 			<iPower>22</iPower>
 			<UnitMeshGroups>
-				<iGroupSize>1</iGroupSize>
+				<iGroupSize>7</iGroupSize>
 				<fMaxSpeed>1.75</fMaxSpeed>
 				<fPadTime>1</fPadTime>
-				<iMeleeWaveSize>3</iMeleeWaveSize>
-				<iRangedWaveSize>0</iRangedWaveSize>
+				<iMeleeWaveSize>7</iMeleeWaveSize>
+				<iRangedWaveSize>7</iRangedWaveSize>
 				<UnitMeshGroup>
 					<iRequired>1</iRequired>
 					<EarlyArtDefineTag>ART_DEF_UNIT_MOBILE_SAM</EarlyArtDefineTag>
 				</UnitMeshGroup>
 			</UnitMeshGroups>
-			<FormationType>FORMATION_TYPE_DEFAULT</FormationType>
+			<FormationType>FORMATION_TYPE_GROUND_NEW</FormationType>
 			<HotKey/>
 			<bAltDown>0</bAltDown>
 			<bShiftDown>0</bShiftDown>
@@ -10035,17 +10037,17 @@
 			<iAsset>4</iAsset>
 			<iPower>28</iPower>
 			<UnitMeshGroups>
-				<iGroupSize>3</iGroupSize>
+				<iGroupSize>28</iGroupSize>
 				<fMaxSpeed>1.75</fMaxSpeed>
 				<fPadTime>1</fPadTime>
-				<iMeleeWaveSize>3</iMeleeWaveSize>
+				<iMeleeWaveSize>7</iMeleeWaveSize>
 				<iRangedWaveSize>0</iRangedWaveSize>
 				<UnitMeshGroup>
-					<iRequired>3</iRequired>
+					<iRequired>7</iRequired>
 					<EarlyArtDefineTag>ART_DEF_UNIT_MARINE</EarlyArtDefineTag>
 				</UnitMeshGroup>
 			</UnitMeshGroups>
-			<FormationType>FORMATION_TYPE_DEFAULT</FormationType>
+			<FormationType>FORMATION_TYPE_GROUND_NEW</FormationType>
 			<HotKey/>
 			<bAltDown>0</bAltDown>
 			<bShiftDown>0</bShiftDown>
@@ -10231,17 +10233,17 @@
 			<iAsset>4</iAsset>
 			<iPower>28</iPower>
 			<UnitMeshGroups>
-				<iGroupSize>3</iGroupSize>
+				<iGroupSize>28</iGroupSize>
 				<fMaxSpeed>1.75</fMaxSpeed>
 				<fPadTime>1</fPadTime>
-				<iMeleeWaveSize>3</iMeleeWaveSize>
+				<iMeleeWaveSize>7</iMeleeWaveSize>
 				<iRangedWaveSize>0</iRangedWaveSize>
 				<UnitMeshGroup>
-					<iRequired>3</iRequired>
+					<iRequired>7</iRequired>
 					<EarlyArtDefineTag>ART_DEF_UNIT_AMERICAN_NAVY_SEAL</EarlyArtDefineTag>
 				</UnitMeshGroup>
 			</UnitMeshGroups>
-			<FormationType>FORMATION_TYPE_DEFAULT</FormationType>
+			<FormationType>FORMATION_TYPE_GROUND_NEW</FormationType>
 			<HotKey/>
 			<bAltDown>0</bAltDown>
 			<bShiftDown>0</bShiftDown>
@@ -10410,17 +10412,17 @@
 			<iAsset>4</iAsset>
 			<iPower>30</iPower>
 			<UnitMeshGroups>
-				<iGroupSize>3</iGroupSize>
+				<iGroupSize>28</iGroupSize>
 				<fMaxSpeed>1.75</fMaxSpeed>
 				<fPadTime>1</fPadTime>
-				<iMeleeWaveSize>3</iMeleeWaveSize>
+				<iMeleeWaveSize>7</iMeleeWaveSize>
 				<iRangedWaveSize>0</iRangedWaveSize>
 				<UnitMeshGroup>
-					<iRequired>3</iRequired>
+					<iRequired>7</iRequired>
 					<EarlyArtDefineTag>ART_DEF_UNIT_PARATROOPER</EarlyArtDefineTag>
 				</UnitMeshGroup>
 			</UnitMeshGroups>
-			<FormationType>FORMATION_TYPE_DEFAULT</FormationType>
+			<FormationType>FORMATION_TYPE_GROUND_NEW</FormationType>
 			<HotKey/>
 			<bAltDown>0</bAltDown>
 			<bShiftDown>0</bShiftDown>
@@ -10592,11 +10594,11 @@
 			<iAsset>5</iAsset>
 			<iPower>32</iPower>
 			<UnitMeshGroups>
-				<iGroupSize>1</iGroupSize>
+				<iGroupSize>7</iGroupSize>
 				<fMaxSpeed>1.75</fMaxSpeed>
 				<fPadTime>1</fPadTime>
-				<iMeleeWaveSize>1</iMeleeWaveSize>
-				<iRangedWaveSize>0</iRangedWaveSize>
+				<iMeleeWaveSize>7</iMeleeWaveSize>
+				<iRangedWaveSize>7</iRangedWaveSize>
 				<UnitMeshGroup>
 					<iRequired>1</iRequired>
 					<EarlyArtDefineTag>ART_DEF_UNIT_MECHANIZED_INFANTRY</EarlyArtDefineTag>
@@ -10776,17 +10778,17 @@
 			<iAsset>1</iAsset>
 			<iPower>3</iPower>
 			<UnitMeshGroups>
-				<iGroupSize>3</iGroupSize>
+				<iGroupSize>28</iGroupSize>
 				<fMaxSpeed>1.75</fMaxSpeed>
 				<fPadTime>1</fPadTime>
-				<iMeleeWaveSize>3</iMeleeWaveSize>
-				<iRangedWaveSize>3</iRangedWaveSize>
+				<iMeleeWaveSize>7</iMeleeWaveSize>
+				<iRangedWaveSize>7</iRangedWaveSize>
 				<UnitMeshGroup>
-					<iRequired>3</iRequired>
+					<iRequired>7</iRequired>
 					<EarlyArtDefineTag>ART_DEF_UNIT_ARCHER</EarlyArtDefineTag>
 				</UnitMeshGroup>
 			</UnitMeshGroups>
-			<FormationType>FORMATION_TYPE_RANGED</FormationType>
+			<FormationType>FORMATION_TYPE_NEW_RANGED</FormationType>
 			<HotKey/>
 			<bAltDown>0</bAltDown>
 			<bShiftDown>0</bShiftDown>
@@ -10956,17 +10958,17 @@
 			<iAsset>1</iAsset>
 			<iPower>4</iPower>
 			<UnitMeshGroups>
-				<iGroupSize>3</iGroupSize>
+				<iGroupSize>28</iGroupSize>
 				<fMaxSpeed>1.75</fMaxSpeed>
 				<fPadTime>1</fPadTime>
-				<iMeleeWaveSize>3</iMeleeWaveSize>
-				<iRangedWaveSize>3</iRangedWaveSize>
+				<iMeleeWaveSize>7</iMeleeWaveSize>
+				<iRangedWaveSize>7</iRangedWaveSize>
 				<UnitMeshGroup>
-					<iRequired>3</iRequired>
+					<iRequired>7</iRequired>
 					<EarlyArtDefineTag>ART_DEF_UNIT_MALI_SKIRMISHER</EarlyArtDefineTag>
 				</UnitMeshGroup>
 			</UnitMeshGroups>
-			<FormationType>FORMATION_TYPE_RANGED</FormationType>
+			<FormationType>FORMATION_TYPE_NEW_RANGED</FormationType>
 			<HotKey/>
 			<bAltDown>0</bAltDown>
 			<bShiftDown>0</bShiftDown>
@@ -11140,17 +11142,17 @@
 			<iAsset>1</iAsset>
 			<iPower>4</iPower>
 			<UnitMeshGroups>
-				<iGroupSize>3</iGroupSize>
+				<iGroupSize>28</iGroupSize>
 				<fMaxSpeed>1.75</fMaxSpeed>
 				<fPadTime>1</fPadTime>
-				<iMeleeWaveSize>3</iMeleeWaveSize>
-				<iRangedWaveSize>3</iRangedWaveSize>
+				<iMeleeWaveSize>7</iMeleeWaveSize>
+				<iRangedWaveSize>7</iRangedWaveSize>
 				<UnitMeshGroup>
-					<iRequired>3</iRequired>
+					<iRequired>7</iRequired>
 					<EarlyArtDefineTag>ART_DEF_UNIT_BABYLON_BOWMAN</EarlyArtDefineTag>
 				</UnitMeshGroup>
 			</UnitMeshGroups>
-			<FormationType>FORMATION_TYPE_DEFAULT</FormationType>
+			<FormationType>FORMATION_TYPE_GROUND_NEW</FormationType>
 			<HotKey/>
 			<bAltDown>0</bAltDown>
 			<bShiftDown>0</bShiftDown>
@@ -11319,17 +11321,17 @@
 			<iAsset>2</iAsset>
 			<iPower>6</iPower>
 			<UnitMeshGroups>
-				<iGroupSize>3</iGroupSize>
+				<iGroupSize>28</iGroupSize>
 				<fMaxSpeed>1.75</fMaxSpeed>
 				<fPadTime>1</fPadTime>
-				<iMeleeWaveSize>3</iMeleeWaveSize>
-				<iRangedWaveSize>3</iRangedWaveSize>
+				<iMeleeWaveSize>7</iMeleeWaveSize>
+				<iRangedWaveSize>7</iRangedWaveSize>
 				<UnitMeshGroup>
-					<iRequired>3</iRequired>
+					<iRequired>7</iRequired>
 					<EarlyArtDefineTag>ART_DEF_UNIT_LONGBOWMAN</EarlyArtDefineTag>
 				</UnitMeshGroup>
 			</UnitMeshGroups>
-			<FormationType>FORMATION_TYPE_RANGED</FormationType>
+			<FormationType>FORMATION_TYPE_NEW_RANGED</FormationType>
 			<HotKey/>
 			<bAltDown>0</bAltDown>
 			<bShiftDown>0</bShiftDown>
@@ -11515,17 +11517,17 @@
 			<iAsset>2</iAsset>
 			<iPower>7</iPower>
 			<UnitMeshGroups>
-				<iGroupSize>3</iGroupSize>
+				<iGroupSize>28</iGroupSize>
 				<fMaxSpeed>1.75</fMaxSpeed>
 				<fPadTime>1</fPadTime>
-				<iMeleeWaveSize>3</iMeleeWaveSize>
-				<iRangedWaveSize>3</iRangedWaveSize>
+				<iMeleeWaveSize>7</iMeleeWaveSize>
+				<iRangedWaveSize>7</iRangedWaveSize>
 				<UnitMeshGroup>
-					<iRequired>3</iRequired>
+					<iRequired>7</iRequired>
 					<EarlyArtDefineTag>ART_DEF_UNIT_CROSSBOWMAN</EarlyArtDefineTag>
 				</UnitMeshGroup>
 			</UnitMeshGroups>
-			<FormationType>FORMATION_TYPE_RANGED</FormationType>
+			<FormationType>FORMATION_TYPE_NEW_RANGED</FormationType>
 			<HotKey/>
 			<bAltDown>0</bAltDown>
 			<bShiftDown>0</bShiftDown>
@@ -11711,17 +11713,17 @@
 			<iAsset>2</iAsset>
 			<iPower>7</iPower>
 			<UnitMeshGroups>
-				<iGroupSize>3</iGroupSize>
+				<iGroupSize>28</iGroupSize>
 				<fMaxSpeed>1.75</fMaxSpeed>
 				<fPadTime>1</fPadTime>
-				<iMeleeWaveSize>3</iMeleeWaveSize>
-				<iRangedWaveSize>3</iRangedWaveSize>
+				<iMeleeWaveSize>7</iMeleeWaveSize>
+				<iRangedWaveSize>7</iRangedWaveSize>
 				<UnitMeshGroup>
-					<iRequired>3</iRequired>
+					<iRequired>7</iRequired>
 					<EarlyArtDefineTag>ART_DEF_UNIT_CHINA_CHOKONU</EarlyArtDefineTag>
 				</UnitMeshGroup>
 			</UnitMeshGroups>
-			<FormationType>FORMATION_TYPE_RANGED</FormationType>
+			<FormationType>FORMATION_TYPE_NEW_RANGED</FormationType>
 			<HotKey/>
 			<bAltDown>0</bAltDown>
 			<bShiftDown>0</bShiftDown>
@@ -11895,11 +11897,11 @@
 			<iAsset>2</iAsset>
 			<iPower>4</iPower>
 			<UnitMeshGroups>
-				<iGroupSize>2</iGroupSize>
+				<iGroupSize>7</iGroupSize>
 				<fMaxSpeed>1.75</fMaxSpeed>
 				<fPadTime>1</fPadTime>
-				<iMeleeWaveSize>3</iMeleeWaveSize>
-				<iRangedWaveSize>0</iRangedWaveSize>
+				<iMeleeWaveSize>7</iMeleeWaveSize>
+				<iRangedWaveSize>7</iRangedWaveSize>
 				<UnitMeshGroup>
 					<iRequired>2</iRequired>
 					<EarlyArtDefineTag>ART_DEF_UNIT_CHARIOT</EarlyArtDefineTag>
@@ -12080,11 +12082,11 @@
 			<iAsset>2</iAsset>
 			<iPower>4</iPower>
 			<UnitMeshGroups>
-				<iGroupSize>2</iGroupSize>
+				<iGroupSize>7</iGroupSize>
 				<fMaxSpeed>1.75</fMaxSpeed>
 				<fPadTime>1</fPadTime>
-				<iMeleeWaveSize>3</iMeleeWaveSize>
-				<iRangedWaveSize>0</iRangedWaveSize>
+				<iMeleeWaveSize>7</iMeleeWaveSize>
+				<iRangedWaveSize>7</iRangedWaveSize>
 				<UnitMeshGroup>
 					<iRequired>2</iRequired>
 					<EarlyArtDefineTag>ART_DEF_UNIT_EGYPT_WARCHARIOT</EarlyArtDefineTag>
@@ -12276,17 +12278,17 @@
 			<iAsset>2</iAsset>
 			<iPower>4</iPower>
 			<UnitMeshGroups>
-				<iGroupSize>3</iGroupSize>
+				<iGroupSize>28</iGroupSize>
 				<fMaxSpeed>1.75</fMaxSpeed>
 				<fPadTime>1</fPadTime>
-				<iMeleeWaveSize>3</iMeleeWaveSize>
+				<iMeleeWaveSize>7</iMeleeWaveSize>
 				<iRangedWaveSize>0</iRangedWaveSize>
 				<UnitMeshGroup>
-					<iRequired>3</iRequired>
+					<iRequired>7</iRequired>
 					<EarlyArtDefineTag>ART_DEF_UNIT_PERSIA_IMMORTAL</EarlyArtDefineTag>
 				</UnitMeshGroup>
 			</UnitMeshGroups>
-			<FormationType>FORMATION_TYPE_DEFAULT</FormationType>
+			<FormationType>FORMATION_TYPE_GROUND_NEW</FormationType>
 			<HotKey/>
 			<bAltDown>0</bAltDown>
 			<bShiftDown>0</bShiftDown>
@@ -12469,17 +12471,17 @@
 			<iAsset>2</iAsset>
 			<iPower>6</iPower>
 			<UnitMeshGroups>
-				<iGroupSize>3</iGroupSize>
+				<iGroupSize>28</iGroupSize>
 				<fMaxSpeed>1.75</fMaxSpeed>
 				<fPadTime>1</fPadTime>
-				<iMeleeWaveSize>3</iMeleeWaveSize>
-				<iRangedWaveSize>3</iRangedWaveSize>
+				<iMeleeWaveSize>7</iMeleeWaveSize>
+				<iRangedWaveSize>7</iRangedWaveSize>
 				<UnitMeshGroup>
-					<iRequired>3</iRequired>
+					<iRequired>7</iRequired>
 					<EarlyArtDefineTag>ART_DEF_UNIT_HORSE_ARCHER</EarlyArtDefineTag>
 				</UnitMeshGroup>
 			</UnitMeshGroups>
-			<FormationType>FORMATION_TYPE_DEFAULT</FormationType>
+			<FormationType>FORMATION_TYPE_GROUND_NEW</FormationType>
 			<HotKey/>
 			<bAltDown>0</bAltDown>
 			<bShiftDown>0</bShiftDown>
@@ -12671,17 +12673,17 @@
 			<iAsset>2</iAsset>
 			<iPower>6</iPower>
 			<UnitMeshGroups>
-				<iGroupSize>3</iGroupSize>
+				<iGroupSize>28</iGroupSize>
 				<fMaxSpeed>1.75</fMaxSpeed>
 				<fPadTime>1</fPadTime>
-				<iMeleeWaveSize>3</iMeleeWaveSize>
-				<iRangedWaveSize>3</iRangedWaveSize>
+				<iMeleeWaveSize>7</iMeleeWaveSize>
+				<iRangedWaveSize>7</iRangedWaveSize>
 				<UnitMeshGroup>
-					<iRequired>3</iRequired>
+					<iRequired>7</iRequired>
 					<EarlyArtDefineTag>ART_DEF_UNIT_CARTHAGE_NUMIDIAN_CAVALRY</EarlyArtDefineTag>
 				</UnitMeshGroup>
 			</UnitMeshGroups>
-			<FormationType>FORMATION_TYPE_DEFAULT</FormationType>
+			<FormationType>FORMATION_TYPE_GROUND_NEW</FormationType>
 			<HotKey/>
 			<bAltDown>0</bAltDown>
 			<bShiftDown>0</bShiftDown>
@@ -12869,17 +12871,17 @@
 			<iAsset>2</iAsset>
 			<iPower>6</iPower>
 			<UnitMeshGroups>
-				<iGroupSize>3</iGroupSize>
+				<iGroupSize>28</iGroupSize>
 				<fMaxSpeed>1.75</fMaxSpeed>
 				<fPadTime>1</fPadTime>
-				<iMeleeWaveSize>3</iMeleeWaveSize>
-				<iRangedWaveSize>3</iRangedWaveSize>
+				<iMeleeWaveSize>7</iMeleeWaveSize>
+				<iRangedWaveSize>7</iRangedWaveSize>
 				<UnitMeshGroup>
-					<iRequired>3</iRequired>
+					<iRequired>7</iRequired>
 					<EarlyArtDefineTag>ART_DEF_UNIT_MONGOL_KESHIK</EarlyArtDefineTag>
 				</UnitMeshGroup>
 			</UnitMeshGroups>
-			<FormationType>FORMATION_TYPE_DEFAULT</FormationType>
+			<FormationType>FORMATION_TYPE_GROUND_NEW</FormationType>
 			<HotKey/>
 			<bAltDown>0</bAltDown>
 			<bShiftDown>0</bShiftDown>
@@ -13062,17 +13064,17 @@
 			<iAsset>3</iAsset>
 			<iPower>10</iPower>
 			<UnitMeshGroups>
-				<iGroupSize>3</iGroupSize>
+				<iGroupSize>28</iGroupSize>
 				<fMaxSpeed>1.75</fMaxSpeed>
 				<fPadTime>1</fPadTime>
-				<iMeleeWaveSize>3</iMeleeWaveSize>
-				<iRangedWaveSize>3</iRangedWaveSize>
+				<iMeleeWaveSize>7</iMeleeWaveSize>
+				<iRangedWaveSize>7</iRangedWaveSize>
 				<UnitMeshGroup>
-					<iRequired>3</iRequired>
+					<iRequired>7</iRequired>
 					<EarlyArtDefineTag>ART_DEF_UNIT_KNIGHT</EarlyArtDefineTag>
 				</UnitMeshGroup>
 			</UnitMeshGroups>
-			<FormationType>FORMATION_TYPE_DEFAULT</FormationType>
+			<FormationType>FORMATION_TYPE_GROUND_NEW</FormationType>
 			<HotKey/>
 			<bAltDown>0</bAltDown>
 			<bShiftDown>0</bShiftDown>
@@ -13250,17 +13252,17 @@
 			<iAsset>3</iAsset>
 			<iPower>10</iPower>
 			<UnitMeshGroups>
-				<iGroupSize>3</iGroupSize>
+				<iGroupSize>28</iGroupSize>
 				<fMaxSpeed>1.75</fMaxSpeed>
 				<fPadTime>1</fPadTime>
-				<iMeleeWaveSize>3</iMeleeWaveSize>
-				<iRangedWaveSize>3</iRangedWaveSize>
+				<iMeleeWaveSize>7</iMeleeWaveSize>
+				<iRangedWaveSize>7</iRangedWaveSize>
 				<UnitMeshGroup>
-					<iRequired>3</iRequired>
+					<iRequired>7</iRequired>
 					<EarlyArtDefineTag>ART_DEF_UNIT_ARABIA_CAMELARCHER</EarlyArtDefineTag>
 				</UnitMeshGroup>
 			</UnitMeshGroups>
-			<FormationType>FORMATION_TYPE_DEFAULT</FormationType>
+			<FormationType>FORMATION_TYPE_GROUND_NEW</FormationType>
 			<HotKey/>
 			<bAltDown>0</bAltDown>
 			<bShiftDown>0</bShiftDown>
@@ -13443,17 +13445,17 @@
 			<iAsset>3</iAsset>
 			<iPower>12</iPower>
 			<UnitMeshGroups>
-				<iGroupSize>3</iGroupSize>
+				<iGroupSize>28</iGroupSize>
 				<fMaxSpeed>1.75</fMaxSpeed>
 				<fPadTime>1</fPadTime>
-				<iMeleeWaveSize>3</iMeleeWaveSize>
-				<iRangedWaveSize>3</iRangedWaveSize>
+				<iMeleeWaveSize>7</iMeleeWaveSize>
+				<iRangedWaveSize>7</iRangedWaveSize>
 				<UnitMeshGroup>
-					<iRequired>3</iRequired>
+					<iRequired>7</iRequired>
 					<EarlyArtDefineTag>ART_DEF_UNIT_BYZANTINE_CATAPHRACT</EarlyArtDefineTag>
 				</UnitMeshGroup>
 			</UnitMeshGroups>
-			<FormationType>FORMATION_TYPE_DEFAULT</FormationType>
+			<FormationType>FORMATION_TYPE_GROUND_NEW</FormationType>
 			<HotKey/>
 			<bAltDown>0</bAltDown>
 			<bShiftDown>0</bShiftDown>
@@ -13658,17 +13660,17 @@
 			<iAsset>3</iAsset>
 			<iPower>12</iPower>
 			<UnitMeshGroups>
-				<iGroupSize>3</iGroupSize>
+				<iGroupSize>28</iGroupSize>
 				<fMaxSpeed>1.75</fMaxSpeed>
 				<fPadTime>1</fPadTime>
-				<iMeleeWaveSize>3</iMeleeWaveSize>
-				<iRangedWaveSize>3</iRangedWaveSize>
+				<iMeleeWaveSize>7</iMeleeWaveSize>
+				<iRangedWaveSize>7</iRangedWaveSize>
 				<UnitMeshGroup>
-					<iRequired>3</iRequired>
+					<iRequired>7</iRequired>
 					<EarlyArtDefineTag>ART_DEF_UNIT_SPANISH_CONQUISTADOR</EarlyArtDefineTag>
 				</UnitMeshGroup>
 			</UnitMeshGroups>
-			<FormationType>FORMATION_TYPE_DEFAULT</FormationType>
+			<FormationType>FORMATION_TYPE_GROUND_NEW</FormationType>
 			<HotKey/>
 			<bAltDown>0</bAltDown>
 			<bShiftDown>0</bShiftDown>
@@ -13855,17 +13857,17 @@
 			<iAsset>3</iAsset>
 			<iPower>12</iPower>
 			<UnitMeshGroups>
-				<iGroupSize>3</iGroupSize>
+				<iGroupSize>28</iGroupSize>
 				<fMaxSpeed>1.75</fMaxSpeed>
 				<fPadTime>1</fPadTime>
-				<iMeleeWaveSize>3</iMeleeWaveSize>
-				<iRangedWaveSize>3</iRangedWaveSize>
+				<iMeleeWaveSize>7</iMeleeWaveSize>
+				<iRangedWaveSize>7</iRangedWaveSize>
 				<UnitMeshGroup>
-					<iRequired>3</iRequired>
+					<iRequired>7</iRequired>
 					<EarlyArtDefineTag>ART_DEF_UNIT_CUIRASSIER</EarlyArtDefineTag>
 				</UnitMeshGroup>
 			</UnitMeshGroups>
-			<FormationType>FORMATION_TYPE_DEFAULT</FormationType>
+			<FormationType>FORMATION_TYPE_GROUND_NEW</FormationType>
 			<HotKey/>
 			<bAltDown>0</bAltDown>
 			<bShiftDown>0</bShiftDown>
@@ -14052,17 +14054,17 @@
 			<iAsset>3</iAsset>
 			<iPower>15</iPower>
 			<UnitMeshGroups>
-				<iGroupSize>3</iGroupSize>
+				<iGroupSize>28</iGroupSize>
 				<fMaxSpeed>1.75</fMaxSpeed>
 				<fPadTime>1</fPadTime>
-				<iMeleeWaveSize>3</iMeleeWaveSize>
-				<iRangedWaveSize>3</iRangedWaveSize>
+				<iMeleeWaveSize>7</iMeleeWaveSize>
+				<iRangedWaveSize>7</iRangedWaveSize>
 				<UnitMeshGroup>
-					<iRequired>3</iRequired>
+					<iRequired>7</iRequired>
 					<EarlyArtDefineTag>ART_DEF_UNIT_CAVALRY</EarlyArtDefineTag>
 				</UnitMeshGroup>
 			</UnitMeshGroups>
-			<FormationType>FORMATION_TYPE_DEFAULT</FormationType>
+			<FormationType>FORMATION_TYPE_GROUND_NEW</FormationType>
 			<HotKey/>
 			<bAltDown>0</bAltDown>
 			<bShiftDown>0</bShiftDown>
@@ -14254,17 +14256,17 @@
 			<iAsset>3</iAsset>
 			<iPower>15</iPower>
 			<UnitMeshGroups>
-				<iGroupSize>3</iGroupSize>
+				<iGroupSize>28</iGroupSize>
 				<fMaxSpeed>1.75</fMaxSpeed>
 				<fPadTime>1</fPadTime>
-				<iMeleeWaveSize>3</iMeleeWaveSize>
-				<iRangedWaveSize>3</iRangedWaveSize>
+				<iMeleeWaveSize>7</iMeleeWaveSize>
+				<iRangedWaveSize>7</iRangedWaveSize>
 				<UnitMeshGroup>
-					<iRequired>3</iRequired>
+					<iRequired>7</iRequired>
 					<EarlyArtDefineTag>ART_DEF_UNIT_RUSSIA_COSSACK</EarlyArtDefineTag>
 				</UnitMeshGroup>
 			</UnitMeshGroups>
-			<FormationType>FORMATION_TYPE_DEFAULT</FormationType>
+			<FormationType>FORMATION_TYPE_GROUND_NEW</FormationType>
 			<HotKey/>
 			<bAltDown>0</bAltDown>
 			<bShiftDown>0</bShiftDown>
@@ -14439,17 +14441,17 @@
 			<iAsset>2</iAsset>
 			<iPower>8</iPower>
 			<UnitMeshGroups>
-				<iGroupSize>2</iGroupSize>
+				<iGroupSize>7</iGroupSize>
 				<fMaxSpeed>1.75</fMaxSpeed>
 				<fPadTime>1</fPadTime>
-				<iMeleeWaveSize>2</iMeleeWaveSize>
-				<iRangedWaveSize>2</iRangedWaveSize>
+				<iMeleeWaveSize>7</iMeleeWaveSize>
+				<iRangedWaveSize>7</iRangedWaveSize>
 				<UnitMeshGroup>
 					<iRequired>2</iRequired>
 					<EarlyArtDefineTag>ART_DEF_UNIT_WAR_ELEPHANT</EarlyArtDefineTag>
 				</UnitMeshGroup>
 			</UnitMeshGroups>
-			<FormationType>FORMATION_TYPE_DEFAULT</FormationType>
+			<FormationType>FORMATION_TYPE_GROUND_NEW</FormationType>
 			<HotKey/>
 			<bAltDown>0</bAltDown>
 			<bShiftDown>0</bShiftDown>
@@ -14630,17 +14632,17 @@
 			<iAsset>2</iAsset>
 			<iPower>8</iPower>
 			<UnitMeshGroups>
-				<iGroupSize>2</iGroupSize>
+				<iGroupSize>7</iGroupSize>
 				<fMaxSpeed>1.75</fMaxSpeed>
 				<fPadTime>1</fPadTime>
-				<iMeleeWaveSize>2</iMeleeWaveSize>
-				<iRangedWaveSize>2</iRangedWaveSize>
+				<iMeleeWaveSize>7</iMeleeWaveSize>
+				<iRangedWaveSize>7</iRangedWaveSize>
 				<UnitMeshGroup>
 					<iRequired>2</iRequired>
 					<EarlyArtDefineTag>ART_DEF_UNIT_KHMER_BALLISTA_ELEPHANT</EarlyArtDefineTag>
 				</UnitMeshGroup>
 			</UnitMeshGroups>
-			<FormationType>FORMATION_TYPE_DEFAULT</FormationType>
+			<FormationType>FORMATION_TYPE_GROUND_NEW</FormationType>
 			<HotKey/>
 			<bAltDown>0</bAltDown>
 			<bShiftDown>0</bShiftDown>
@@ -14813,11 +14815,11 @@
 			<iAsset>5</iAsset>
 			<iPower>30</iPower>
 			<UnitMeshGroups>
-				<iGroupSize>1</iGroupSize>
+				<iGroupSize>7</iGroupSize>
 				<fMaxSpeed>1.75</fMaxSpeed>
 				<fPadTime>1</fPadTime>
-				<iMeleeWaveSize>1</iMeleeWaveSize>
-				<iRangedWaveSize>1</iRangedWaveSize>
+				<iMeleeWaveSize>7</iMeleeWaveSize>
+				<iRangedWaveSize>7</iRangedWaveSize>
 				<UnitMeshGroup>
 					<iRequired>1</iRequired>
 					<EarlyArtDefineTag>ART_DEF_UNIT_TANK</EarlyArtDefineTag>
@@ -15008,11 +15010,11 @@
 			<iAsset>5</iAsset>
 			<iPower>30</iPower>
 			<UnitMeshGroups>
-				<iGroupSize>1</iGroupSize>
+				<iGroupSize>7</iGroupSize>
 				<fMaxSpeed>1.75</fMaxSpeed>
 				<fPadTime>1</fPadTime>
-				<iMeleeWaveSize>1</iMeleeWaveSize>
-				<iRangedWaveSize>1</iRangedWaveSize>
+				<iMeleeWaveSize>7</iMeleeWaveSize>
+				<iRangedWaveSize>7</iRangedWaveSize>
 				<UnitMeshGroup>
 					<iRequired>1</iRequired>
 					<EarlyArtDefineTag>ART_DEF_UNIT_GERMAN_PANZER</EarlyArtDefineTag>
@@ -15201,11 +15203,11 @@
 			<iAsset>6</iAsset>
 			<iPower>40</iPower>
 			<UnitMeshGroups>
-				<iGroupSize>1</iGroupSize>
+				<iGroupSize>7</iGroupSize>
 				<fMaxSpeed>1.75</fMaxSpeed>
 				<fPadTime>1</fPadTime>
-				<iMeleeWaveSize>1</iMeleeWaveSize>
-				<iRangedWaveSize>1</iRangedWaveSize>
+				<iMeleeWaveSize>7</iMeleeWaveSize>
+				<iRangedWaveSize>7</iRangedWaveSize>
 				<UnitMeshGroup>
 					<iRequired>1</iRequired>
 					<EarlyArtDefineTag>ART_DEF_UNIT_MODERN_ARMOR</EarlyArtDefineTag>
@@ -15399,11 +15401,11 @@
 			<iAsset>4</iAsset>
 			<iPower>26</iPower>
 			<UnitMeshGroups>
-				<iGroupSize>1</iGroupSize>
+				<iGroupSize>7</iGroupSize>
 				<fMaxSpeed>1.75</fMaxSpeed>
 				<fPadTime>1</fPadTime>
-				<iMeleeWaveSize>1</iMeleeWaveSize>
-				<iRangedWaveSize>1</iRangedWaveSize>
+				<iMeleeWaveSize>7</iMeleeWaveSize>
+				<iRangedWaveSize>7</iRangedWaveSize>
 				<UnitMeshGroup>
 					<iRequired>1</iRequired>
 					<EarlyArtDefineTag>ART_DEF_UNIT_GUNSHIP</EarlyArtDefineTag>
@@ -15586,11 +15588,11 @@
 			<iAsset>2</iAsset>
 			<iPower>5</iPower>
 			<UnitMeshGroups>
-				<iGroupSize>2</iGroupSize>
+				<iGroupSize>7</iGroupSize>
 				<fMaxSpeed>1.75</fMaxSpeed>
 				<fPadTime>1</fPadTime>
-				<iMeleeWaveSize>2</iMeleeWaveSize>
-				<iRangedWaveSize>2</iRangedWaveSize>
+				<iMeleeWaveSize>7</iMeleeWaveSize>
+				<iRangedWaveSize>7</iRangedWaveSize>
 				<UnitMeshGroup>
 					<iRequired>2</iRequired>
 					<EarlyArtDefineTag>ART_DEF_UNIT_CATAPULT</EarlyArtDefineTag>
@@ -15776,11 +15778,11 @@
 			<iAsset>2</iAsset>
 			<iPower>5</iPower>
 			<UnitMeshGroups>
-				<iGroupSize>2</iGroupSize>
+				<iGroupSize>7</iGroupSize>
 				<fMaxSpeed>1.75</fMaxSpeed>
 				<fPadTime>1</fPadTime>
-				<iMeleeWaveSize>2</iMeleeWaveSize>
-				<iRangedWaveSize>2</iRangedWaveSize>
+				<iMeleeWaveSize>7</iMeleeWaveSize>
+				<iRangedWaveSize>7</iRangedWaveSize>
 				<UnitMeshGroup>
 					<iRequired>2</iRequired>
 					<EarlyArtDefineTag>ART_DEF_UNIT_KOREAN_HWACHA</EarlyArtDefineTag>
@@ -15963,11 +15965,11 @@
 			<!-- advc.104: Was 8, which seems to assume that Trebs always have strength 8. -->
 			<iPower>7</iPower>
 			<UnitMeshGroups>
-				<iGroupSize>1</iGroupSize>
+				<iGroupSize>7</iGroupSize>
 				<fMaxSpeed>1.75</fMaxSpeed>
 				<fPadTime>1</fPadTime>
-				<iMeleeWaveSize>2</iMeleeWaveSize>
-				<iRangedWaveSize>2</iRangedWaveSize>
+				<iMeleeWaveSize>7</iMeleeWaveSize>
+				<iRangedWaveSize>7</iRangedWaveSize>
 				<UnitMeshGroup>
 					<iRequired>2</iRequired>
 					<EarlyArtDefineTag>ART_DEF_UNIT_TREBUCHET</EarlyArtDefineTag>
@@ -16145,11 +16147,11 @@
 			<iAsset>3</iAsset>
 			<iPower>12</iPower>
 			<UnitMeshGroups>
-				<iGroupSize>2</iGroupSize>
+				<iGroupSize>7</iGroupSize>
 				<fMaxSpeed>1.75</fMaxSpeed>
 				<fPadTime>1</fPadTime>
-				<iMeleeWaveSize>2</iMeleeWaveSize>
-				<iRangedWaveSize>2</iRangedWaveSize>
+				<iMeleeWaveSize>7</iMeleeWaveSize>
+				<iRangedWaveSize>7</iRangedWaveSize>
 				<UnitMeshGroup>
 					<iRequired>2</iRequired>
 					<EarlyArtDefineTag>ART_DEF_UNIT_CANNON</EarlyArtDefineTag>
@@ -16340,17 +16342,17 @@
 			<iAsset>3</iAsset>
 			<iPower>14</iPower>
 			<UnitMeshGroups>
-				<iGroupSize>3</iGroupSize>
+				<iGroupSize>28</iGroupSize>
 				<fMaxSpeed>1.75</fMaxSpeed>
 				<fPadTime>1</fPadTime>
-				<iMeleeWaveSize>3</iMeleeWaveSize>
-				<iRangedWaveSize>3</iRangedWaveSize>
+				<iMeleeWaveSize>7</iMeleeWaveSize>
+				<iRangedWaveSize>7</iRangedWaveSize>
 				<UnitMeshGroup>
-					<iRequired>3</iRequired>
+					<iRequired>7</iRequired>
 					<EarlyArtDefineTag>ART_DEF_UNIT_MACHINE_GUN</EarlyArtDefineTag>
 				</UnitMeshGroup>
 			</UnitMeshGroups>
-			<FormationType>FORMATION_TYPE_DEFAULT</FormationType>
+			<FormationType>FORMATION_TYPE_GROUND_NEW</FormationType>
 			<HotKey/>
 			<bAltDown>0</bAltDown>
 			<bShiftDown>0</bShiftDown>
@@ -16527,11 +16529,11 @@
 			<iAsset>4</iAsset>
 			<iPower>18</iPower>
 			<UnitMeshGroups>
-				<iGroupSize>2</iGroupSize>
+				<iGroupSize>7</iGroupSize>
 				<fMaxSpeed>1.75</fMaxSpeed>
 				<fPadTime>1</fPadTime>
-				<iMeleeWaveSize>2</iMeleeWaveSize>
-				<iRangedWaveSize>2</iRangedWaveSize>
+				<iMeleeWaveSize>7</iMeleeWaveSize>
+				<iRangedWaveSize>7</iRangedWaveSize>
 				<UnitMeshGroup>
 					<iRequired>2</iRequired>
 					<EarlyArtDefineTag>ART_DEF_UNIT_ARTILLERY</EarlyArtDefineTag>
@@ -16713,13 +16715,13 @@
 			<iAsset>5</iAsset>
 			<iPower>26</iPower>
 			<UnitMeshGroups>
-				<iGroupSize>1</iGroupSize>
+				<iGroupSize>7</iGroupSize>
 				<fMaxSpeed>1.75</fMaxSpeed>
 				<fPadTime>1</fPadTime>
-				<iMeleeWaveSize>2</iMeleeWaveSize>
-				<iRangedWaveSize>2</iRangedWaveSize>
+				<iMeleeWaveSize>7</iMeleeWaveSize>
+				<iRangedWaveSize>7</iRangedWaveSize>
 				<UnitMeshGroup>
-					<iRequired>1</iRequired>
+					<iRequired>2</iRequired>
 					<EarlyArtDefineTag>ART_DEF_UNIT_MOBILE_ARTILLERY</EarlyArtDefineTag>
 				</UnitMeshGroup>
 			</UnitMeshGroups>
@@ -21807,11 +21809,11 @@
 			<iAsset>10</iAsset>
 			<iPower>40</iPower>
 			<UnitMeshGroups>
-				<iGroupSize>1</iGroupSize>
+				<iGroupSize>7</iGroupSize>
 				<fMaxSpeed>1.75</fMaxSpeed>
 				<fPadTime>1</fPadTime>
-				<iMeleeWaveSize>1</iMeleeWaveSize>
-				<iRangedWaveSize>1</iRangedWaveSize>
+				<iMeleeWaveSize>7</iMeleeWaveSize>
+				<iRangedWaveSize>7</iRangedWaveSize>
 				<UnitMeshGroup>
 					<iRequired>1</iRequired>
 					<EarlyArtDefineTag>ART_DEF_UNIT_ICBM</EarlyArtDefineTag>
@@ -22040,17 +22042,17 @@
 			<iAsset>5</iAsset>
 			<iPower>0</iPower>
 			<UnitMeshGroups>
-				<iGroupSize>1</iGroupSize>
+				<iGroupSize>7</iGroupSize>
 				<fMaxSpeed>1.75</fMaxSpeed>
 				<fPadTime>1</fPadTime>
-				<iMeleeWaveSize>1</iMeleeWaveSize>
-				<iRangedWaveSize>1</iRangedWaveSize>
+				<iMeleeWaveSize>7</iMeleeWaveSize>
+				<iRangedWaveSize>7</iRangedWaveSize>
 				<UnitMeshGroup>
 					<iRequired>1</iRequired>
 					<EarlyArtDefineTag>ART_DEF_UNIT_PROPHET</EarlyArtDefineTag>
 				</UnitMeshGroup>
 			</UnitMeshGroups>
-			<FormationType>FORMATION_TYPE_DEFAULT</FormationType>
+			<FormationType>FORMATION_TYPE_GROUND_NEW</FormationType>
 			<HotKey/>
 			<bAltDown>0</bAltDown>
 			<bShiftDown>0</bShiftDown>
@@ -22271,7 +22273,7 @@
 					<LateArtDefineTag>ART_DEF_UNIT_ARTIST_MODERN</LateArtDefineTag>
 				</UnitMeshGroup>
 			</UnitMeshGroups>
-			<FormationType>FORMATION_TYPE_DEFAULT</FormationType>
+			<FormationType>FORMATION_TYPE_GROUND_NEW</FormationType>
 			<HotKey/>
 			<bAltDown>0</bAltDown>
 			<bShiftDown>0</bShiftDown>
@@ -22491,18 +22493,18 @@
 			<iAsset>5</iAsset>
 			<iPower>0</iPower>
 			<UnitMeshGroups>
-				<iGroupSize>1</iGroupSize>
+				<iGroupSize>7</iGroupSize>
 				<fMaxSpeed>1.75</fMaxSpeed>
 				<fPadTime>1</fPadTime>
-				<iMeleeWaveSize>1</iMeleeWaveSize>
-				<iRangedWaveSize>1</iRangedWaveSize>
+				<iMeleeWaveSize>7</iMeleeWaveSize>
+				<iRangedWaveSize>7</iRangedWaveSize>
 				<UnitMeshGroup>
 					<iRequired>1</iRequired>
 					<EarlyArtDefineTag>ART_DEF_UNIT_SCIENTIST</EarlyArtDefineTag>
 					<LateArtDefineTag>ART_DEF_UNIT_SCIENTIST_MODERN</LateArtDefineTag>
 				</UnitMeshGroup>
 			</UnitMeshGroups>
-			<FormationType>FORMATION_TYPE_DEFAULT</FormationType>
+			<FormationType>FORMATION_TYPE_GROUND_NEW</FormationType>
 			<HotKey/>
 			<bAltDown>0</bAltDown>
 			<bShiftDown>0</bShiftDown>
@@ -22708,18 +22710,18 @@
 			<iAsset>5</iAsset>
 			<iPower>0</iPower>
 			<UnitMeshGroups>
-				<iGroupSize>1</iGroupSize>
+				<iGroupSize>7</iGroupSize>
 				<fMaxSpeed>1.75</fMaxSpeed>
 				<fPadTime>1</fPadTime>
-				<iMeleeWaveSize>1</iMeleeWaveSize>
-				<iRangedWaveSize>1</iRangedWaveSize>
+				<iMeleeWaveSize>7</iMeleeWaveSize>
+				<iRangedWaveSize>7</iRangedWaveSize>
 				<UnitMeshGroup>
 					<iRequired>1</iRequired>
 					<EarlyArtDefineTag>ART_DEF_UNIT_MERCHANT</EarlyArtDefineTag>
 					<LateArtDefineTag>ART_DEF_UNIT_MERCHANT_MODERN</LateArtDefineTag>
 				</UnitMeshGroup>
 			</UnitMeshGroups>
-			<FormationType>FORMATION_TYPE_DEFAULT</FormationType>
+			<FormationType>FORMATION_TYPE_GROUND_NEW</FormationType>
 			<HotKey/>
 			<bAltDown>0</bAltDown>
 			<bShiftDown>0</bShiftDown>
@@ -22927,18 +22929,18 @@
 			<iAsset>5</iAsset>
 			<iPower>0</iPower>
 			<UnitMeshGroups>
-				<iGroupSize>1</iGroupSize>
+				<iGroupSize>7</iGroupSize>
 				<fMaxSpeed>1.75</fMaxSpeed>
 				<fPadTime>1</fPadTime>
-				<iMeleeWaveSize>1</iMeleeWaveSize>
-				<iRangedWaveSize>1</iRangedWaveSize>
+				<iMeleeWaveSize>7</iMeleeWaveSize>
+				<iRangedWaveSize>7</iRangedWaveSize>
 				<UnitMeshGroup>
 					<iRequired>1</iRequired>
 					<EarlyArtDefineTag>ART_DEF_UNIT_ENGINEER</EarlyArtDefineTag>
 					<LateArtDefineTag>ART_DEF_UNIT_ENGINEER_MODERN</LateArtDefineTag>
 				</UnitMeshGroup>
 			</UnitMeshGroups>
-			<FormationType>FORMATION_TYPE_DEFAULT</FormationType>
+			<FormationType>FORMATION_TYPE_GROUND_NEW</FormationType>
 			<HotKey/>
 			<bAltDown>0</bAltDown>
 			<bShiftDown>0</bShiftDown>
@@ -23150,11 +23152,11 @@
 			<iAsset>5</iAsset>
 			<iPower>0</iPower>
 			<UnitMeshGroups>
-				<iGroupSize>1</iGroupSize>
+				<iGroupSize>7</iGroupSize>
 				<fMaxSpeed>1.75</fMaxSpeed>
 				<fPadTime>1</fPadTime>
-				<iMeleeWaveSize>1</iMeleeWaveSize>
-				<iRangedWaveSize>1</iRangedWaveSize>
+				<iMeleeWaveSize>7</iMeleeWaveSize>
+				<iRangedWaveSize>7</iRangedWaveSize>
 				<UnitMeshGroup>
 					<iRequired>1</iRequired>
 					<EarlyArtDefineTag>ART_DEF_UNIT_WARLORD_ANCIENT</EarlyArtDefineTag>
@@ -23162,7 +23164,7 @@
 					<MiddleArtDefineTag>ART_DEF_UNIT_WARLORD_MEDIEVAL</MiddleArtDefineTag>
 				</UnitMeshGroup>
 			</UnitMeshGroups>
-			<FormationType>FORMATION_TYPE_DEFAULT</FormationType>
+			<FormationType>FORMATION_TYPE_GROUND_NEW</FormationType>
 			<HotKey/>
 			<bAltDown>0</bAltDown>
 			<bShiftDown>0</bShiftDown>
@@ -23388,18 +23390,18 @@
 			<iAsset>5</iAsset>
 			<iPower>0</iPower>
 			<UnitMeshGroups>
-				<iGroupSize>1</iGroupSize>
+				<iGroupSize>7</iGroupSize>
 				<fMaxSpeed>1.75</fMaxSpeed>
 				<fPadTime>1</fPadTime>
-				<iMeleeWaveSize>1</iMeleeWaveSize>
-				<iRangedWaveSize>0</iRangedWaveSize>
+				<iMeleeWaveSize>7</iMeleeWaveSize>
+				<iRangedWaveSize>7</iRangedWaveSize>
 				<UnitMeshGroup>
 					<iRequired>1</iRequired>
 					<EarlyArtDefineTag>ART_DEF_UNIT_ANCIENT_GREAT_SPY</EarlyArtDefineTag>
 					<LateArtDefineTag>ART_DEF_UNIT_GREAT_SPY</LateArtDefineTag>
 				</UnitMeshGroup>
 			</UnitMeshGroups>
-			<FormationType>FORMATION_TYPE_DEFAULT</FormationType>
+			<FormationType>FORMATION_TYPE_GROUND_NEW</FormationType>
 			<HotKey/>
 			<bAltDown>0</bAltDown>
 			<bShiftDown>0</bShiftDown>
