@@ -32,28 +32,6 @@ m_iCombat(0),
 m_iCombatLimit(0),
 m_iAirCombat(0),
 m_iAirCombatLimit(0),
-// Merkava120.tc and fintac
-m_iRangeMoves(0),
-m_iShotsPerTurn(0),
-m_iArmor(0),
-m_iHillArmor(0),
-m_iFortifyTurns(0),
-m_bFortifyToShoot(false),
-m_iFortifyArmor(0),
-m_iAntiArmor(0),
-m_iDropoffPerTile(0),
-m_iRangeDamage(0),
-m_iRangeDamageResistance(0),
-m_bAdjustRangeDamage(false),
-m_iRangeCollateralDamage(0),
-m_iRangeCollateralDamageResistance(0),
-m_bIndirectFire(false),
-m_bAir(false),
-m_bAttackAir(false),
-m_iSight(0),
-m_iAntiCamo(0),
-m_iCamo(0),
-// Merkava END
 m_iXPValueAttack(0),
 m_iXPValueDefense(0),
 m_iFirstStrikes(0),
@@ -1442,28 +1420,6 @@ bool CvUnitInfo::read(CvXMLLoadUtility* pXML)
 	pXML->GetChildXmlValByName(&m_iCombatLimit, "iCombatLimit");
 	pXML->GetChildXmlValByName(&m_iAirCombat, "iAirCombat");
 	pXML->GetChildXmlValByName(&m_iAirCombatLimit, "iAirCombatLimit");
-	// Merkava120.tc, updated with fintac
-	pXML->GetChildXmlValByName(&m_iRangeMoves, "iRangeMoves", 60);
-	pXML->GetChildXmlValByName(&m_iShotsPerTurn, "iShotsPerTurn", 0);
-	pXML->GetChildXmlValByName(&m_iArmor, "iArmor", 0);
-	pXML->GetChildXmlValByName(&m_iHillArmor, "iHillArmor", 0);
-	pXML->GetChildXmlValByName(&m_iFortifyTurns, "iFortifyTurns", 0);
-	pXML->GetChildXmlValByName(&m_bFortifyToShoot, "bFortifyToShoot", false);
-	pXML->GetChildXmlValByName(&m_iFortifyArmor, "iFortifyArmor", 0);
-	pXML->GetChildXmlValByName(&m_iAntiArmor, "iAntiArmor", 0);
-	pXML->GetChildXmlValByName(&m_iDropoffPerTile, "iDropoffPerTile", 0);
-	pXML->GetChildXmlValByName(&m_iRangeDamage, "iRangeDamage", 0);
-	pXML->GetChildXmlValByName(&m_iRangeDamageResistance, "iRangeDamageResistance", 100);
-	pXML->GetChildXmlValByName(&m_bAdjustRangeDamage, "bAdjustRangeDamage", false);
-	pXML->GetChildXmlValByName(&m_iRangeCollateralDamage, "iRangeCollateralDamage", 0);
-	pXML->GetChildXmlValByName(&m_iRangeCollateralDamageResistance, "iRangeCollateralDamageResistance", 100);
-	pXML->GetChildXmlValByName(&m_bIndirectFire, "bIndirectFire", false);
-	pXML->GetChildXmlValByName(&m_bAir, "bAir", false);
-	pXML->GetChildXmlValByName(&m_bAttackAir, "bAttackAir", false);
-	pXML->GetChildXmlValByName(&m_iSight, "iSight", GC.getDefineINT("UNIT_VISIBILITY_RANGE"));
-	pXML->GetChildXmlValByName(&m_iAntiCamo, "iAntiCamo", 0);
-	pXML->GetChildXmlValByName(&m_iCamo, "iCamo", 0);
-	// Merkava END
 	pXML->GetChildXmlValByName(&m_iXPValueAttack, "iXPValueAttack");
 	pXML->GetChildXmlValByName(&m_iXPValueDefense, "iXPValueDefense");
 	pXML->GetChildXmlValByName(&m_iFirstStrikes, "iFirstStrikes");

@@ -2542,7 +2542,7 @@ CvUnit* CvPlot::getBestDefender(PlayerTypes eOwner,
 			kUnit.canBeAttackedBy(kFilters.m_eAttackingPlayer,
 			kFilters.m_pAttacker, kFilters.m_bTestEnemy, kFilters.m_bTestPotentialEnemy,
 			kFilters.m_bTestVisible, // advc.028
-			kFilters.m_bTestCanAttack, (bool)iRanged)) // merkava120.tc specifying ranged
+			kFilters.m_bTestCanAttack))
 		{
 			if (kFilters.m_bTestAny)
 				return &kUnit; // </advc>

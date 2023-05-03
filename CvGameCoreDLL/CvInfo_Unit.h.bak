@@ -107,29 +107,6 @@ public: /*  All const functions are exposed to Python except some related to art
 	int getCombatLimit() const { return m_iCombatLimit; }
 	int getAirCombat() const { return m_iAirCombat; }
 	int getAirCombatLimit() const { return m_iAirCombatLimit; }
-	// Merkava120.TC
-	int getRangeMoves() const { return m_iRangeMoves; }
-	int getArmor() const { return m_iArmor; }
-	int getAntiArmor() const { return m_iAntiArmor; }
-	int getDropoffPerTile() const { return m_iDropoffPerTile; }
-	int getRangeDamage() const { return m_iRangeDamage; }
-	int getRangeDamageResistance() const { return m_iRangeDamageResistance; }
-	bool isAdjustRangeDamage() const { return m_bAdjustRangeDamage; }
-	int getRangeCollateralDamage() const { return m_iRangeCollateralDamage; }
-	int getRangeCollateralDamageResistance() const { return m_iRangeCollateralDamageResistance; }
-	bool isIndirectFire() const { return m_bIndirectFire; }
-	bool isAir() const { return m_bAir; }
-	bool isAttackAir() const { return m_bAttackAir; }
-	int getSight() const { return m_iSight; }
-	int getAntiCamo() const { return m_iAntiCamo; }
-	int getCamo() const { return m_iCamo; }
-	// Merkava120.fintac
-	bool isFortifyToShoot() const { return m_bFortifyToShoot; }
-	int getUnitSpecificFortifyTurns() const { return m_iFortifyTurns; }
-	int getShotsPerTurn() const { return m_iShotsPerTurn; }
-	int getHillArmor() const { return m_iHillArmor; }
-	int getFortifyArmor() const { return m_iFortifyArmor; }
-	// Merkava120 END
 	int getXPValueAttack() const { return m_iXPValueAttack; }
 	int getXPValueDefense() const { return m_iXPValueDefense; }
 	int getFirstStrikes() const { return m_iFirstStrikes; }
@@ -398,30 +375,6 @@ protected:
 	int m_iCombatLimit;
 	int m_iAirCombat;
 	int m_iAirCombatLimit;
-	// Merkava120.tc
-	int m_iRangeMoves;
-	int m_iShotsPerTurn; // merkava120.fintac
-	int m_iArmor;
-	// merkava120.fintac BEGIN
-	int m_iHillArmor; 
-	int m_iFortifyArmor;
-	int m_iFortifyTurns;
-	bool m_bFortifyToShoot;
-	// merkava120.fintac END
-	int m_iAntiArmor;
-	int m_iDropoffPerTile;
-	int m_iRangeDamage;
-	int m_iRangeDamageResistance;
-	bool m_bAdjustRangeDamage;
-	int m_iRangeCollateralDamage;
-	int m_iRangeCollateralDamageResistance;
-	bool m_bIndirectFire;
-	bool m_bAir;
-	bool m_bAttackAir;
-	int m_iSight;
-	int m_iAntiCamo;
-	int m_iCamo;
-	// Merkava120 END
 	int m_iXPValueAttack;
 	int m_iXPValueDefense;
 	int m_iFirstStrikes;
