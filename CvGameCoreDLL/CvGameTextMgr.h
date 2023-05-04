@@ -321,6 +321,7 @@ public:
 	void getAirBombPlotHelp(CvPlot const& kPlot, CvUnit& kHeadSelectedUnit, CvWString& szHelp);
 	void getAirStrikePlotHelp(CvPlot const& kPlot, CvUnit& kHeadSelectedUnit, CvWString& szHelp);
 	void getParadropPlotHelp(CvPlot const& kPlot, CvUnit& kHeadSelectedUnit, CvWString& szHelp); // </advc.004c>
+	void getRangeAttackPlotHelp(CvPlot const& kPlot, CvUnit& kHeadSelectedUnit, CvWString& szHelp); // merkava120.tc
 	DllExport void getInterfaceCenterText(CvWString& strText);
 	DllExport void getTurnTimerText(CvWString& strText);
 	DllExport void getFontSymbols(std::vector< std::vector<wchar> >& aacSymbols, std::vector<int>& aiMaxNumRows);

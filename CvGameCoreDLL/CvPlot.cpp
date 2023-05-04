@@ -2514,7 +2514,7 @@ int CvPlot::getFeatureProduction(BuildTypes eBuild, TeamTypes eTeam, CvCity** pp
 
 
 CvUnit* CvPlot::getBestDefender(PlayerTypes eOwner,
-	/* <advc> */ DefenderFilters& kFilters) const
+	/* <advc> */ DefenderFilters& kFilters, int iRanged) const // merkava120.tc specifying ranged
 {
 	PROFILE_FUNC();
 	// Ensure consistency of parameters
@@ -2542,7 +2542,7 @@ CvUnit* CvPlot::getBestDefender(PlayerTypes eOwner,
 			kUnit.canBeAttackedBy(kFilters.m_eAttackingPlayer,
 			kFilters.m_pAttacker, kFilters.m_bTestEnemy, kFilters.m_bTestPotentialEnemy,
 			kFilters.m_bTestVisible, // advc.028
-			kFilters.m_bTestCanAttack))
+			kFilters.m_bTestCanAttack, (bool)iRanged)) // merkava120.tc specifying ranged
 		{
 			if (kFilters.m_bTestAny)
 				return &kUnit; // </advc>

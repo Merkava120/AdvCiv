@@ -140,13 +140,13 @@ public:
 		CvUnit const* pAttacker = NULL, bool bTestAtWar = false, bool bTestPotentialEnemy = false,
 		/*  advc.028: Replacing bTestCanMove. False by default b/c invisible units are generally
 			able to defend - they just choose not to (CvUnit::isBetterDefenderThan). */
-		bool bTestVisible = false) const
+		bool bTestVisible = false, int iRanged = 0) const // merkava120.tc specifying ranged (int so overload works)
 	// <advc> Need some more params
 	{
 		DefenderFilters defFilters(eAttackingPlayer, pAttacker,
 				bTestAtWar, bTestPotentialEnemy,
 				bTestVisible); // advc.028
-		return getBestDefender(eOwner, defFilters);
+		return getBestDefender(eOwner, defFilters, iRanged); // merkava120.tc specifying ranged
 	}
 	struct DefenderFilters
 	{
@@ -174,7 +174,7 @@ public:
 			 m_bTestCanAttack, m_bTestAny, // advc
 			 m_bTestCanMove;
 	};
-	CvUnit* getBestDefender(PlayerTypes eOwner, DefenderFilters& kFilters) const;
+	CvUnit* getBestDefender(PlayerTypes eOwner, DefenderFilters& kFilters, int iRanged = 0) const; // merkava120.tc specifying ranged
 	// </advc>
 	// BETTER_BTS_AI_MOD, Lead From Behind (UncutDragon), 02/21/10, jdog5000:
 	bool hasDefender(bool bTestCanAttack, PlayerTypes eOwner,

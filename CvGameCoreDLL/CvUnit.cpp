@@ -700,6 +700,11 @@ void CvUnit::doTurn()
 	if (getMoves() >= 2 * maxMoves())
 		finishMoves(); // </advc.001b>
 	else setMoves(0);
+	// merkava120.fintac - reset shots per turn
+	if (shotsLeft() < getUnitInfo().getShotsPerTurn())
+		resetShots(); 
+	// merkava120 end
+
 }
 
 // advc.029:
@@ -1098,6 +1103,7 @@ void CvUnit::resolveCombat(CvUnit* pDefender, CvPlot* pPlot, bool bVisible)
 	getDefenderCombatValues(*pDefender, pPlot, iAttackerStrength, iAttackerFirepower,
 			iDefenderOdds, iDefenderStrength, iAttackerDamage, iDefenderDamage,
 			&cdDefenderDetails);
+	// merkava120.tc comment: since withdrawal is applied every round now, this will be inaccurate. Not sure how to fix it other than sticking an exponent in there
 	int iAttackerKillOdds = iDefenderOdds * (100 - withdrawalProbability()) / 100;
 	// advc.001: Replacing isHuman checks
 	if (isActiveOwned() || pDefender->isActiveOwned())
@@ -1117,8 +1123,9 @@ void CvUnit::resolveCombat(CvUnit* pDefender, CvPlot* pPlot, bool bVisible)
 		{
 			if (getCombatFirstStrikes() == 0)
 			{
-				if (getDamage() + iAttackerDamage >= maxHitPoints() &&
-					SyncRandSuccess100(withdrawalProbability()))
+				
+				if (/*getDamage() + iAttackerDamage >= maxHitPoints() &&*/
+					SyncRandSuccess100(withdrawalProbability())) // merkava120.tc withdrawal chance applied every round now, so skirmishers are a possibility
 				{
 					flankingStrikeCombat(pPlot, iAttackerStrength, iAttackerFirepower,
 							iAttackerKillOdds, iDefenderDamage, pDefender);
@@ -6940,11 +6947,13 @@ bool CvUnit::isHuman() const
 	return GET_PLAYER(getOwner()).isHuman();
 }
 
-
+// merkava120.tc xml-based view range
 int CvUnit::visibilityRange() const
 {
-	return (GC.getDefineINT(CvGlobals::UNIT_VISIBILITY_RANGE) + getExtraVisibilityRange());
+	int iSight = std::max(GC.getDefineINT("UNIT_VISIBILITY_RANGE"), getUnitInfo().getSight());
+	return (GC.getDefineINT("UNIT_VISIBILITY_RANGE") + getExtraVisibilityRange());
 }
+// merkava120 end
 
 
 int CvUnit::baseMoves() const
@@ -7160,6 +7169,7 @@ void CvUnit::setBaseCombatStr(int iCombat)
 	m_iBaseCombat = iCombat;
 }
 
+// merkava120.tc note the following comment applies to both maxCombatStr() and the new function pulled out of it, getCombatModifier()
 /*	maxCombatStr can be called in four different configurations
 	+	pPlot == NULL, pAttacker == NULL for combat when this is the attacker;
 	+	pPlot valid, pAttacker valid for combat when this is the defender;
@@ -7199,6 +7209,35 @@ int CvUnit::maxCombatStr(CvPlot const* pPlot, CvUnit const* pAttacker,
 	if (baseCombatStr() == 0)
 		return 0;
 
+	// merkava120.tc the following line splits off the majority of maxCombatStr into its own function which can now be used elsewhere
+	int iModifier = getCombatModifier(pCombatDetails, pAttacker,  pPlot, bGarrisonStrength, bAttackingUnknownDefender, pAttackedPlot);
+
+	if (pCombatDetails != NULL)
+	{
+		pCombatDetails->iModifierTotal = iModifier;
+		pCombatDetails->iBaseCombatStr = baseCombatStr();
+	}
+	int iCombat;
+	if (iModifier > 0)
+		iCombat = (baseCombatStr() * (iModifier + 100));
+	else iCombat = ((baseCombatStr() * 10000) / (100 - iModifier));
+
+	if (pCombatDetails != NULL)
+	{
+		pCombatDetails->iCombat = iCombat;
+		pCombatDetails->iMaxCombatStr = std::max(1, iCombat);
+		pCombatDetails->iCurrHitPoints = currHitPoints();
+		pCombatDetails->iMaxHitPoints = maxHitPoints();
+		pCombatDetails->iCurrCombatStr = (pCombatDetails->iMaxCombatStr *
+				pCombatDetails->iCurrHitPoints) / pCombatDetails->iMaxHitPoints;
+	}
+
+	return std::max(1, iCombat);
+}
+
+// Merkava120.tc: this was copied out of maxCombatStr() so it can be used elsewhere without considering strength. 
+int CvUnit::getCombatModifier(CombatDetails* pCombatDetails,  const CvUnit* pAttacker, const CvPlot* pPlot, bool bGarrisonStrength, bool bAttackingUnknownDefender, const CvPlot* pAttackedPlot) const
+{
 	int iModifier = 0;
 	int iExtraModifier;
 
@@ -7556,7 +7595,7 @@ int CvUnit::maxCombatStr(CvPlot const* pPlot, CvUnit const* pAttacker,
 				pCombatDetails->iCurrHitPoints) / pCombatDetails->iMaxHitPoints;
 	}
 
-	return std::max(1, iCombat);
+	return iModifier; //merkava120.tc added this line only
 }
 
 // this nomalizes str by firepower, useful for quick odds calcs
@@ -7610,8 +7649,8 @@ bool CvUnit::canSiege(TeamTypes eTeam) const
 bool CvUnit::canCombat() const
 {
 	// avdc: Check m_pUnitInfo->isMilitaryProduction() instead?
-	return (baseCombatStr() > 0 || airBaseCombatStr() > 0 || isNuke());
-}
+	return (baseCombatStr() > 0 || airBaseCombatStr() > 0 || isNuke() || airCombatLimit() > 0); // merkava120.tc added ranged combat because why not
+} // </kekm.8>
 
 
 bool CvUnit::canAttack() const
@@ -7665,6 +7704,16 @@ bool CvUnit::canAttack(const CvUnit& kDefender) const
 	{
 		return false;
 	} // </advc.089>
+	// merkava120.tc disallow units from attacking units with X times their strength
+	if (currCombatStr() != 0)
+		if (kDefender.currCombatStr() / currCombatStr() > GC.getDefineINT("MAX_STRENGTH_RATIO") / 100)
+			return false;
+	// disallow units from attacking units with X times their speed - defender would just run away
+	// however, this does not apply to cities, defenders will stay in cities
+	if (!kDefender.plot()->isCity())
+		if (kDefender.baseMoves() * 100 / baseMoves() > GC.getDefineINT("MAX_SPEED_RATIO"))
+			return false;
+	// merkava120 END
 	return true;
 }
 
@@ -7690,7 +7739,7 @@ bool CvUnit::canDefend(const CvPlot* pPlot) const
 // advc: Based on code removed from CvPlot::getBestDefender and CvPlot::hasDefender
 bool CvUnit::canBeAttackedBy(PlayerTypes eAttackingPlayer,
 	CvUnit const* pAttacker, bool bTestEnemy, bool bTestPotentialEnemy,
-	/* <advc.028> */ bool bTestVisible, /* </advc.028> */ bool bTestCanAttack) const
+	/* <advc.028> */ bool bTestVisible, /* </advc.028> */ bool bTestCanAttack, bool bRanged) const // merkava120.tc specifying ranged
 {
 	FAssert(eAttackingPlayer != NO_PLAYER);
 	if (/* advc.028: */ bTestVisible &&
@@ -7724,8 +7773,11 @@ bool CvUnit::canBeAttackedBy(PlayerTypes eAttackingPlayer,
 	if (pAttacker != NULL)
 	{
 		// Moved from CvPlot::hasDefender
-		if (bTestCanAttack && !pAttacker->canAttack(*this))
+		if (bTestCanAttack && !pAttacker->canAttack(*this) && !bRanged) // merkava120.tc: ranged ignores canAttack method (has its own check)
 			return false;
+		// merkava120.tc trying air stuff here to see if it works
+		if (bRanged && !pAttacker->getUnitInfo().isAttackAir() && getUnitInfo().isAir())
+			return false; //merkava120 end
 	} // </advc>
 	return true;
 }
@@ -8000,21 +8052,80 @@ int CvUnit::airCombatDamage(const CvUnit* pDefender) const
 	return iDamage;
 }
 
-
+// merkava120.tc heavily modified
 int CvUnit::rangeCombatDamage(const CvUnit* pDefender) const
 {
-	int iOurStrength = airCurrCombatStr(pDefender);
-	FAssertMsg(iOurStrength > 0, "Combat strength is expected to be greater than zero");
-	int iTheirStrength = pDefender->maxCombatStr(plot(), this);
-
-	int iStrengthFactor = (iOurStrength + iTheirStrength + 1) / 2;
-	static int const iRANGE_COMBAT_DAMAGE = GC.getDefineINT("RANGE_COMBAT_DAMAGE"); // advc.opt
-	int iDamage = std::max(1, ((iRANGE_COMBAT_DAMAGE * (iOurStrength + iStrengthFactor)) /
-			(iTheirStrength + iStrengthFactor)));
-
-	return iDamage;
+	// check 'air' unit or not
+	int iDamage = getUnitInfo().getRangeDamage();
+	// check armor - modified merkava120.fintac
+	int iArmor = pDefender->plot()->isHills() ? pDefender->getUnitInfo().getHillArmor() :
+		pDefender->getFortifyTurns() >= pDefender->getUnitInfo().getUnitSpecificFortifyTurns() ? 
+		pDefender->getUnitInfo().getFortifyArmor() : pDefender->getUnitInfo().getArmor();
+	int iAntiArmor = getUnitInfo().getAntiArmor();
+	if (getUnitInfo().getDropoffPerTile() > 0)
+		iAntiArmor -= (getUnitInfo().getDropoffPerTile() * (plotDistance(plot(), pDefender->plot()) - 1)); // first tile doesn't count
+	if (iArmor > iAntiArmor)
+		return 0;
+	else if (iArmor == iAntiArmor)
+		iDamage = (iDamage * GC.getDefineINT("EQUAL_ARMOR_PERCENT")) / 100;
+	// adjust for enemy damage resistance
+	if (pDefender->getUnitInfo().getRangeDamageResistance() > 0)
+	{
+		iDamage *= maxHitPoints();
+		iDamage /= pDefender->getUnitInfo().getRangeDamageResistance();
+	}
+	int iOurStrength = airBaseCombatStr();
+	int iTheirStrength = pDefender->baseCombatStr();
+	int iModifier = 0;
+	if (getUnitInfo().isAdjustRangeDamage())
+	{
+		// previous method I was going to use
+		//int iOurStrength = airCurrCombatStr(pDefender);
+		////FAssertMsg(iOurStrength > 0, "Combat strength is expected to be greater than zero"); // not anymore. 
+		//int iTheirStrength = pDefender->maxCombatStr(plot(), this); // note this is max, which means include tile stuff but not hitpoints. which is good. 
+		//if (iOurStrength <= 0)
+		//{
+		//	// This means adjust the damage by their strength but don't worry about our strength
+		//	iDamage *= (iTheirStrength / pDefender->baseCombatStr());
+		//}
+		//else
+		//{
+		//	// this means adjust by both our strength and their strength
+		//	// but NOT current strength, use base strength for this
+		//	int iStrengthFactor = iTheirStrength / airBaseCombatStr(); 
+		//	iDamage *= iStrengthFactor;
+		//}
+		
+		// new method: combat modifier
+		// if have air strength, then just compare strengths (including modifiers)
+		
+		if (iOurStrength > 0 && iTheirStrength != 0)
+		{
+			iDamage *= iOurStrength / iTheirStrength;
+		}
+		// otherwise, get the combat modifier alone and use that to scale range damage
+		else
+		{
+			// call this function on the defender because it takes their perspective
+			iModifier = pDefender->getCombatModifier(NULL, this, pDefender->plot(), false, false, pDefender->plot()) + 100;
+			iDamage *= 100;
+			if (iModifier != 0)
+				iDamage /= iModifier;
+			else
+				iDamage *= 1000; // just kill them if their strength has been reduced to zero
+		}
+	}
+	else if (iOurStrength > 0 && iTheirStrength != 0) // if not adjust but still has air combat strength, adjust by that
+	{
+		iDamage *= (iOurStrength / iTheirStrength);
+	}
+	// old and not used anymore
+	//static int const iRANGE_COMBAT_DAMAGE = GC.getDefineINT("RANGE_COMBAT_DAMAGE"); // advc.opt
+	//int iDamage = std::max(1, ((iRANGE_COMBAT_DAMAGE * (iOurStrength + iStrengthFactor)) /
+	//		(iTheirStrength + iStrengthFactor)));
+	return getUnitInfo().getRangeCollateralDamage();
 }
-
+// merkava120 END
 
 CvUnit* CvUnit::bestInterceptor(CvPlot const& kPlot,
 	bool bOdds) const // advc.004c
@@ -10751,12 +10862,16 @@ bool CvUnit::canAdvance(const CvPlot* pPlot, int iThreshold) const
 	The actual game mechanics are only very slightly changed.
 	(I've removed the targets cap of "visible units - 1".
 	That seemed like a silly limitation.) */
-void CvUnit::collateralCombat(CvPlot const* pPlot, CvUnit const* pSkipUnit)
+void CvUnit::collateralCombat(CvPlot const* pPlot, CvUnit const* pSkipUnit, bool bRanged) // merkava120.tc ranged separate
 {
 	std::vector<std::pair<int,IDInfo> > aTargetUnits;
 
 	int iCollateralStrength = (getDomainType() == DOMAIN_AIR ?
 			airBaseCombatStr() : baseCombatStr()) * collateralDamage() / 100;
+	// merkava120.tc ranged collateral combat is separate
+	if (bRanged)
+		iCollateralStrength = getUnitInfo().getRangeCollateralDamage();
+	// merkava120 END
 	if (iCollateralStrength <= 0 &&
 		getExtraCollateralDamage() <= 0) // UNOFFICIAL_PATCH
 	{
@@ -10770,8 +10885,22 @@ void CvUnit::collateralCombat(CvPlot const* pPlot, CvUnit const* pSkipUnit)
 			// This value thing is a bit bork. It's directly from the original code...
 			int iValue = 1 + SyncRandNum(10000);
 			iValue *= pLoopUnit->currHitPoints();
+			// merkava120.tc un-borking it for ranged combat
+			if (bRanged)
+			{
+				iValue = pLoopUnit->maxHitPoints() - pLoopUnit->getUnitInfo().getRangeCollateralDamageResistance();
+			}
+			// merkava120 END
 			aTargetUnits.push_back(std::make_pair(iValue, pLoopUnit->getIDInfo()));
 		}
+		// merkava120.tc ranged collateral does hit the center unit (guaranteed)
+		else if (bRanged && pLoopUnit == pSkipUnit)
+		{
+			// hit center target twice (not double damage, double hit)
+			aTargetUnits.push_back(std::make_pair(500000, pLoopUnit->getIDInfo()));
+			aTargetUnits.push_back(std::make_pair(500000, pLoopUnit->getIDInfo()));
+		}
+		// merkava120 end
 	}
 
 	CvCity const* pCity = NULL;
@@ -10791,12 +10920,23 @@ void CvUnit::collateralCombat(CvPlot const* pPlot, CvUnit const* pSkipUnit)
 		if (getUnitCombatType() == NO_UNITCOMBAT ||
 			!kTargetUnit.m_pUnitInfo->getUnitCombatCollateralImmune(getUnitCombatType()))
 		{
-			int iTheirStrength = kTargetUnit.baseCombatStr();
-			int iStrengthFactor = ((iCollateralStrength + iTheirStrength + 1) / 2);
-			/*	advc (note): This makes the damage proportional to (3*r + 1) / (3 + r)
-				where r is the ratio of the attacker's to the defender's base combat str.
-				This ratio is used again a few lines below in the iMaxDamage formula. */
-			int iCollateralDamage = (GC.getDefineINT(CvGlobals::COLLATERAL_COMBAT_DAMAGE) *
+			// merkava120.tc ranged collateral is separate
+			int iCollateralDamage = 0;
+			int iUnitDamage = 0;
+			int iMaxDamage = 0;
+			if (bRanged)
+			{
+				iCollateralDamage = std::max(getUnitInfo().getRangeCollateralDamage() - kTargetUnit.getUnitInfo().getRangeCollateralDamageResistance(), 0);
+				iMaxDamage = airCombatLimit();
+			}
+			else
+			{
+				int iTheirStrength = kTargetUnit.baseCombatStr();
+				int iStrengthFactor = ((iCollateralStrength + iTheirStrength + 1) / 2);
+				/*	advc (note): This makes the damage proportional to (3*r + 1) / (3 + r)
+					where r is the ratio of the attacker's to the defender's base combat str.
+					This ratio is used again a few lines below in the iMaxDamage formula. */
+				iCollateralDamage = (GC.getDefineINT(CvGlobals::COLLATERAL_COMBAT_DAMAGE) *
 					(iCollateralStrength + iStrengthFactor)) /
 					(iTheirStrength + iStrengthFactor);
 			iCollateralDamage *= 100 + getExtraCollateralDamage();
@@ -10812,8 +10952,10 @@ void CvUnit::collateralCombat(CvPlot const* pPlot, CvUnit const* pSkipUnit)
 					(collateralDamageLimit() *
 					(iCollateralStrength + iStrengthFactor)) /
 					(iTheirStrength + iStrengthFactor));
-			int iUnitDamage = std::max(kTargetUnit.getDamage(),
-					std::min(kTargetUnit.getDamage() + iCollateralDamage, iMaxDamage));
+			}
+			iUnitDamage = std::max(kTargetUnit.getDamage(),
+				std::min(kTargetUnit.getDamage() + iCollateralDamage, iMaxDamage));
+			// merkava120 END
 			if (kTargetUnit.getDamage() != iUnitDamage)
 			{
 				kTargetUnit.setDamage(iUnitDamage, getOwner());
@@ -10959,7 +11101,7 @@ bool CvUnit::interceptTest(CvPlot const& kPlot, /* <advc.004c> */ IDInfo* pInter
 
 CvUnit* CvUnit::airStrikeTarget(CvPlot const& kPlot) const // advc: was CvPlot const*
 {
-	CvUnit* pDefender = kPlot.getBestDefender(NO_PLAYER, getOwner(), this, true);
+	CvUnit* pDefender = kPlot.getBestDefender(NO_PLAYER, getOwner(), this, true, false, false, 1); //merkava120.tc specifying ranged
 	if (pDefender != NULL && !pDefender->isDead())
 	{
 		if (pDefender->canDefend())
@@ -11038,17 +11180,23 @@ bool CvUnit::canRangeStrike() const
 		return false;
 	if (airRange() <= 0)
 		return false;
-	if (airBaseCombatStr() <= 0)
-		return false;
+	/*if (airBaseCombatStr() <= 0)
+		return false;*/ // merkava120.tc - serves a secondary purpose now
 	if (!canFight())
 		return false;
 	if (//isMadeAttack() && !isBlitz()
-		isMadeAllAttacks()) // advc.164
+		isMadeAllAttacks()) // advc.164 // merkava120.tc note, this applies to ranged attacks by default now, see rangeStrike()
 	{
 		return false;
 	}
 	if (!canMove() && getMoves() > 0)
 		return false;
+	// merkava120.fintac
+	if (getUnitInfo().isFortifyToShoot() && getFortifyTurns() < getUnitInfo().getUnitSpecificFortifyTurns())
+		return false;
+	if (shotsLeft() <= 0)
+		return false;
+	// merkava120 end
 	return true;
 }
 
@@ -11074,6 +11222,10 @@ bool CvUnit::canRangeStrikeAt(const CvPlot* pPlot, int iX, int iY) const
 	CvUnit* pDefender = airStrikeTarget(*pTargetPlot);
 	if (pDefender == NULL)
 		return false;
+	// merkava120.tc attacking 'air' units - unfortunately this means they might cover up ground units but there are ways around that
+	if (pDefender->getUnitInfo().isAir() && !getUnitInfo().isAttackAir())
+		return false;
+	// merkava120 end
 
 	/*	advc.rstr: The facing direction shouldn't matter. If we want to check for
 		obstacles in the line of sight, GC.getMap().directionXY(*pPlot, *pTargetPlot)
@@ -11081,6 +11233,13 @@ bool CvUnit::canRangeStrikeAt(const CvPlot* pPlot, int iX, int iY) const
 		arguably represent indirect fire. */
 	/*if (!pPlot->canSeePlot(pTargetPlot, getTeam(), airRange(), getFacingDirection(true)))
 		return false;*/
+
+	// merkava120.tc added bIndirectFire tag to make the above note an explicit option
+	// edit: turns out this does NOT work and actually causes huge issues + exceptions
+	//if (!getUnitInfo().isIndirectFire() && !pPlot->canSeePlot(pTargetPlot, getTeam(), airRange(), GC.getMap().directionXY(*pPlot, *pTargetPlot)))
+	if (!pPlot->canSeePlot(pTargetPlot, getTeam(), airRange(), getFacingDirection(true)) && !getUnitInfo().isIndirectFire())
+		return false;
+	// merkava120 END
 
 	return true;
 }
@@ -11097,7 +11256,7 @@ bool CvUnit::rangeStrike(int iX, int iY)
 	/*if (!canRangeStrikeAt(pPlot, iX, iY))
 		return false;*/ // BtS
 	// UNOFFICIAL_PATCH (Bugfix), 05/10/10, jdog5000
-	if (!canRangeStrikeAt(plot(), iX, iY))
+	if (!canRangeStrikeAt(plot(), iX, iY)) // merkava120.tc note this check has been modified a bit
 	{
 		return false;
 	} // UNOFFICIAL_PATCH: END
@@ -11107,21 +11266,30 @@ bool CvUnit::rangeStrike(int iX, int iY)
 	FAssert(pDefender != NULL);
 	FAssert(pDefender->canDefend());
 
-	if (GC.getDefineINT("RANGED_ATTACKS_USE_MOVES") == 0)
-	{
-		setMadeAttack(true);
-	}
-	changeMoves(GC.getMOVE_DENOMINATOR());
+	// merkava120.tc blitz units can attack multiple times, so this is no longer relevant
+	/*if (GC.getDefineINT("RANGED_ATTACKS_USE_MOVES") == 0)
+	{*/
+	setMadeAttack(true);
+	takeShot(); // decrease shots by 1 - merkava120.fintac
+	//}
+	// Merkava120.tc end
+	changeMoves(getUnitInfo().getRangeMoves()); //merkava120.tc added individual tag for this instead of flat global define
 
-	int iDamage = rangeCombatDamage(pDefender);
+	// merkava120.tc: iDamage means displayed damage in message, iUnitDamage means damage done to unit
+	int iDamage = rangeCombatDamage(pDefender); // note this function has been heavily modified
 
 	int iUnitDamage = std::max(pDefender->getDamage(),
 			std::min(pDefender->getDamage() + iDamage, airCombatLimit()));
-
+	/*if (iDamage < airCombatLimit())
+		iDamage = airCombatLimit(); */
+	// display collateral damage done to center unit
+	if (getUnitInfo().getRangeCollateralDamage() > 0)
+		iDamage = getUnitInfo().getRangeCollateralDamage() * pDefender->maxHitPoints() / pDefender->getUnitInfo().getRangeCollateralDamageResistance();
+	// Merkava120.tc end
 	CvWString szBuffer(gDLL->getText("TXT_KEY_MISC_YOU_ARE_ATTACKED_BY_AIR",
-			pDefender->getNameKey(), getNameKey(),
+		pDefender->getNameKey(), getNameKey(), iDamage)); // merkava120.tc
 			// advc.004g:
-			((iUnitDamage - pDefender->getDamage()) * 100) / pDefender->maxHitPoints()));
+			//((iUnitDamage - pDefender->getDamage()) * 100) / pDefender->maxHitPoints()));
 	//red icon over attacking unit
 	gDLL->UI().addMessage(pDefender->getOwner(), false, -1, szBuffer, getPlot(),
 			"AS2D_COMBAT", MESSAGE_TYPE_INFO, getButton(), GC.getColorType("RED"));
@@ -11130,15 +11298,20 @@ bool CvUnit::rangeStrike(int iX, int iY)
 			"AS2D_COMBAT", MESSAGE_TYPE_DISPLAY_ONLY, pDefender->getButton());
 
 	szBuffer = gDLL->getText("TXT_KEY_MISC_YOU_ATTACK_BY_AIR", getNameKey(), pDefender->getNameKey(),
-			// advc.004g:
-			((iUnitDamage - pDefender->getDamage()) * 100) / pDefender->maxHitPoints());
+		// advc.004g:
+		iDamage); // merkava120.tc
+			//((iUnitDamage - pDefender->getDamage()) * 100) / pDefender->maxHitPoints());
 	gDLL->UI().addMessage(getOwner(), true, -1, szBuffer, *pPlot,
 			"AS2D_COMBAT", MESSAGE_TYPE_INFO, pDefender->getButton(), GC.getColorType("GREEN"));
 
-	collateralCombat(pPlot, pDefender);
-
+	//merkava120.tc
+	//regular collateral damage can still be done this way; third parameter in collateralCombat differentiates
+	if (getUnitInfo().getRangeCollateralDamage() > 0 || collateralDamageLimit() > 0)
+		collateralCombat(pPlot, pDefender, getUnitInfo().getRangeCollateralDamage() > 0);
+	// don't do regular damage for ranged collateral
+	else if (getUnitInfo().getRangeCollateralDamage() <= 0)//merkava120 end
 	//set damage but don't update entity damage visibility
-	pDefender->setDamage(iUnitDamage, getOwner(), false);
+		pDefender->setDamage(iUnitDamage, getOwner(), false);
 
 	if (pPlot->isActiveVisible(false))
 	{

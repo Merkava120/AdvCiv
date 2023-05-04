@@ -351,6 +351,21 @@ public:
 	{
 		return std::max(0, maxMoves() - getMoves());
 	}
+	// merkava120.fintac
+	int shotsLeft() const
+	{
+		return m_iShotsLeft;
+	}
+	void takeShot() 
+	{
+		m_iShotsLeft--;
+	}
+	void resetShots()
+	{
+		m_iShotsLeft = getUnitInfo().getShotsPerTurn();
+	}
+	// merkava120 end
+	
 	DllExport bool canMove() const;																			// Exposed to Python
 	DllExport bool hasMoved() const																			// Exposed to Python
 	{
@@ -448,10 +463,14 @@ public:
 	int maxCombatStr(CvPlot const* pPlot = NULL, CvUnit const* pAttacker = NULL,							// Exposed to Python
 			CombatDetails* pCombatDetails = NULL,
 			bool bGarrisonStrength = false) const; // advc.500b
+	int getCombatModifier(CombatDetails* pCombatDetails, const CvUnit* pAttacker, const CvPlot* pPlot, bool bGarrisonStrength, bool bAttackingUnknownDefender, const CvPlot* pAttackedPlot) const;
 	int currCombatStr(CvPlot const* pPlot = NULL, CvUnit const* pAttacker = NULL,							// Exposed to Python
 		CombatDetails* pCombatDetails = NULL) const
 	{
-		return ((maxCombatStr(pPlot, pAttacker, pCombatDetails) * currHitPoints()) / maxHitPoints());
+		// merkava120.tc the scaling is stopped at a global define now
+		int iMinHitpoints = std::max(currHitPoints() * 100 / maxHitPoints(), GC.getDefineINT("HITPOINTS_STRENGTH_THRESHOLD"));
+		return ((maxCombatStr(pPlot, pAttacker, pCombatDetails) * iMinHitpoints / 100));
+		// merkava120 END
 	}
 	int currFirepower(const CvPlot* pPlot = NULL, const CvUnit* pAttacker = NULL) const						// Exposed to Python
 	{
@@ -479,7 +498,7 @@ public:
 	// <advc>
 	bool canBeAttackedBy(PlayerTypes eAttackingPlayer,
 			CvUnit const* pAttacker, bool bTestEnemy, bool bTestPotentialEnemy,
-			bool bTestVisible, bool bTestCanAttack) const; // </advc>
+			bool bTestVisible, bool bTestCanAttack, bool bRanged = false) const; // </advc> // merkava120.tc specifying ranged
 	bool isBetterDefenderThan(const CvUnit* pDefender, const CvUnit* pAttacker) const;						// Exposed to Python
 
 	int airBaseCombatStr() const																			// Exposed to Python
@@ -489,7 +508,9 @@ public:
 	int airMaxCombatStr(const CvUnit* pOther) const;														// Exposed to Python
 	int airCurrCombatStr(const CvUnit* pOther) const														// Exposed to Python
 	{
-		return ((airMaxCombatStr(pOther) * currHitPoints()) / maxHitPoints());
+		// merkava120.tc hitpoints only affect strength down to a threshold set in global defines
+		int iMinHitpoints = std::min(currHitPoints() * 100 / maxHitPoints(), GC.getDefineINT("HITPOINTS_STRENGTH_THRESHOLD"));
+		return ((airMaxCombatStr(pOther) * iMinHitpoints / 100));
 	}
 	DllExport float airMaxCombatStrFloat(const CvUnit* pOther) const;										// Exposed to Python
 	DllExport float airCurrCombatStrFloat(const CvUnit* pOther) const;										// Exposed to Python
@@ -1113,6 +1134,7 @@ protected:
 	int m_iHotKeyNumber;
 	int m_iDamage;
 	int m_iMoves;
+	int m_iShotsLeft; // merkava120.fintac
 	int m_iExperience;
 	int m_iLevel;
 	int m_iCargo;
@@ -1209,7 +1231,7 @@ protected:
 	bool pillageRoute();
 	// </advc.111>
 	bool canAdvance(const CvPlot* pPlot, int iThreshold) const;
-	void collateralCombat(const CvPlot* pPlot, CvUnit const* pSkipUnit = NULL);
+	void collateralCombat(const CvPlot* pPlot, CvUnit const* pSkipUnit = NULL, bool bRanged = false); //merkava120.tc
 	void flankingStrikeCombat(const CvPlot* pPlot, int iAttackerStrength,
 			int iAttackerFirepower, int iDefenderOdds, int iDefenderDamage,
 			CvUnit const* pSkipUnit = NULL);

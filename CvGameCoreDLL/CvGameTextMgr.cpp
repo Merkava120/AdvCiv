@@ -516,6 +516,20 @@ void CvGameTextMgr::setUnitHelp(CvWStringBuffer &szString, const CvUnit* pUnit,
 	{
 		szString.append(gDLL->getText("TXT_KEY_UNIT_HELP_AIR_RANGE",
 				pUnit->airRange()));
+		// merkava120.tc
+		// actually, this is not the right help text I think
+		/*if (pUnit->getUnitInfo().getRangeDamage() > 0)
+			szString.append(NEWLINE + gDLL->getText("TXT_KEY_UNIT_HELP_RANGE_DAMAGE", pUnit->getUnitInfo().getRangeDamage()));
+		if (pUnit->getUnitInfo().getRangeCollateralDamage() > 0)
+			szString.append(NEWLINE + gDLL->getText("TXT_KEY_UNIT_HELP_RANGE_COLLATERAL_DAMAGE", pUnit->getUnitInfo().getRangeCollateralDamage()));
+		if (pUnit->getUnitInfo().getAntiArmor() > 0)
+			szString.append(NEWLINE + gDLL->getText("TXT_KEY_UNIT_HELP_ANTI_ARMOR", pUnit->getUnitInfo().getAntiArmor())); 
+		if (pUnit->getUnitInfo().getDropoffPerTile() > 0)
+			szString.append(gDLL->getText("TXT_KEY_UNIT_HELP_RANGE_DROPOFF", pUnit->getUnitInfo().getDropoffPerTile()));
+		if (pUnit->getUnitInfo().getRangeMoves() != CvGlobals::MOVE_DENOMINATOR)
+			szString.append(NEWLINE + gDLL->getText("TXT_KEY_UNIT_HELP_RANGE_MOVES", pUnit->getUnitInfo().getRangeMoves() / CvGlobals::MOVE_DENOMINATOR));*/
+		// not bothering with the others yet
+		// merkava120.tc END
 	}
 
 	BuildTypes eBuild = pUnit->getBuildType();
@@ -8755,6 +8769,28 @@ void CvGameTextMgr::setBasicUnitHelp(CvWStringBuffer &szBuffer, UnitTypes eUnit,
 				szTempBuffer.Format(L"%d%c, ", u.getCombat(), gDLL->getSymbolID(STRENGTH_CHAR));
 				szBuffer.append(szTempBuffer);
 			}
+			// merkava120.tc
+			if (u.getAirRange() > 0)
+			{
+				szTempBuffer.Format(L"%d%c, ", u.getAirRange(), gDLL->getSymbolID(SILVER_STAR_CHAR));
+				szBuffer.append(szTempBuffer);
+				if (u.getAirCombat() > 0)
+				{
+					szTempBuffer.Format(L"%d%c, ", u.getAirCombat(), gDLL->getSymbolID(STRENGTH_CHAR));
+					szBuffer.append(szTempBuffer);
+				}
+				if (u.getRangeDamage() > 0)
+				{
+					szTempBuffer.Format(L"%d%c, ", u.getRangeDamage(), gDLL->getSymbolID(POWER_CHAR));
+					szBuffer.append(szTempBuffer);
+				}
+			}
+			if (u.getRangeDamageResistance() > 0)
+			{
+				szTempBuffer.Format(L"%d%c, ", u.getRangeDamageResistance(), gDLL->getSymbolID(DEFENSE_CHAR));
+				szBuffer.append(szTempBuffer);
+			}
+			// that should be enough. merkava120 END
 		}
 		// <advc.905b>
 		bool bAllSpeedBonusesAvailable = true;
@@ -9231,7 +9267,18 @@ void CvGameTextMgr::setBasicUnitHelp(CvWStringBuffer &szBuffer, UnitTypes eUnit,
 		szBuffer.append(gDLL->getText("TXT_KEY_UNIT_COMBAT_LIMIT",
 				(100 * u.getCombatLimit()) / GC.getMAX_HIT_POINTS()));
 	}
-
+	// merkava120.tc 
+	/*if (u.getRangeDamage() > 0)
+		szString.append(NEWLINE + gDLL->getText("TXT_KEY_UNIT_HELP_RANGE_DAMAGE", pUnit->getUnitInfo().getRangeDamage()));*/
+	if (u.getRangeCollateralDamage() > 0)
+		szBuffer.append(NEWLINE + gDLL->getText("TXT_KEY_UNIT_HELP_RANGE_COLLATERAL_DAMAGE", u.getRangeCollateralDamage()));
+	if (u.getAntiArmor() > 0)
+		szBuffer.append(NEWLINE + gDLL->getText("TXT_KEY_UNIT_HELP_ANTI_ARMOR", u.getAntiArmor()));
+	if (u.getDropoffPerTile() > 0)
+		szBuffer.append(gDLL->getText("TXT_KEY_UNIT_HELP_RANGE_DROPOFF", u.getDropoffPerTile()));
+	if (u.getRangeMoves() != CvGlobals::MOVE_DENOMINATOR)
+		szBuffer.append(NEWLINE + gDLL->getText("TXT_KEY_UNIT_HELP_RANGE_MOVES", u.getRangeMoves() / CvGlobals::MOVE_DENOMINATOR));
+	// merkava120 END
 	if (u.getCollateralDamage() > 0)
 	{
 		szBuffer.append(NEWLINE);
@@ -20714,6 +20761,11 @@ void CvGameTextMgr::getPlotHelp(CvPlot* pMouseOverPlot,
 					getParadropPlotHelp(*pMouseOverPlot, *pHeadSelectedUnit, szTempBuffer);
 					break;
 				// </advc.004c>
+				// merkava120.tc
+				case INTERFACEMODE_RANGE_ATTACK:
+					getRangeAttackPlotHelp(*pMouseOverPlot, *pHeadSelectedUnit, szTempBuffer);
+					break;
+				// merkava120.tc end
 				}
 			}
 			szTempBuffer += strHelp.getCString();
@@ -20919,6 +20971,26 @@ void CvGameTextMgr::getAirStrikePlotHelp(CvPlot const& kPlot,
 	if (pBestSelectedUnit != NULL && pBestSelectedUnit->canAirStrike(kPlot))
 		setInterceptPlotHelp(kPlot, *pBestSelectedUnit, szHelp);
 }
+
+// merkava120.tc
+void CvGameTextMgr::getRangeAttackPlotHelp(CvPlot const& kPlot,
+	CvUnit& kHeadSelectedUnit, CvWString& szHelp)
+{
+	CvUnit const* pBestSelectedUnit = &kHeadSelectedUnit; // might change this later
+	if (pBestSelectedUnit == NULL)
+		return;
+	CvUnit const* pBestDefender = kPlot.getBestDefender(NO_PLAYER, pBestSelectedUnit->getOwner(), pBestSelectedUnit, true, false, false, 1);
+	if (!pBestSelectedUnit->canRangeStrikeAt(pBestSelectedUnit->plot(), kPlot.getX(), kPlot.getY()))
+		return;
+	if (pBestDefender == NULL)
+		return;
+	int iRangeDamage = pBestSelectedUnit->rangeCombatDamage(pBestDefender);
+	int iRangeCollateralDamage = pBestSelectedUnit->getUnitInfo().getRangeCollateralDamage();
+	szHelp.append(gDLL->getText("TXT_KEY_RANGE_ATTACK_HELP", iRangeDamage));
+	if (iRangeCollateralDamage > 0)
+		szHelp.append(gDLL->getText("TXT_KEY_RANGE_ATTACK_COLLATERAL", iRangeCollateralDamage));
+}
+// merkava120.tc END
 
 // advc.004c:
 void CvGameTextMgr::getParadropPlotHelp(CvPlot const& kPlot,
