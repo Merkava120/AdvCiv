@@ -7,4 +7,6 @@ CvGameCoreDLL/Project/temp_files/*
 CvGameCoreDLL/Project/AdvCiv.opensdf
 CvGameCoreDLL/Project/AdvCiv.sdf
 CvGameCoreDLL/Project/AdvCiv.vcxproj.user
+CvGameCoreDLL/Project/Makefile
+CvGameCoreDLL/Project/Makefile.settings
 *.bak
