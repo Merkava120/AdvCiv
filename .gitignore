@@ -1,2 +1,10 @@
-CvGameCoreDLL/Project/*
-*.FPK
+CvGameCoreDLL/Project/.vs/*
+CvGameCoreDLL/Project/Boost-1.32.0/*
+CvGameCoreDLL/Project/Debug/*
+CvGameCoreDLL/Project/obj/*
+CvGameCoreDLL/Project/Python24/*
+CvGameCoreDLL/Project/temp_files/*
+CvGameCoreDLL/Project/AdvCiv.opensdf
+CvGameCoreDLL/Project/AdvCiv.sdf
+CvGameCoreDLL/Project/AdvCiv.vcxproj.user
+*.bak
