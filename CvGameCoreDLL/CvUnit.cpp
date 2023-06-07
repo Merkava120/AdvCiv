@@ -2559,7 +2559,8 @@ bool CvUnit::canMoveInto(CvPlot const& kPlot, bool bAttack, bool bDeclareWar,
 			{
 				return false;
 			}
-			if (kPlot.getNumUnits() > 0)
+			// merk.ras1: changed to global define
+			if (kPlot.getNumUnits() > GC.getDefineINT("ANIMAL_UNITS_PER_TILE_LIMIT") && GC.getDefineINT("ANIMAL_UNITS_PER_TILE_LIMIT") >= 0)
 				return false;
 		}
 	}
@@ -8696,11 +8697,12 @@ void CvUnit::setXY(int iX, int iY, bool bGroup, bool bUpdate, bool bShow, bool b
 					continue;
 				/*  advc.001, advc.300: Otherwise, a Barbarian city can land
 					on top of an animal and trap it. */
-				if(pLoopUnit->isAnimal())
+				// merk.ras1 - removed, makes weird things happen to animals. Can find another way to set trapped ones free later
+				/*if(pLoopUnit->isAnimal())
 				{
 					pLoopUnit->kill(false);
 					continue;
-				}
+				}*/
 				CvTeamAI& kUnitTeam = GET_TEAM(pLoopUnit->getTeam()); // advc
 				if ((isEnemy(kUnitTeam.getID(), *pNewPlot) ||
 					pLoopUnit->isEnemy(getTeam())) &&

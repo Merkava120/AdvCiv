@@ -34,5 +34,11 @@
 		<DefineName>BARB_ADVANCED_START_MULTIPLIER</DefineName>
 		<iDefineIntVal>50</iDefineIntVal>
 	</Define>
+	
+	<!-- animal units cannot move into tiles with more than this number of units (default 0) -->
+	<Define>
+		<DefineName>ANIMAL_UNITS_PER_TILE_LIMIT</DefineName>
+		<iDefineIntVal>3</iDefineIntVal>
+	</Define>
 
 </Civ4Defines>
