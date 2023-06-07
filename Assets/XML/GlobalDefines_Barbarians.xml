@@ -35,6 +35,51 @@
 		<iDefineIntVal>50</iDefineIntVal>
 	</Define>
 	
+	<!-- if GAMEOPTION_NO_ANIMALS is checked, the turn barbarians spawn will be multiplied by this numerator and denominator, 
+		and then the max of that and MIN will be added to the otherwise calculated StartTurn. 
+	Default is 3, 4, 9-->
+	<!-- note that this target is usually compared to MIN anyway but is not multiplied by 3/4 so that's the NOANIMALS part-->
+	<Define>
+		<DefineName>NOANIMALS_START_NUMERATOR</DefineName>
+		<iDefineIntVal>3</iDefineIntVal>
+	</Define>
+	<Define> 
+		<DefineName>NOANIMALS_START_DENOMINATOR</DefineName>
+		<iDefineIntVal>4</iDefineIntVal>
+	</Define>
+	<Define> 
+		<DefineName>BARB_START_MIN_ADD</DefineName>
+		<iDefineIntVal>9</iDefineIntVal>
+	</Define>
+	
+	<!-- minimum turns before animals can spawn, no exceptions; default 5 -->
+	<Define>
+		<DefineName>MIN_TURNS_BEFORE_ANIMALS</DefineName>
+		<iDefineIntVal>5</iDefineIntVal>
+	</Define>
+	
+	<!-- require a multiple of this and the number of cities existing to be greater than the number of players to spawn animals
+	 default 100, setting to 0 disables the city requirement, between 0 and 100 is a percent -->	
+	<Define>
+		<DefineName>CITIES_BEFORE_ANIMALS_MULT</DefineName>
+		<iDefineIntVal>100</iDefineIntVal>
+	</Define>
+	<!-- if an area has no civs in it, divide the animals needed by this (default 2)-->
+	<Define>
+		<DefineName>ANIMALS_ON_EMPTY_LANDS_DIVISOR</DefineName>
+		<iDefineIntVal>2</iDefineIntVal>
+	</Define>
+	<!-- in the code for creating animals the iNeededAnimals is divided by this before actually placing them. Can change this to fine tune total number of animals-->
+	<Define>
+		<DefineName>NEEDED_ANIMALS_DIVISOR</DefineName>
+		<iDefineIntVal>5</iDefineIntVal>
+	</Define>
+	<!-- continent must have more than this many cities for big groups of barbs to spawn. Set to -1 to not care. Default 0 -->
+	<Define>
+		<DefineName>ALLOW_BIG_GROUPS_WITH_CITIES</DefineName>
+		<iDefineIntVal>0</iDefineIntVal>
+	</Define>
+	
 	<!-- animal units cannot move into tiles with more than this number of units (default 0) -->
 	<Define>
 		<DefineName>ANIMAL_UNITS_PER_TILE_LIMIT</DefineName>

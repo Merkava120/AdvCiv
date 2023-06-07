@@ -7114,7 +7114,7 @@ void CvGame::createBarbarianUnits()
 	int iBaseTilesPerLandUnit = kGameHandicap.getUnownedTilesPerBarbarianUnit();
 	// Divided by 10 b/c now only shelf water tiles count
 	int iBaseTilesPerSeaUnit = kGameHandicap.getUnownedWaterTilesPerBarbarianUnit() / 8;
-	// </advc.300>
+	// </advc.300> // merk.ras1 - leaving that for now
 	FOR_EACH_AREA_VAR(pLoopArea)
 	{
 		// <advc.300>
@@ -7232,7 +7232,7 @@ void CvGame::createBarbarianUnits()
 	{
 		/*	Large Barb congregations are only a problem if they have nothing
 			to attack */
-		if (pCity->getArea().getNumCivCities() > 0)
+		if (pCity->getArea().getNumCivCities() > GC.getDefineINT("ALLOW_BIG_GROUPS_WITH_CITIES") && GC.getDefineINT("ALLOW_BIG_GROUPS_WITH_CITIES") >= 0) // merk.ras1
 			continue;
 		int iUnits = pCity->getPlot().getNumDefenders(BARBARIAN_PLAYER);
 		scaled rKillProb = (iUnits - scaled::max(fixp(1.5) * pCity->getPopulation(), 4)) / 4;
@@ -7250,13 +7250,14 @@ void CvGame::createAnimals()
 		return;
 	}
 	CvHandicapInfo const& kGameHandicap = GC.getInfo(getHandicapType());
+	// merk.ras1 note - leaving this alone, I think it's a bug check?
 	if (kGameHandicap.getUnownedTilesPerGameAnimal() <= 0)
 		return;
 
-	if (getNumCivCities() < countCivPlayersAlive())
+	if (intdiv::uround(getNumCivCities() * GC.getDefineINT("CITIES_BEFORE_ANIMALS_MULT"), 100) < countCivPlayersAlive()) // merk.ras1
 		return;
 
-	if (getElapsedGameTurns() < 5)
+	if (getElapsedGameTurns() < GC.getDefineINT("MIN_TURNS_BEFORE_ANIMALS")) // merk.ras1
 		return;
 
 	int const iMinAnimalStartingDist = GC.getDefineINT("MIN_ANIMAL_STARTING_DISTANCE"); // advc.300
@@ -7270,12 +7271,12 @@ void CvGame::createAnimals()
 		/*	<advc.300> Will allow animals to survive longer on landmasses w/o
 			civ cities. But only want a couple of animals there. */
 		if (pLoopArea->getNumCivCities() <= 0)
-			iNeededAnimals /= 2; // </advc.300>
+			iNeededAnimals /= GC.getDefineINT("ANIMALS_ON_EMPTY_LANDS_DIVISOR"); // </advc.300> // merk.ras1
 		iNeededAnimals -= pLoopArea->getUnitsPerPlayer(BARBARIAN_PLAYER);
 		if (iNeededAnimals <= 0)
 			continue;
 
-		iNeededAnimals = (iNeededAnimals / 5) + 1;
+		iNeededAnimals = (iNeededAnimals / GC.getDefineINT("NEEDED_ANIMALS_DIVISOR")) + 1; // merk.ras1
 		for (int i = 0; i < iNeededAnimals; i++)
 		{
 			CvPlot* pPlot = GC.getMap().syncRandPlot(
@@ -7288,6 +7289,7 @@ void CvGame::createAnimals()
 			UnitTypes eBestUnit = NO_UNIT;
 			int iBestValue = 0;
 			// advc (comment): This loop picks an animal that is suitable for pPlot
+			// merk.ras1 note - this will be heavily modded later
 			CvCivilization const& kCiv = GET_PLAYER(BARBARIAN_PLAYER).getCivilization();
 			for (int j = 0; j < kCiv.getNumUnits(); j++)
 			{
@@ -7345,9 +7347,11 @@ int CvGame::getBarbarianStartTurn() const
 		iStartTurn = (iStartTurn * GC.getDefineINT("BARB_ADVANCED_START_MULTIPLIER")) / 100; // merk.ras1
 	}
 	// <advc.309>
+	// merk.ras1 BEGIN
 	else if (isOption(GAMEOPTION_NO_ANIMALS))
-		iTargetElapsed = intdiv::uround(iTargetElapsed * 3, 4); // </advc.309>
-	iTargetElapsed = std::max(iTargetElapsed, 9);
+		iTargetElapsed = intdiv::uround(iTargetElapsed * GC.getDefineINT("NOANIMALS_START_NUMERATOR"), GC.getDefineINT("NOANIMALS_START_DENOMINATOR")); // </advc.309>
+	iTargetElapsed = std::max(iTargetElapsed, GC.getDefineINT("BARB_START_MIN_ADD"));
+	// merk.ras1 END
 	return iStartTurn + iTargetElapsed;
 }
 
@@ -7377,6 +7381,7 @@ int CvGame::numBarbariansToCreate(int iTilesPerUnit, int iTiles, int iUnowned,
 	}
 	/*	For Rage, reduce divisor to 65% (50% in BtS), but
 		<advc.307> reduces it further based on the game era. */
+	// merk.ras1 note - this has a bunch of hardcoded stuff but I don't usually use Raging Barbs so I'm leaving it alone for now
 	if (isOption(GAMEOPTION_RAGING_BARBARIANS))
 	{
 		int iCurrentEra = getCurrentEra();
