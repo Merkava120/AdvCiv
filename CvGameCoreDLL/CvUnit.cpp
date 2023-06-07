@@ -566,6 +566,8 @@ void CvUnit::kill(bool bDelay, PlayerTypes ePlayer)
 	UnitTypes const eCaptureUnitType = (eCapturingPlayer == NO_PLAYER ? NO_UNIT :
 			getCaptureUnitType(GET_PLAYER(eCapturingPlayer).getCivilizationType()));
 
+	
+
 	setXY(INVALID_PLOT_COORD, INVALID_PLOT_COORD, true);
 	joinGroup(NULL, false, false);
 	CvEventReporter::getInstance().unitLost(this);
@@ -1218,6 +1220,8 @@ void CvUnit::resolveCombat(CvUnit* pDefender, CvPlot* pPlot, bool bVisible)
 				pDefender->changeExperience(iExperience, maxXPValue(), true,
 						pPlot->getOwner() == pDefender->getOwner(), //!isBarbarian()
 						getGlobalXPPercent()); // advc.312
+
+				
 			}
 			else
 			{
@@ -1234,6 +1238,19 @@ void CvUnit::resolveCombat(CvUnit* pDefender, CvPlot* pPlot, bool bVisible)
 				changeExperience(iExperience, pDefender->maxXPValue(), true,
 						pPlot->getOwner() == getOwner(), //!pDefender->isBarbarian()
 						pDefender->getGlobalXPPercent());
+
+				// merk.ns BEGIN
+				if (pDefender->getUnitInfo().getDuplicateAttackerChance() > 0)
+				{
+					int iDup = SyncRandNum(100);
+					if (iDup <= pDefender->getUnitInfo().getDuplicateAttackerChance())
+					{
+						// place a copy of attacker on attacker 
+						CvPlayerAI& kAttackerPlayer = GET_PLAYER(getOwner());
+						kAttackerPlayer.initUnit(getUnitType(), getX(), getY());
+					}
+				}
+				// merk.ns END
 			}
 			GET_PLAYER(getOwner()).AI_attackMadeAgainst(*pDefender); // advc.139
 			break;

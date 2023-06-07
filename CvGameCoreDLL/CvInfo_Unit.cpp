@@ -91,6 +91,7 @@ m_bOnlyDefensive(false),
 m_bOnlyAttackAnimals(false), // advc.315a
 m_bOnlyAttackBarbarians(false), // advc.315b
 m_bNoCapture(false),
+m_iDuplicateAttackerChance(0), // merk.ns
 m_bQuickCombat(false),
 m_bRivalTerritory(false),
 m_bMilitaryHappiness(false),
@@ -819,6 +820,7 @@ void CvUnitInfo::read(FDataStreamBase* stream)
 	stream->Read(&m_bOnlyAttackAnimals); // advc.315a
 	stream->Read(&m_bOnlyAttackBarbarians); // advc.315b
 	stream->Read(&m_bNoCapture);
+	stream->Read(&m_iDuplicateAttackerChance); // merk.ns
 	stream->Read(&m_bQuickCombat);
 	stream->Read(&m_bRivalTerritory);
 	stream->Read(&m_bMilitaryHappiness);
@@ -1091,6 +1093,7 @@ void CvUnitInfo::write(FDataStreamBase* stream)
 	stream->Write(m_bOnlyAttackAnimals); // advc.315a
 	stream->Write(m_bOnlyAttackBarbarians); // advc.315b
 	stream->Write(m_bNoCapture);
+	stream->Write(m_iDuplicateAttackerChance); // merk.ns
 	stream->Write(m_bQuickCombat);
 	stream->Write(m_bRivalTerritory);
 	stream->Write(m_bMilitaryHappiness);
@@ -1225,6 +1228,7 @@ bool CvUnitInfo::read(CvXMLLoadUtility* pXML)
 	// advc.315b:
 	pXML->GetChildXmlValByName(&m_bOnlyAttackBarbarians, "bOnlyAttackBarbarians", false);
 	pXML->GetChildXmlValByName(&m_bNoCapture, "bNoCapture");
+	pXML->GetChildXmlValByName(&m_iDuplicateAttackerChance, "iDuplicateAttackerChance", 0); // merk.ns
 	pXML->GetChildXmlValByName(&m_bQuickCombat, "bQuickCombat");
 	pXML->GetChildXmlValByName(&m_bRivalTerritory, "bRivalTerritory");
 	pXML->GetChildXmlValByName(&m_bMilitaryHappiness, "bMilitaryHappiness");
