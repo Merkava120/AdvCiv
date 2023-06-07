@@ -7093,12 +7093,14 @@ void CvGame::createBarbarianUnits()
 	/*	advc.300: No need to delay Barbarians (bAnimals=true) if they start slowly.
 		For slow game speed settings, there is now a similar check in
 		CvUnitAI::AI_barbAttackMove. */
-	if (barbarianPeakLandRatio() < per100(30) &&
-		getNumCivCities() * 2 < countCivPlayersAlive() * 3 &&
+	// merk.ras1 begin - changed numbers to globaldefines 
+	if (barbarianPeakLandRatio() < per100(GC.getDefineINT("ANIMAL_BARB_LAND_RATIO")) &&
+		getNumCivCities() * GC.getDefineINT("ANIMAL_CITY_MULT") < countCivPlayersAlive() * GC.getDefineINT("ANIMAL_ALIVE_PLAYERS_MULT") &&
 		!isOption(GAMEOPTION_ONE_CITY_CHALLENGE))
 	{
 		bAnimals = true;
 	}
+	// merk.ras1 end
 	// advc.300: Moved into new function
 	if (getGameTurn() < getBarbarianStartTurn())
 		bAnimals = true;
@@ -7322,8 +7324,8 @@ bool CvGame::isBarbarianCreationEra() const
 	EraTypes eCurrentEra = getCurrentEra();
 	return (!GC.getInfo(eCurrentEra).isNoBarbUnits() &&
 			/*	Also stop spawning when Barbarian tech falls behind too much;
-				may resume once they catch up. */
-			eCurrentEra <= GET_PLAYER(BARBARIAN_PLAYER).getCurrentEra() + 1);
+				may resume once they catch up. */ /*merk.ras1 moved to two global defines*/ GC.getDefineINT("PAUSE_BARBS_IF_BEHIND") ? 
+			eCurrentEra <= GET_PLAYER(BARBARIAN_PLAYER).getCurrentEra() + GC.getDefineINT("BARBS_BEHIND_ERAS") : false);
 }
 
 // <advc.300>
@@ -7340,7 +7342,7 @@ int CvGame::getBarbarianStartTurn() const
 		// advc.250b: Earlier Barbarians only if humans start Advanced too
 		!isOption(GAMEOPTION_SPAH))
 	{
-		iStartTurn /= 2;
+		iStartTurn = (iStartTurn * GC.getDefineINT("BARB_ADVANCED_START_MULTIPLIER")) / 100; // merk.ras1
 	}
 	// <advc.309>
 	else if (isOption(GAMEOPTION_NO_ANIMALS))

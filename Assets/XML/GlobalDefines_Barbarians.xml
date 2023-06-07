@@ -1,0 +1,38 @@
+<?xml version="1.0"?>
+
+<!-- This file contains a bunch of variables related to barbarian and animal spawning which were previously hard-coded in CvGame.cpp -->
+
+<Civ4Defines xmlns="x-schema:CIV4GlobalDefinesSchema.xml">
+
+	<!-- Set to 1 if you want barbarians to stop spawning if they fall too far behind -->
+	<Define> 
+		<DefineName>PAUSE_BARBS_IF_BEHIND</DefineName>
+		<iDefineIntVal>1</iDefineIntVal>
+	</Define>
+	<!-- how many eras. Advc default 1 -->
+	<Define> 
+		<DefineName>BARBS_BEHIND_ERAS</DefineName>
+		<iDefineIntVal>1</iDefineIntVal>
+	</Define>
+	<!-- Animal spawning condition 1: If the barbarian 'peak land ratio' is less than this per 100 (default 30) -->
+	<Define> 
+		<DefineName>ANIMAL_BARB_LAND_RATIO</DefineName>
+		<iDefineIntVal>30</iDefineIntVal>
+	</Define>
+	<!-- Animal spawning condition 2: ANIMAL_CITY_MULT times the number of cities in the game is less than ANIMAL_ALIVE_PLAYERS_MULT times the number of players who are alive (default 2 and 3) -->
+	<Define> 
+		<DefineName>ANIMAL_CITY_MULT</DefineName>
+		<iDefineIntVal>2</iDefineIntVal>
+	</Define>
+	<Define> 
+		<DefineName>ANIMAL_ALIVE_PLAYERS_MULT</DefineName>
+		<iDefineIntVal>3</iDefineIntVal>
+	</Define>
+	
+	<!-- multiply start turn by this, then divide by 100, if it's advanced start for barbarians and humans. Default 50 -->
+	<Define> 
+		<DefineName>BARB_ADVANCED_START_MULTIPLIER</DefineName>
+		<iDefineIntVal>50</iDefineIntVal>
+	</Define>
+
+</Civ4Defines>
