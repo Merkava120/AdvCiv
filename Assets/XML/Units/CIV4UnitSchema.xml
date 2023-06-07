@@ -113,6 +113,8 @@
 	<!-- advc.315b -->
 	<ElementType name="bOnlyAttackBarbarians" content="textOnly" dt:type="boolean"/>
 	<ElementType name="bNoCapture" content="textOnly" dt:type="boolean"/>
+	<!-- merk.ns -->
+	<ElementType name="iDuplicateAttackerChance" content="textOnly" dt:type="int"/>
 	<ElementType name="bQuickCombat" content="textOnly" dt:type="boolean"/>
 	<ElementType name="bRivalTerritory" content="textOnly" dt:type="boolean"/>
 	<ElementType name="bMilitaryHappiness" content="textOnly" dt:type="boolean"/>
@@ -553,6 +555,8 @@
 		<!-- advc.315b (set to false by default in the DLL) -->
 		<element type="bOnlyAttackBarbarians" minOccurs="0"/>
 		<element type="bNoCapture"/>
+		<!-- merk.ns -->
+		<element type="iDuplicateAttackerChance" minOccurs="0"/>
 		<element type="bQuickCombat"/>
 		<element type="bRivalTerritory"/>
 		<element type="bMilitaryHappiness"/>

@@ -182,6 +182,7 @@ public: /*  All const functions are exposed to Python except some related to art
 		return m_bOnlyAttackBarbarians;
 	}
 	bool isNoCapture() const { return m_bNoCapture; }
+	int getDuplicateAttackerChance() const { return m_iDuplicateAttackerChance;  } // merk.ns
 	bool isQuickCombat() const { return m_bQuickCombat; }
 	bool isRivalTerritory() const { return m_bRivalTerritory; }
 	bool isMilitaryHappiness() const { return m_bMilitaryHappiness; }
@@ -433,6 +434,7 @@ protected:
 	bool m_bOnlyAttackAnimals; // advc.315a
 	bool m_bOnlyAttackBarbarians; // advc.315b
 	bool m_bNoCapture;
+	int m_iDuplicateAttackerChance; // merk.ns
 	bool m_bQuickCombat;
 	bool m_bRivalTerritory;
 	bool m_bMilitaryHappiness;
