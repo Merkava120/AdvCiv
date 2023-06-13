@@ -37,6 +37,7 @@ m_iRangeDefense(0),
 m_iRangeDamage(0),
 m_iRangeDamageBlock(0),
 m_iRangeBlockScalingType(0),
+m_bIndirectAttack(false),
 // merk.rcb end
 m_iXPValueAttack(0),
 m_iXPValueDefense(0),
@@ -767,6 +768,7 @@ void CvUnitInfo::read(FDataStreamBase* stream)
 	stream->Read(&m_iRangeDamage);
 	stream->Read(&m_iRangeDamageBlock);
 	stream->Read(&m_iRangeBlockScalingType);
+	stream->Read(&m_bIndirectAttack);
 	// merk.rcb end
 	stream->Read(&m_iXPValueAttack);
 	stream->Read(&m_iXPValueDefense);
@@ -1050,6 +1052,7 @@ void CvUnitInfo::write(FDataStreamBase* stream)
 	stream->Write(m_iRangeDamage);
 	stream->Write(m_iRangeDamageBlock);
 	stream->Write(m_iRangeBlockScalingType);
+	stream->Write(m_bIndirectAttack);
 	// merk.rcb end
 	stream->Write(m_iXPValueAttack);
 	stream->Write(m_iXPValueDefense);
@@ -1443,6 +1446,7 @@ bool CvUnitInfo::read(CvXMLLoadUtility* pXML)
 	pXML->GetChildXmlValByName(&m_iRangeDamage, "iRangeDamage", 0);
 	pXML->GetChildXmlValByName(&m_iRangeDamageBlock, "iRangeDamageBlock", 0);
 	pXML->GetChildXmlValByName(&m_iRangeBlockScalingType, "iRangeBlockScalingType", 0);
+	pXML->GetChildXmlValByName(&m_bIndirectAttack, "bIndirectAttack", false);
 	// merk.rcb end
 	pXML->GetChildXmlValByName(&m_iXPValueAttack, "iXPValueAttack");
 	pXML->GetChildXmlValByName(&m_iXPValueDefense, "iXPValueDefense");

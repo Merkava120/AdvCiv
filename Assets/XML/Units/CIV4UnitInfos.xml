@@ -118,6 +118,7 @@
 			<iRangeDamage>30</iRangeDamage>
 			<iRangeDamageBlock>15</iRangeDamageBlock>
 			<iRangeBlockScalingType>1</iRangeBlockScalingType>
+			<bIndirectAttack>1</bIndirectAttack>
 			<iXPValueAttack>4</iXPValueAttack>
 			<iXPValueDefense>2</iXPValueDefense>
 			<iFirstStrikes>0</iFirstStrikes>

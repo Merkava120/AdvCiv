@@ -11126,8 +11126,9 @@ bool CvUnit::canRangeStrikeAt(const CvPlot* pPlot, int iX, int iY) const
 		obstacles in the line of sight, GC.getMap().directionXY(*pPlot, *pTargetPlot)
 		could be used instead of getFacingDirection, but a strike at range 2 should
 		arguably represent indirect fire. */
-	/*if (!pPlot->canSeePlot(pTargetPlot, getTeam(), airRange(), getFacingDirection(true)))
-		return false;*/
+	// merk.rcb: indirect fire now has a tag. 
+	if (!pPlot->canSeePlot(pTargetPlot, getTeam(), airRange(), getFacingDirection(true)))
+		return getUnitInfo().isIndirectAttack();
 
 	return true;
 }

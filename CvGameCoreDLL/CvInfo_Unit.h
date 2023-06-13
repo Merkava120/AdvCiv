@@ -112,6 +112,7 @@ public: /*  All const functions are exposed to Python except some related to art
 	int getRangeDamage() const { return m_iRangeDamage; }
 	int getRangeDamageBlock() const { return m_iRangeDamageBlock; }
 	int getRangeBlockScalingType() const { return m_iRangeBlockScalingType; }
+	bool isIndirectAttack() const { return m_bIndirectAttack; }
 	// merk.rcb end
 	int getXPValueAttack() const { return m_iXPValueAttack; }
 	int getXPValueDefense() const { return m_iXPValueDefense; }
@@ -386,6 +387,7 @@ protected:
 	int m_iRangeDamage;
 	int m_iRangeDamageBlock;
 	int m_iRangeBlockScalingType;
+	bool m_bIndirectAttack;
 	// merk.rcb end
 	int m_iXPValueAttack;
 	int m_iXPValueDefense;
