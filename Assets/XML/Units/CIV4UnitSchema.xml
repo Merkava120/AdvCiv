@@ -361,6 +361,12 @@
 	<ElementType name="iCombatLimit" content="textOnly" dt:type="int"/>
 	<ElementType name="iAirCombat" content="textOnly" dt:type="int"/>
 	<ElementType name="iAirCombatLimit" content="textOnly" dt:type="int"/>
+	<!-- merkava120.rcb start -->
+	<ElementType name="iRangeDefense" content="textOnly" dt:type="int"/>
+	<ElementType name="iRangeDamage" content="textOnly" dt:type="int"/>
+	<ElementType name="iRangeDamageBlock" content="textOnly" dt:type="int"/>
+	<ElementType name="iRangeBlockScalingType" content="textOnly" dt:type="int"/>
+	<!-- merkava120.rcb end -->
 	<ElementType name="iXPValueAttack" content="textOnly" dt:type="int"/>
 	<ElementType name="iXPValueDefense" content="textOnly" dt:type="int"/>
 	<ElementType name="iFirstStrikes" content="textOnly" dt:type="int"/>
@@ -643,6 +649,12 @@
 		<element type="iCombatLimit"/>
 		<element type="iAirCombat"/>
 		<element type="iAirCombatLimit"/>
+		<!-- merkava120.rcb begin -->
+		<element type="iRangeDefense" minOccurs="0"/>
+		<element type="iRangeDamage" minOccurs="0"/>
+		<element type="iRangeDamageBlock" minOccurs="0"/>
+		<element type="iRangeBlockScalingType" minOccurs="0"/>
+		<!-- merkava120.rcb end -->
 		<element type="iXPValueAttack"/>
 		<element type="iXPValueDefense"/>
 		<element type="iFirstStrikes"/>

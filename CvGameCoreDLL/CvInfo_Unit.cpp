@@ -32,6 +32,12 @@ m_iCombat(0),
 m_iCombatLimit(0),
 m_iAirCombat(0),
 m_iAirCombatLimit(0),
+// merk.rcb begin
+m_iRangeDefense(0),
+m_iRangeDamage(0),
+m_iRangeDamageBlock(0),
+m_iRangeBlockScalingType(0),
+// merk.rcb end
 m_iXPValueAttack(0),
 m_iXPValueDefense(0),
 m_iFirstStrikes(0),
@@ -756,6 +762,12 @@ void CvUnitInfo::read(FDataStreamBase* stream)
 	stream->Read(&m_iCombatLimit);
 	stream->Read(&m_iAirCombat);
 	stream->Read(&m_iAirCombatLimit);
+	// merk.rcb begin
+	stream->Read(&m_iRangeDefense);
+	stream->Read(&m_iRangeDamage);
+	stream->Read(&m_iRangeDamageBlock);
+	stream->Read(&m_iRangeBlockScalingType);
+	// merk.rcb end
 	stream->Read(&m_iXPValueAttack);
 	stream->Read(&m_iXPValueDefense);
 	stream->Read(&m_iFirstStrikes);
@@ -1033,6 +1045,12 @@ void CvUnitInfo::write(FDataStreamBase* stream)
 	stream->Write(m_iCombatLimit);
 	stream->Write(m_iAirCombat);
 	stream->Write(m_iAirCombatLimit);
+	// merk.rcb begin
+	stream->Write(m_iRangeDefense);
+	stream->Write(m_iRangeDamage);
+	stream->Write(m_iRangeDamageBlock);
+	stream->Write(m_iRangeBlockScalingType);
+	// merk.rcb end
 	stream->Write(m_iXPValueAttack);
 	stream->Write(m_iXPValueDefense);
 	stream->Write(m_iFirstStrikes);
@@ -1420,6 +1438,12 @@ bool CvUnitInfo::read(CvXMLLoadUtility* pXML)
 	pXML->GetChildXmlValByName(&m_iCombatLimit, "iCombatLimit");
 	pXML->GetChildXmlValByName(&m_iAirCombat, "iAirCombat");
 	pXML->GetChildXmlValByName(&m_iAirCombatLimit, "iAirCombatLimit");
+	// merk.rcb begin
+	pXML->GetChildXmlValByName(&m_iRangeDefense, "iRangeDefense", 0);
+	pXML->GetChildXmlValByName(&m_iRangeDamage, "iRangeDamage", 0);
+	pXML->GetChildXmlValByName(&m_iRangeDamageBlock, "iRangeDamageBlock", 0);
+	pXML->GetChildXmlValByName(&m_iRangeBlockScalingType, "iRangeBlockScalingType", 0);
+	// merk.rcb end
 	pXML->GetChildXmlValByName(&m_iXPValueAttack, "iXPValueAttack");
 	pXML->GetChildXmlValByName(&m_iXPValueDefense, "iXPValueDefense");
 	pXML->GetChildXmlValByName(&m_iFirstStrikes, "iFirstStrikes");
