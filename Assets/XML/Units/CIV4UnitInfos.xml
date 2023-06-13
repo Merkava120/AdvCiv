@@ -93,7 +93,7 @@
 			<iMinAreaSize>-1</iMinAreaSize>
 			<iMoves>1</iMoves>
 			<bNoRevealMap>0</bNoRevealMap>
-			<iAirRange>0</iAirRange>
+			<iAirRange>8</iAirRange>
 			<iAirUnitCap>0</iAirUnitCap>
 			<iDropRange>0</iDropRange>
 			<iNukeRange>-1</iNukeRange>
@@ -112,8 +112,12 @@
 			<FeaturePassableTechs/>
 			<iCombat>2</iCombat>
 			<iCombatLimit>100</iCombatLimit>
-			<iAirCombat>0</iAirCombat>
-			<iAirCombatLimit>0</iAirCombatLimit>
+			<iAirCombat>2</iAirCombat>
+			<iAirCombatLimit>100</iAirCombatLimit>
+			<iRangeDefense>1</iRangeDefense>
+			<iRangeDamage>30</iRangeDamage>
+			<iRangeDamageBlock>15</iRangeDamageBlock>
+			<iRangeBlockScalingType>1</iRangeBlockScalingType>
 			<iXPValueAttack>4</iXPValueAttack>
 			<iXPValueDefense>2</iXPValueDefense>
 			<iFirstStrikes>0</iFirstStrikes>
@@ -293,6 +297,9 @@
 			<iCombatLimit>100</iCombatLimit>
 			<iAirCombat>0</iAirCombat>
 			<iAirCombatLimit>0</iAirCombatLimit>
+			<iRangeDefense>5</iRangeDefense>
+			<iRangeDamageBlock>3</iRangeDamageBlock>
+			<iRangeBlockScalingType>1</iRangeBlockScalingType>
 			<iXPValueAttack>4</iXPValueAttack>
 			<iXPValueDefense>2</iXPValueDefense>
 			<iFirstStrikes>0</iFirstStrikes>
@@ -464,6 +471,9 @@
 			<iCombatLimit>100</iCombatLimit>
 			<iAirCombat>0</iAirCombat>
 			<iAirCombatLimit>0</iAirCombatLimit>
+			<iRangeDefense>5</iRangeDefense>
+			<iRangeDamageBlock>3</iRangeDamageBlock>
+			<iRangeBlockScalingType>2</iRangeBlockScalingType>
 			<iXPValueAttack>4</iXPValueAttack>
 			<iXPValueDefense>2</iXPValueDefense>
 			<iFirstStrikes>0</iFirstStrikes>
@@ -635,6 +645,9 @@
 			<iCombatLimit>100</iCombatLimit>
 			<iAirCombat>0</iAirCombat>
 			<iAirCombatLimit>0</iAirCombatLimit>
+			<iRangeDefense>5</iRangeDefense>
+			<iRangeDamageBlock>3</iRangeDamageBlock>
+			<iRangeBlockScalingType>3</iRangeBlockScalingType>
 			<iXPValueAttack>4</iXPValueAttack>
 			<iXPValueDefense>2</iXPValueDefense>
 			<iFirstStrikes>0</iFirstStrikes>

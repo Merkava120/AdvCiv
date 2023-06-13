@@ -8027,19 +8027,37 @@ int CvUnit::rangeCombatDamage(const CvUnit* pDefender) const
 	}
 	
 	switch (iScalingType) {
-	case 0:
-		// simple blocking
-		if (iTheirStrength > iOurStrength)
+		case 0:
+			// percentage blocking
+			if (iTheirStrength > iOurStrength)
+				iDamage = (iDamage * iBlock) / 100;
+			break;
+		case 1:
+			// ratio blocking
+			iBlock = (iBlock * iTheirStrength) / iOurStrength;
+			iDamage -= iBlock; 
+			break;
+		case 2: 
+			// ratio blocking, cannot exceed original block
+			iBlock = std::min(iBlock * iTheirStrength / iOurStrength, iBlock);
 			iDamage -= iBlock;
-	case 1:
-		// ratio blocking
-		iBlock *= iTheirStrength / iOurStrength;
-		iDamage -= iBlock; 
-	case 2: 
-		// ratio blocking, cannot exceed original block
-		int iBlocked = iBlock * iTheirStrength / iOurStrength;
-		iBlocked = std::min(iBlocked, iBlock);
-		iDamage -= iBlocked;
+			break;
+		case 3:
+			// subtractive blocking
+			if (iTheirStrength > iOurStrength)
+				iDamage -= iBlock;
+			break;
+		case 4: 
+			// ratio percentage blocking
+			iBlock = (iBlock * iTheirStrength) / iOurStrength;
+			iDamage = (iDamage * iBlock) / 100;
+			break;
+		case 5: 
+			// ratio percentage, cannot exceed original
+			// ratio blocking, cannot exceed original block
+			iBlock = std::min(iBlock * iTheirStrength / iOurStrength, iBlock);
+			iDamage = (iDamage * iBlock) / 100;
+			break;
 	}
 	return iDamage;
 }
