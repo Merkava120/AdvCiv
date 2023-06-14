@@ -15,6 +15,8 @@ m_iAdvancedStartCost(100), // advc (from MNAI)
 m_iAdvancedStartCostIncrease(0),
 m_iMinAreaSize(0),
 m_iMoves(0),
+m_iStrike(0), // merk.lt
+m_iReach(0), // merk.lt
 m_iAirRange(0),
 m_iAirUnitCap(0),
 m_iDropRange(0),
@@ -42,7 +44,20 @@ m_iRangeAttackMoves(0),
 m_iRangeAttacks(0),
 m_bRangeMustMotionless(false),
 m_bRangeMustFortify(false),
-// merk.rcb end
+// merk.rcm begin
+m_iHillsRangeDefense(0),
+m_iHillsRangeBlock(0),
+m_iCityRangeDefense(0),
+m_iCityRangeBlock(0),
+m_iFeatureRangeDefense(0),
+m_iFeatureRangeBlock(0),
+m_iMotionlessRangeDefense(0),
+m_iMotionlessRangeBlock(0),
+m_iFortifyRangeDefense(0),
+m_iFortifyRangeBlock(0),
+m_iDamagedRangeDefense(0),
+m_iDamagedRangeBlock(0),
+// merk.rc end
 m_iXPValueAttack(0),
 m_iXPValueDefense(0),
 m_iFirstStrikes(0),
@@ -753,6 +768,8 @@ void CvUnitInfo::read(FDataStreamBase* stream)
 	stream->Read(&m_iAdvancedStartCostIncrease);
 	stream->Read(&m_iMinAreaSize);
 	stream->Read(&m_iMoves);
+	stream->Read(&m_iStrike); // merk.lt
+	stream->Read(&m_iReach); // merk.lt
 	stream->Read(&m_iAirRange);
 	stream->Read(&m_iAirUnitCap);
 	stream->Read(&m_iDropRange);
@@ -780,7 +797,20 @@ void CvUnitInfo::read(FDataStreamBase* stream)
 	stream->Read(&m_iRangeAttacks);
 	stream->Read(&m_bRangeMustMotionless);
 	stream->Read(&m_bRangeMustFortify);
-	// merk.rcb end
+	// merk.rcm begin
+	stream->Read(&m_iHillsRangeDefense);
+	stream->Read(&m_iHillsRangeBlock);
+	stream->Read(&m_iCityRangeDefense);
+	stream->Read(&m_iCityRangeBlock);
+	stream->Read(&m_iFeatureRangeDefense);
+	stream->Read(&m_iFeatureRangeBlock);
+	stream->Read(&m_iMotionlessRangeDefense);
+	stream->Read(&m_iMotionlessRangeBlock);
+	stream->Read(&m_iFortifyRangeDefense);
+	stream->Read(&m_iFortifyRangeBlock);
+	stream->Read(&m_iDamagedRangeDefense);
+	stream->Read(&m_iDamagedRangeBlock);
+	// merk.rc end
 	stream->Read(&m_iXPValueAttack);
 	stream->Read(&m_iXPValueDefense);
 	stream->Read(&m_iFirstStrikes);
@@ -1044,6 +1074,8 @@ void CvUnitInfo::write(FDataStreamBase* stream)
 	stream->Write(m_iAdvancedStartCostIncrease);
 	stream->Write(m_iMinAreaSize);
 	stream->Write(m_iMoves);
+	stream->Write(m_iStrike); // merk.lt
+	stream->Write(m_iReach); // merk.lt
 	stream->Write(m_iAirRange);
 	stream->Write(m_iAirUnitCap);
 	stream->Write(m_iDropRange);
@@ -1071,7 +1103,20 @@ void CvUnitInfo::write(FDataStreamBase* stream)
 	stream->Write(m_iRangeAttacks);
 	stream->Write(m_bRangeMustMotionless);
 	stream->Write(m_bRangeMustFortify);
-	// merk.rcb end
+	// merk.rcm begin
+	stream->Write(m_iHillsRangeDefense);
+	stream->Write(m_iHillsRangeBlock);
+	stream->Write(m_iCityRangeDefense);
+	stream->Write(m_iCityRangeBlock);
+	stream->Write(m_iFeatureRangeDefense);
+	stream->Write(m_iFeatureRangeBlock);
+	stream->Write(m_iMotionlessRangeDefense);
+	stream->Write(m_iMotionlessRangeBlock);
+	stream->Write(m_iFortifyRangeDefense);
+	stream->Write(m_iFortifyRangeBlock);
+	stream->Write(m_iDamagedRangeDefense);
+	stream->Write(m_iDamagedRangeBlock);
+	// merk.rc end
 	stream->Write(m_iXPValueAttack);
 	stream->Write(m_iXPValueDefense);
 	stream->Write(m_iFirstStrikes);
@@ -1442,6 +1487,8 @@ bool CvUnitInfo::read(CvXMLLoadUtility* pXML)
 	pXML->GetChildXmlValByName(&m_iAdvancedStartCostIncrease, "iAdvancedStartCostIncrease");
 	pXML->GetChildXmlValByName(&m_iMinAreaSize, "iMinAreaSize");
 	pXML->GetChildXmlValByName(&m_iMoves, "iMoves");
+	pXML->GetChildXmlValByName(&m_iStrike, "iStrike", 0); // merk.lt
+	pXML->GetChildXmlValByName(&m_iReach, "iReach", 0); // merk.lt
 	pXML->GetChildXmlValByName(&m_iAirRange, "iAirRange");
 	pXML->GetChildXmlValByName(&m_iAirUnitCap, "iAirUnitCap");
 	pXML->GetChildXmlValByName(&m_iDropRange, "iDropRange");
@@ -1473,7 +1520,20 @@ bool CvUnitInfo::read(CvXMLLoadUtility* pXML)
 	pXML->GetChildXmlValByName(&m_iRangeAttacks, "iRangeAttacks", 0);
 	pXML->GetChildXmlValByName(&m_bRangeMustMotionless, "bRangeMustMotionless", false);
 	pXML->GetChildXmlValByName(&m_bRangeMustFortify, "bRangeMustFortify", false);
-	// merk.rcb end
+	// merk.rcm begin
+	pXML->GetChildXmlValByName(&m_iHillsRangeDefense, "iHillsRangeDefense", 0);
+	pXML->GetChildXmlValByName(&m_iHillsRangeBlock, "iHillsRangeBlock", 0);
+	pXML->GetChildXmlValByName(&m_iCityRangeDefense, "iCityRangeDefense", 0);
+	pXML->GetChildXmlValByName(&m_iCityRangeBlock, "iCityRangeBlock", 0);
+	pXML->GetChildXmlValByName(&m_iFeatureRangeDefense, "iFeatureRangeDefense", 0);
+	pXML->GetChildXmlValByName(&m_iFeatureRangeBlock, "iFeatureRangeBlock", 0);
+	pXML->GetChildXmlValByName(&m_iMotionlessRangeDefense, "iMotionlessRangeDefense", 0);
+	pXML->GetChildXmlValByName(&m_iMotionlessRangeBlock, "iMotionlessRangeBlock", 0);
+	pXML->GetChildXmlValByName(&m_iFortifyRangeDefense, "iFortifyRangeDefense", 0);
+	pXML->GetChildXmlValByName(&m_iFortifyRangeBlock, "iFortifyRangeBlock", 0);
+	pXML->GetChildXmlValByName(&m_iFortifyRangeDefense, "iDamagedRangeDefense", 0);
+	pXML->GetChildXmlValByName(&m_iFortifyRangeBlock, "iDamagedRangeBlock", 0);
+	// merk.rc end
 	pXML->GetChildXmlValByName(&m_iXPValueAttack, "iXPValueAttack");
 	pXML->GetChildXmlValByName(&m_iXPValueDefense, "iXPValueDefense");
 	pXML->GetChildXmlValByName(&m_iFirstStrikes, "iFirstStrikes");

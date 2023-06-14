@@ -725,6 +725,11 @@ public:
 	void setFortifyTurns(int iNewValue);
 	void changeFortifyTurns(int iChange);
 
+	// merk.rcm begin
+	int getTotalRangeDefense() const;
+	int getTotalRangeBlock() const; 
+	// merk.rcm end
+	
 	int getBlitzCount() const { return m_iBlitzCount; }
 	bool isBlitz() const																					// Exposed to Python
 	{

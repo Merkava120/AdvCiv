@@ -7706,6 +7706,11 @@ bool CvUnit::canAttack(const CvUnit& kDefender) const
 	{
 		return false;
 	} // </advc.089>
+	// merk.lt begin
+	// check strike here, but not reach
+	if (getUnitInfo().getStrike() < kDefender.getUnitInfo().getStrike())
+		return false; 
+	// merk.lt end
 	return true;
 }
 
@@ -7764,6 +7769,14 @@ bool CvUnit::canBeAttackedBy(PlayerTypes eAttackingPlayer,
 	// <advc>
 	if (pAttacker != NULL)
 	{
+		// merk.lt begin
+		// if attacker does not have enough strike, can't attack
+		if (pAttacker->getUnitInfo().getStrike() < getUnitInfo().getStrike())
+			return false;
+		// if attacker has more strike, but this does not make up for reach disadvantage, can't attack
+		else if (pAttacker->getUnitInfo().getStrike() - getUnitInfo().getStrike() + pAttacker->getUnitInfo().getReach() < getUnitInfo().getReach())
+			return false;
+		// merk.lt end
 		// Moved from CvPlot::hasDefender
 		if (bTestCanAttack && !pAttacker->canAttack(*this))
 			return false;
@@ -8055,9 +8068,9 @@ int CvUnit::rangeCombatDamage(const CvUnit* pDefender) const
 
 	int iScalingType = pDefender->getUnitInfo().getRangeBlockScalingType();
 	int iDamage = getUnitInfo().getRangeDamage();
-	int iBlock = pDefender->getUnitInfo().getRangeDamageBlock();
+	int iBlock = pDefender->getTotalRangeBlock(); // merk.rcm
 	int iOurStrength = airBaseCombatStr();
-	int iTheirStrength = pDefender->getUnitInfo().getRangeDefense();
+	int iTheirStrength = pDefender->getTotalRangeDefense(); // merk.rcm
 
 	// 10+ signals to use adjusted strengths
 	if (iScalingType >= 10)
@@ -8095,7 +8108,6 @@ int CvUnit::rangeCombatDamage(const CvUnit* pDefender) const
 			break;
 		case 5: 
 			// ratio percentage, cannot exceed original
-			// ratio blocking, cannot exceed original block
 			iBlock = std::min(iBlock * iTheirStrength / iOurStrength, iBlock);
 			iDamage = (iDamage * iBlock) / 100;
 			break;
@@ -9434,6 +9446,50 @@ void CvUnit::setFortifyTurns(int iNewValue)
 void CvUnit::changeFortifyTurns(int iChange)
 {
 	setFortifyTurns(getFortifyTurns() + iChange);
+}
+
+int CvUnit::getTotalRangeDefense() const
+{
+	int iDefense = getUnitInfo().getRangeDefense();
+	if (plot()->isHills())
+		iDefense += getUnitInfo().getHillsRangeDefense();
+	if (plot()->isFeature())
+	{
+		// make sure feature is not harmful
+		if (GC.getFeatureInfo(plot()->getFeatureType()).getTurnDamage() <= 0)
+			iDefense += getUnitInfo().getFeatureRangeDefense();
+	}
+	if (plot()->isCity())
+		iDefense += getUnitInfo().getCityRangeDefense();
+	if (!m_bActuallyMoved)
+		iDefense += getUnitInfo().getMotionlessRangeDefense();
+	if (getFortifyTurns() >= GC.getDefineINT("MAX_FORTIFY_TURNS"))
+		iDefense += getUnitInfo().getFortifyRangeDefense();
+	if (getDamage() >= 0)
+		iDefense += getUnitInfo().getDamagedRangeDefense();
+	return iDefense;
+}
+
+int CvUnit::getTotalRangeBlock() const
+{
+	int iBlock = getUnitInfo().getRangeDamageBlock();
+	if (plot()->isHills())
+		iBlock += getUnitInfo().getHillsRangeBlock();
+	if (plot()->isFeature())
+	{
+		// make sure feature is not harmful
+		if (GC.getFeatureInfo(plot()->getFeatureType()).getTurnDamage() <= 0)
+			iBlock += getUnitInfo().getFeatureRangeBlock();
+	}
+	if (plot()->isCity())
+		iBlock += getUnitInfo().getCityRangeBlock();
+	if (!m_bActuallyMoved)
+		iBlock += getUnitInfo().getMotionlessRangeBlock();
+	if (getFortifyTurns() >= GC.getDefineINT("MAX_FORTIFY_TURNS"))
+		iBlock += getUnitInfo().getFortifyRangeBlock();
+	if (getDamage() >= 0)
+		iBlock += getUnitInfo().getDamagedRangeBlock();
+	return iBlock;
 }
 
 void CvUnit::changeBlitzCount(int iChange)
@@ -11073,7 +11129,7 @@ CvUnit* CvUnit::airStrikeTarget(CvPlot const& kPlot) const // advc: was CvPlot c
 	CvUnit* pDefender = kPlot.getBestDefender(NO_PLAYER, getOwner(), this, true);
 	if (pDefender != NULL && !pDefender->isDead())
 	{
-		if (pDefender->canDefend())
+		if (pDefender->canDefend() /*merk.lt*/ && (getUnitInfo().getReach() + getUnitInfo().getStrike() - pDefender->getUnitInfo().getStrike() >= pDefender->getUnitInfo().getReach()))
 			return pDefender;
 	}
 	return NULL;

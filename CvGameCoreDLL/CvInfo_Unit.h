@@ -88,6 +88,8 @@ public: /*  All const functions are exposed to Python except some related to art
 	int getAdvancedStartCostIncrease() const;
 	int getMinAreaSize() const { return m_iMinAreaSize; }
 	int getMoves() const { return m_iMoves; }
+	int getStrike() const { return m_iStrike; } // merk.lt
+	int getReach() const { return m_iReach; } // merk.lt
 	int getAirRange() const { return m_iAirRange; }
 	int getAirUnitCap() const { return m_iAirUnitCap; }
 	int getDropRange() const { return m_iDropRange; }
@@ -117,6 +119,19 @@ public: /*  All const functions are exposed to Python except some related to art
 	int getRangeAttacks() const { return m_iRangeAttacks; }
 	int isRangeMustMotionless() const { return m_bRangeMustMotionless; }
 	bool isRangeMustFortify() const { return m_bRangeMustFortify; }
+	// merk.rcm begin 
+	int getHillsRangeDefense() const { return m_iHillsRangeDefense; }
+	int getHillsRangeBlock() const { return m_iHillsRangeBlock; }
+	int getCityRangeDefense() const { return m_iCityRangeDefense; }
+	int getCityRangeBlock() const { return m_iCityRangeBlock; }
+	int getFeatureRangeDefense() const { return m_iFeatureRangeDefense; }
+	int getFeatureRangeBlock() const { return m_iFeatureRangeBlock; }
+	int getMotionlessRangeDefense() const { return m_iMotionlessRangeDefense; }
+	int getMotionlessRangeBlock() const { return m_iMotionlessRangeBlock; }
+	int getFortifyRangeDefense() const { return m_iFortifyRangeDefense; }
+	int getFortifyRangeBlock() const { return m_iFortifyRangeBlock; }
+	int getDamagedRangeDefense() const { return m_iDamagedRangeDefense; }
+	int getDamagedRangeBlock() const { return m_iDamagedRangeBlock; }
 	// merk.rcb end
 	int getXPValueAttack() const { return m_iXPValueAttack; }
 	int getXPValueDefense() const { return m_iXPValueDefense; }
@@ -372,6 +387,8 @@ protected:
 	int m_iAdvancedStartCostIncrease;
 	int m_iMinAreaSize;
 	int m_iMoves;
+	int m_iStrike; // merk.lt
+	int m_iReach; // merk.lt
 	int m_iAirRange;
 	int m_iAirUnitCap;
 	int m_iDropRange;
@@ -399,6 +416,19 @@ protected:
 	int m_iRangeAttacks;
 	bool m_bRangeMustMotionless;
 	bool m_bRangeMustFortify;
+	// merk.rcm begin
+	int m_iHillsRangeDefense;
+	int m_iHillsRangeBlock;
+	int m_iCityRangeDefense;
+	int m_iCityRangeBlock;
+	int m_iFeatureRangeDefense;
+	int m_iFeatureRangeBlock;
+	int m_iMotionlessRangeDefense;
+	int m_iMotionlessRangeBlock;
+	int m_iFortifyRangeDefense;
+	int m_iFortifyRangeBlock;
+	int m_iDamagedRangeDefense;
+	int m_iDamagedRangeBlock;
 	// merk.rcb end
 	int m_iXPValueAttack;
 	int m_iXPValueDefense;
