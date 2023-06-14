@@ -124,6 +124,8 @@ public: /*  All const functions are exposed to Python except some related to art
 	int getCollateralDamage() const { return m_iCollateralDamage; }
 	int getCollateralDamageLimit() const { return m_iCollateralDamageLimit; }
 	int getCollateralDamageMaxUnits() const { return m_iCollateralDamageMaxUnits; }
+	int getFlatCollateralDamage() const { return m_iFlatCollateralDamage; } // merk.rcb
+	int getCollateralDamageBlock() const { return m_iCollateralDamageBlock; } // merk.rcb
 	int getCityAttackModifier() const { return m_iCityAttackModifier; }
 	int getCityDefenseModifier() const { return m_iCityDefenseModifier; }
 	int getAnimalCombatModifier() const { return m_iAnimalCombatModifier; }
@@ -399,6 +401,8 @@ protected:
 	int m_iCollateralDamage;
 	int m_iCollateralDamageLimit;
 	int m_iCollateralDamageMaxUnits;
+	int m_iFlatCollateralDamage; // merk.rcb
+	int m_iCollateralDamageBlock; // merk.rcb
 	int m_iCityAttackModifier;
 	int m_iCityDefenseModifier;
 	int m_iAnimalCombatModifier;

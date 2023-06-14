@@ -10861,6 +10861,12 @@ void CvUnit::collateralCombat(CvPlot const* pPlot, CvUnit const* pSkipUnit)
 					(iTheirStrength + iStrengthFactor));
 			int iUnitDamage = std::max(kTargetUnit.getDamage(),
 					std::min(kTargetUnit.getDamage() + iCollateralDamage, iMaxDamage));
+			// merk.rcb begin
+			// this is a bit funky, but if the unit has "flat collateral damage" then all of the previous is tossed out and the damage is reset to that flat number
+			if (getUnitInfo().getFlatCollateralDamage() > 0)
+				iUnitDamage = getUnitInfo().getFlatCollateralDamage();
+			iUnitDamage -= kTargetUnit.getUnitInfo().getCollateralDamageBlock(); // blocking happens either way so be careful
+			// merk.rcb end
 			if (kTargetUnit.getDamage() != iUnitDamage)
 			{
 				kTargetUnit.setDamage(iUnitDamage, getOwner());

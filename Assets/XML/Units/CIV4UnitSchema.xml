@@ -378,6 +378,10 @@
 	<ElementType name="iCollateralDamage" content="textOnly" dt:type="int"/>
 	<ElementType name="iCollateralDamageLimit" content="textOnly" dt:type="int"/>
 	<ElementType name="iCollateralDamageMaxUnits" content="textOnly" dt:type="int"/>
+	<!-- merk.rcb start -->
+	<ElementType name="iFlatCollateralDamage" content="textOnly" dt:type="int"/>
+	<ElementType name="iCollateralDamageBlock" content="textOnly" dt:type="int"/>
+	<!-- merk.rcb end -->
 	<ElementType name="iCityAttack" content="textOnly" dt:type="int"/>
 	<ElementType name="iCityDefense" content="textOnly" dt:type="int"/>
 	<ElementType name="iAnimalCombat" content="textOnly" dt:type="int"/>
@@ -667,6 +671,10 @@
 		<element type="iCollateralDamage"/>
 		<element type="iCollateralDamageLimit"/>
 		<element type="iCollateralDamageMaxUnits"/>
+		<!-- merk.rcb begin -->
+		<element type="iFlatCollateralDamage" minOccurs="0"/>
+		<element type="iCollateralDamageBlock" minOccurs="0"/>
+		<!-- merk.rcb end -->
 		<element type="iCityAttack"/>
 		<element type="iCityDefense"/>
 		<element type="iAnimalCombat"/>
