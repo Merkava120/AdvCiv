@@ -1127,7 +1127,8 @@ void CvUnit::resolveCombat(CvUnit* pDefender, CvPlot* pPlot, bool bVisible)
 		{
 			if (getCombatFirstStrikes() == 0)
 			{
-				if (getDamage() + iAttackerDamage >= maxHitPoints() &&
+				// merk.mct: withdrawal applied every round, not just when hitpoints near death
+				if (/*getDamage() + iAttackerDamage >= maxHitPoints() &&*/
 					SyncRandSuccess100(withdrawalProbability()))
 				{
 					flankingStrikeCombat(pPlot, iAttackerStrength, iAttackerFirepower,
