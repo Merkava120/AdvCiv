@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+
+<!-- This file is for options related to Dynamica -->
+
+<Civ4Defines xmlns="x-schema:CIV4GlobalDefinesSchema.xml">
+
+	<!-- Set to 1 to have beakers accumulate naturally with the dynamic system; set to 0 to disable this feature -->
+	<Define> 
+		<DefineName>DYNAMIC_TECHS</DefineName>
+		<iDefineIntVal>1</iDefineIntVal>
+	</Define>
+	
+</Civ4Defines>
