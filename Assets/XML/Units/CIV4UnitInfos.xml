@@ -80,8 +80,12 @@
 			<PrereqReligion>NONE</PrereqReligion>
 			<PrereqCorporation>NONE</PrereqCorporation>
 			<PrereqBuilding>NONE</PrereqBuilding>
-			<PrereqTech>NONE</PrereqTech>
-			<TechTypes/>
+			<PrereqTech>TECH_HUNTING</PrereqTech>
+			<TechTypes>
+				<PrereqTech>TECH_FISHING</PrereqTech>
+				<PrereqTech>TECH_THE_WHEEL</PrereqTech>
+				<PrereqTech>TECH_MYSTICISM</PrereqTech>
+			</TechTypes>
 			<BonusType>NONE</BonusType>
 			<PrereqBonuses/>
 			<ProductionTraits/>
@@ -93,8 +97,6 @@
 			<iAdvancedStartCostIncrease>0</iAdvancedStartCostIncrease>
 			<iMinAreaSize>-1</iMinAreaSize>
 			<iMoves>4</iMoves>
-			<iStrike>5</iStrike>
-			<iReach>2</iReach>
 			<bNoRevealMap>0</bNoRevealMap>
 			<iAirRange>8</iAirRange>
 			<iAirUnitCap>0</iAirUnitCap>

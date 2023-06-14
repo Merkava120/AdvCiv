@@ -6513,6 +6513,51 @@ bool CvPlayer::canResearch(TechTypes eTech, bool bTrade,
 	return true;
 }
 
+// merk.dt begin
+// this is the same as "canResearch" but does NOT check bDisabled or Civ-disabled techs. 
+bool CvPlayer::isTechResearchable(TechTypes eTech, bool bTrade) const 
+{
+	if (GC.getPythonCaller()->canResearchOverride(getID(), eTech, bTrade))
+		return true;
+	if (GET_TEAM(getTeam()).isHasTech(eTech))
+		return false;
+
+	bool bFoundPossible = false;
+	bool bFoundValid = false;
+	for (int i = 0; i < GC.getInfo(eTech).getNumOrTechPrereqs(); i++)
+	{
+		TechTypes const ePrereq = GC.getInfo(eTech).getPrereqOrTechs(i);
+		FAssert(ePrereq != eTech); // advc
+		bFoundPossible = true;
+		if (GET_TEAM(getTeam()).isHasTech(ePrereq))
+		{
+			if (!bTrade || GC.getGame().isOption(GAMEOPTION_NO_TECH_BROKERING) ||
+				!GET_TEAM(getTeam()).isNoTradeTech(ePrereq))
+			{
+				bFoundValid = true;
+				break;
+			}
+		}
+	}
+
+	if (bFoundPossible && !bFoundValid)
+		return false;
+
+	for (int i = 0; i < GC.getInfo(eTech).getNumAndTechPrereqs(); i++)
+	{
+		TechTypes const ePrereq = GC.getInfo(eTech).getPrereqAndTechs(i);
+		if (!GET_TEAM(getTeam()).isHasTech(ePrereq))
+			return false;
+		if (bTrade && !GC.getGame().isOption(GAMEOPTION_NO_TECH_BROKERING) &&
+			GET_TEAM(getTeam()).isNoTradeTech(ePrereq))
+		{
+			return false;
+		}
+	}
+	return true;
+}
+// merk.dt end
+
 
 TechTypes CvPlayer::getCurrentResearch() const
 {

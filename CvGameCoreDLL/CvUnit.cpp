@@ -1288,6 +1288,27 @@ void CvUnit::resolveCombat(CvUnit* pDefender, CvPlot* pPlot, bool bVisible)
 			gDLL->getEntityIFace()->AddMission(&kBattle);
 		}
 	}
+
+	// merk.dt1: get beakers for techs!
+	if (GC.getDefineINT("DYNAMIC_TECHS") > 0)
+	{
+		// regardless of who got killed both teams learn from each other
+		TechTypes eDefenderTech = pDefender->getDynamicTech(getOwner()); // tech for attacker from defender
+		TechTypes eAttackerTech = getDynamicTech(pDefender->getOwner()); // tech for defender from attacker
+		if (eDefenderTech != NO_TECH) // if found a defender tech, give the attacker some beakers
+		{
+			int iBeakers = GC.getDefineINT("BEAKERS_FROM_COMBAT") + SyncRandNum(2 * GC.getDefineINT("BEAKERS_FROM_COMBAT_RAND")) - GC.getDefineINT("BEAKERS_FROM_COMBAT_RAND");
+			GET_TEAM(getTeam()).changeResearchProgress(eDefenderTech, iBeakers, getOwner());
+		}
+		if (eAttackerTech != NO_TECH) // if found an attacker tech, give the defender some beakers
+		{
+			int iBeakers = GC.getDefineINT("BEAKERS_FROM_COMBAT") + SyncRandNum(2 * GC.getDefineINT("BEAKERS_FROM_COMBAT_RAND")) - GC.getDefineINT("BEAKERS_FROM_COMBAT_RAND");
+			GET_TEAM(pDefender->getTeam()).changeResearchProgress(eAttackerTech, iBeakers, pDefender->getOwner());
+		}
+	}
+	// merk.dt1 end
+
+
 #ifdef LOG_COMBAT_OUTCOMES
 	// (don't log barb battles, because they have special rules.)
 	if (!isBarbarian() && !pDefender->isBarbarian())
@@ -6933,6 +6954,30 @@ HandicapTypes CvUnit::getHandicapType() const
 CivilizationTypes CvUnit::getCivilizationType() const
 {
 	return GET_PLAYER(getOwner()).getCivilizationType();
+}
+
+TechTypes CvUnit::getDynamicTech(PlayerTypes eResearchPlayer) const
+{
+	// first, check the unit's primary prereq tech
+	TechTypes ePrereqTech = getUnitInfo().getPrereqAndTech();
+	if (!GET_TEAM(GET_PLAYER(eResearchPlayer).getTeam()).isHasTech(ePrereqTech) && GET_PLAYER(eResearchPlayer).isTechResearchable(ePrereqTech, false))
+		return ePrereqTech;
+	// then, search through other prereq techs
+	for (int k = 0; k < getUnitInfo().getNumPrereqAndTechs(); k++)
+	{
+		ePrereqTech = getUnitInfo().getPrereqAndTechs(k);
+		if (GET_TEAM(GET_PLAYER(eResearchPlayer).getTeam()).isHasTech(ePrereqTech))
+			continue;
+		else if (!GET_PLAYER(eResearchPlayer).isTechResearchable(ePrereqTech, false))
+			continue;
+		else
+		{
+			return ePrereqTech;
+		}
+	}
+	// If we got here that means none of the AND prereqs work. 
+	// for now that just means return nothing. 
+	return NO_TECH; 
 }
 
 

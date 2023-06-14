@@ -10,4 +10,15 @@
 		<iDefineIntVal>1</iDefineIntVal>
 	</Define>
 	
+	<!-- beakers accumulated from combat. Base, plus/minus RAND -->
+	<Define>
+		<DefineName>BEAKERS_FROM_COMBAT</DefineName>
+		<iDefineIntVal>10</iDefineIntVal>
+	</Define>
+	<Define>
+		<DefineName>BEAKERS_FROM_COMBAT_RAND</DefineName>
+		<iDefineIntVal>5</iDefineIntVal>
+	</Define>
+	
+	
 </Civ4Defines>
