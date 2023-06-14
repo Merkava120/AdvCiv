@@ -92,7 +92,7 @@
 			<iAdvancedStartCost>-1</iAdvancedStartCost>
 			<iAdvancedStartCostIncrease>0</iAdvancedStartCostIncrease>
 			<iMinAreaSize>-1</iMinAreaSize>
-			<iMoves>1</iMoves>
+			<iMoves>4</iMoves>
 			<bNoRevealMap>0</bNoRevealMap>
 			<iAirRange>8</iAirRange>
 			<iAirUnitCap>0</iAirUnitCap>
@@ -120,6 +120,9 @@
 			<iRangeDamageBlock>15</iRangeDamageBlock>
 			<iRangeBlockScalingType>1</iRangeBlockScalingType>
 			<bIndirectAttack>1</bIndirectAttack>
+			<iRangeAttackMoves>60</iRangeAttackMoves>
+			<iRangeAttacks>2</iRangeAttacks>
+			<bRangeMustMotionless>1</bRangeMustMotionless>
 			<iXPValueAttack>4</iXPValueAttack>
 			<iXPValueDefense>2</iXPValueDefense>
 			<iFirstStrikes>0</iFirstStrikes>

@@ -687,6 +687,11 @@ public:
 	int getMoves() const { return m_iMoves; } // advc (note): Moves spent, not remaining.					// Exposed to Python
 	void setMoves(int iNewValue);																			// Exposed to Python
 	void changeMoves(int iChange);																			// Exposed to Python
+	// merk.rcs begin
+	int getRangeAttacksLeft() const { return m_iRangeAttacksLeft; }
+	void setRangeAttacksLeft(int iNewValue);
+	void changeRangeAttacksLeft(int iChange);
+	// merk.rcs end
 	void finishMoves();																						// Exposed to Python
 
 	int getExperience() const { return m_iExperience; }														// Exposed to Python
@@ -1115,6 +1120,8 @@ protected:
 	int m_iHotKeyNumber;
 	int m_iDamage;
 	int m_iMoves;
+	int m_bActuallyMoved; // merk.rcs
+	int m_iRangeAttacksLeft; // merk.rcs
 	int m_iExperience;
 	int m_iLevel;
 	int m_iCargo;

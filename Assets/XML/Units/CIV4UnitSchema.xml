@@ -369,6 +369,10 @@
 	<ElementType name="iRangeDamageBlock" content="textOnly" dt:type="int"/>
 	<ElementType name="iRangeBlockScalingType" content="textOnly" dt:type="int"/>
 	<ElementType name="bIndirectAttack" content="textOnly" dt:type="boolean"/>
+	<ElementType name="iRangeAttackMoves" content="textOnly" dt:type="int"/>
+	<ElementType name="iRangeAttacks" content="textOnly" dt:type="int"/>
+	<ElementType name="bRangeMustMotionless" content="textOnly" dt:type="boolean"/>
+	<ElementType name="bRangeMustFortify" content="textOnly" dt:type="boolean"/>
 	<!-- merkava120.rcb end -->
 	<ElementType name="iXPValueAttack" content="textOnly" dt:type="int"/>
 	<ElementType name="iXPValueDefense" content="textOnly" dt:type="int"/>
@@ -664,6 +668,10 @@
 		<element type="iRangeDamageBlock" minOccurs="0"/>
 		<element type="iRangeBlockScalingType" minOccurs="0"/>
 		<element type="bIndirectAttack" minOccurs="0"/>
+		<element type="iRangeAttackMoves" minOccurs="0"/>
+		<element type="iRangeAttacks" minOccurs="0"/>
+		<element type="bRangeMustMotionless" minOccurs="0"/>
+		<element type="bRangeMustFortify" minOccurs="0"/>
 		<!-- merkava120.rcb end -->
 		<element type="iXPValueAttack"/>
 		<element type="iXPValueDefense"/>

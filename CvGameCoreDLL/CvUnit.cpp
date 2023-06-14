@@ -37,6 +37,7 @@ CvUnit::CvUnit() // advc.003u: Body cut from the deleted reset function
 	m_iGameTurnCreated = 0;
 	m_iDamage = 0;
 	m_iMoves = 0;
+	m_iRangeAttacksLeft = 0; // merk.rcs
 	m_iExperience = 0;
 	m_iLevel = 1;
 	m_iCargo = 0;
@@ -302,6 +303,11 @@ void CvUnit::finalizeInit() // advc.003u: Body cut from init
 			kGame.setBestLandUnit(getUnitType());
 		}
 	}
+
+	// merk.rcs begin
+	setRangeAttacksLeft(getUnitInfo().getRangeAttacks());
+	m_bActuallyMoved = false; 
+	// merk.rcs end
 
 	if (isActiveOwned())
 		gDLL->UI().setDirty(GameData_DIRTY_BIT, true);
@@ -702,6 +708,8 @@ void CvUnit::doTurn()
 	if (getMoves() >= 2 * maxMoves())
 		finishMoves(); // </advc.001b>
 	else setMoves(0);
+	setRangeAttacksLeft(getUnitInfo().getRangeAttacks()); // merk.rcs
+
 }
 
 // advc.029:
@@ -1623,6 +1631,7 @@ void CvUnit::updateCombat(bool bQuick, /* <advc.004c> */ bool* pbIntercepted,
 			{
 				changeMoves(std::max(GC.getMOVE_DENOMINATOR(),
 						pPlot->movementCost(*this, getPlot())));
+				m_bActuallyMoved = true; // merk.rcs
 				checkRemoveSelectionAfterAttack();
 			}
 		}
@@ -1642,6 +1651,7 @@ void CvUnit::updateCombat(bool bQuick, /* <advc.004c> */ bool* pbIntercepted,
 		addWithdrawalMessages(*pDefender); // advc: Moved into new function
 		changeMoves(std::max(GC.getMOVE_DENOMINATOR(),
 				pPlot->movementCost(*this, getPlot())));
+		m_bActuallyMoved = true; // merk.rcs
 		checkRemoveSelectionAfterAttack();
 		getGroup()->clearMissionQueue();
 	}
@@ -3007,6 +3017,7 @@ void CvUnit::move(CvPlot& kPlot, bool bShow, /* advc.163: */ bool bJump, bool bG
 	if (bJump)
 		finishMoves(); // </advc.163>
 	else changeMoves(kPlot.movementCost(*this, kOldPlot));
+	m_bActuallyMoved = true; // merk.rcs
 	// <advc.162>
 	if(isInvasionMove(kOldPlot, kPlot))
 	{
@@ -3014,8 +3025,12 @@ void CvUnit::move(CvPlot& kPlot, bool bShow, /* advc.163: */ bool bJump, bool bG
 		getCargoUnits(aCargoUnits);
 		for(size_t i = 0; i < aCargoUnits.size(); i++)
 		{
-			if(!aCargoUnits[i]->isRivalTerritory() && aCargoUnits[i]->getDomainType() != DOMAIN_AIR)
+			if (!aCargoUnits[i]->isRivalTerritory() && aCargoUnits[i]->getDomainType() != DOMAIN_AIR)
+			{
 				aCargoUnits[i]->changeMoves(aCargoUnits[i]->movesLeft());
+				aCargoUnits[i]->m_bActuallyMoved = true; // merk.rcs
+			}
+
 		}
 	} // </advc.162>
 	setXY(kPlot.getX(), kPlot.getY(), /* advc.163 (was 'true'): */ bGroup,
@@ -4336,6 +4351,7 @@ bool CvUnit::paradrop(int iX, int iY, /* <advc.004c> */ IDInfo* pInterceptor)
 
 	CvPlot const& kPlot = GC.getMap().getPlot(iX, iY);
 	changeMoves(GC.getMOVE_DENOMINATOR() / 2);
+	m_bActuallyMoved = true; // merk.rcs
 	setMadeAttack(true);
 	setXY(kPlot.getX(), kPlot.getY(), /* K-Mod: */ true);
 
@@ -9220,6 +9236,19 @@ void CvUnit::setMoves(int iNewValue)
 		gDLL->UI().setDirty(PlotListButtons_DIRTY_BIT, true);
 }
 
+// merk.rcs begin
+void CvUnit::setRangeAttacksLeft(int iNewValue)
+{
+	if (getRangeAttacksLeft() == iNewValue)
+		return;
+	m_iRangeAttacksLeft = iNewValue;
+	FAssert(getRangeAttacksLeft() >= 0);
+}
+void CvUnit::changeRangeAttacksLeft(int iChange)
+{
+	m_iRangeAttacksLeft += iChange;
+}
+// merk.rcs end
 
 void CvUnit::changeMoves(int iChange)
 {
@@ -9230,6 +9259,7 @@ void CvUnit::changeMoves(int iChange)
 void CvUnit::finishMoves()
 {
 	setMoves(maxMoves());
+	m_bActuallyMoved = false; // merk.rcs
 }
 
 
@@ -10539,6 +10569,7 @@ void CvUnit::read(FDataStreamBase* pStream)
 	pStream->Read(&m_iGameTurnCreated);
 	pStream->Read(&m_iDamage);
 	pStream->Read(&m_iMoves);
+	pStream->Read(&m_iRangeAttacksLeft); // merk.rcs
 	pStream->Read(&m_iExperience);
 	pStream->Read(&m_iLevel);
 	pStream->Read(&m_iCargo);
@@ -10713,6 +10744,7 @@ void CvUnit::write(FDataStreamBase* pStream)
 	pStream->Write(m_iGameTurnCreated);
 	pStream->Write(m_iDamage);
 	pStream->Write(m_iMoves);
+	pStream->Write(m_iRangeAttacksLeft); // merk.rcs
 	pStream->Write(m_iExperience);
 	pStream->Write(m_iLevel);
 	pStream->Write(m_iCargo);
@@ -11121,13 +11153,27 @@ bool CvUnit::canRangeStrike() const
 		return false;
 	if (!canFight())
 		return false;
-	if (//isMadeAttack() && !isBlitz()
-		isMadeAllAttacks()) // advc.164
-	{
-		return false;
-	}
+	// merk.rcs: superseded by other attack numbering
+	//if (//isMadeAttack() && !isBlitz()
+	//	isMadeAllAttacks()) // advc.164
+	//{
+	//	return false;
+	//}
 	if (!canMove() && getMoves() > 0)
 		return false;
+	// merk.rcs begin
+	// can't attack if ranged moves will put us over
+	if (getMoves() + getUnitInfo().getRangeAttackMoves() > maxMoves())
+		return false; 
+	// can't attack if not enough ranged attacks left
+	if (getRangeAttacksLeft() <= 0)
+		return false; 
+	// can't attack if require motionless and moved
+	if (getUnitInfo().isRangeMustMotionless() && m_bActuallyMoved)
+		return false; 
+	// can't attack if require fortified and not
+	if (getUnitInfo().isRangeMustFortify() && getFortifyTurns() <= GC.getDefineINT("MAX_FORTIFY_TURNS"))
+		return false; 
 	return true;
 }
 
@@ -11191,7 +11237,11 @@ bool CvUnit::rangeStrike(int iX, int iY)
 	{
 		setMadeAttack(true);
 	}
-	changeMoves(GC.getMOVE_DENOMINATOR());
+	// merk.rcs begin
+	//changeMoves(GC.getMOVE_DENOMINATOR());
+	changeMoves(getUnitInfo().getRangeAttackMoves());
+	changeRangeAttacksLeft(-1);
+	// merk.rcs end
 
 	int iDamage = rangeCombatDamage(pDefender);
 

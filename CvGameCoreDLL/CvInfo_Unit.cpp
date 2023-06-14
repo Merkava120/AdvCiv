@@ -38,6 +38,10 @@ m_iRangeDamage(0),
 m_iRangeDamageBlock(0),
 m_iRangeBlockScalingType(0),
 m_bIndirectAttack(false),
+m_iRangeAttackMoves(0),
+m_iRangeAttacks(0),
+m_bRangeMustMotionless(false),
+m_bRangeMustFortify(false),
 // merk.rcb end
 m_iXPValueAttack(0),
 m_iXPValueDefense(0),
@@ -772,6 +776,10 @@ void CvUnitInfo::read(FDataStreamBase* stream)
 	stream->Read(&m_iRangeDamageBlock);
 	stream->Read(&m_iRangeBlockScalingType);
 	stream->Read(&m_bIndirectAttack);
+	stream->Read(&m_iRangeAttackMoves);
+	stream->Read(&m_iRangeAttacks);
+	stream->Read(&m_bRangeMustMotionless);
+	stream->Read(&m_bRangeMustFortify);
 	// merk.rcb end
 	stream->Read(&m_iXPValueAttack);
 	stream->Read(&m_iXPValueDefense);
@@ -1059,6 +1067,10 @@ void CvUnitInfo::write(FDataStreamBase* stream)
 	stream->Write(m_iRangeDamageBlock);
 	stream->Write(m_iRangeBlockScalingType);
 	stream->Write(m_bIndirectAttack);
+	stream->Write(m_iRangeAttackMoves);
+	stream->Write(m_iRangeAttacks);
+	stream->Write(m_bRangeMustMotionless);
+	stream->Write(m_bRangeMustFortify);
 	// merk.rcb end
 	stream->Write(m_iXPValueAttack);
 	stream->Write(m_iXPValueDefense);
@@ -1457,6 +1469,10 @@ bool CvUnitInfo::read(CvXMLLoadUtility* pXML)
 	pXML->GetChildXmlValByName(&m_iRangeDamageBlock, "iRangeDamageBlock", 0);
 	pXML->GetChildXmlValByName(&m_iRangeBlockScalingType, "iRangeBlockScalingType", 0);
 	pXML->GetChildXmlValByName(&m_bIndirectAttack, "bIndirectAttack", false);
+	pXML->GetChildXmlValByName(&m_iRangeAttackMoves, "iRangeAttackMoves", 0);
+	pXML->GetChildXmlValByName(&m_iRangeAttacks, "iRangeAttacks", 0);
+	pXML->GetChildXmlValByName(&m_bRangeMustMotionless, "bRangeMustMotionless", false);
+	pXML->GetChildXmlValByName(&m_bRangeMustFortify, "bRangeMustFortify", false);
 	// merk.rcb end
 	pXML->GetChildXmlValByName(&m_iXPValueAttack, "iXPValueAttack");
 	pXML->GetChildXmlValByName(&m_iXPValueDefense, "iXPValueDefense");
