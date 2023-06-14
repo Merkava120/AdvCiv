@@ -8018,18 +8018,65 @@ int CvUnit::airCombatDamage(const CvUnit* pDefender) const
 	return iDamage;
 }
 
-
+// merk.rcb: heavily modified
 int CvUnit::rangeCombatDamage(const CvUnit* pDefender) const
 {
-	int iOurStrength = airCurrCombatStr(pDefender);
-	FAssertMsg(iOurStrength > 0, "Combat strength is expected to be greater than zero");
-	int iTheirStrength = pDefender->maxCombatStr(plot(), this);
+	//int iOurStrength = airCurrCombatStr(pDefender);
+	//FAssertMsg(iOurStrength > 0, "Combat strength is expected to be greater than zero");
+	//int iTheirStrength = pDefender->maxCombatStr(plot(), this);
 
-	int iStrengthFactor = (iOurStrength + iTheirStrength + 1) / 2;
-	static int const iRANGE_COMBAT_DAMAGE = GC.getDefineINT("RANGE_COMBAT_DAMAGE"); // advc.opt
-	int iDamage = std::max(1, ((iRANGE_COMBAT_DAMAGE * (iOurStrength + iStrengthFactor)) /
-			(iTheirStrength + iStrengthFactor)));
+	//int iStrengthFactor = (iOurStrength + iTheirStrength + 1) / 2;
+	//static int const iRANGE_COMBAT_DAMAGE = GC.getDefineINT("RANGE_COMBAT_DAMAGE"); // advc.opt
+	//int iDamage = std::max(1, ((iRANGE_COMBAT_DAMAGE * (iOurStrength + iStrengthFactor)) /
+	//		(iTheirStrength + iStrengthFactor)));
 
+	int iScalingType = pDefender->getUnitInfo().getRangeBlockScalingType();
+	int iDamage = getUnitInfo().getRangeDamage();
+	int iBlock = pDefender->getUnitInfo().getRangeDamageBlock();
+	int iOurStrength = airBaseCombatStr();
+	int iTheirStrength = pDefender->getUnitInfo().getRangeDefense();
+
+	// 10+ signals to use adjusted strengths
+	if (iScalingType >= 10)
+	{
+		iOurStrength = airCurrCombatStr(pDefender);
+		iTheirStrength = pDefender->currCombatStr() * iTheirStrength / pDefender->baseCombatStr();
+		iScalingType -= 10;
+	}
+	
+	switch (iScalingType) {
+		case 0:
+			// percentage blocking
+			if (iTheirStrength > iOurStrength)
+				iDamage = (iDamage * iBlock) / 100;
+			break;
+		case 1:
+			// ratio blocking
+			iBlock = (iBlock * iTheirStrength) / iOurStrength;
+			iDamage -= iBlock; 
+			break;
+		case 2: 
+			// ratio blocking, cannot exceed original block
+			iBlock = std::min(iBlock * iTheirStrength / iOurStrength, iBlock);
+			iDamage -= iBlock;
+			break;
+		case 3:
+			// subtractive blocking
+			if (iTheirStrength > iOurStrength)
+				iDamage -= iBlock;
+			break;
+		case 4: 
+			// ratio percentage blocking
+			iBlock = (iBlock * iTheirStrength) / iOurStrength;
+			iDamage = (iDamage * iBlock) / 100;
+			break;
+		case 5: 
+			// ratio percentage, cannot exceed original
+			// ratio blocking, cannot exceed original block
+			iBlock = std::min(iBlock * iTheirStrength / iOurStrength, iBlock);
+			iDamage = (iDamage * iBlock) / 100;
+			break;
+	}
 	return iDamage;
 }
 
@@ -10833,6 +10880,12 @@ void CvUnit::collateralCombat(CvPlot const* pPlot, CvUnit const* pSkipUnit)
 					(iTheirStrength + iStrengthFactor));
 			int iUnitDamage = std::max(kTargetUnit.getDamage(),
 					std::min(kTargetUnit.getDamage() + iCollateralDamage, iMaxDamage));
+			// merk.rcb begin
+			// this is a bit funky, but if the unit has "flat collateral damage" then all of the previous is tossed out and the damage is reset to that flat number
+			if (getUnitInfo().getFlatCollateralDamage() > 0)
+				iUnitDamage = getUnitInfo().getFlatCollateralDamage();
+			iUnitDamage -= kTargetUnit.getUnitInfo().getCollateralDamageBlock(); // blocking happens either way so be careful
+			// merk.rcb end
 			if (kTargetUnit.getDamage() != iUnitDamage)
 			{
 				kTargetUnit.setDamage(iUnitDamage, getOwner());
@@ -11098,8 +11151,9 @@ bool CvUnit::canRangeStrikeAt(const CvPlot* pPlot, int iX, int iY) const
 		obstacles in the line of sight, GC.getMap().directionXY(*pPlot, *pTargetPlot)
 		could be used instead of getFacingDirection, but a strike at range 2 should
 		arguably represent indirect fire. */
-	/*if (!pPlot->canSeePlot(pTargetPlot, getTeam(), airRange(), getFacingDirection(true)))
-		return false;*/
+	// merk.rcb: indirect fire now has a tag. 
+	if (!pPlot->canSeePlot(pTargetPlot, getTeam(), airRange(), getFacingDirection(true)))
+		return getUnitInfo().isIndirectAttack();
 
 	return true;
 }

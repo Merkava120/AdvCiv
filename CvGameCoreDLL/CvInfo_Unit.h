@@ -107,6 +107,13 @@ public: /*  All const functions are exposed to Python except some related to art
 	int getCombatLimit() const { return m_iCombatLimit; }
 	int getAirCombat() const { return m_iAirCombat; }
 	int getAirCombatLimit() const { return m_iAirCombatLimit; }
+	// merk.rcb begin
+	int getRangeDefense() const { return m_iRangeDefense; }
+	int getRangeDamage() const { return m_iRangeDamage; }
+	int getRangeDamageBlock() const { return m_iRangeDamageBlock; }
+	int getRangeBlockScalingType() const { return m_iRangeBlockScalingType; }
+	bool isIndirectAttack() const { return m_bIndirectAttack; }
+	// merk.rcb end
 	int getXPValueAttack() const { return m_iXPValueAttack; }
 	int getXPValueDefense() const { return m_iXPValueDefense; }
 	int getFirstStrikes() const { return m_iFirstStrikes; }
@@ -117,6 +124,8 @@ public: /*  All const functions are exposed to Python except some related to art
 	int getCollateralDamage() const { return m_iCollateralDamage; }
 	int getCollateralDamageLimit() const { return m_iCollateralDamageLimit; }
 	int getCollateralDamageMaxUnits() const { return m_iCollateralDamageMaxUnits; }
+	int getFlatCollateralDamage() const { return m_iFlatCollateralDamage; } // merk.rcb
+	int getCollateralDamageBlock() const { return m_iCollateralDamageBlock; } // merk.rcb
 	int getCityAttackModifier() const { return m_iCityAttackModifier; }
 	int getCityDefenseModifier() const { return m_iCityDefenseModifier; }
 	int getAnimalCombatModifier() const { return m_iAnimalCombatModifier; }
@@ -376,6 +385,13 @@ protected:
 	int m_iCombatLimit;
 	int m_iAirCombat;
 	int m_iAirCombatLimit;
+	// merk.rcb begin
+	int m_iRangeDefense;
+	int m_iRangeDamage;
+	int m_iRangeDamageBlock;
+	int m_iRangeBlockScalingType;
+	bool m_bIndirectAttack;
+	// merk.rcb end
 	int m_iXPValueAttack;
 	int m_iXPValueDefense;
 	int m_iFirstStrikes;
@@ -386,6 +402,8 @@ protected:
 	int m_iCollateralDamage;
 	int m_iCollateralDamageLimit;
 	int m_iCollateralDamageMaxUnits;
+	int m_iFlatCollateralDamage; // merk.rcb
+	int m_iCollateralDamageBlock; // merk.rcb
 	int m_iCityAttackModifier;
 	int m_iCityDefenseModifier;
 	int m_iAnimalCombatModifier;
