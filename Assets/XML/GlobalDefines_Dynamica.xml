@@ -20,5 +20,15 @@
 		<iDefineIntVal>5</iDefineIntVal>
 	</Define>
 	
+	<!-- These are also from combat (same spot as above) but go toward unit upgrades instead of enemy unit requirements. -->
+	<Define>
+		<DefineName>BEAKERS_FOR_UPGRADE</DefineName>
+		<iDefineIntVal>10</iDefineIntVal>
+	</Define>
+	<Define>
+		<DefineName>BEAKERS_FOR_UPGRADE_RAND</DefineName>
+		<iDefineIntVal>5</iDefineIntVal>
+	</Define>
+	
 	
 </Civ4Defines>

@@ -1290,11 +1290,14 @@ void CvUnit::resolveCombat(CvUnit* pDefender, CvPlot* pPlot, bool bVisible)
 	}
 
 	// merk.dt1: get beakers for techs!
+	// merk.dt2 here too, beakers toward upgrades. 
 	if (GC.getDefineINT("DYNAMIC_TECHS") > 0)
 	{
 		// regardless of who got killed both teams learn from each other
 		TechTypes eDefenderTech = pDefender->getDynamicTech(getOwner()); // tech for attacker from defender
+		TechTypes eDefenderUpgradeTech = pDefender->getUpgradeTech(); // tech for defender from self
 		TechTypes eAttackerTech = getDynamicTech(pDefender->getOwner()); // tech for defender from attacker
+		TechTypes eAttackerUpgradeTech = getDynamicTech(pDefender->getOwner()); // tech for attacker from self
 		if (eDefenderTech != NO_TECH) // if found a defender tech, give the attacker some beakers
 		{
 			int iBeakers = GC.getDefineINT("BEAKERS_FROM_COMBAT") + SyncRandNum(2 * GC.getDefineINT("BEAKERS_FROM_COMBAT_RAND")) - GC.getDefineINT("BEAKERS_FROM_COMBAT_RAND");
@@ -1304,6 +1307,17 @@ void CvUnit::resolveCombat(CvUnit* pDefender, CvPlot* pPlot, bool bVisible)
 		{
 			int iBeakers = GC.getDefineINT("BEAKERS_FROM_COMBAT") + SyncRandNum(2 * GC.getDefineINT("BEAKERS_FROM_COMBAT_RAND")) - GC.getDefineINT("BEAKERS_FROM_COMBAT_RAND");
 			GET_TEAM(pDefender->getTeam()).changeResearchProgress(eAttackerTech, iBeakers, pDefender->getOwner());
+		}
+		// merk.dt2
+		if (eAttackerUpgradeTech != NO_TECH)
+		{
+			int iBeakers = GC.getDefineINT("BEAKERS_FROM_COMBAT") + SyncRandNum(2 * GC.getDefineINT("BEAKERS_FROM_COMBAT_RAND")) - GC.getDefineINT("BEAKERS_FROM_COMBAT_RAND");
+			GET_TEAM(getTeam()).changeResearchProgress(eAttackerUpgradeTech, iBeakers, getOwner());
+		}
+		if (eDefenderUpgradeTech != NO_TECH) // if found an attacker tech, give the defender some beakers
+		{
+			int iBeakers = GC.getDefineINT("BEAKERS_FROM_COMBAT") + SyncRandNum(2 * GC.getDefineINT("BEAKERS_FROM_COMBAT_RAND")) - GC.getDefineINT("BEAKERS_FROM_COMBAT_RAND");
+			GET_TEAM(pDefender->getTeam()).changeResearchProgress(eDefenderUpgradeTech, iBeakers, pDefender->getOwner());
 		}
 	}
 	// merk.dt1 end
@@ -6979,6 +6993,46 @@ TechTypes CvUnit::getDynamicTech(PlayerTypes eResearchPlayer) const
 	// for now that just means return nothing. 
 	return NO_TECH; 
 }
+
+TechTypes CvUnit::getUpgradeTech() const
+{
+	// Okay. The way upgrades work, we gotta loop through every unitclass to find and test techs. 
+	FOR_EACH_ENUM(UnitClass)
+	{
+		// first, test if it's an upgrade
+		if (getUnitInfo().getUpgradeUnitClass((int)eLoopUnitClass))
+		{
+			// awesome. Now to test the prereqs, translate it to the civ unit;  
+			UnitTypes eUpgradeUnit = GC.getCivilizationInfo(GET_PLAYER(getOwner()).getCivilizationType()).getCivilizationUnits((int)eLoopUnitClass);
+			// test if we can upgrade to it already (if so, skip onward)
+			if (canUpgrade(eUpgradeUnit))
+				continue;
+			// then, check the unit's primary prereq tech
+			TechTypes ePrereqTech = GC.getUnitInfo((int)eUpgradeUnit).getPrereqAndTech();
+			if (!GET_TEAM(GET_PLAYER(getOwner()).getTeam()).isHasTech(ePrereqTech) && GET_PLAYER(getOwner()).isTechResearchable(ePrereqTech, false))
+				return ePrereqTech;
+			// if nothing yet, search through other prereq techs
+			for (int k = 0; k < GC.getUnitInfo((int)eUpgradeUnit).getNumPrereqAndTechs(); k++)
+			{
+				ePrereqTech = GC.getUnitInfo((int)eUpgradeUnit).getPrereqAndTechs(k);
+				if (GET_TEAM(GET_PLAYER(getOwner()).getTeam()).isHasTech(ePrereqTech))
+					continue;
+				else if (!GET_PLAYER(getOwner()).isTechResearchable(ePrereqTech, false))
+					continue;
+				else
+				{
+					return ePrereqTech;
+				}
+			}
+			// if we got here that means none of the techs work so just move on to next unitclass
+		}
+		// can't upgrade to that unitclass, so move on to next one
+	}
+	// didn't find any upgrade unitclass
+	// for now that just means return nothing. 
+	return NO_TECH;
+}
+// merk.dt end
 
 
 const wchar* CvUnit::getVisualCivAdjective(TeamTypes eForTeam) const

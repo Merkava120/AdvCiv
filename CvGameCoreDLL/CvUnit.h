@@ -301,6 +301,7 @@ public:
 	CivilizationTypes getCivilizationType() const;															// Exposed to Python
 	// merk.dt1 begin
 	TechTypes getDynamicTech(PlayerTypes eResearchPlayer) const;
+	TechTypes getUpgradeTech() const;
 	// merk end
 	const wchar* getVisualCivAdjective(TeamTypes eForTeam) const;
 	SpecialUnitTypes getSpecialUnitType() const																// Exposed to Python
