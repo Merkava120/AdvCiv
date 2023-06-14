@@ -1128,6 +1128,7 @@ void CvUnit::resolveCombat(CvUnit* pDefender, CvPlot* pPlot, bool bVisible)
 			if (getCombatFirstStrikes() == 0)
 			{
 				// merk.mct: withdrawal applied every round, not just when hitpoints near death
+				// If you want to use high withdrawal probs I suggest giving them first strikes so they don't just leave combat instantly
 				if (/*getDamage() + iAttackerDamage >= maxHitPoints() &&*/
 					SyncRandSuccess100(withdrawalProbability()))
 				{
