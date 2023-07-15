@@ -691,7 +691,14 @@ public:
 	int getRangeAttacksLeft() const { return m_iRangeAttacksLeft; }
 	void setRangeAttacksLeft(int iNewValue);
 	void changeRangeAttacksLeft(int iChange);
-	// merk.rcs end
+	// merk.ftac begin
+	int getCurrentStrike() const { return m_iCurrentStrike; }
+	void setCurrentStrike(int iNewValue);
+	void changeCurrentStrike(int iChange);
+	int getCurrentLevel() const { return m_iCurrentLevel; }
+	void setCurrentLevel(int iNewValue);
+	void changeCurrentLevel(int iChange);
+	// merkava end
 	void finishMoves();																						// Exposed to Python
 
 	int getExperience() const { return m_iExperience; }														// Exposed to Python
@@ -1127,6 +1134,8 @@ protected:
 	int m_iMoves;
 	int m_bActuallyMoved; // merk.rcs
 	int m_iRangeAttacksLeft; // merk.rcs
+	int m_iCurrentStrike; // merk.ftac
+	int m_iCurrentLevel; // merk.ftac
 	int m_iExperience;
 	int m_iLevel;
 	int m_iCargo;
