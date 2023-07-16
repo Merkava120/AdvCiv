@@ -317,6 +317,9 @@
 	<!-- merk.lt begin -->
 	<ElementType name="iStrike" content="textOnly" dt:type="int"/>
 	<ElementType name="iReach" content="textOnly" dt:type="int"/>
+	<ElementType name="iLevel" content="textOnly" dt:type="int"/>
+	<ElementType name="iDive" content="textOnly" dt:type="int"/>
+	<ElementType name="iClimb" content="textOnly" dt:type="int"/>
 	<!-- merk.lt end -->
 	<ElementType name="bNoRevealMap" content="textOnly" dt:type="boolean"/>
 	<ElementType name="iAirRange" content="textOnly" dt:type="int"/>
@@ -660,6 +663,9 @@
 		<!-- merk.lt -->
 		<element type="iStrike" minOccurs="0"/>
 		<element type="iReach" minOccurs="0"/>
+		<element type="iLevel" minOccurs="0"/>
+		<element type="iDive" minOccurs="0"/>
+		<element type="iClimb" minOccurs="0"/>
 		<!-- merk.lt -->
 		<element type="bNoRevealMap"/>
 		<element type="iAirRange"/>

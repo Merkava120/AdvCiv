@@ -38,6 +38,8 @@ CvUnit::CvUnit() // advc.003u: Body cut from the deleted reset function
 	m_iDamage = 0;
 	m_iMoves = 0;
 	m_iRangeAttacksLeft = 0; // merk.rcs
+	m_iCurrentStrike = 0; // merk.ftac
+	m_iCurrentLevel = 0; // merk.ftac
 	m_iExperience = 0;
 	m_iLevel = 1;
 	m_iCargo = 0;
@@ -307,7 +309,10 @@ void CvUnit::finalizeInit() // advc.003u: Body cut from init
 	// merk.rcs begin
 	setRangeAttacksLeft(getUnitInfo().getRangeAttacks());
 	m_bActuallyMoved = false; 
-	// merk.rcs end
+	// merk.ftac begin
+	setCurrentLevel(getUnitInfo().getLevel());
+	setCurrentStrike(getUnitInfo().getStrike());
+	// merkava end
 
 	if (isActiveOwned())
 		gDLL->UI().setDirty(GameData_DIRTY_BIT, true);
@@ -626,7 +631,7 @@ void CvUnit::NotifyEntity(MissionTypes eMission)
 	gDLL->getEntityIFace()->NotifyEntity(getEntity(), eMission);
 }
 
-
+// merk note: called at BEGINNING of turn
 void CvUnit::doTurn()
 {
 	PROFILE("CvUnit::doTurn()");
@@ -709,6 +714,35 @@ void CvUnit::doTurn()
 		finishMoves(); // </advc.001b>
 	else setMoves(0);
 	setRangeAttacksLeft(getUnitInfo().getRangeAttacks()); // merk.rcs
+	// merk.ftac begin
+	// if strike is not up to speed, spend moves to get it there:
+	if (getCurrentStrike() < getUnitInfo().getStrike())
+	{
+		setCurrentStrike(getUnitInfo().getStrike());
+		changeMoves(GC.getDefineINT("MOVE_DENOMINATOR"));
+	}
+	// if strike is above speed, just slow down. 
+	else if (getCurrentStrike() > getUnitInfo().getStrike())
+		setCurrentStrike(getUnitInfo().getStrike());
+	// if current level is below maximum, climb up to it. 
+	// This is purposefully after adjusting strike, so it takes two turns to fully recover from a dive. 
+	if (getCurrentLevel() < getUnitInfo().getLevel())
+	{
+		// if we can't climb all the way, figure out how far we can climb. 
+		if (getCurrentStrike() - ((getUnitInfo().getLevel() - getCurrentLevel()) * getUnitInfo().getClimb()) < 0)
+		{
+			int iOriginalLevel = getCurrentLevel();
+			setCurrentLevel((getCurrentStrike()/*put -X here to limit minimum strike to X, otherwise it's 0*/) / getUnitInfo().getClimb() + getCurrentLevel());
+			changeCurrentStrike(-1 * getUnitInfo().getClimb() * (getCurrentLevel() - iOriginalLevel));
+		}
+		// otherwise just change the level and strike. 
+		else
+		{
+			changeCurrentStrike(-1 * getUnitInfo().getClimb() * (getUnitInfo().getLevel() - getCurrentLevel()));
+			setCurrentLevel(getUnitInfo().getLevel());
+		}
+	}
+	// merk.ftac end
 
 }
 
@@ -1121,6 +1155,23 @@ void CvUnit::resolveCombat(CvUnit* pDefender, CvPlot* pPlot, bool bVisible)
 
 	collateralCombat(pPlot, pDefender);
 
+	// merk.ftac
+	if (pDefender->getCurrentLevel() > getCurrentLevel() + getUnitInfo().getReach())
+	{
+		int iPreviousLevel = getCurrentLevel();
+		setCurrentLevel(pDefender->getCurrentLevel() - getUnitInfo().getReach());
+		changeCurrentStrike((getCurrentLevel() - iPreviousLevel) * getUnitInfo().getClimb() * -1);
+	}
+	else if (pDefender->getCurrentLevel() < getCurrentLevel() - getUnitInfo().getReach())
+	{
+		setCurrentLevel(pDefender->getCurrentLevel() + getUnitInfo().getReach());
+		if (getCurrentStrike() <= getUnitInfo().getStrike())
+			changeCurrentStrike(getUnitInfo().getDive());
+		else // don't go more than strike + dive
+			setCurrentStrike(getUnitInfo().getDive() + getUnitInfo().getStrike());
+	}
+	// merk.ftac END
+
 	while (true)
 	{
 		if (SyncRandNum(GC.getCOMBAT_DIE_SIDES()) < iDefenderOdds)
@@ -1228,7 +1279,7 @@ void CvUnit::resolveCombat(CvUnit* pDefender, CvPlot* pPlot, bool bVisible)
 				pDefender->changeExperience(iExperience, maxXPValue(), true,
 						pPlot->getOwner() == pDefender->getOwner(), //!isBarbarian()
 						getGlobalXPPercent()); // advc.312
-
+				
 				
 			}
 			else
@@ -7706,11 +7757,17 @@ bool CvUnit::canAttack(const CvUnit& kDefender) const
 	{
 		return false;
 	} // </advc.089>
-	// merk.lt begin
-	// check strike here, but not reach
-	if (getUnitInfo().getStrike() < kDefender.getUnitInfo().getStrike())
-		return false; 
-	// merk.lt end
+	// merk.ftac begin
+	// are we unable to reach them because they are too high?
+	if (kDefender.getUnitInfo().getLevel() > (getCurrentLevel() + getUnitInfo().getReach()))
+	{
+		// Could we climb to their level? (current strike would not be reduced to zero by climbing, and our max level (base level) is within reach)
+		if (!(kDefender.getUnitInfo().getLevel() <= (getLevel() + getUnitInfo().getReach()) && getCurrentStrike() - ((kDefender.getUnitInfo().getLevel() - getCurrentLevel()) * getUnitInfo().getClimb()) > 0)) // could change this to a non-magic zero defined in global defines
+			return false; // we are NOT able to do that
+	}
+	// if they are too low we can still attack them using a dive, no matter how high we are.
+	// Strike doesn't affect direct attacks. 
+	// merk.ftac end
 	return true;
 }
 
@@ -7769,14 +7826,7 @@ bool CvUnit::canBeAttackedBy(PlayerTypes eAttackingPlayer,
 	// <advc>
 	if (pAttacker != NULL)
 	{
-		// merk.lt begin
-		// if attacker does not have enough strike, can't attack
-		if (pAttacker->getUnitInfo().getStrike() < getUnitInfo().getStrike())
-			return false;
-		// if attacker has more strike, but this does not make up for reach disadvantage, can't attack
-		else if (pAttacker->getUnitInfo().getStrike() - getUnitInfo().getStrike() + pAttacker->getUnitInfo().getReach() < getUnitInfo().getReach())
-			return false;
-		// merk.lt end
+		// merk.ftac note: this is called by airStrikeTarget, but should still be ok?
 		// Moved from CvPlot::hasDefender
 		if (bTestCanAttack && !pAttacker->canAttack(*this))
 			return false;
@@ -9260,7 +9310,28 @@ void CvUnit::changeRangeAttacksLeft(int iChange)
 {
 	m_iRangeAttacksLeft += iChange;
 }
-// merk.rcs end
+// merk.ftac begin
+void CvUnit::setCurrentStrike(int iNewValue)
+{
+	if (getCurrentStrike() == iNewValue)
+		return;
+	m_iCurrentStrike = iNewValue;
+}
+void CvUnit::setCurrentLevel(int iNewValue)
+{
+	if (getCurrentLevel() == iNewValue)
+		return;
+	m_iCurrentLevel = iNewValue;
+}
+void CvUnit::changeCurrentStrike(int iChange)
+{
+	m_iCurrentStrike += iChange;
+}
+void CvUnit::changeCurrentLevel(int iChange)
+{
+	m_iCurrentLevel += iChange;
+}
+// merkava120 end
 
 void CvUnit::changeMoves(int iChange)
 {
@@ -10626,6 +10697,8 @@ void CvUnit::read(FDataStreamBase* pStream)
 	pStream->Read(&m_iDamage);
 	pStream->Read(&m_iMoves);
 	pStream->Read(&m_iRangeAttacksLeft); // merk.rcs
+	pStream->Read(&m_iCurrentStrike); // merk.ftac
+	pStream->Read(&m_iCurrentLevel); // merk.ftac
 	pStream->Read(&m_iExperience);
 	pStream->Read(&m_iLevel);
 	pStream->Read(&m_iCargo);
@@ -10801,6 +10874,8 @@ void CvUnit::write(FDataStreamBase* pStream)
 	pStream->Write(m_iDamage);
 	pStream->Write(m_iMoves);
 	pStream->Write(m_iRangeAttacksLeft); // merk.rcs
+	pStream->Write(m_iCurrentStrike); // merk.ftac
+	pStream->Write(m_iCurrentLevel); // merk.ftac
 	pStream->Write(m_iExperience);
 	pStream->Write(m_iLevel);
 	pStream->Write(m_iCargo);
@@ -11123,14 +11198,57 @@ bool CvUnit::interceptTest(CvPlot const& kPlot, /* <advc.004c> */ IDInfo* pInter
 	return false;
 }
 
-
+// merk.ftac note: this method effectively includes "canAirStrikeTarget" functionality
 CvUnit* CvUnit::airStrikeTarget(CvPlot const& kPlot) const // advc: was CvPlot const*
 {
 	CvUnit* pDefender = kPlot.getBestDefender(NO_PLAYER, getOwner(), this, true);
 	if (pDefender != NULL && !pDefender->isDead())
 	{
-		if (pDefender->canDefend() /*merk.lt*/ && (getUnitInfo().getReach() + getUnitInfo().getStrike() - pDefender->getUnitInfo().getStrike() >= pDefender->getUnitInfo().getReach()))
+		// merk.ftac begin
+		// note, I do not intend to apply this to air strikes and have not touched air strike-related code, so climbing / diving / etc. will not actually occur with air units, just "land" units
+		// collect some variables
+		int iReach = getUnitInfo().getReach(); 
+		int iClimb = getUnitInfo().getClimb(); 
+		int iDive = getUnitInfo().getDive(); 
+		int iMaxLevel = getUnitInfo().getLevel();
+		int iTheirLevel = pDefender->getCurrentLevel(); 
+		int iTheirReach = pDefender->getUnitInfo().getReach();
+		int iTheirStrike = pDefender->getCurrentStrike(); 
+		int iTheirMaxLevel = pDefender->getUnitInfo().getLevel();
+		int iTheirClimb = pDefender->getUnitInfo().getClimb();
+		int iTheirDive = pDefender->getUnitInfo().getDive();
+		// Ok if we're at a globally defined MINIMUM_DIVE_LEVEL already then diving won't help us. 
+		iDive = getCurrentLevel() >= GC.getDefineINT("MINIMUM_DIVE_LEVEL") ? iDive : 0;
+		iTheirDive = iTheirLevel >= GC.getDefineINT("MINIMUM_DIVE_LEVEL") ? iTheirDive : 0;
+		// Can we strike them right now, including if one or both of us dives? 
+		if (getCurrentStrike() + iDive < iTheirStrike + iTheirDive)
+		{
+			// nope, can't. 
+			return NULL; 
+		}
+		// We can strike, but can we reach them right now?
+		// note: I suspect the "getBestDefender" thing is already checking reach via CanAttack but haven't verified exactly yet
+		if (iReach + getCurrentLevel() < iTheirLevel)
+		{
+			// can't right now, could we EVER reach them? 
+			if (iReach + iMaxLevel < iTheirLevel)
+				return NULL; // nope can't
+			// we could: but would we lose too much strike in the climb? 
+			if (getCurrentStrike() - ((iTheirLevel - getCurrentLevel()) * iClimb) < iTheirStrike)
+				return NULL; // yep would be too slow at that point
+			// Ok. We can reach them by climbing. But what if they start climbing to get away? 
+			if (iTheirClimb < iClimb && iTheirMaxLevel > iMaxLevel)
+				return NULL; // no chance of catching them at that point. 
+			// They can't climb away and we can reach them. But. What if. They. Dive.
+			if (getCurrentStrike() - ((iTheirLevel - 1 - getCurrentLevel()) * iClimb) < iTheirStrike + iTheirDive)
+				return NULL; // they would zoom away at a slightly lower altitude so we don't even bother. 
+			// note: I assume nobody can get faster than Strike + Dive. 
+		}
+		// merk.ftac end
+		if (pDefender->canDefend())
 			return pDefender;
+		else
+			return NULL;
 	}
 	return NULL;
 }
@@ -11260,8 +11378,8 @@ bool CvUnit::canRangeStrikeAt(const CvPlot* pPlot, int iX, int iY) const
 		obstacles in the line of sight, GC.getMap().directionXY(*pPlot, *pTargetPlot)
 		could be used instead of getFacingDirection, but a strike at range 2 should
 		arguably represent indirect fire. */
-	// merk.rcb: indirect fire now has a tag. 
-	if (!pPlot->canSeePlot(pTargetPlot, getTeam(), airRange(), getFacingDirection(true)))
+	// merk.rcb: indirect fire now has a tag. merk.ftac: switched away from facing direction
+	if (!pPlot->canSeePlot(pTargetPlot, getTeam(), airRange(), GC.getMap().directionXY(*pPlot, *pTargetPlot)))
 		return getUnitInfo().isIndirectAttack();
 
 	return true;
@@ -11344,6 +11462,25 @@ bool CvUnit::rangeStrike(int iX, int iY)
 		// harm in commenting it out.
 		//pDefender->getGroup()->setMissionTimer(GC.getInfo(MISSION_RANGE_ATTACK).getTime()); // BtS
 	}
+
+	// merk.ftac: effects from diving and climbing
+	// Note: this all assumes the enemy is static because they can't get away and trying would reduce speed or height unnecessarily. 
+	// If the enemy has lower altitude than we can reach, it's assumed that we dived to hit them. 
+	if (pDefender->getCurrentLevel() < getCurrentLevel() - getUnitInfo().getReach())
+	{
+		setCurrentLevel(pDefender->getCurrentLevel() + getUnitInfo().getReach());
+		if (getCurrentStrike() < getUnitInfo().getStrike() + getUnitInfo().getDive()) // don't double dive
+			setCurrentStrike(getUnitInfo().getStrike() + getUnitInfo().getDive());
+	}
+	// If the enemy has higher altitude than we can reach, it's assumed we climbed to hit them. 
+	if (pDefender->getCurrentLevel() > getCurrentLevel() + getUnitInfo().getReach())
+	{
+		int iNewLevel = pDefender->getCurrentLevel() - getUnitInfo().getReach(); 
+		changeCurrentStrike(-1 * (iNewLevel - getCurrentLevel()) * getUnitInfo().getClimb());
+		setCurrentLevel(iNewLevel);
+	}
+	// could put asserts here to make sure strike and level don't go wonky
+	// merk.ftac end
 
 	return true;
 }

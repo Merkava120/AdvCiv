@@ -90,7 +90,10 @@ public: /*  All const functions are exposed to Python except some related to art
 	int getMoves() const { return m_iMoves; }
 	int getStrike() const { return m_iStrike; } // merk.lt
 	int getReach() const { return m_iReach; } // merk.lt
-	int getAirRange() const { return m_iAirRange; }
+	int getLevel() const { return m_iLevel;  } // merk.ftac
+	int getDive() const { return m_iDive;  } // merk.ftac
+	int getClimb() const { return m_iClimb;  } // merk.ftac
+	int getAirRange() const { return m_iAirRange; } 
 	int getAirUnitCap() const { return m_iAirUnitCap; }
 	int getDropRange() const { return m_iDropRange; }
 	int getNukeRange() const { return m_iNukeRange; }
@@ -389,6 +392,9 @@ protected:
 	int m_iMoves;
 	int m_iStrike; // merk.lt
 	int m_iReach; // merk.lt
+	int m_iLevel; // merk.ftac
+	int m_iDive; // merk.ftac
+	int m_iClimb; // merk.ftac
 	int m_iAirRange;
 	int m_iAirUnitCap;
 	int m_iDropRange;

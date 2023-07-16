@@ -17,6 +17,9 @@ m_iMinAreaSize(0),
 m_iMoves(0),
 m_iStrike(0), // merk.lt
 m_iReach(0), // merk.lt
+m_iLevel(0), // merk.ftac
+m_iDive(0), // merk.ftac
+m_iClimb(0), // merk.ftac
 m_iAirRange(0),
 m_iAirUnitCap(0),
 m_iDropRange(0),
@@ -770,6 +773,9 @@ void CvUnitInfo::read(FDataStreamBase* stream)
 	stream->Read(&m_iMoves);
 	stream->Read(&m_iStrike); // merk.lt
 	stream->Read(&m_iReach); // merk.lt
+	stream->Read(&m_iLevel); // merk.ftac
+	stream->Read(&m_iDive); // merk.ftac
+	stream->Read(&m_iClimb); // merk.ftac
 	stream->Read(&m_iAirRange);
 	stream->Read(&m_iAirUnitCap);
 	stream->Read(&m_iDropRange);
@@ -1076,6 +1082,9 @@ void CvUnitInfo::write(FDataStreamBase* stream)
 	stream->Write(m_iMoves);
 	stream->Write(m_iStrike); // merk.lt
 	stream->Write(m_iReach); // merk.lt
+	stream->Write(m_iLevel); // merk.ftac
+	stream->Write(m_iDive); // merk.ftac
+	stream->Write(m_iClimb); // merk.ftac
 	stream->Write(m_iAirRange);
 	stream->Write(m_iAirUnitCap);
 	stream->Write(m_iDropRange);
@@ -1489,6 +1498,9 @@ bool CvUnitInfo::read(CvXMLLoadUtility* pXML)
 	pXML->GetChildXmlValByName(&m_iMoves, "iMoves");
 	pXML->GetChildXmlValByName(&m_iStrike, "iStrike", 0); // merk.lt
 	pXML->GetChildXmlValByName(&m_iReach, "iReach", 0); // merk.lt
+	pXML->GetChildXmlValByName(&m_iLevel, "iLevel", 0); // merk.ftac
+	pXML->GetChildXmlValByName(&m_iDive, "iDive", 0); // merk.ftac
+	pXML->GetChildXmlValByName(&m_iClimb, "iClimb", 0); // merk.ftac
 	pXML->GetChildXmlValByName(&m_iAirRange, "iAirRange");
 	pXML->GetChildXmlValByName(&m_iAirUnitCap, "iAirUnitCap");
 	pXML->GetChildXmlValByName(&m_iDropRange, "iDropRange");

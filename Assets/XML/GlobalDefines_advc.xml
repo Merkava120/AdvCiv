@@ -1392,5 +1392,14 @@
 		<DefineName>MAX_HURRY_POP</DefineName>
 		<iDefineIntVal>1000</iDefineIntVal>
 	</Define>
+	
+	
+	
+	<!-- Merkava120 DEFINES NOT WORTH THEIR OWN FILE -->
+	<!-- merk.ftac: minimum level at which things can dive. Default is 2.  -->
+	<Define>
+		<DefineName>MINIMUM_DIVE_LEVEL</DefineName>
+		<iDefineIntVal>2</iDefineIntVal>
+	</Define>
 
 </Civ4Defines>
