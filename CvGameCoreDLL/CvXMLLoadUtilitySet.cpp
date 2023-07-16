@@ -197,7 +197,11 @@ bool CvXMLLoadUtility::SetGlobalDefines()
 
 	// merk.ras1 begin
 	if (!ReadGlobalDefines("xml\\GlobalDefines_Barbarians.xml", cache))
-		return false; // merk.ras1 end
+		return false;
+	// merk.dt begin
+	if (!ReadGlobalDefines("xml\\GlobalDefines_Dynamica.xml", cache))
+		return false; 
+	// merk end
 
 	// BETTER_BTS_AI_MOD, XML Options, 02/21/10, jdog5000: START
 	ReadGlobalDefines("xml\\BBAI_Game_Options_GlobalDefines.xml", cache);

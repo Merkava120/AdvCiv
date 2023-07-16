@@ -299,6 +299,11 @@ public:
 
 	HandicapTypes getHandicapType() const;																	// Exposed to Python
 	CivilizationTypes getCivilizationType() const;															// Exposed to Python
+	// merk.dt1 begin
+	TechTypes getDynamicTech(PlayerTypes eResearchPlayer) const;
+	TechTypes getUpgradeTech() const;
+	TechTypes getPlotTech() const;
+	// merk end
 	const wchar* getVisualCivAdjective(TeamTypes eForTeam) const;
 	SpecialUnitTypes getSpecialUnitType() const																// Exposed to Python
 	{

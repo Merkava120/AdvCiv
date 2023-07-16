@@ -744,6 +744,15 @@ void CvUnit::doTurn()
 	}
 	// merk.ftac end
 
+	// merk.dt3
+	if (GC.getDefineINT("DYNAMIC_TECHS"))
+	{
+		TechTypes ePlotTech = getPlotTech();
+		int iBeakers = GC.getDefineINT("BEAKERS_FROM_PLOT") + SyncRandNum(2 * GC.getDefineINT("BEAKERS_FROM_PLOT_RAND")) - GC.getDefineINT("BEAKERS_FROM_PLOT_RAND");
+		GET_TEAM(getTeam()).changeResearchProgress(ePlotTech, iBeakers, getOwner());
+	}
+
+
 }
 
 // advc.029:
@@ -1178,7 +1187,9 @@ void CvUnit::resolveCombat(CvUnit* pDefender, CvPlot* pPlot, bool bVisible)
 		{
 			if (getCombatFirstStrikes() == 0)
 			{
-				if (getDamage() + iAttackerDamage >= maxHitPoints() &&
+				// merk.mct: withdrawal applied every round, not just when hitpoints near death
+				// If you want to use high withdrawal probs I suggest giving them first strikes so they don't just leave combat instantly
+				if (/*getDamage() + iAttackerDamage >= maxHitPoints() &&*/
 					SyncRandSuccess100(withdrawalProbability()))
 				{
 					flankingStrikeCombat(pPlot, iAttackerStrength, iAttackerFirepower,
@@ -1337,6 +1348,41 @@ void CvUnit::resolveCombat(CvUnit* pDefender, CvPlot* pPlot, bool bVisible)
 			gDLL->getEntityIFace()->AddMission(&kBattle);
 		}
 	}
+
+	// merk.dt1: get beakers for techs!
+	// merk.dt2 here too, beakers toward upgrades. 
+	if (GC.getDefineINT("DYNAMIC_TECHS") > 0)
+	{
+		// regardless of who got killed both teams learn from each other
+		TechTypes eDefenderTech = pDefender->getDynamicTech(getOwner()); // tech for attacker from defender
+		TechTypes eDefenderUpgradeTech = pDefender->getUpgradeTech(); // tech for defender from self
+		TechTypes eAttackerTech = getDynamicTech(pDefender->getOwner()); // tech for defender from attacker
+		TechTypes eAttackerUpgradeTech = getDynamicTech(pDefender->getOwner()); // tech for attacker from self
+		if (eDefenderTech != NO_TECH) // if found a defender tech, give the attacker some beakers
+		{
+			int iBeakers = GC.getDefineINT("BEAKERS_FROM_COMBAT") + SyncRandNum(2 * GC.getDefineINT("BEAKERS_FROM_COMBAT_RAND")) - GC.getDefineINT("BEAKERS_FROM_COMBAT_RAND");
+			GET_TEAM(getTeam()).changeResearchProgress(eDefenderTech, iBeakers, getOwner());
+		}
+		if (eAttackerTech != NO_TECH) // if found an attacker tech, give the defender some beakers
+		{
+			int iBeakers = GC.getDefineINT("BEAKERS_FROM_COMBAT") + SyncRandNum(2 * GC.getDefineINT("BEAKERS_FROM_COMBAT_RAND")) - GC.getDefineINT("BEAKERS_FROM_COMBAT_RAND");
+			GET_TEAM(pDefender->getTeam()).changeResearchProgress(eAttackerTech, iBeakers, pDefender->getOwner());
+		}
+		// merk.dt2
+		if (eAttackerUpgradeTech != NO_TECH)
+		{
+			int iBeakers = GC.getDefineINT("BEAKERS_FOR_UPGRADE") + SyncRandNum(2 * GC.getDefineINT("BEAKERS_FOR_UPGRADE_RAND")) - GC.getDefineINT("BEAKERS_FOR_UPGRADE_RAND");
+			GET_TEAM(getTeam()).changeResearchProgress(eAttackerUpgradeTech, iBeakers, getOwner());
+		}
+		if (eDefenderUpgradeTech != NO_TECH) // if found an attacker tech, give the defender some beakers
+		{
+			int iBeakers = GC.getDefineINT("BEAKERS_FOR_UPGRADE") + SyncRandNum(2 * GC.getDefineINT("BEAKERS_FOR_UPGRADE_RAND")) - GC.getDefineINT("BEAKERS_FOR_UPGRADE_RAND");
+			GET_TEAM(pDefender->getTeam()).changeResearchProgress(eDefenderUpgradeTech, iBeakers, pDefender->getOwner());
+		}
+	}
+	// merk.dt end
+
+
 #ifdef LOG_COMBAT_OUTCOMES
 	// (don't log barb battles, because they have special rules.)
 	if (!isBarbarian() && !pDefender->isBarbarian())
@@ -6983,6 +7029,175 @@ CivilizationTypes CvUnit::getCivilizationType() const
 {
 	return GET_PLAYER(getOwner()).getCivilizationType();
 }
+// merk.dt begin
+TechTypes CvUnit::getDynamicTech(PlayerTypes eResearchPlayer) const
+{
+	// first, check the unit's primary prereq tech
+	TechTypes ePrereqTech = getUnitInfo().getPrereqAndTech();
+	if (!GET_TEAM(GET_PLAYER(eResearchPlayer).getTeam()).isHasTech(ePrereqTech) && GET_PLAYER(eResearchPlayer).isTechResearchable(ePrereqTech, false))
+		return ePrereqTech;
+	// then, search through other prereq techs
+	for (int k = 0; k < getUnitInfo().getNumPrereqAndTechs(); k++)
+	{
+		ePrereqTech = getUnitInfo().getPrereqAndTechs(k);
+		if (GET_TEAM(GET_PLAYER(eResearchPlayer).getTeam()).isHasTech(ePrereqTech))
+			continue;
+		else if (!GET_PLAYER(eResearchPlayer).isTechResearchable(ePrereqTech, false))
+			continue;
+		else
+		{
+			return ePrereqTech;
+		}
+	}
+	// If we got here that means none of the AND prereqs work. 
+	// for now that just means return nothing. 
+	return NO_TECH; 
+}
+
+TechTypes CvUnit::getUpgradeTech() const
+{
+	// Okay. The way upgrades work, we gotta loop through every unitclass to find and test techs. 
+	FOR_EACH_ENUM(UnitClass)
+	{
+		// first, test if it's an upgrade
+		if (getUnitInfo().getUpgradeUnitClass((int)eLoopUnitClass))
+		{
+			// awesome. Now to test the prereqs, translate it to the civ unit;  
+			UnitTypes eUpgradeUnit = GC.getCivilizationInfo(GET_PLAYER(getOwner()).getCivilizationType()).getCivilizationUnits((int)eLoopUnitClass);
+			// test if we can upgrade to it already (if so, skip onward)
+			if (canUpgrade(eUpgradeUnit))
+				continue;
+			// then, check the unit's primary prereq tech
+			TechTypes ePrereqTech = GC.getUnitInfo((int)eUpgradeUnit).getPrereqAndTech();
+			if (!GET_TEAM(GET_PLAYER(getOwner()).getTeam()).isHasTech(ePrereqTech) && GET_PLAYER(getOwner()).isTechResearchable(ePrereqTech, false))
+				return ePrereqTech;
+			// if nothing yet, search through other prereq techs
+			for (int k = 0; k < GC.getUnitInfo((int)eUpgradeUnit).getNumPrereqAndTechs(); k++)
+			{
+				ePrereqTech = GC.getUnitInfo((int)eUpgradeUnit).getPrereqAndTechs(k);
+				if (GET_TEAM(GET_PLAYER(getOwner()).getTeam()).isHasTech(ePrereqTech))
+					continue;
+				else if (!GET_PLAYER(getOwner()).isTechResearchable(ePrereqTech, false))
+					continue;
+				else
+				{
+					return ePrereqTech;
+				}
+			}
+			// if we got here that means none of the techs work so just move on to next unitclass
+		}
+		// can't upgrade to that unitclass, so move on to next one
+	}
+	// didn't find any upgrade unitclass
+	// for now that just means return nothing. 
+	return NO_TECH;
+}
+// merk.dt3
+TechTypes CvUnit::getPlotTech() const
+{
+	// merk.dt3 begin
+	// check bonus on tile and see if we can reveal it
+	BonusTypes eBonus = plot()->getBonusType();
+	if (eBonus != NO_BONUS)
+	{
+		if (GET_TEAM(getTeam()).isBonusRevealed(eBonus))
+		{
+			// It's revealed, so let's see about improvements that can harvest it
+			FOR_EACH_ENUM(Improvement)
+			{
+				if (GC.getImprovementInfo((int)eLoopImprovement).isImprovementBonusMakesValid(eBonus))
+				{
+					// bingo, this improvement requires the bonus, so let's look at its build
+					FOR_EACH_ENUM(Build)
+					{
+						if (GC.getBuildInfo(eLoopBuild).getImprovement() != eLoopImprovement)
+							continue;
+						if (GET_TEAM(getTeam()).isHasTech((GC.getBuildInfo(eLoopBuild).getTechPrereq())))
+							continue;
+						else if (GET_PLAYER(getOwner()).isTechResearchable(GC.getBuildInfo(eLoopBuild).getTechPrereq(), false))
+							return GC.getBuildInfo(eLoopBuild).getTechPrereq();
+					}
+				}
+			}
+		}
+		else
+		{
+			// it's not revealed; let's see about revealing it
+			TechTypes eRevealTech = GC.getBonusInfo(eBonus).getTechReveal();
+			if (!GET_TEAM(getTeam()).isHasTech(eRevealTech) && GET_PLAYER(getOwner()).isTechResearchable(eRevealTech))
+				return eRevealTech;
+		}
+	}
+	// If got to here that means bonuses aren't giving us techs so let's look at the terrain and features
+	// Could easily split this into other functions and do them separately but I like having them combined for now
+	// Features first:
+	FeatureTypes eFeature = plot()->getFeatureType();
+	if (eFeature != NO_FEATURE)
+	{
+		// Builds that require this feature?
+		FOR_EACH_ENUM(Build)
+		{
+			if (!GC.getImprovementInfo(GC.getBuildInfo(eLoopBuild).getImprovement()).getFeatureMakesValid(eFeature) && !GC.getBuildInfo(eLoopBuild).getFeatureProduction(eFeature) && !GC.getBuildInfo(eLoopBuild).isFeatureRemove(eFeature))
+			{
+				if ()
+					continue;
+			}
+			TechTypes eBuildTech = GC.getBuildInfo(eLoopBuild).getTechPrereq();
+			if (!GET_TEAM(getTeam()).isHasTech(eBuildTech) && GET_PLAYER(getOwner()).isTechResearchable(eBuildTech, false))
+				return eBuildTech;
+			TechTypes eFeatureTech = GC.getBuildInfo(eLoopBuild).getFeatureTech(eFeature);
+			if (!GET_TEAM(getTeam()).isHasTech(eFeatureTech) && GET_PLAYER(getOwner()).isTechResearchable(eFeatureTech, false))
+				return eFeatureTech;
+		}
+		// If got here, found no techs related to builds with this feature here. 
+	}
+	// bonuses and features not giving techs, so how about terrains? 
+	TerrainTypes eTerrain = plot()->getTerrainType();
+	if (eTerrain != NO_TERRAIN)
+	{
+		// Builds that require this terrain?
+		FOR_EACH_ENUM(Build)
+		{
+			if (!GC.getImprovementInfo(GC.getBuildInfo(eLoopBuild).getImprovement()).getTerrainMakesValid(eTerrain))
+					continue;
+			TechTypes eBuildTech = GC.getBuildInfo(eLoopBuild).getTechPrereq();
+			if (!GET_TEAM(getTeam()).isHasTech(eBuildTech) && GET_PLAYER(getOwner()).isTechResearchable(eBuildTech, false))
+				return eBuildTech;
+		}
+		// If got here, found no techs related to builds with this terrain here. 
+	}
+	// Still nothing? Okay let's check one more thing: adjacent coasts. 
+	// reason: this is, as of yet, the only immersive way I can think of to get fishing / sailing stuff dynamically. 
+	if (plot()->isCoastalLand())
+	{
+		TerrainTypes eCoastalTerrain = (TerrainTypes)GC.getDefineINT("SHALLOW_WATER_TERRAIN");
+		// Builds that require this terrain?
+		FOR_EACH_ENUM(Build)
+		{
+			if (!GC.getImprovementInfo(GC.getBuildInfo(eLoopBuild).getImprovement()).getTerrainMakesValid(eCoastalTerrain))
+				continue;
+			TechTypes eBuildTech = GC.getBuildInfo(eLoopBuild).getTechPrereq();
+			if (!GET_TEAM(getTeam()).isHasTech(eBuildTech) && GET_PLAYER(getOwner()).isTechResearchable(eBuildTech, false))
+				return eBuildTech;
+		}
+	}
+	// One more: if there is an improvement on the tile we can learn techs for its builds. 
+	ImprovementTypes eImprovement = plot()->getImprovementType();
+	if (eImprovement != NO_IMPROVEMENT)
+	{
+		FOR_EACH_ENUM(Build)
+		{
+			if (GC.getBuildInfo(eLoopBuild).getImprovement() != eImprovement)
+				continue;
+			TechTypes eBuildTech = GC.getBuildInfo(eLoopBuild).getTechPrereq();
+			if (!GET_TEAM(getTeam()).isHasTech(eBuildTech) && GET_PLAYER(getOwner()).isTechResearchable(eBuildTech, false))
+				return eBuildTech;
+		}
+	}
+
+	return NO_TECH;
+}
+// merk.dt end
 
 
 const wchar* CvUnit::getVisualCivAdjective(TeamTypes eForTeam) const
