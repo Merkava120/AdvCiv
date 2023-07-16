@@ -748,9 +748,13 @@ void CvUnit::doTurn()
 	if (GC.getDefineINT("DYNAMIC_TECHS"))
 	{
 		TechTypes ePlotTech = getPlotTech();
-		int iBeakers = GC.getDefineINT("BEAKERS_FROM_PLOT") + SyncRandNum(2 * GC.getDefineINT("BEAKERS_FROM_PLOT_RAND")) - GC.getDefineINT("BEAKERS_FROM_PLOT_RAND");
-		GET_TEAM(getTeam()).changeResearchProgress(ePlotTech, iBeakers, getOwner());
+		if (ePlotTech != NO_TECH)
+		{
+			int iBeakers = GC.getDefineINT("BEAKERS_FROM_PLOT") + SyncRandNum(2 * GC.getDefineINT("BEAKERS_FROM_PLOT_RAND")) - GC.getDefineINT("BEAKERS_FROM_PLOT_RAND");
+			GET_TEAM(getTeam()).changeResearchProgress(ePlotTech, iBeakers, getOwner());
+		}
 	}
+	// merk.dt end
 
 
 }
@@ -7096,6 +7100,24 @@ TechTypes CvUnit::getUpgradeTech() const
 TechTypes CvUnit::getPlotTech() const
 {
 	// merk.dt3 begin
+	// First, check coasts nearby. 
+	// reason: this is, as of yet, the only immersive way I can think of to get fishing / sailing stuff dynamically. 
+	if (plot()->isCoastalLand())
+	{
+		TerrainTypes eCoastalTerrain = (TerrainTypes)GC.getDefineINT("SHALLOW_WATER_TERRAIN");
+		// Builds that require this terrain?
+		FOR_EACH_ENUM(Build)
+		{
+			ImprovementTypes eImprovement = GC.getBuildInfo(eLoopBuild).getImprovement();
+			if (eImprovement != NO_IMPROVEMENT)
+				if (!GC.getImprovementInfo(GC.getBuildInfo(eLoopBuild).getImprovement()).getTerrainMakesValid(eCoastalTerrain))
+					continue;
+			TechTypes eBuildTech = GC.getBuildInfo(eLoopBuild).getTechPrereq();
+			if (eBuildTech != NO_TECH)
+				if (!GET_TEAM(getTeam()).isHasTech(eBuildTech) && GET_PLAYER(getOwner()).isTechResearchable(eBuildTech, false))
+					return eBuildTech;
+		}
+	}
 	// check bonus on tile and see if we can reveal it
 	BonusTypes eBonus = plot()->getBonusType();
 	if (eBonus != NO_BONUS)
@@ -7124,8 +7146,9 @@ TechTypes CvUnit::getPlotTech() const
 		{
 			// it's not revealed; let's see about revealing it
 			TechTypes eRevealTech = GC.getBonusInfo(eBonus).getTechReveal();
-			if (!GET_TEAM(getTeam()).isHasTech(eRevealTech) && GET_PLAYER(getOwner()).isTechResearchable(eRevealTech))
-				return eRevealTech;
+			if (eRevealTech != NO_TECH)
+				if (!GET_TEAM(getTeam()).isHasTech(eRevealTech) && GET_PLAYER(getOwner()).isTechResearchable(eRevealTech, false))
+					return eRevealTech;
 		}
 	}
 	// If got to here that means bonuses aren't giving us techs so let's look at the terrain and features
@@ -7137,17 +7160,23 @@ TechTypes CvUnit::getPlotTech() const
 		// Builds that require this feature?
 		FOR_EACH_ENUM(Build)
 		{
-			if (!GC.getImprovementInfo(GC.getBuildInfo(eLoopBuild).getImprovement()).getFeatureMakesValid(eFeature) && !GC.getBuildInfo(eLoopBuild).getFeatureProduction(eFeature) && !GC.getBuildInfo(eLoopBuild).isFeatureRemove(eFeature))
-			{
-				if ()
+			// If the feature doesn't make an improvement valid, the build doesn't remove the feature, and the build doesn't gain hammers from the feature...
+			ImprovementTypes eImprovement = GC.getBuildInfo(eLoopBuild).getImprovement();
+			if (eImprovement != NO_IMPROVEMENT)
+				if (!GC.getImprovementInfo(eImprovement).getFeatureMakesValid(eFeature) && !GC.getBuildInfo(eLoopBuild).getFeatureProduction(eFeature) && !GC.getBuildInfo(eLoopBuild).isFeatureRemove(eFeature))
+				{
+					// Then the build doesn't "require" this feature
 					continue;
-			}
+				}
+			// Otherwise, it's feature related somehow, so try the build tech prereq and build feature tech 
 			TechTypes eBuildTech = GC.getBuildInfo(eLoopBuild).getTechPrereq();
-			if (!GET_TEAM(getTeam()).isHasTech(eBuildTech) && GET_PLAYER(getOwner()).isTechResearchable(eBuildTech, false))
-				return eBuildTech;
+			if (eBuildTech != NO_TECH)
+				if (!GET_TEAM(getTeam()).isHasTech(eBuildTech) && GET_PLAYER(getOwner()).isTechResearchable(eBuildTech, false))
+					return eBuildTech;
 			TechTypes eFeatureTech = GC.getBuildInfo(eLoopBuild).getFeatureTech(eFeature);
-			if (!GET_TEAM(getTeam()).isHasTech(eFeatureTech) && GET_PLAYER(getOwner()).isTechResearchable(eFeatureTech, false))
-				return eFeatureTech;
+			if (eFeatureTech != NO_TECH)
+				if (!GET_TEAM(getTeam()).isHasTech(eFeatureTech) && GET_PLAYER(getOwner()).isTechResearchable(eFeatureTech, false))
+					return eFeatureTech;
 		}
 		// If got here, found no techs related to builds with this feature here. 
 	}
@@ -7158,29 +7187,19 @@ TechTypes CvUnit::getPlotTech() const
 		// Builds that require this terrain?
 		FOR_EACH_ENUM(Build)
 		{
-			if (!GC.getImprovementInfo(GC.getBuildInfo(eLoopBuild).getImprovement()).getTerrainMakesValid(eTerrain))
+			ImprovementTypes eImprovement = GC.getBuildInfo(eLoopBuild).getImprovement();
+			if (eImprovement != NO_IMPROVEMENT)
+				if (!GC.getImprovementInfo(GC.getBuildInfo(eLoopBuild).getImprovement()).getTerrainMakesValid(eTerrain))
 					continue;
 			TechTypes eBuildTech = GC.getBuildInfo(eLoopBuild).getTechPrereq();
-			if (!GET_TEAM(getTeam()).isHasTech(eBuildTech) && GET_PLAYER(getOwner()).isTechResearchable(eBuildTech, false))
-				return eBuildTech;
+			if (eBuildTech != NO_TECH)
+				if (!GET_TEAM(getTeam()).isHasTech(eBuildTech) && GET_PLAYER(getOwner()).isTechResearchable(eBuildTech, false))
+					return eBuildTech;
 		}
 		// If got here, found no techs related to builds with this terrain here. 
 	}
-	// Still nothing? Okay let's check one more thing: adjacent coasts. 
-	// reason: this is, as of yet, the only immersive way I can think of to get fishing / sailing stuff dynamically. 
-	if (plot()->isCoastalLand())
-	{
-		TerrainTypes eCoastalTerrain = (TerrainTypes)GC.getDefineINT("SHALLOW_WATER_TERRAIN");
-		// Builds that require this terrain?
-		FOR_EACH_ENUM(Build)
-		{
-			if (!GC.getImprovementInfo(GC.getBuildInfo(eLoopBuild).getImprovement()).getTerrainMakesValid(eCoastalTerrain))
-				continue;
-			TechTypes eBuildTech = GC.getBuildInfo(eLoopBuild).getTechPrereq();
-			if (!GET_TEAM(getTeam()).isHasTech(eBuildTech) && GET_PLAYER(getOwner()).isTechResearchable(eBuildTech, false))
-				return eBuildTech;
-		}
-	}
+	
+	
 	// One more: if there is an improvement on the tile we can learn techs for its builds. 
 	ImprovementTypes eImprovement = plot()->getImprovementType();
 	if (eImprovement != NO_IMPROVEMENT)
