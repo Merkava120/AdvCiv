@@ -80,8 +80,12 @@
 			<PrereqReligion>NONE</PrereqReligion>
 			<PrereqCorporation>NONE</PrereqCorporation>
 			<PrereqBuilding>NONE</PrereqBuilding>
-			<PrereqTech>NONE</PrereqTech>
-			<TechTypes/>
+			<PrereqTech>TECH_HUNTING</PrereqTech>
+			<TechTypes>
+				<PrereqTech>TECH_FISHING</PrereqTech>
+				<PrereqTech>TECH_THE_WHEEL</PrereqTech>
+				<PrereqTech>TECH_MYSTICISM</PrereqTech>
+			</TechTypes>
 			<BonusType>NONE</BonusType>
 			<PrereqBonuses/>
 			<ProductionTraits/>
@@ -93,11 +97,6 @@
 			<iAdvancedStartCostIncrease>0</iAdvancedStartCostIncrease>
 			<iMinAreaSize>-1</iMinAreaSize>
 			<iMoves>4</iMoves>
-			<iStrike>8</iStrike>
-			<iReach>0</iReach>
-			<iLevel>8</iLevel>
-			<iDive>1</iDive>
-			<iClimb>1</iClimb>
 			<bNoRevealMap>0</bNoRevealMap>
 			<iAirRange>8</iAirRange>
 			<iAirUnitCap>0</iAirUnitCap>
@@ -127,6 +126,7 @@
 			<bIndirectAttack>1</bIndirectAttack>
 			<iRangeAttackMoves>60</iRangeAttackMoves>
 			<iRangeAttacks>2</iRangeAttacks>
+			<bRangeMustMotionless>1</bRangeMustMotionless>
 			<iXPValueAttack>4</iXPValueAttack>
 			<iXPValueDefense>2</iXPValueDefense>
 			<iFirstStrikes>0</iFirstStrikes>
@@ -285,11 +285,8 @@
 			<iAdvancedStartCostIncrease>0</iAdvancedStartCostIncrease>
 			<iMinAreaSize>-1</iMinAreaSize>
 			<iMoves>1</iMoves>
-			<iStrike>9</iStrike>
-			<iReach>0</iReach>
-			<iLevel>7</iLevel>
-			<iDive>0</iDive>
-			<iClimb>0</iClimb>
+			<iStrike>2</iStrike>
+			<iReach>5</iReach>
 			<bNoRevealMap>0</bNoRevealMap>
 			<iAirRange>4</iAirRange>
 			<iAirUnitCap>0</iAirUnitCap>
@@ -465,8 +462,8 @@
 			<iAdvancedStartCostIncrease>0</iAdvancedStartCostIncrease>
 			<iMinAreaSize>-1</iMinAreaSize>
 			<iMoves>2</iMoves>
-			<iStrike>10</iStrike>
-			<iLevel>10</iLevel>
+			<iStrike>1</iStrike>
+			<iReach>1</iReach>
 			<bNoRevealMap>0</bNoRevealMap>
 			<iAirRange>4</iAirRange>
 			<iAirUnitCap>0</iAirUnitCap>
@@ -642,9 +639,8 @@
 			<iAdvancedStartCostIncrease>0</iAdvancedStartCostIncrease>
 			<iMinAreaSize>-1</iMinAreaSize>
 			<iMoves>2</iMoves>
-			<iStrike>12</iStrike>
-			<iLevel>10</iLevel>
-			<iClimb>2</iClimb>
+			<iStrike>3</iStrike>
+			<iReach>3</iReach>
 			<bNoRevealMap>0</bNoRevealMap>
 			<iAirRange>4</iAirRange>
 			<iAirUnitCap>0</iAirUnitCap>
@@ -1529,11 +1525,8 @@
 			<iAdvancedStartCostIncrease>0</iAdvancedStartCostIncrease>
 			<iMinAreaSize>-1</iMinAreaSize>
 			<iMoves>2</iMoves>
-			<iStrike>10</iStrike>
-			<iReach>8</iReach>
-			<iLevel>1</iLevel>
 			<bNoRevealMap>0</bNoRevealMap>
-			<iAirRange>4</iAirRange>
+			<iAirRange>0</iAirRange>
 			<iAirUnitCap>0</iAirUnitCap>
 			<iDropRange>0</iDropRange>
 			<iNukeRange>-1</iNukeRange>
@@ -1552,11 +1545,8 @@
 			<FeaturePassableTechs/>
 			<iCombat>1</iCombat>
 			<iCombatLimit>100</iCombatLimit>
-			<iAirCombat>5</iAirCombat>
-			<iAirCombatLimit>100</iAirCombatLimit>
-			<iRangeDefense>1</iRangeDefense>
-			<iRangeDamage>20</iRangeDamage>
-			<iRangeAttacks>3</iRangeAttacks>
+			<iAirCombat>0</iAirCombat>
+			<iAirCombatLimit>0</iAirCombatLimit>
 			<iXPValueAttack>4</iXPValueAttack>
 			<iXPValueDefense>2</iXPValueDefense>
 			<iFirstStrikes>0</iFirstStrikes>
