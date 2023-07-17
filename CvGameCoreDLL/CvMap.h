@@ -604,6 +604,12 @@ protected:
 	ListEnumMap2D<PlotNumTypes,YieldTypes,int,char> m_aeiPlotExtraYield;
 	ListEnumMap<PlotNumTypes,int> m_aiPlotExtraCost;
 	// </advc.enum>
+	// merk.tt tile trackers begin
+	ListEnumMap<PlotNumTypes,std::vector< std::vector< int > >> m_ttPlotPops; // will be used to track individual pops and their info
+	// 0 = faction membership, 1 = current 'value', 2 = is fed or not
+	ListEnumMap<PlotNumTypes, std::vector< int >> m_ttPlotData; // will be used to track plot-level data like wind speed / temperature / etc.
+	ListEnumMap<PlotNumTypes, int> m_ttPlotFactions; // lists which faction controls each plot. 
+	// merk.tt end
 	CvPlot* m_pMapPlots;
 	std::map<Shelf::Id,Shelf*> m_shelves; // advc.300
 	FFreeListTrashArray<CvArea> m_areas;

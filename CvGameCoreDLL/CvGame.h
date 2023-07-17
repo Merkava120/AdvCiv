@@ -1126,6 +1126,21 @@ protected:
 	mutable bool m_bShowingCurrentDeals;
 	// </advc.072>
 
+	// merk.tt trackers begin
+	struct Faction
+	{
+		ListEnumMap<PlotNumTypes, std::vector< int >> factionPlots; // will track the faction's plots and ratings in each - unused
+		// plan right now is 0 = popularity, 1 = influence / control
+		ListEnumMap<YieldTypes, int> factionYields; // will track the faction's total yields - unused
+		ListEnumMap<TechTypes,bool> factionTechs; // will track the faction's known techs - unused
+		std::pair< int, int > factionRelations; // unused
+		ListEnumMap<PlayerTypes, int> factionPlayerRelations; // unused
+		ArtStyleTypes factionEthnicity; // unused
+	};
+	std::vector< Faction > m_ttFactions; 
+	// merk.tt end
+
+
 	// <advc.027b>
 	struct InitialRandSeed
 	{
