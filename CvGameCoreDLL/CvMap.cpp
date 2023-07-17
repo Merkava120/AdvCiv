@@ -45,6 +45,7 @@ CvMap::~CvMap()
 	pInitInfo  - Optional init structure (used for WB load) */
 void CvMap::init(CvMapInitData* pInitInfo)
 {
+	m_bMappingInitDone = false; //Merkava120 1.1.1 terrain adj
 	PROFILE("CvMap::init");
 	gDLL->logMemState(CvString::format("CvMap::init begin - world size=%s, climate=%s, sealevel=%s, num custom options=%6",
 			GC.getInfo(GC.getInitCore().getWorldSize()).getDescription(),
@@ -727,7 +728,133 @@ CvCity* CvMap::findCity(int iX, int iY, PlayerTypes eOwner, TeamTypes eTeam,
 	}
 	return pBestCity;
 }
-
+// Dynamica 0.2.4
+// finds nearest unit or city that can store a yield and returns the amount they have stored. 
+int CvMap::getNearestStoredYieldAmount(int iX, int iY, int iYield, PlayerTypes eOwner, bool bSameArea) const
+{
+	CvCity* pNearestCity = findCity(iX, iY, eOwner, GET_PLAYER(eOwner).getTeam(), bSameArea);
+	int iCityDist = plotDistance(pNearestCity->plot(), plot(iX, iY));
+	bool bFound = false;
+	int iAmount = iCityDist < GC.getDefineINT("MAX_YIELD_STORAGE_DISTANCE") ? pNearestCity->getStoredYield(iYield) : 0;
+	for (PlotCircleIter itPlot(*plot(iX, iY), std::min(iCityDist, GC.getDefineINT("MAX_YIELD_STORAGE_DISTANCE")));
+		itPlot.hasNext(); ++itPlot)
+	{
+		if (itPlot->getNumUnits() > 0)
+		{
+			FOR_EACH_UNIT_IN(pUnit, *itPlot)
+			{
+				if (pUnit->getOwner() != eOwner)
+					continue;
+				if (pUnit->getStoredYield(iYield) > 0)
+				{
+					bFound = true;
+					iAmount = pUnit->getStoredYield(iYield);
+					break;
+				}
+			}
+		}
+		if (bFound)
+			break;
+	}
+	return iAmount;
+}
+// adjusts stored yield of nearest city or unit that can store the yield, and which has enough space (if a unit), and which will not end up with negative yields
+void CvMap::changeNearestStoredYieldAmount(int iX, int iY, int iYield, int iChange, PlayerTypes eOwner, bool bSameArea)
+{
+	CvCity* pNearestCity = findCity(iX, iY, eOwner, GET_PLAYER(eOwner).getTeam(), bSameArea);
+	if (pNearestCity == NULL)
+		return;
+	int iCityDist = plotDistance(pNearestCity->plot(), plot(iX, iY));
+	bool bFound = false;
+	int iAmount = iCityDist < GC.getDefineINT("MAX_YIELD_STORAGE_DISTANCE") ? pNearestCity->getStoredYield(iYield) : 0;
+	for (PlotCircleIter itPlot(*plot(iX, iY), std::min(iCityDist, GC.getDefineINT("MAX_YIELD_STORAGE_DISTANCE")));
+		itPlot.hasNext(); ++itPlot)
+	{
+		if (itPlot->getNumUnits() > 0)
+		{
+			FOR_EACH_UNIT_IN(pUnit, *itPlot)
+			{
+				if (pUnit->getOwner() != eOwner)
+					continue;
+				if (pUnit->getStoredYield(iYield) + iChange > 0 && GC.getUnitInfo(pUnit->getUnitType()).getYieldStorage(iYield) - iChange - pUnit->getStoredYield(iYield) >= 0)
+				{
+					bFound = true;
+					GET_PLAYER(eOwner).getUnit(pUnit->getID())->changeStoredYield(iYield, iChange);
+					break;
+				}
+			}
+		}
+		if (bFound)
+			break;
+	}
+	if (!bFound && iAmount + iChange > 0) // not having limited storage in cities...yet. 
+	{
+		pNearestCity->changeStoredYield(iYield, iChange);
+	}
+}
+// finds nearest unit or city that can store a yield and returns the amount they have stored. 
+int CvMap::getNearestStoredCommerceAmount(int iX, int iY, int iCommerce, PlayerTypes eOwner, bool bSameArea) const
+{
+	CvCity* pNearestCity = findCity(iX, iY, eOwner, GET_PLAYER(eOwner).getTeam(), bSameArea);
+	int iCityDist = plotDistance(pNearestCity->plot(), plot(iX, iY));
+	bool bFound = false;
+	int iAmount = iCityDist < GC.getDefineINT("MAX_Commerce_STORAGE_DISTANCE") ? pNearestCity->getStoredCommerce(iCommerce) : 0;
+	for (PlotCircleIter itPlot(*plot(iX, iY), std::min(iCityDist, GC.getDefineINT("MAX_Commerce_STORAGE_DISTANCE")));
+		itPlot.hasNext(); ++itPlot)
+	{
+		if (itPlot->getNumUnits() > 0)
+		{
+			FOR_EACH_UNIT_IN(pUnit, *itPlot)
+			{
+				if (pUnit->getOwner() != eOwner)
+					continue;
+				if (pUnit->getStoredCommerce(iCommerce) > 0)
+				{
+					bFound = true;
+					iAmount = pUnit->getStoredCommerce(iCommerce);
+					break;
+				}
+			}
+		}
+		if (bFound)
+			break;
+	}
+	return iAmount;
+}
+// adjusts stored Commerce of nearest city or unit that can store the Commerce, and which has enough space (if a unit), and which will not end up with negative Commerces
+void CvMap::changeNearestStoredCommerceAmount(int iX, int iY, int iCommerce, int iChange, PlayerTypes eOwner, bool bSameArea)
+{
+	CvCity* pNearestCity = findCity(iX, iY, eOwner, GET_PLAYER(eOwner).getTeam(), bSameArea);
+	if (pNearestCity == NULL)
+		return;
+	int iCityDist = plotDistance(pNearestCity->plot(), plot(iX, iY));
+	bool bFound = false;
+	int iAmount = iCityDist < GC.getDefineINT("MAX_Commerce_STORAGE_DISTANCE") ? pNearestCity->getStoredCommerce(iCommerce) : 0;
+	for (PlotCircleIter itPlot(*plot(iX, iY), std::min(iCityDist, GC.getDefineINT("MAX_Commerce_STORAGE_DISTANCE")));
+		itPlot.hasNext(); ++itPlot)
+	{
+		if (itPlot->getNumUnits() > 0)
+		{
+			FOR_EACH_UNIT_IN(pUnit, *itPlot)
+			{
+				if (pUnit->getOwner() != eOwner)
+					continue;
+				if (pUnit->getStoredCommerce(iCommerce) + iChange > 0 && GC.getUnitInfo(pUnit->getUnitType()).getCommerceStorage(iCommerce) - iChange - pUnit->getStoredCommerce(iCommerce) >= 0)
+				{
+					bFound = true;
+					GET_PLAYER(eOwner).getUnit(pUnit->getID())->changeStoredCommerce(iCommerce, iChange);
+					break;
+				}
+			}
+		}
+		if (bFound)
+			break;
+	}
+	if (!bFound && iAmount + iChange > 0) // not having limited storage in cities...yet. 
+	{
+		pNearestCity->changeStoredCommerce(iCommerce, iChange);
+	}
+}
 
 CvSelectionGroup* CvMap::findSelectionGroup(int iX, int iY, PlayerTypes eOwner,
 	bool bReadyToSelect, bool bWorkers) const
@@ -1315,7 +1442,46 @@ void CvMap::read(FDataStreamBase* pStream)
 		}
 	} // </advc.106n>
 }
-
+// 1.1.1 terrain adjuster
+void CvMap::initMappingArrays()
+{
+	return;
+	m_aiPlotMappings = new int[numPlots()];
+	m_aiPlotVariations = new int[numPlots()];
+	m_bMappingInitDone = true;
+	// Set each variation to MIN_INT for now (and mapping to 0)
+	for (int i = 0; i < numPlots(); i++)
+	{
+		m_aiPlotMappings[i] = 0;
+		m_aiPlotVariations[i] = MIN_INT;
+	}
+}
+void CvMap::setMapping(int iPlot, int iMapping)
+{
+	return;
+	FAssertBounds(0, numPlots(), iPlot);
+	m_aiPlotMappings[iPlot] = iMapping;
+}
+void CvMap::setVariation(int iPlot, int iVar)
+{
+	return;
+	FAssertBounds(0, numPlots(), iPlot);
+	m_aiPlotVariations[iPlot] = iVar;
+}
+int CvMap::getMapping(int iPlot) const
+{
+	return 0;
+	return m_aiPlotMappings[iPlot];
+}
+int CvMap::getVariation(int iPlot) const
+{
+	return 0;
+	if (m_aiPlotVariations[iPlot] != NULL)
+		return m_aiPlotVariations[iPlot];
+	else
+		return MIN_INT;
+}
+// Merkava120 END
 
 void CvMap::write(FDataStreamBase* pStream)
 {
@@ -1427,6 +1593,7 @@ void CvMap::calculateAreas()
 		calculateReprAreas();
 		return;
 	} // </advc.030>
+	int iNumAreas = 0; // Merkava120 1.1.1
 	for (int i = 0; i < numPlots(); i++)
 	{
 		CvPlot& kLoopPlot = getPlotByIndex(i);
@@ -1435,6 +1602,35 @@ void CvMap::calculateAreas()
 		{
 			CvArea* pArea = addArea();
 			pArea->init(kLoopPlot.isWater());
+			//pArea->setAreaNum(iNumAreas); // merkava120 1.1.1
+			iNumAreas++; // merkava120 1.1.1
+			// Dynamica 0.2.3
+			// This area might have already had a channel set, which may have been deleted, or may not have been. 
+			// so let's just set the area's channel equal to the channel of any barbarian unit on this tile. 
+			// this will overwrite accidental random channels set by other tiles in the area. 
+			if (pArea->getBarbarianSpawnChannel() <= 0)
+			{
+				FOR_EACH_UNIT_IN(pUnit, kLoopPlot)
+				{
+					// skip non-barbarians, they can have channels but it doesn't affect anything. 
+					if (pUnit->getOwner() != GET_PLAYER(BARBARIAN_PLAYER).getID())
+						continue;
+					// skip animals, their channel stuff is different
+					if (pUnit->isAnimal())
+						continue;
+					int iChannel = GC.getUnitInfo(pUnit->getUnitType()).getSpawnChannel();
+					if (iChannel > 0)
+					{
+						pArea->setBarbarianSpawnChannel(iChannel);
+						break;
+					}
+				}
+			}
+			// It's important to note that the above may not have set a channel for the area. 
+			// If not, the channel will end up being set to whatever units spawn. 
+			// This means barbarians can be localized to terrains AND split between continents,
+			// so you can have a few different tribes of desert barbarians, for example. 
+			// END
 			kLoopPlot.setArea(pArea);
 			gDLL->getFAStarIFace()->GeneratePath(&GC.getAreaFinder(),
 					kLoopPlot.getX(), kLoopPlot.getY(), -1, -1,
@@ -1473,6 +1669,7 @@ public:
 
 void CvMap::calculateAreas_dfs()
 {
+	int iNumAreas = 0; // Merkava120 1.1.1
 	for (int iPass = 0; iPass <= 1; iPass++)
 	{
 		FOR_EACH_ENUM(PlotNum)
@@ -1486,6 +1683,8 @@ void CvMap::calculateAreas_dfs()
 				continue;
 			FAssert(iPass == 0 || kPlot.isImpassable());
 			CvArea& kArea = *addArea();
+			//a.setAreaNum(iNumAreas); // Merkava120 1.1.1
+			iNumAreas++; // Merkava120 1.1.1
 			kArea.init(kPlot.isWater());
 			CvAreaAggregator aggr(*this, kArea);
 			DepthFirstPlotSearch<CvAreaAggregator> dfs(kPlot, aggr);

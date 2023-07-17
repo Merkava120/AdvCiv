@@ -85,7 +85,16 @@ void CvArea::setID(int iID)
 	m_iRepresentativeArea = iID; // advc.030
 }
 
-
+// merk.map begin
+void CvArea::setBarbarianSpawnChannel(int iNewChannel)
+{
+	m_iBarbarianSpawnChannel = iNewChannel;
+}
+void CvArea::setAreaNum(int iNew)
+{
+	m_iAreaNum = iNew;
+}
+// merk.map end
 int CvArea::calculateTotalBestNatureYield() const
 {
 	int iCount = 0;

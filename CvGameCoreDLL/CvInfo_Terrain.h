@@ -36,7 +36,31 @@ public: // All the const functions are exposed to Python except for those relate
 	bool isFoundCoast() const { return m_bFoundCoast; }
 	bool isFoundFreshWater() const { return m_bFoundFreshWater; }
 
-	DllExport const TCHAR* getArtDefineTag() const;
+	// Merkava120 1.1.1 terrain adjuster
+	int getMapping(int iVariation, int iIndex) const { return aMappings[iVariation].aiMappings[iIndex].first; }
+	int hasMappings(int iMapping) const;
+	int getWorldSoundScapeID(int iVariation) const { return aMappings[iVariation].aiSoundscapeStuff.first; }
+	int getFootstepIndex(int iVariation) const { return aMappings[iVariation].aiSoundscapeStuff.second; }
+	int getMappingType(int iVariation, int iMapping) const {
+		return	aMappings[iVariation].aiMappings[iMapping].second; }
+	bool mappingIsType(int iMapping, int iType) const;
+	CvWString getDescription(int iVariation = -1) const { return gDLL->getText((iVariation < 0 ? m_szTextKey : aMappings[iVariation].szMappedDescription));  }
+	TerrainTypes getMappedTerrain(int iVariation) const { return aMappings[iVariation].iMappedTerrain; }
+	bool hasFeatureMapping(int iVariation, FeatureTypes iFeature) const;
+	FeatureTypes getMappedFeature(int iVariation, FeatureTypes iFeature) const;
+	bool hasBonusMapping(int iVariation, BonusTypes iBonus) const;
+	BonusTypes getMappedBonus(int iVariation, BonusTypes iBonus) const;
+	int getTotalBaseProbability(int iVariation, bool bRiver = false, bool bHills = false, bool bPeakAdj = false, bool bHillsAdj = false, int iFeature = NO_FEATURE) const;
+	int getFeatureAdjProbability(int iVariation, FeatureTypes iFeature, int iNum = 1) const;
+	int getTerrainAdjProbability(int iVariation, TerrainTypes iTerrain, int iNum = 1) const;
+	TerrainTypes getSingleAdjTerrainProbability(int iVariation) const { return aMappings[iVariation].iSingleAdjTerrain; }
+	FeatureTypes getSingleAdjFeatureProbability(int iVariation) const { return aMappings[iVariation].iSingleAdjFeature; }
+	int getHomogeneity(int iVariation) const { return (getTotalVariations() > 0 ? aMappings[iVariation].iHomogeneity : 0); }
+	int getTotalVariations() const { return aMappings.size(); }
+	int getTotalMappings(int iVariation) const { return aMappings[iVariation].aiMappings.size(); }
+	// Merkava120 END
+
+	DllExport const TCHAR* getArtDefineTag(int iVariation = -1) const;
 
 	int getWorldSoundscapeScriptId() const;
 
@@ -62,6 +86,35 @@ protected:
 	bool m_bFound;
 	bool m_bFoundCoast;
 	bool m_bFoundFreshWater;
+
+	// Merkava120 1.1.1 terrain adjuster
+	struct Mapping
+	{
+		
+		std::vector<std::pair<int,int> > aiMappings; //channel, type
+		CvString szMappedDescription;
+		TCHAR* szMappedArtDefine;
+		std::pair<int, int> aiSoundscapeStuff;
+		TerrainTypes iMappedTerrain;
+		std::vector<std::pair<FeatureTypes, FeatureTypes> > aiMappedFeatures;
+		std::vector<std::pair<BonusTypes, BonusTypes> > aiMappedBonuses;
+		int iBaseProbability;
+		int iRiverProbability;
+		int iHillsProbability;
+		int iHillsAdjProbability;
+		int iPeakAdjProbability;
+		std::vector<std::pair<FeatureTypes, int> > aiFeatureProbabilities;
+		std::vector < std::pair<TerrainTypes, int> >
+			aiTerrainAdjProbabilities;
+		std::vector < std::pair<FeatureTypes, int> >
+			aiFeatureAdjProbabilities;
+		int iPlaceLimit;
+		TerrainTypes iSingleAdjTerrain;
+		FeatureTypes iSingleAdjFeature;
+		int iHomogeneity;
+	};
+	std::vector<Mapping> aMappings;
+	// END
 
 	int m_iWorldSoundscapeScriptId;
 

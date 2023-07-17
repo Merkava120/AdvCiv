@@ -16,6 +16,7 @@ m_bImpassable(false),
 m_bFound(false),
 m_bFoundCoast(false),
 m_bFoundFreshWater(false),
+aMappings(NULL), // Merkava120 1.1.1 terrain adjuster
 m_iWorldSoundscapeScriptId(0),
 m_piYields(NULL),
 m_piRiverYieldChange(NULL),
@@ -31,8 +32,13 @@ CvTerrainInfo::~CvTerrainInfo()
 	SAFE_DELETE_ARRAY(m_pi3DAudioScriptFootstepIndex);
 }
 
-const TCHAR* CvTerrainInfo::getArtDefineTag() const
+const TCHAR* CvTerrainInfo::getArtDefineTag(int iVariation) const
 {
+	/*if (iVariation < 0 || getTotalVariations() <= iVariation)
+		return m_szArtDefineTag;
+	else
+		return aMappings[iVariation].szMappedArtDefine;*/
+	// turns out you can't ever modify calls for getArtDefineTag anywhere. So. 
 	return m_szArtDefineTag;
 }
 
@@ -65,6 +71,110 @@ int CvTerrainInfo::get3DAudioScriptFootstepIndex(int i) const
 	return m_pi3DAudioScriptFootstepIndex ? m_pi3DAudioScriptFootstepIndex[i]
 			: 0; // advc.003t: see get3DAudioScriptFootstepIndex
 }
+// Merkava120 terrain adjuster 1.1.1
+int CvTerrainInfo::hasMappings(int iMapping) const
+{
+	int iMappings = 0;
+	for (int iID = 0; iID < getTotalVariations(); iID++)
+	{
+		for (int iM = 0; iM < getTotalMappings(iID); iM++)
+		{
+			if (getMapping(iID, iM) == iMapping)
+				iMappings++;
+		}
+	}
+	return iMappings;
+}
+bool CvTerrainInfo::mappingIsType(int iMapping, int iType) const
+{
+	for (int iID = 0; iID < getTotalVariations(); iID++)
+	{
+		for (int iM = 0; iM < getTotalMappings(iID); iM++)
+		{
+			if (getMapping(iID, iM) == iMapping && getMappingType(iID, iM) == iType)
+				return true;
+		}
+	}
+	return false;
+}
+bool CvTerrainInfo::hasFeatureMapping(int iVariation, FeatureTypes iFeature) const
+{
+	if ((int)aMappings[iVariation].aiMappedFeatures.size() <= 0)
+		return false;
+	for (int iID = 0; iID < (int)aMappings[iVariation].aiMappedFeatures.size(); iID++)
+	{
+		if (aMappings[iVariation].aiMappedFeatures[iID].first == iFeature)
+			return true;
+	}
+	return false;
+}
+bool CvTerrainInfo::hasBonusMapping(int iVariation, BonusTypes iBonus) const
+{
+	if ((int)aMappings[iVariation].aiMappedBonuses.size() <= 0)
+		return false;
+	for (int iID = 0; iID < (int)aMappings[iVariation].aiMappedBonuses.size(); iID++)
+	{
+		if (aMappings[iVariation].aiMappedBonuses[iID].first == iBonus)
+			return true;
+	}
+	return false;
+}
+int CvTerrainInfo::getTotalBaseProbability(int iVariation, bool bRiver, bool bHills, bool bPeakAdj, bool bHillsAdj, int iFeature) const
+{
+	int iProb = aMappings[iVariation].iBaseProbability;
+	iProb += bRiver ? aMappings[iVariation].iRiverProbability : 0;
+	iProb += bHills ? aMappings[iVariation].iHillsProbability : 0;
+	iProb += bHillsAdj ? aMappings[iVariation].iHillsAdjProbability : 0;
+	iProb += bPeakAdj ? aMappings[iVariation].iPeakAdjProbability : 0;
+	if (iFeature != NO_FEATURE)
+	{
+		for (int iID = 0; iID < (int)aMappings[iVariation].aiFeatureProbabilities.size(); iID++)
+		{
+			if (aMappings[iVariation].aiFeatureProbabilities[iID].first == iFeature)
+				iProb += aMappings[iVariation].aiFeatureProbabilities[iID].second;
+		}
+	}
+	return iProb;
+}
+BonusTypes CvTerrainInfo::getMappedBonus(int iVariation, BonusTypes iBonus) const
+{
+	for (int iID = 0; iID < (int)aMappings[iVariation].aiMappedBonuses.size(); iID++)
+	{
+		if (aMappings[iVariation].aiMappedBonuses[iID].first == iBonus)
+			return aMappings[iVariation].aiMappedBonuses[iID].second;
+	}
+	return NO_BONUS;
+}
+FeatureTypes CvTerrainInfo::getMappedFeature(int iVariation, FeatureTypes iFeature) const
+{
+	for (int iID = 0; iID < (int)aMappings[iVariation].aiMappedFeatures.size(); iID++)
+	{
+		if (aMappings[iVariation].aiMappedFeatures[iID].first == iFeature)
+			return aMappings[iVariation].aiMappedFeatures[iID].second;
+	}
+	return NO_FEATURE;
+}
+int CvTerrainInfo::getFeatureAdjProbability(int iVariation, FeatureTypes iFeature, int iNum) const
+{
+	for (int iID = 0; iID < (int)aMappings[iVariation].aiFeatureAdjProbabilities.size(); iID++)
+	{
+		if (aMappings[iVariation].aiFeatureAdjProbabilities[iID].first == iFeature)
+			return aMappings[iVariation].aiFeatureAdjProbabilities[iID].second * iNum;
+	}
+	return NO_FEATURE;
+}
+int CvTerrainInfo::getTerrainAdjProbability(int iVariation, TerrainTypes iTerrain, int iNum) const
+{
+	for (int iID = 0; iID < (int)aMappings[iVariation].aiTerrainAdjProbabilities.size(); iID++)
+	{
+		if (aMappings[iVariation].aiTerrainAdjProbabilities[iID].first == iTerrain)
+			return aMappings[iVariation].aiTerrainAdjProbabilities[iID].second * iNum;
+	}
+	return NO_FEATURE;
+}
+
+
+
 
 bool CvTerrainInfo::read(CvXMLLoadUtility* pXML)
 {
@@ -72,7 +182,205 @@ bool CvTerrainInfo::read(CvXMLLoadUtility* pXML)
 		return false;
 
 	pXML->GetChildXmlValByName(m_szArtDefineTag, "ArtDefineTag");
+	// Merkava120 1.1.1 terrain adjuster 
+	//if (gDLL->getXMLIFace()->SetToChildByTagName(pXML->GetXML(), "Mappings"))
+	//{
+	//	int iTotalVariations = gDLL->getXMLIFace()->NumOfChildrenByTagName(pXML->GetXML(), "Mapping");
+	//	// advc.006b: GetChildXmlValByName can't handle comments. Assert added to warn about that.
+	//	FAssertMsg(iTotalVariations >= 0, "XML comment inside Mappings?");
+	//	for (int iV = 0; iV < iTotalVariations; iV++)
+	//	{
+	//		if (gDLL->getXMLIFace()->SetToChildByTagName(pXML->GetXML(), "Mapping"))
+	//		{
+	//			Mapping currmapping;
+	//			std::vector<std::pair<int, int> > tmpmappings;
+	//			if (gDLL->getXMLIFace()->SetToChildByTagName(pXML->GetXML(), "SpecificMappings"))
+	//			{
+	//				if (pXML->SkipToNextVal())
+	//				{
+	//					int const iNumSibs = gDLL->getXMLIFace()->GetNumChildren(pXML->GetXML());
+	//					if (iNumSibs > 0 && gDLL->getXMLIFace()->SetToChild(pXML->GetXML()))
+	//					{
+	//						for (int j = 0; j < iNumSibs; j++)
+	//						{
+	//							int tmpmap;
+	//							pXML->GetChildXmlValByName(&tmpmap, "iMappingChannel");
+	//							int tmptype;
+	//							pXML->GetChildXmlValByName(&tmptype, "iMappingType");
+	//							tmpmappings.push_back(std::make_pair(tmpmap, tmptype));
+	//							if (!gDLL->getXMLIFace()->NextSibling(pXML->GetXML()))
+	//								break;
+	//						}
+	//						gDLL->getXMLIFace()->SetToParent(pXML->GetXML());
+	//					}
+	//				}
+	//				gDLL->getXMLIFace()->SetToParent(pXML->GetXML());
+	//			}
+	//			currmapping.aiMappings = tmpmappings;
+	//			CvString tmpstring;
+	//			pXML->GetChildXmlValByName(tmpstring, "MappedArtDefine","");
+	//			currmapping.szMappedArtDefine = ""; // art defines don't work anyway so just leaving this ""
+	//			pXML->GetChildXmlValByName(tmpstring, "MappedDescription","");
+	//			currmapping.szMappedDescription = tmpstring;
+	//			int tmpterrain;
+	//			pXML->GetChildXmlValByName(&tmpterrain, "MappedTerrain",-1);
+	//			currmapping.iMappedTerrain = (TerrainTypes)tmpterrain;
+	//			std::vector<std::pair<BonusTypes, BonusTypes> > tmpbonuses;
+	//			if (gDLL->getXMLIFace()->SetToChildByTagName(pXML->GetXML(), "BonusChanges"))
+	//			{
+	//				if (pXML->SkipToNextVal())
+	//				{
+	//					int const iNumSibs = gDLL->getXMLIFace()->GetNumChildren(pXML->GetXML());
+	//					if (iNumSibs > 0 && gDLL->getXMLIFace()->SetToChild(pXML->GetXML()))
+	//					{
+	//						for (int j = 0; j < iNumSibs; j++)
+	//						{
+	//							int tmpBonus;
+	//							pXML->GetChildXmlValByName(&tmpBonus, "BaseBonus");
+	//							int tmpBonus2;
+	//							pXML->GetChildXmlValByName(&tmpBonus2, "MappedBonus");
+	//							tmpbonuses.push_back(std::make_pair((BonusTypes)tmpBonus, (BonusTypes)tmpBonus2));
+	//							if (!gDLL->getXMLIFace()->NextSibling(pXML->GetXML()))
+	//								break;
+	//						}
+	//						gDLL->getXMLIFace()->SetToParent(pXML->GetXML());
+	//					}
+	//				}
+	//				gDLL->getXMLIFace()->SetToParent(pXML->GetXML());
+	//			}
+	//			currmapping.aiMappedBonuses = tmpbonuses;
+	//			std::vector<std::pair<FeatureTypes, FeatureTypes> > tmpfeatures;
+	//			if (gDLL->getXMLIFace()->SetToChildByTagName(pXML->GetXML(), "FeatureChanges"))
+	//			{
+	//				if (pXML->SkipToNextVal())
+	//				{
+	//					int const iNumSibs = gDLL->getXMLIFace()->GetNumChildren(pXML->GetXML());
+	//					if (iNumSibs > 0 && gDLL->getXMLIFace()->SetToChild(pXML->GetXML()))
+	//					{
+	//						for (int j = 0; j < iNumSibs; j++)
+	//						{
+	//							int tmpFeature;
+	//							pXML->GetChildXmlValByName(&tmpFeature, "BaseFeature");
+	//							int tmpFeature2;
+	//							pXML->GetChildXmlValByName(&tmpFeature2, "MappedFeature");
+	//							tmpfeatures.push_back(std::make_pair((FeatureTypes)tmpFeature, (FeatureTypes)tmpFeature2));
+	//							if (!gDLL->getXMLIFace()->NextSibling(pXML->GetXML()))
+	//								break;
+	//						}
+	//						gDLL->getXMLIFace()->SetToParent(pXML->GetXML());
+	//					}
+	//				}
+	//				gDLL->getXMLIFace()->SetToParent(pXML->GetXML());
+	//			}
+	//			int iprob;
+	//			pXML->GetChildXmlValByName(&iprob, "iBaseProbability",0);
+	//			currmapping.iBaseProbability = iprob;
+	//			pXML->GetChildXmlValByName(&iprob, "iHillsProbability",0);
+	//			currmapping.iHillsProbability = iprob;
+	//			pXML->GetChildXmlValByName(&iprob, "iHillsAdjProbability",0);
+	//			currmapping.iHillsAdjProbability = iprob;
+	//			pXML->GetChildXmlValByName(&iprob, "iPeakAdjProbability",0);
+	//			currmapping.iPeakAdjProbability = iprob;
+	//			pXML->GetChildXmlValByName(&iprob, "iRiverProbability",0);
+	//			currmapping.iRiverProbability = iprob;
+	//			pXML->GetChildXmlValByName(&iprob, "iHomogeneity");
+	//			currmapping.iHomogeneity = iprob;
+	//			pXML->GetChildXmlValByName(&iprob, "iRiverProbability",0);
+	//			currmapping.iRiverProbability = iprob;
+	//			pXML->GetChildXmlValByName(&iprob, "iSingleAdjFeature",-1);
+	//			currmapping.iSingleAdjFeature = (FeatureTypes)iprob;
+	//			pXML->GetChildXmlValByName(&iprob, "iSingleAdjTerrain",-1);
+	//			currmapping.iSingleAdjTerrain = (TerrainTypes)iprob;
+	//			pXML->GetChildXmlValByName(&iprob, "iPlaceLimit",-1);
+	//			currmapping.iPlaceLimit = iprob;
 
+	//			pXML->GetChildXmlValByName(&iprob, "iMappedWorldSound",-1);
+	//			currmapping.aiSoundscapeStuff.first = iprob;
+	//			pXML->GetChildXmlValByName(&iprob, "iMappedFootstepSound",-1);
+	//			currmapping.aiSoundscapeStuff.second = iprob;
+
+	//			std::vector<std::pair<FeatureTypes, int> > tmpprobs;
+	//			if (gDLL->getXMLIFace()->SetToChildByTagName(pXML->GetXML(), "FeatureProbabilities"))
+	//			{
+	//				if (pXML->SkipToNextVal())
+	//				{
+	//					int const iNumSibs = gDLL->getXMLIFace()->GetNumChildren(pXML->GetXML());
+	//					if (iNumSibs > 0 && gDLL->getXMLIFace()->SetToChild(pXML->GetXML()))
+	//					{
+	//						for (int j = 0; j < iNumSibs; j++)
+	//						{
+	//							int tmpFeature;
+	//							pXML->GetChildXmlValByName(&tmpFeature, "ProbabilityFeature");
+	//							int tmpprob;
+	//							pXML->GetChildXmlValByName(&tmpprob, "iProbabilityChange");
+	//							tmpprobs.push_back(std::make_pair((FeatureTypes)tmpFeature, tmpprob));
+	//							if (!gDLL->getXMLIFace()->NextSibling(pXML->GetXML()))
+	//								break;
+	//						}
+	//						gDLL->getXMLIFace()->SetToParent(pXML->GetXML());
+	//					}
+	//				}
+	//				gDLL->getXMLIFace()->SetToParent(pXML->GetXML());
+	//			}
+	//			currmapping.aiFeatureProbabilities = tmpprobs;
+	//			tmpprobs.clear();
+	//			if (gDLL->getXMLIFace()->SetToChildByTagName(pXML->GetXML(), "FeatureAdjProbabilities"))
+	//			{
+	//				if (pXML->SkipToNextVal())
+	//				{
+	//					int const iNumSibs = gDLL->getXMLIFace()->GetNumChildren(pXML->GetXML());
+	//					if (iNumSibs > 0 && gDLL->getXMLIFace()->SetToChild(pXML->GetXML()))
+	//					{
+	//						for (int j = 0; j < iNumSibs; j++)
+	//						{
+	//							int tmpFeature;
+	//							pXML->GetChildXmlValByName(&tmpFeature, "ProbabilityFeature");
+	//							int tmpprob;
+	//							pXML->GetChildXmlValByName(&tmpprob, "iProbabilityChange");
+	//							tmpprobs.push_back(std::make_pair((FeatureTypes)tmpFeature, tmpprob));
+	//							if (!gDLL->getXMLIFace()->NextSibling(pXML->GetXML()))
+	//								break;
+	//						}
+	//						gDLL->getXMLIFace()->SetToParent(pXML->GetXML());
+	//					}
+	//				}
+	//				gDLL->getXMLIFace()->SetToParent(pXML->GetXML());
+	//			}
+	//			currmapping.aiFeatureAdjProbabilities = tmpprobs;
+	//			std::vector<std::pair<TerrainTypes, int> > tmpterrains;
+	//			if (gDLL->getXMLIFace()->SetToChildByTagName(pXML->GetXML(), "TerrainAdjProbabilities"))
+	//			{
+	//				if (pXML->SkipToNextVal())
+	//				{
+	//					int const iNumSibs = gDLL->getXMLIFace()->GetNumChildren(pXML->GetXML());
+	//					if (iNumSibs > 0 && gDLL->getXMLIFace()->SetToChild(pXML->GetXML()))
+	//					{
+	//						for (int j = 0; j < iNumSibs; j++)
+	//						{
+	//							int tmpterrain;
+	//							pXML->GetChildXmlValByName(&tmpterrain, "ProbabilityAdjTerrain");
+	//							int tmpprob;
+	//							pXML->GetChildXmlValByName(&tmpprob, "iProbabilityChange");
+	//							tmpterrains.push_back(std::make_pair((TerrainTypes)tmpterrain, tmpprob));
+	//							if (!gDLL->getXMLIFace()->NextSibling(pXML->GetXML()))
+	//								break;
+	//						}
+	//						gDLL->getXMLIFace()->SetToParent(pXML->GetXML());
+	//					}
+	//				}
+	//				gDLL->getXMLIFace()->SetToParent(pXML->GetXML());
+
+	//			}
+	//			currmapping.aiTerrainAdjProbabilities = tmpterrains;
+	//			aMappings.push_back(currmapping);
+	//			gDLL->getXMLIFace()->SetToParent(pXML->GetXML());
+	//		}
+	//	}
+	//	gDLL->getXMLIFace()->SetToParent(pXML->GetXML());
+	//}
+	
+	
+	// Merkava120 1.1.1 END
 	if (gDLL->getXMLIFace()->SetToChildByTagName(pXML->GetXML(),
 		"Yields"))
 	{

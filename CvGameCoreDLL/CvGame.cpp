@@ -7104,12 +7104,13 @@ void CvGame::createBarbarianUnits()
 	// advc.300: Moved into new function
 	if (getGameTurn() < getBarbarianStartTurn())
 		bAnimals = true;
-
+	// dynamica 0.2.4 not sure how to balance animals + barbarians yet, so
+	bAnimals = true; // will do for now
 	if (bAnimals)
 		createAnimals();
 	// <advc.300>
-	if (bAnimals)
-		return;
+	//if (bAnimals)
+		//return; // dynamica 0.2.4 nope just keep having animals. 
 	CvHandicapInfo const& kGameHandicap = GC.getInfo(getHandicapType());
 	int iBaseTilesPerLandUnit = kGameHandicap.getUnownedTilesPerBarbarianUnit();
 	// Divided by 10 b/c now only shelf water tiles count
@@ -7217,16 +7218,19 @@ void CvGame::createBarbarianUnits()
 			createBarbarians */
 		// </advc.300>
 	}
-	FOR_EACH_UNIT_VAR(pLoopUnit, GET_PLAYER(BARBARIAN_PLAYER))
-	{
-		if (pLoopUnit->isAnimal() &&
-			// advc.309: Don't cull animals where there are no civ cities
-			pLoopUnit->getArea().getNumCivCities() > 0)
-		{
-			pLoopUnit->kill(false);
-			break;
-		}
-	}
+	// dynamica 0.2.4 absolutely do not slaughter all the animals no way
+	//FOR_EACH_UNIT_VAR(pLoopUnit, GET_PLAYER(BARBARIAN_PLAYER))
+	//{
+	//	
+
+	//	if (pLoopUnit->isAnimal() &&
+	//		// advc.309: Don't cull animals where there are no civ cities
+	//		pLoopUnit->getArea().getNumCivCities() > 0)
+	//	{
+	//		pLoopUnit->kill(false);
+	//		break;
+	//	}
+	//}
 	// <advc.300>
 	FOR_EACH_CITY(pCity, GET_PLAYER(BARBARIAN_PLAYER))
 	{
@@ -7253,38 +7257,60 @@ void CvGame::createAnimals()
 	// merk.ras1 note - leaving this alone, I think it's a bug check?
 	if (kGameHandicap.getUnownedTilesPerGameAnimal() <= 0)
 		return;
-
-	if (intdiv::uround(getNumCivCities() * GC.getDefineINT("CITIES_BEFORE_ANIMALS_MULT"), 100) < countCivPlayersAlive()) // merk.ras1
+	// Dynamica 0.2.4 get rid of this; the beginning will have zero cities and X very alive players looking for animals to eat
+	/*if (getNumCivCities() < countCivPlayersAlive())
+		return;*/
+	
+	if (getElapsedGameTurns() < GC.getDefineINT("MIN_TURNS_BEFORE_ANIMALS")) // Dynamica 0.2.3 was hard coded to 5
 		return;
-
-	if (getElapsedGameTurns() < GC.getDefineINT("MIN_TURNS_BEFORE_ANIMALS")) // merk.ras1
-		return;
+	
 
 	int const iMinAnimalStartingDist = GC.getDefineINT("MIN_ANIMAL_STARTING_DISTANCE"); // advc.300
 	FOR_EACH_AREA(pLoopArea)
 	{
+		// Dynamica 0.2.3 BEGIN: I want water animals.
+		int iNeededAnimals = 0;
 		if (pLoopArea->isWater())
-			continue;
-
-		int iNeededAnimals = pLoopArea->getNumUnownedTiles() /
+		{
+			iNeededAnimals = pLoopArea->getNumUnownedTiles() / (kGameHandicap.getUnownedTilesPerGameAnimal() * GC.getDefineINT("WATER_ANIMALS_DIVISOR"));
+		}
+		else
+		{
+			iNeededAnimals = pLoopArea->getNumUnownedTiles() /
 				kGameHandicap.getUnownedTilesPerGameAnimal();
-		/*	<advc.300> Will allow animals to survive longer on landmasses w/o
-			civ cities. But only want a couple of animals there. */
-		if (pLoopArea->getNumCivCities() <= 0)
-			iNeededAnimals /= GC.getDefineINT("ANIMALS_ON_EMPTY_LANDS_DIVISOR"); // </advc.300> // merk.ras1
-		iNeededAnimals -= pLoopArea->getUnitsPerPlayer(BARBARIAN_PLAYER);
+
+			/*  <advc.300> Will allow animals to survive longer on landmasses w/o
+				civ cities. But only want a couple of animals there. */
+			if (pLoopArea->getNumCivCities() <= 0)
+				iNeededAnimals /= 2; // </advc.300>
+		}
 		if (iNeededAnimals <= 0)
 			continue;
+		// I also want animals to stick around even when barbarians are there, so goodbye:
+		// iNeededAnimals -= pLoopArea->getUnitsPerPlayer(BARBARIAN_PLAYER);
+		// if it gets crowded I think the methods below can be tweaked to deal with that. 
+		// Dynamica 0.2.3 END
 
 		iNeededAnimals = (iNeededAnimals / GC.getDefineINT("NEEDED_ANIMALS_DIVISOR")) + 1; // merk.ras1
 		for (int i = 0; i < iNeededAnimals; i++)
 		{
 			CvPlot* pPlot = GC.getMap().syncRandPlot(
-					(RANDPLOT_NOT_VISIBLE_TO_CIV | RANDPLOT_PASSABLE
-					| RANDPLOT_WATERSOURCE), // advc.300: Also use no iTimeout (try all plots)
-					pLoopArea, iMinAnimalStartingDist);
+				(RANDPLOT_NOT_VISIBLE_TO_CIV | RANDPLOT_PASSABLE),
+					// | RANDPLOT_WATERSOURCE Dynamica 0.2.3 I want animals to spawn everywhere, not just water sources
+					 // advc.300: Also use no iTimeout (try all plots)
+				pLoopArea, iMinAnimalStartingDist);
 			if (pPlot == NULL)
 				continue;
+			// Dynamica 0.2.3: let's make a list of animal channels that are already here, eh?
+			std::vector<UnitTypes> aiChannelUnits;
+			FOR_EACH_UNIT(pAnimal, GET_PLAYER(BARBARIAN_PLAYER))
+			{
+				if (!pAnimal->plot()->isArea(*pLoopArea))
+					continue;
+				if (pAnimal->getUnitInfo().getSpawnChannel() != -1)
+					aiChannelUnits.push_back(pAnimal->getUnitType());
+			}
+			// Dynamica 0.2.3 pause
 
 			UnitTypes eBestUnit = NO_UNIT;
 			int iBestValue = 0;
@@ -7295,20 +7321,41 @@ void CvGame::createAnimals()
 			{
 				UnitTypes eLoopUnit = kCiv.unitAt(j);
 				CvUnitInfo const& kUnit = GC.getInfo(eLoopUnit);
-				if (!kUnit.getUnitAIType(UNITAI_ANIMAL))
-					continue;
-				if (pPlot->isFeature() ?
-					kUnit.getFeatureNative(pPlot->getFeatureType()) :
-					kUnit.getTerrainNative(pPlot->getTerrainType()))
+				// Dynamica 0.2.3 more useful animal selection. First of all:
+				/*if (!kUnit.getUnitAIType(UNITAI_ANIMAL))
+					continue;*/
+				// This way any unit set to bAnimal will be spawned in this method no matter what their UnitAI is. 
+				// Because why limit ourselves? 
+				
+
+				// Animals can spawn in their terrain native only, 
+				// and cannot spawn in features they can't move in. I ignore passable techs / promotions / whatever
+				// and I also assume that if you set a terrain native for an animal, 
+				// you won't also set the terrain to impassable
+				if (kUnit.getTerrainNative(pPlot->getTerrainType()) && 
+					!kUnit.getFeatureImpassable(pPlot->getFeatureType()))
 				{
-					int iValue = 1 + SyncRandNum(1000);
-					if (iValue > iBestValue)
+					for (int anim = aiChannelUnits.size(); anim > 0; anim--)
 					{
-						eBestUnit = eLoopUnit;
-						iBestValue = iValue;
+						// if the channel matches another channel in this area (as determined above),
+						// then unless the other channel unit is the same unit as this one, can't place this.
+						if (GC.getUnitInfo(aiChannelUnits[anim]).getSpawnChannel() != kUnit.getSpawnChannel() ||
+							eLoopUnit == aiChannelUnits[anim])
+						{
+							int iValue = 1 + SyncRandNum(1000) + kUnit.getSpawnWeight(); // can weight units in xml.
+							// much more likely to choose this animal if the feature native matches. 
+							if (kUnit.getFeatureNative(pPlot->getFeatureType()))
+								iValue += GC.getDefineINT("ANIMAL_FEATURE_NATIVE_WEIGHT");
+							if (iValue > iBestValue)
+							{
+								eBestUnit = eLoopUnit;
+								iBestValue = iValue;
+							}
+						}
 					}
 				}
 			}
+			// Dynamica 0.2.3 END
 			if (eBestUnit != NO_UNIT)
 			{
 				GET_PLAYER(BARBARIAN_PLAYER).initUnit(eBestUnit,
@@ -7501,27 +7548,32 @@ int CvGame::createBarbarianUnits(int iUnitsToCreate, int iUnitsPresent,
 		if (pShelf != NULL)
 			eUnitAI = UNITAI_ATTACK_SEA;
 		// Original code moved into new function:
-		UnitTypes eUnitType = randomBarbarianUnit(eUnitAI, *pPlot);
+		UnitTypes eUnitType = randomBarbarianUnit(eUnitAI, kArea, pPlot); // dynamica 0.2.3
 		if (eUnitType == NO_UNIT)
 			return iCreated;
 		/*CvUnit* pNewUnit =*/GET_PLAYER(BARBARIAN_PLAYER).initUnit(eUnitType,
 				pPlot->getX(), pPlot->getY(), eUnitAI);
+		// dynamica 0.2.3: if the area does not yet have a channel set it to this one
+		if (kArea.getBarbarianSpawnChannel() <= 0)
+			kArea.setBarbarianSpawnChannel(GC.getUnitInfo(pNewUnit->getUnitType()).getSpawnChannel());
+		// END
 		if (!pPlot->isWater())
 			iCreated++;
 		// </advc.300>
-	// advc.313: Replaced by a handicap-based modifier
-	#if 0
-		/*	K-Mod. Sorry, barbarians. Free ships are just too dangerous for
-			real civilizations to defend against. */
-		if (pPlot->isWater() &&
-			!pNewUnit->getUnitInfo().isHiddenNationality()) // kekm.12
-		{
-			PromotionTypes eDisorganized = (PromotionTypes)
-					GC.getInfoTypeForString("PROMOTION_DISORGANIZED", true);
-			if (eDisorganized != NO_PROMOTION)
-				pNewUnit->setHasPromotion(eDisorganized, true);
-		} // K-Mod end
-	#endif
+		// K-Mod. Give a combat penalty to barbarian boats.
+		// Dynamica 0.2.3 - this is hard-coded and annoying, and unnecessary for my mod - 
+		// I'm planning on unique or flavored ships anyway. 
+		//if (pPlot->isWater() &&
+		//	!pNewUnit->getUnitInfo().isHiddenNationality()) // kekm.12
+		//{	// find the "disorganized" promotion. (is there a better way to do this?) 
+		//	PromotionTypes eDisorganized = (PromotionTypes)
+		//			GC.getInfoTypeForString("PROMOTION_DISORGANIZED", true);
+		//	if (eDisorganized != NO_PROMOTION)
+		//	{	/*	Sorry, barbarians. Free ships are just too dangerous for
+		//			real civilizations to defend against. */
+		//		pNewUnit->setHasPromotion(eDisorganized, true);
+		//	}
+		//} // K-Mod end
 		// <advc.304> Discourage nearby unit placement for some time
 		getBarbarianWeightMap().getActivityMap().change(*pPlot,
 				BarbarianActivityMap::maxStrength() / 2, 2); // </advc.304>
@@ -7530,6 +7582,8 @@ int CvGame::createBarbarianUnits(int iUnitsToCreate, int iUnitsPresent,
 }
 
 // <advc.300>
+/* dynamica 0.2.3 comment - leaving 'habitable' because although animals 
+	need to spawn everywhere, barbarians are fine being limited to habitable areas.*/
 CvPlot* CvGame::randomBarbarianPlot(/* out-param */int& iValid,
 	CvArea const& kArea, Shelf const* pShelf)
 {
@@ -7564,7 +7618,7 @@ CvPlot* CvGame::randomBarbarianPlot(/* out-param */int& iValid,
 bool CvGame::killBarbarian(int iUnitsPresent, int iTiles, int iPop,
 	CvArea& kArea, Shelf* pShelf)
 {
-	if (iUnitsPresent <= 5) // 5 is never a crowd
+	if (iUnitsPresent <= GC.getDefineINT("TOO_MANY_BARBARIANS")) // dynamica 0.2.3: original comment, "5 is never a crowd" - let's let modders decide that. Global Define added. 
 		return false;
 	scaled rDivisor = std::max(1, 4 * iPop);
 	if (pShelf != NULL)
@@ -7614,7 +7668,7 @@ bool CvGame::killBarbarian(int iUnitsPresent, int iTiles, int iPop,
 }
 
 // Based on BtS code originally in createBarbarianUnits
-UnitTypes CvGame::randomBarbarianUnit(UnitAITypes eUnitAI, CvPlot const& kPlot)
+UnitTypes CvGame::randomBarbarianUnit(UnitAITypes eUnitAI, CvArea const& kArea /*Dynamica 0.2.3 added plot*/, CvPlot* pPlot)
 {
 	bool bSea;
 	switch (eUnitAI)
@@ -7644,13 +7698,26 @@ UnitTypes CvGame::randomBarbarianUnit(UnitAITypes eUnitAI, CvPlot const& kPlot)
 		UnitTypes const eUnit = kCiv.unitAt(i);
 		CvUnitInfo const& kUnit = GC.getInfo(eUnit);
 		DomainTypes const eDomain = kUnit.getDomainType();
-		if (kUnit.getCombat() <= 0 || eDomain == DOMAIN_AIR ||
-			kUnit.isMostlyDefensive() || // advc.315
+		if (/*kUnit.getCombat() <= 0 || Dynamica 0.2.3, I might spawn zero-strength barbs.
+			Also, it's perfectly fine to ban units from being spawned in the CivilizationInfo so let's 
+			remove the consideration for air & defensive units. Don't have specific plans to spawn barbarian planes, 
+			but you never know.
+			eDomain == DOMAIN_AIR ||
+			kUnit.isMostlyDefensive() || */// advc.315
 			(eDomain == DOMAIN_SEA) != bSea ||
 			!GET_PLAYER(BARBARIAN_PLAYER).canTrain(eUnit))
 		{
 			continue;
 		}
+		// Dynamica 0.2.3: skip units that do not match the channel. If the area does not have a channel then this will be ignored, so units are spawned randomly instead, and then that ends up determining the area channel. 
+		if (kUnit.getSpawnChannel() > 0 && kArea.getBarbarianSpawnChannel() != kUnit.getSpawnChannel() && kArea.getBarbarianSpawnChannel() > 0)
+			continue;
+		// prevent units from being considered for their impassable tiles. 
+		if (kUnit.getFeatureImpassable(pPlot->getFeatureType()))
+			continue;
+		if (kUnit.getTerrainImpassable(pPlot->getTerrainType()))
+			continue;
+		// dynamica 0.2.3 end
 		// <advc.301>
 		BonusTypes const eAndBonus = kUnit.getPrereqAndBonus();
 		std::vector<TechTypes> aeAndBonusTechs;
@@ -7705,8 +7772,8 @@ UnitTypes CvGame::randomBarbarianUnit(UnitAITypes eUnitAI, CvPlot const& kPlot)
 		if (eAndTech != NO_TECH)
 			iUnitEra = GC.getInfo(eAndTech).getEra();
 		// No units from more than 1 era behind the civs
-		if (iUnitEra + 1 < getCurrentEra())
-			continue;
+		if (iUnitEra + /* Dynamica 0.2.3 using a global define */ GC.getDefineINT("BARBS_UNIT_ERAS_BEHIND") < getCurrentEra())
+			continue; // </advc.301>
 		// Treat Warrior as pre-Ancient in the following
 		if (eAndTech == NO_TECH)
 			iUnitEra = -1;
@@ -7742,13 +7809,22 @@ UnitTypes CvGame::randomBarbarianUnit(UnitAITypes eUnitAI, CvPlot const& kPlot)
 		{
 			iDieSides = (iDieSides * rNoBonusReqDieSidesMult).uround();
 		} // </advc.301>
-		int iValue = 1 + SyncRandNum(iDieSides);
+		int iValue = 1 + SyncRandNum(iDieSides) /* Dynamica 0.2.3 unit weights */ + kUnit.getSpawnWeight();
 		if (kUnit.getUnitAIType(eUnitAI))
 		{
 			//iValue += 200;
 			// <advc.301>
 			iValue += (rNoBonusReqDieSidesMult + 1).getPercent();
 		}
+		// Dynamica 0.2.3 - add weight for barb units native terrains and features. 
+		if (pPlot != NULL)
+		{
+			if (kUnit.getTerrainNative(pPlot->getTerrainType()))
+				iValue += GC.getDefineINT("BARBARIAN_TERRAN_NATIVE_WEIGHT");
+			if (kUnit.getFeatureNative(pPlot->getFeatureType()))
+				iValue += GC.getDefineINT("BARBARIAN_FEATURE_NATIVE_WEIGHT");
+		}
+		// END
 		for (size_t j = 0; j < aeAndBonusTechs.size(); j++)
 		{
 			iUnitEra = std::max<int>(iUnitEra,

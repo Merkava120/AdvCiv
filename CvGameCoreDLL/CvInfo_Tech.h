@@ -63,6 +63,7 @@ public: // advc: All the const functions are exposed to Python except those adde
 	bool isRepeat() const { return m_bRepeat; }
 	bool isTrade() const { return m_bTrade; }
 	bool isDisable() const { return m_bDisable; }
+	bool isEventOnly() const { return m_bEventOnly; } // Merkava120 Dynamica 0.1.7b
 	bool isGoodyTech() const { return m_bGoodyTech; }
 	bool isExtraWaterSeeFrom() const { return m_bExtraWaterSeeFrom; }
 	bool isMapCentering() const { return m_bMapCentering; }
@@ -145,6 +146,7 @@ protected:
 	bool m_bRepeat;
 	bool m_bTrade;
 	bool m_bDisable;
+	bool m_bEventOnly; // Merkava120 Dynamica 0.1.7b
 	bool m_bGoodyTech;
 	bool m_bExtraWaterSeeFrom;
 	bool m_bMapCentering;

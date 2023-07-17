@@ -44,7 +44,15 @@ public:
 	void generateTerrain();																// Exposed to Python
 
 	void afterGeneration();																// Exposed to Python
-
+	void applyMappings(); // Merkava120 1.1.1 terrain adjuster
+	void setPlotVariation(CvTerrainInfo const& kTerrain, int p, CvMap& kMap, int iMapping, int iType = -1);
+	void applyNewMappingChanges(int iNewVar, CvMap& kMap, int p, CvTerrainInfo const& kTerrain, bool bFeature = true, bool bBonus = true);
+	int getMappingProbability(CvPlot* pPlot, CvTerrainInfo const& kTerrain, int iVariation);
+	void CvMapGenerator::collectNums(std::vector<int>& aiCollectNums, int iCollectInt, int power = 10);
+	bool isMappingHasType(int iMapping, int iType) const;
+	bool CvMapGenerator::contains(std::vector<int> ThisVector, int iThisInt) const;
+	bool CvMapGenerator::isHomogeneityEligible(CvPlot* pPlot, CvTerrainInfo const& kTerrain, int iVariation) const;
+	int getRandVariationFromMapping(TerrainTypes eTerrain, int iMapping);
 	void setPlotTypes(const int* paiPlotTypes);						// Exposed to Python
 
 protected:

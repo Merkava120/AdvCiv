@@ -201,6 +201,8 @@ public: /*  All const functions are exposed to Python except some related to art
 	void setCommandType(CommandTypes eNewType);
 
 	bool isAnimal() const { return m_bAnimal; }
+	int getSpawnChannel() const { return m_iSpawnChannel; } // dynamica 0.2.3
+	int getSpawnWeight() const { return m_iSpawnWeight; } // dynamica 0.2.3
 	bool isFoodProduction() const { return m_bFoodProduction; }
 	bool isNoBadGoodies() const { return m_bNoBadGoodies; }
 	bool isOnlyDefensive() const { return m_bOnlyDefensive; }
@@ -490,6 +492,8 @@ protected:
 	int m_iLeaderExperience;
 
 	bool m_bAnimal;
+	bool m_iSpawnChannel; // dynamica 0.2.3
+	bool m_iSpawnWeight; // dynamica 0.2.3
 	bool m_bFoodProduction;
 	bool m_bNoBadGoodies;
 	bool m_bOnlyDefensive;

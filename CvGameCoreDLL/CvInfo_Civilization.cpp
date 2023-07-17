@@ -81,7 +81,12 @@ int CvCivilizationInfo::getActionSoundScriptId() const
 {
 	return m_iActionSoundScriptId;
 }
-
+// Civilization specific tech trees by ClassicThunder - Merkava120 0.0.5
+int CvCivilizationInfo::getTechChannel() const 
+{
+	return m_iTechChannel;
+}
+//Merkava120 END
 bool CvCivilizationInfo::isAIPlayable() const
 {
 	return m_bAIPlayable;
@@ -210,6 +215,7 @@ void CvCivilizationInfo::read(FDataStreamBase* stream)
 	stream->Read(&m_iSelectionSoundScriptId);
 	stream->Read(&m_iActionSoundScriptId);
 	stream->Read(&m_iDerivativeCiv);
+	stream->Read(&m_iTechChannel); //Civilization specific tech trees by ClassicThunder - Merkava120 0.0.5
 	stream->Read(&m_bAIPlayable);
 	stream->Read(&m_bPlayable);
 	stream->ReadString(m_szArtDefineTag);
@@ -258,6 +264,7 @@ void CvCivilizationInfo::write(FDataStreamBase* stream)
 	stream->Write(m_iSelectionSoundScriptId);
 	stream->Write(m_iActionSoundScriptId);
 	stream->Write(m_iDerivativeCiv);
+	stream->Write(m_iTechChannel); //Civilization specific tech trees by ClassicThunder - Merkava120 0.0.5
 	stream->Write(m_bAIPlayable);
 	stream->Write(m_bPlayable);
 	stream->WriteString(m_szArtDefineTag);
@@ -301,6 +308,7 @@ bool CvCivilizationInfo::read(CvXMLLoadUtility* pXML)
 	}
 	pXML->GetChildXmlValByName(&m_bPlayable, "bPlayable");
 	pXML->GetChildXmlValByName(&m_bAIPlayable, "bAIPlayable");
+	pXML->GetChildXmlValByName(&m_iTechChannel, "iTechChannel"); //Civilization specific tech trees by ClassicThunder - Merkava120 0.0.5
 	if (gDLL->getXMLIFace()->SetToChildByTagName(pXML->GetXML(), "Cities"))
 	{
 		pXML->SetStringList(&m_paszCityNames, &m_iNumCityNames);

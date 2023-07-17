@@ -26,6 +26,8 @@ public:
 
 	int getID() const { return m_iID; }																	// Exposed to Python
 	void setID(int iID);
+	int getAreaNum() const { return m_iAreaNum; } // merk.map
+	void setAreaNum(int iNew); // merk.map
 	
 	bool isWater() const { return m_bWater; }															// Exposed to Python
 	bool isLake() const																					// Exposed to Python
@@ -194,6 +196,8 @@ public:
 	// advc.opt: No longer used
 	/*int getNumImprovements(ImprovementTypes eImprovement) const;										// Exposed to Python
 	void changeNumImprovements(ImprovementTypes eImprovement, int iChange);*/
+	int getBarbarianSpawnChannel() const { return m_iBarbarianSpawnChannel; } // merk.map
+	void setBarbarianSpawnChannel(int iNewChannel); // merk.map
 
 protected:
 
@@ -206,6 +210,8 @@ protected:
 	int m_iTotalPopulation;
 	int m_iNumStartingPlots;
 	int m_iBarbarianCitiesEver; // advc.300
+	int m_iBarbarianSpawnChannel; // merk.map
+	int m_iAreaNum; // merk.map
 
 	bool m_bWater;
 	// <advc.030>

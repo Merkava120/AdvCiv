@@ -27,6 +27,7 @@ m_iGridY(0),
 m_bRepeat(false),
 m_bTrade(false),
 m_bDisable(false),
+m_bEventOnly(false), // Merkava120 Dynamica 0.1.7b
 m_bGoodyTech(false),
 m_bExtraWaterSeeFrom(false),
 m_bMapCentering(false),
@@ -162,6 +163,7 @@ void CvTechInfo::read(FDataStreamBase* stream)
 	stream->Read(&m_bRepeat);
 	stream->Read(&m_bTrade);
 	stream->Read(&m_bDisable);
+	stream->Read(&m_bEventOnly); // Merkava120 Dynamica 0.1.7b
 	stream->Read(&m_bGoodyTech);
 	stream->Read(&m_bExtraWaterSeeFrom);
 	stream->Read(&m_bMapCentering);
@@ -245,6 +247,7 @@ void CvTechInfo::write(FDataStreamBase* stream)
 	stream->Write(m_bRepeat);
 	stream->Write(m_bTrade);
 	stream->Write(m_bDisable);
+	stream->Write(m_bEventOnly); // Merkava120 Dynamica 0.1.7b
 	stream->Write(m_bGoodyTech);
 	stream->Write(m_bExtraWaterSeeFrom);
 	stream->Write(m_bMapCentering);
@@ -314,6 +317,7 @@ bool CvTechInfo::read(CvXMLLoadUtility* pXML)
 	pXML->GetChildXmlValByName(&m_bRepeat, "bRepeat");
 	pXML->GetChildXmlValByName(&m_bTrade, "bTrade");
 	pXML->GetChildXmlValByName(&m_bDisable, "bDisable");
+	pXML->GetChildXmlValByName(&m_bEventOnly, "bEventOnly", false, false); // Merkava120 Dynamica 0.1.7b
 	pXML->GetChildXmlValByName(&m_bGoodyTech, "bGoodyTech");
 	pXML->GetChildXmlValByName(&m_bExtraWaterSeeFrom, "bExtraWaterSeeFrom");
 	pXML->GetChildXmlValByName(&m_bMapCentering, "bMapCentering");
