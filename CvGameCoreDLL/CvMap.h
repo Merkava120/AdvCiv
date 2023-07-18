@@ -643,7 +643,7 @@ public: // advc: made several functions const
 	void updateBiomeCharacteristics(int iBiome);
 	void resetBiomes();
 	void initBiomes();
-	void biomesAdjCheck();
+	void biomesAdjCheck(bool bBackwards = false);
 	void biomesSizeCheck();
 	// merk.biome end
 

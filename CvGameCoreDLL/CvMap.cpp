@@ -1413,6 +1413,13 @@ void CvMap::calculateBiomes()
 				int iBiome = getPlotBiomeIndex(pAdj->plotNum());
 				if (isBiomeInRange(iBiome))
 				{
+					// merk.biome2 - specifics
+					if (isBiomeRiver(iBiome) && !kPlot.isRiver())
+						continue;
+					if (getBiomeFeatureLevel(iBiome) > 2 && kPlot.getFeatureType() != getBiomeFeature(iBiome))
+						continue;
+					if (getBiomeHillLevel(iBiome) > 2 && !kPlot.isHills())
+						continue;
 					setPlotBiome(i, iBiome);
 					bFound = true;
 					break;
@@ -1437,7 +1444,7 @@ void CvMap::calculateBiomes()
 	// moar checks
 	for (int a = 0; a < GC.getDefineINT("THEN_ADJ_CHECKS"); a++)
 	{
-		biomesAdjCheck();
+		biomesAdjCheck(true);
 	}
 	for (int a = 0; a < GC.getDefineINT("AND_THEN_SIZE_CHECKS"); a++)
 	{
@@ -1744,6 +1751,14 @@ void CvMap::flipToAdjacentBiome(int iPlot, bool bExcludeSame)
 	int iMaxAdjBiomeIndex = maxAdjacentBiomeIndex(iPlot, bExcludeSame, GC.getDefineINT("PRIORITIZE_MATCHING_BIOMES") > 0);
 	if (isBiomeInRange(iMaxAdjBiomeIndex))
 	{
+		// merk.biome2 - specifics
+		CvPlot& kPlot = getPlotByIndex(iPlot);
+		if (isBiomeRiver(iMaxAdjBiomeIndex) && !kPlot.isRiver())
+			return;
+		if (getBiomeFeatureLevel(iMaxAdjBiomeIndex) > 2 && kPlot.getFeatureType() != getBiomeFeature(iMaxAdjBiomeIndex))
+			return;
+		if (getBiomeHillLevel(iMaxAdjBiomeIndex) > 2 && !kPlot.isHills())
+			return;
 		// remove from previous biome
 		if (isBiomeInRange(getPlotBiomeIndex(iPlot)))
 		{
@@ -1848,6 +1863,8 @@ int CvMap::countAdjacentBiomeTiles(int iPlot, int iCountBiome)
 	int iCount = 0;
 	FOR_EACH_ADJ_PLOT(getPlotByIndex(iPlot))
 	{
+		if (pAdj->isPeak() && GC.getDefineINT("PEAKS_NO_BIOME"))
+			continue;
 		int iAdj = pAdj->plotNum();
 		if (getPlotBiomeIndex(iAdj) == iCountBiome)
 			iCount++;
@@ -2115,13 +2132,29 @@ void CvMap::initBiomes()
 }
 
 // go through all tiles and flip to adjacent if there are not enough
-void CvMap::biomesAdjCheck()
+void CvMap::biomesAdjCheck(bool bBackwards)
 {
-	for (int i = 0; i < numPlots(); i++)
+	if (bBackwards)
 	{
-		int iNumAdj = countAdjacentBiomeTiles(i, getPlotBiomeIndex(i));
-		if (iNumAdj < GC.getDefineINT("MIN_ADJ_SHARE"))
-			flipToAdjacentBiome(i, true);
+		for (int i = numPlots() - 1; i >= 0; i--)
+		{
+			if (getPlotByIndex(i).isPeak() && GC.getDefineINT("PEAKS_NO_BIOME"))
+				continue;
+			int iNumAdj = countAdjacentBiomeTiles(i, getPlotBiomeIndex(i));
+			if (iNumAdj < GC.getDefineINT("MIN_ADJ_SHARE"))
+				flipToAdjacentBiome(i, true);
+		}
+	}
+	else
+	{
+		for (int i = 0; i < numPlots(); i++)
+		{
+			if (getPlotByIndex(i).isPeak() && GC.getDefineINT("PEAKS_NO_BIOME"))
+				continue;
+			int iNumAdj = countAdjacentBiomeTiles(i, getPlotBiomeIndex(i));
+			if (iNumAdj < GC.getDefineINT("MIN_ADJ_SHARE"))
+				flipToAdjacentBiome(i, true);
+		}
 	}
 }
 
