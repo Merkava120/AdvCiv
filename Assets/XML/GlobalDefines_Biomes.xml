@@ -1,0 +1,90 @@
+<?xml version="1.0"?>
+
+<!-- This file contains a bunch of variables related to barbarian and animal spawning which were previously hard-coded in CvGame.cpp -->
+
+<Civ4Defines xmlns="x-schema:CIV4GlobalDefinesSchema.xml">
+
+	<!-- places bonuses on the map to represent biomes so they can be visualized easily. -->
+	<Define> 
+		<DefineName>DEBUG_MODE</DefineName>
+		<iDefineIntVal>1</iDefineIntVal>
+	</Define>
+	<!-- Set to 1 for peaks to not be assigned biomes -->
+	<Define> 
+		<DefineName>PEAKS_NO_BIOME</DefineName>
+		<iDefineIntVal>1</iDefineIntVal>
+	</Define>
+	<!-- step 2 flips tiles to nearby biomes if they don't have enough of their own biome adjacent to them. How many is 'enough'? -->
+	<Define> 
+		<DefineName>MIN_ADJ_SHARE</DefineName>
+		<iDefineIntVal>3</iDefineIntVal>
+	</Define>
+	<!-- to flip a tile to an adjacent one, should we do the most common or just another matching one that is bigger? 1 means prioritize matching -->
+	<Define> 
+		<DefineName>PRIORITIZE_MATCHING_BIOMES</DefineName>
+		<iDefineIntVal>1</iDefineIntVal>
+	</Define>
+	<!-- step 3 flips small biomes to join bigger ones if they are under this size -->
+	<Define> 
+		<DefineName>MIN_BIOME_SIZE</DefineName>
+		<iDefineIntVal>6</iDefineIntVal>
+	</Define>
+	
+	<!-- configure ordering of steps / how many of each to do. -->
+	<Define> 
+		<DefineName>FIRST_ADJ_CHECKS</DefineName>
+		<iDefineIntVal>1</iDefineIntVal>
+	</Define>
+	<Define> 
+		<DefineName>THEN_SIZE_CHECKS</DefineName>
+		<iDefineIntVal>1</iDefineIntVal>
+	</Define>
+	<Define> 
+		<DefineName>THEN_ADJ_CHECKS</DefineName>
+		<iDefineIntVal>2</iDefineIntVal>
+	</Define>
+	<Define> 
+		<DefineName>AND_THEN_SIZE_CHECKS</DefineName>
+		<iDefineIntVal>0</iDefineIntVal>
+	</Define>
+	<Define> 
+		<DefineName>LAST_ADJ_CHECKS</DefineName>
+		<iDefineIntVal>0</iDefineIntVal>
+	</Define>
+	
+	<!-- minimum percentages to be considered a 'level' -->
+	<Define> 
+		<DefineName>HILL_LEVEL_2_PERCENT</DefineName>
+		<iDefineIntVal>20</iDefineIntVal>
+	</Define>
+	<Define> 
+		<DefineName>HILL_LEVEL_3_PERCENT</DefineName>
+		<iDefineIntVal>40</iDefineIntVal>
+	</Define>
+	<Define> 
+		<DefineName>HILL_LEVEL_4_PERCENT</DefineName>
+		<iDefineIntVal>60</iDefineIntVal>
+	</Define>
+	<Define> 
+		<DefineName>HILL_LEVEL_5_PERCENT</DefineName>
+		<iDefineIntVal>80</iDefineIntVal>
+	</Define>
+	<Define> 
+		<DefineName>FEATURE_LEVEL_2_PERCENT</DefineName>
+		<iDefineIntVal>20</iDefineIntVal>
+	</Define>
+	<Define> 
+		<DefineName>FEATURE_LEVEL_3_PERCENT</DefineName>
+		<iDefineIntVal>40</iDefineIntVal>
+	</Define>
+	<Define> 
+		<DefineName>FEATURE_LEVEL_4_PERCENT</DefineName>
+		<iDefineIntVal>60</iDefineIntVal>
+	</Define>
+	<Define> 
+		<DefineName>FEATURE_LEVEL_5_PERCENT</DefineName>
+		<iDefineIntVal>80</iDefineIntVal>
+	</Define>
+	
+
+</Civ4Defines>

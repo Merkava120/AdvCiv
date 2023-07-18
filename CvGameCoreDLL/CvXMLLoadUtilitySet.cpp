@@ -201,6 +201,9 @@ bool CvXMLLoadUtility::SetGlobalDefines()
 	// merk.dt begin
 	if (!ReadGlobalDefines("xml\\GlobalDefines_Dynamica.xml", cache))
 		return false; 
+	// merk.biome begin
+	if (!ReadGlobalDefines("xml\\GlobalDefines_Biomes.xml", cache))
+		return false;
 	// merk end
 
 	// BETTER_BTS_AI_MOD, XML Options, 02/21/10, jdog5000: START

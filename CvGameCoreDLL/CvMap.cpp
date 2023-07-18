@@ -71,6 +71,7 @@ void CvMap::init(CvMapInitData* pInitInfo)
 	FOR_EACH_ENUM(PlotNum)
 		getPlotByIndex(eLoopPlotNum).initAdjList(); // </advc.003s>
 	calculateAreas();
+	calculateBiomes(); // merk.biome
 	gDLL->logMemState("CvMap after init plots");
 }
 
@@ -928,6 +929,7 @@ void CvMap::changeOwnedPlots(int iChange)
 	FAssert(getOwnedPlots() >= 0);
 }
 
+
 // advc.tsl:
 void CvMap::setLatitudeLimits(int iTop, int iBottom)
 {
@@ -1123,6 +1125,7 @@ void CvMap::recalculateAreas(/* advc.opt: */bool bUpdateIsthmuses)
 	}
 	m_areas.removeAll();
 	calculateAreas();
+	calculateBiomes(); // merk.biome
 }
 
 
@@ -1386,6 +1389,79 @@ void CvMap::updateNumPlots()
 	m_ePlots = (PlotNumTypes)(getGridWidth() * getGridHeight());
 }
 
+// merk.biome: this maps tiles to biomes based on terrains / features / etc. 
+void CvMap::calculateBiomes()
+{
+	if (getPlotByIndex(0).getTerrainType() == NO_TERRAIN)
+		return; // haven't actually placed terrains yet
+	resetBiomes(); // just in case
+	initBiomes();
+	// Gather some settings
+	bool bSkipPeaks = (GC.getDefineINT("PEAKS_NO_BIOME") > 0);
+	
+	// First pass: add a basic biome to each plot. But first check adjacent plots and add to their biome if same terrain. 
+	for (int i = 0; i < numPlots(); i++)
+	{
+		CvPlot& kPlot = getPlotByIndex(i);
+		if (kPlot.isPeak() && bSkipPeaks)
+			continue;
+		bool bFound = false;
+		FOR_EACH_ADJ_PLOT(kPlot)
+		{
+			if (kPlot.getTerrainType() == pAdj->getTerrainType() && kPlot.getFeatureType() == pAdj->getFeatureType())
+			{
+				int iBiome = getPlotBiomeIndex(pAdj->plotNum());
+				if (isBiomeInRange(iBiome))
+				{
+					setPlotBiome(i, iBiome);
+					bFound = true;
+					break;
+				}
+			}
+		}
+		if (!bFound)
+			addBiomeFromPlot(i);
+	}
+	int blah = m_aiBiomesMap.size();
+	// At this point every tile has a biome, and they are grouped by which biomes they touch. 
+	// Step 2: adj checks
+	for (int a = 0; a < GC.getDefineINT("FIRST_ADJ_CHECKS"); a++)
+	{
+		biomesAdjCheck();
+	}
+	// Step 3: size checks (shouldn't ever need more than one, but hey, who knows)
+	for (int a = 0; a < GC.getDefineINT("THEN_SIZE_CHECKS"); a++)
+	{
+		biomesSizeCheck();
+	}
+	// moar checks
+	for (int a = 0; a < GC.getDefineINT("THEN_ADJ_CHECKS"); a++)
+	{
+		biomesAdjCheck();
+	}
+	for (int a = 0; a < GC.getDefineINT("AND_THEN_SIZE_CHECKS"); a++)
+	{
+		biomesSizeCheck();
+	}
+	for (int a = 0; a < GC.getDefineINT("LAST_ADJ_CHECKS"); a++)
+	{
+		biomesAdjCheck();
+	}
+	
+	// Debug mode: set plot bonus type equal to the biome. 
+	if (GC.getDefineINT("DEBUG_MODE") > 0)
+	{
+		for (int i = 0; i < (int)(m_aiBiomesMap.size()); i++)
+		{
+			if (m_aiBiomesMap[i] > GC.getNumBonusInfos() - 1)
+				continue;
+			getPlotByIndex(i).setBonusType((BonusTypes)m_aiBiomesMap[i]);
+		}
+	}
+}
+// merk.biome end
+
+
 // <advc.106n>
 void CvMap::updateReplayTexture()
 {
@@ -1612,3 +1688,451 @@ void CvMap::computeShelves()
 		}
 	}
 } // </advc.300>
+// merk.biome begin
+
+// return biome plot index in main list from its tile list
+int CvMap::getBiomePlot(int iBiome, int iIndex)
+{
+	if (iIndex > (int)(getBiome(iBiome).tiles.size()) - 1)
+		return -1;
+	return getBiome(iBiome).tiles[iIndex];
+}
+bool CvMap::isBiomeInRange(int iBiome)
+{
+	if (iBiome < 0)
+		return false;
+	if (iBiome > (int)(m_Biomes.size() - 1))
+		return false;
+	return true;
+}
+// remove a tile from a biome in the list
+void CvMap::removeTile(int iPlot, int iBiome)
+{
+	if (!isBiomeInRange(iBiome))
+		return;
+	if (isPlotInRange(iPlot))
+	{
+		for (int i = 0; i < getBiomeSize(iBiome); i++)
+		{
+			if (iPlot == getBiomePlot(iBiome, i))
+			{
+				std::vector< int > newtiles;
+				newtiles = getBiome(iBiome).tiles;
+				newtiles.erase(newtiles.begin() + i);
+				getBiome(iBiome).tiles = newtiles;
+				setPlotBiome(iPlot, -1);
+				return; // all done
+			}
+		}
+	}
+}
+// add a tile to a biome's list
+void CvMap::addTile(int iPlot, int iBiome)
+{
+	if (!isBiomeInRange(iBiome))
+		return;
+	if (isPlotInRange(iPlot))
+	{
+		m_Biomes[iBiome].tiles.push_back(iPlot);
+	}
+}
+// find most common adjacent biome and flip to that
+void CvMap::flipToAdjacentBiome(int iPlot, bool bExcludeSame)
+{
+	if (!isPlotInRange(iPlot))
+		return;
+	int iMaxAdjBiomeIndex = maxAdjacentBiomeIndex(iPlot, bExcludeSame, GC.getDefineINT("PRIORITIZE_MATCHING_BIOMES") > 0);
+	if (isBiomeInRange(iMaxAdjBiomeIndex))
+	{
+		// remove from previous biome
+		if (isBiomeInRange(getPlotBiomeIndex(iPlot)))
+		{
+			removeTile(iPlot, getPlotBiomeIndex(iPlot));
+			if (getBiomeSize(getPlotBiomeIndex(iPlot)) <= 0)
+				removeBiome(getPlotBiomeIndex(iPlot));
+		}
+		setPlotBiome(iPlot, iMaxAdjBiomeIndex);
+		if (getBiomeFeature(iMaxAdjBiomeIndex) == NO_FEATURE)
+			setBiomeFeature(iMaxAdjBiomeIndex, getPlotByIndex(iPlot).getFeatureType());
+	
+	}
+}
+void CvMap::addBiome(TerrainTypes eTerrain, FeatureTypes eFeature, int iFeatureLevel, int iHillLevel, bool bRiver, bool bCoast, bool bCoastalSea, bool bOcean)
+{
+	Biome biome1; 
+	biome1.eBiomeTerrain = eTerrain;
+	biome1.eBiomeFeature = eFeature;
+	biome1.iFeatureLevel = iFeatureLevel;
+	biome1.iHillLevel = iHillLevel;
+	biome1.bRiver = bRiver;
+	biome1.bCoast = bCoast;
+	biome1.bCoastalSea = bCoastalSea;
+	biome1.bOcean = bOcean;
+	m_Biomes.push_back(biome1);
+}
+void CvMap::addBiomeFromPlot(int iPlot)
+{
+	if (!isPlotInRange(iPlot))
+		return;
+	CvPlot& kPlot = getPlotByIndex(iPlot);
+	addBiome(kPlot.getTerrainType(), kPlot.getFeatureType(), 0, 0, kPlot.isRiver(), kPlot.isCoastalLand(), kPlot.getTerrainType() == GC.getDefineINT("SHALLOW_WATER_TERRAIN"), kPlot.getTerrainType() == GC.getDefineINT("DEEP_WATER_TERRAIN"));
+	setPlotBiome(iPlot, (int)m_Biomes.size() - 1);
+}
+void CvMap::removeBiome(int iBiome)
+{
+	if (!isBiomeInRange(iBiome))
+		return;
+	m_Biomes.erase(m_Biomes.begin() + iBiome);
+	// Have to delete it from tiles referencing it too! 
+	// And update everything greater than iBiome to move one down
+	for (int i = 0; i < (int)(m_aiBiomesMap.size()); i++)
+	{
+		if (m_aiBiomesMap[i] == iBiome)
+			m_aiBiomesMap[i] = -1;
+		else if (m_aiBiomesMap[i] > iBiome)
+			m_aiBiomesMap[i] -= 1;
+	}
+}
+int CvMap::getMostSimilarBiome(int iPlot, std::vector<int> compareBiomes)
+{
+	if (!isPlotInRange(iPlot))
+		return -1;
+	if ((int)(compareBiomes.size()) == 0)
+		return -1;
+	CvPlot& kPlot = getPlotByIndex(iPlot);
+	TerrainTypes eCompareTerrain = kPlot.getTerrainType();
+	FeatureTypes eCompareFeature = kPlot.getFeatureType();
+	bool bRiver = kPlot.isRiver();
+	bool bCoast = kPlot.isCoastalLand();
+	bool bCoastalSea = kPlot.getTerrainType() == GC.getDefineINT("SHALLOW_WATER_TERRAIN");
+	bool bHills = kPlot.isHills();
+	bool bOcean = kPlot.getTerrainType() == GC.getDefineINT("DEEP_WATER_TERRAIN");
+	int iMaxScore = 0;
+	int iBestBiome = -1;
+	for (int i = 0; i < (int)(compareBiomes.size()); i++)
+	{
+		int iBiome = compareBiomes[i];
+		if (!isBiomeInRange(iBiome))
+			continue;
+		int iScore = 0;
+		if (getBiomeTerrain(iBiome) == eCompareTerrain)
+			iScore++;
+		if (getBiomeFeatureLevel(iBiome) <= 2 || getBiomeFeature(iBiome) == eCompareFeature)
+			iScore++;
+		if ((isBiomeCoast(iBiome) && bCoast) || (isBiomeCoastalSea(iBiome) && bCoastalSea) || (isBiomeOcean(iBiome) && bOcean))
+			iScore++;
+		if (getBiomeHillLevel(iBiome) < 2 && !bHills)
+			iScore++;
+		else if (getBiomeHillLevel(iBiome) == 2)
+			iScore++;
+		else if (getBiomeHillLevel(iBiome) > 2 && bHills)
+			iScore++;
+		if (iScore > iMaxScore)
+		{
+			iMaxScore = iScore;
+			iBestBiome = iBiome;
+		}
+	}
+	if (isBiomeInRange(iBestBiome))
+		return iBestBiome;
+	else // just return the first one
+		return compareBiomes[0];
+}
+// count tiles of the given biome adjacent to this plot
+int CvMap::countAdjacentBiomeTiles(int iPlot, int iCountBiome)
+{
+	if (!isPlotInRange(iPlot))
+		return -1;
+	if (!isBiomeInRange(iCountBiome))
+		return 0;
+	int iCount = 0;
+	FOR_EACH_ADJ_PLOT(getPlotByIndex(iPlot))
+	{
+		int iAdj = pAdj->plotNum();
+		if (getPlotBiomeIndex(iAdj) == iCountBiome)
+			iCount++;
+	}
+	return iCount;
+}
+// returns the most common adjacent biome
+int CvMap::maxAdjacentBiomeIndex(int iPlot, bool bExcludeSame, bool bSharedWinsTies)
+{
+	if (!isPlotInRange(iPlot))
+		return -1;
+	int iMax = 0;
+	int iMaxBiome = -1;
+	std::vector< int > iTiedBiomes;
+	std::vector < std::pair< int, int > > adjBiomes;
+	int iOriginalBiome = getPlotBiomeIndex(iPlot);
+	FOR_EACH_ADJ_PLOT(getPlotByIndex(iPlot))
+	{
+		int iAdjBiome = getPlotBiomeIndex(pAdj->plotNum());
+		if (!isBiomeInRange(iAdjBiome))
+			continue;
+		if (isBiomeInRange(iOriginalBiome) && iAdjBiome == iOriginalBiome && bExcludeSame)
+			continue;
+		bool bFound = false;
+		for (int i = 0; i < (int)(adjBiomes.size()); i++)
+		{
+			if (adjBiomes[i].first == iAdjBiome)
+			{
+				adjBiomes[i].second++;
+				if (adjBiomes[i].second > iMax)
+				{
+					iTiedBiomes.clear();
+					iMax = adjBiomes[i].second;
+					iMaxBiome = adjBiomes[i].first;
+				}
+				else if (adjBiomes[i].second == iMax)
+					iTiedBiomes.push_back(adjBiomes[i].first);
+				bFound = true;
+				break;
+			}
+		}
+		if (!bFound)
+		{
+			std::pair< int, int > newBiome;
+			newBiome.first = iAdjBiome;
+			newBiome.second = 1;
+			adjBiomes.push_back(newBiome);
+			if (iMax < 1)
+			{
+				iMaxBiome = iAdjBiome;
+				iTiedBiomes.clear();
+				iMax = 1;
+			}
+		}
+	}
+	if ((int)(iTiedBiomes.size()) > 0 && bSharedWinsTies)
+	{
+		iTiedBiomes.push_back(iMaxBiome);
+		return getMostSimilarBiome(iPlot, iTiedBiomes);
+	}
+	else
+		return iMaxBiome; // ignore ties unless we are prioritizing similar biomes
+}
+// sends all tiles from a biome to another biome
+void CvMap::mergeBiome(int iBiome, int iNewBiome)
+{
+	if (!isBiomeInRange(iBiome) || !isBiomeInRange(iNewBiome))
+		return;
+	for (int i = 0; i < (int)(getBiome(iBiome).tiles.size()); i++)
+	{
+		addTile(getBiome(iBiome).tiles[i], iNewBiome);
+	}
+	updateBiomeCharacteristics(iNewBiome);
+	removeBiome(iBiome);
+}
+
+
+
+void CvMap::setBiomeTerrain(int iBiome, TerrainTypes eTerrain)
+{
+	if (!isBiomeInRange(iBiome))
+		return;
+	m_Biomes[iBiome].eBiomeTerrain = eTerrain;
+}
+
+void CvMap::setBiomeFeature(int iBiome, FeatureTypes eFeature)
+{
+	if (!isBiomeInRange(iBiome))
+		return;
+	m_Biomes[iBiome].eBiomeFeature = eFeature;
+}
+
+void CvMap::setBiomeFeatureLevel(int iBiome, int iFeatureLevel)
+{
+	if (!isBiomeInRange(iBiome))
+		return;
+	m_Biomes[iBiome].iFeatureLevel = iFeatureLevel;
+}
+
+void CvMap::setBiomeHillLevel(int iBiome, int iHillLevel)
+{
+	if (!isBiomeInRange(iBiome))
+		return;
+	m_Biomes[iBiome].iHillLevel = iHillLevel;
+}
+
+void CvMap::setBiomeTypes(int iBiome, bool bRiver, bool bCoast, bool bCoastalSea, bool bOcean)
+{
+	if (!isBiomeInRange(iBiome))
+		return;
+	m_Biomes[iBiome].bRiver = bRiver;
+	m_Biomes[iBiome].bCoast = bCoast;
+	m_Biomes[iBiome].bCoastalSea = bCoastalSea;
+	m_Biomes[iBiome].bOcean = bOcean;
+}
+
+TerrainTypes CvMap::getBiomeTerrain(int iBiome)
+{
+	if (!isBiomeInRange(iBiome))
+		return NO_TERRAIN;
+	return m_Biomes[iBiome].eBiomeTerrain;
+}
+
+FeatureTypes CvMap::getBiomeFeature(int iBiome)
+{
+	if (!isBiomeInRange(iBiome))
+		return NO_FEATURE;
+	return m_Biomes[iBiome].eBiomeFeature;
+}
+
+int CvMap::getBiomeFeatureLevel(int iBiome)
+{
+	if (!isBiomeInRange(iBiome))
+		return -1;
+	return m_Biomes[iBiome].iFeatureLevel;
+}
+
+int CvMap::getBiomeHillLevel(int iBiome)
+{
+	if (!isBiomeInRange(iBiome))
+		return -1;
+	return m_Biomes[iBiome].iHillLevel;
+}
+
+bool CvMap::isBiomeRiver(int iBiome)
+{
+	if (!isBiomeInRange(iBiome))
+		return false;
+	return m_Biomes[iBiome].bRiver;
+}
+
+bool CvMap::isBiomeCoast(int iBiome)
+{
+	if (!isBiomeInRange(iBiome))
+		return false;
+	return m_Biomes[iBiome].bCoast;
+}
+
+bool CvMap::isBiomeCoastalSea(int iBiome)
+{
+	if (!isBiomeInRange(iBiome))
+		return false;
+	return m_Biomes[iBiome].bCoastalSea;
+}
+
+bool CvMap::isBiomeOcean(int iBiome)
+{
+	if (!isBiomeInRange(iBiome))
+		return false;
+	return m_Biomes[iBiome].bOcean;
+}
+
+int CvMap::getBiomeSize(int iBiome)
+{
+	if (!isBiomeInRange(iBiome))
+		return -1;
+	return (int)(m_Biomes[iBiome].tiles.size());
+}
+
+void CvMap::setPlotBiome(int iPlot, int iNewBiome)
+{
+	if (!isPlotInRange(iPlot))
+		return;
+	if (!isBiomeInRange(iNewBiome))
+		return;
+	CvPlot& kPlot = getPlotByIndex(iPlot);
+	m_aiBiomesMap[iPlot] = iNewBiome;
+	addTile(iPlot, iNewBiome);
+	updateBiomeCharacteristics(iNewBiome);
+}
+
+// splits up a biome and divides tiles among adjacent ones
+void CvMap::carveUpBiome(int iBiome)
+{
+	if (!isBiomeInRange(iBiome))
+		return;
+	for (int i = 0; i < getBiomeSize(iBiome); i++)
+	{
+		flipToAdjacentBiome(getBiomePlot(iBiome, i), true);
+	}
+	removeBiome(iBiome);
+}
+// resets biome of a plot
+void CvMap::unBiomePlot(int iPlot)
+{
+	if (!isPlotInRange(iPlot))
+		return;
+	int iBiome = getPlotBiomeIndex(iPlot);
+	removeTile(iPlot, iBiome);
+	setPlotBiome(iPlot, -1);
+}
+
+// adjusts iFeatureLevel and iHillLevel for the biome
+void CvMap::updateBiomeCharacteristics(int iBiome)
+{
+	if (!isBiomeInRange(iBiome))
+		return;
+	int iFeatures = 0;
+	int iHills = 0;
+	for (int i = 0; i < getBiomeSize(iBiome); i++)
+	{
+		if (getPlotByIndex(getBiomePlot(iBiome, i)).getFeatureType() == getBiomeFeature(iBiome))
+			iFeatures++;
+		if (getPlotByIndex(getBiomePlot(iBiome, i)).isHills())
+			iHills++;
+	}
+	int iFeaturePercent = 100 * iFeatures / getBiomeSize(iBiome);
+	int iHillsPercent = 100 * iFeatures / getBiomeSize(iBiome);
+	if (getBiomeFeature(iBiome) == NO_FEATURE)
+		setBiomeFeatureLevel(iBiome, -1);
+	else if (iFeaturePercent < GC.getDefineINT("FEATURE_LEVEL_2_PERCENT"))
+		setBiomeFeatureLevel(iBiome, 0);
+	else if (iFeaturePercent < GC.getDefineINT("FEATURE_LEVEL_3_PERCENT"))
+		setBiomeFeatureLevel(iBiome, 1);
+	else if (iFeaturePercent < GC.getDefineINT("FEATURE_LEVEL_4_PERCENT"))
+		setBiomeFeatureLevel(iBiome, 2);
+	else if (iFeaturePercent < GC.getDefineINT("FEATURE_LEVEL_5_PERCENT"))
+		setBiomeFeatureLevel(iBiome, 3);
+	else
+		setBiomeFeatureLevel(iBiome, 4);
+	if (iHillsPercent < GC.getDefineINT("HILL_LEVEL_2_PERCENT"))
+		setBiomeHillLevel(iBiome, 0);
+	else if (iHillsPercent < GC.getDefineINT("HILL_LEVEL_3_PERCENT"))
+		setBiomeHillLevel(iBiome, 1);
+	else if (iHillsPercent < GC.getDefineINT("HILL_LEVEL_4_PERCENT"))
+		setBiomeHillLevel(iBiome, 2);
+	else if (iHillsPercent < GC.getDefineINT("HILL_LEVEL_5_PERCENT"))
+		setBiomeHillLevel(iBiome, 3);
+	else
+		setBiomeHillLevel(iBiome, 4);
+}
+
+void CvMap::resetBiomes()
+{
+	m_aiBiomesMap.clear();
+	m_Biomes.clear();
+}
+
+void CvMap::initBiomes()
+{
+	for (int i = 0; i < numPlots(); i++)
+	{
+		m_aiBiomesMap.push_back(-1);
+	}
+}
+
+// go through all tiles and flip to adjacent if there are not enough
+void CvMap::biomesAdjCheck()
+{
+	for (int i = 0; i < numPlots(); i++)
+	{
+		int iNumAdj = countAdjacentBiomeTiles(i, getPlotBiomeIndex(i));
+		if (iNumAdj < GC.getDefineINT("MIN_ADJ_SHARE"))
+			flipToAdjacentBiome(i, true);
+	}
+}
+
+void CvMap::biomesSizeCheck()
+{
+	for (int i = 0; i < (int)(m_Biomes.size()); i++)
+	{
+		if (getBiomeSize(i) < GC.getDefineINT("MIN_BIOME_SIZE"))
+			carveUpBiome(i);
+	}
+}
+
+
+// merk.biome end

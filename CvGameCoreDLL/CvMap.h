@@ -405,6 +405,8 @@ public: // advc: made several functions const
 	int getOwnedPlots() const { return m_iOwnedPlots; }														// Exposed to Python
 	void changeOwnedPlots(int iChange);
 
+
+
 	int getTopLatitude() const																									// Exposed to Python
 	{
 		return m_iTopLatitude;
@@ -581,6 +583,69 @@ public: // advc: made several functions const
 	MinimapSettings& getMinimapSettings() { return m_minimapSettings; }
 	MinimapSettings const& getMinimapSettings() const { return m_minimapSettings; }
 	// </advc.002a>
+	// merk.biome begin
+	struct Biome
+	{
+		Biome()
+			: eBiomeTerrain(NO_TERRAIN),
+			eBiomeFeature(NO_FEATURE),
+			iFeatureLevel(-1),
+			iHillLevel(-1),
+			bRiver(false),
+			bCoast(false),
+			bCoastalSea(false),
+			bOcean(false),
+			tiles()
+		{}
+		FeatureTypes eBiomeFeature;
+		int iFeatureLevel;
+		TerrainTypes eBiomeTerrain;
+		int iHillLevel;
+		bool bRiver;
+		bool bCoast;
+		bool bCoastalSea;
+		bool bOcean;
+		std::vector< int > tiles;
+	};
+	int getPlotBiomeIndex(int iPlot) { return iPlot > (int)m_aiBiomesMap.size() - 1 ? -1 : m_aiBiomesMap[iPlot]; }
+	bool isPlotInRange(int iPlot) { return iPlot <= (int)m_aiBiomesMap.size() - 1 ? iPlot > -1 ? true : false : false; }
+	int getBiomePlot(int iBiome, int iIndex);
+	Biome getPlotBiome(int iPlot) { return m_Biomes[getPlotBiomeIndex(iPlot)]; }
+	bool isBiomeInRange(int iBiome);
+	Biome getBiome(int iBiome) { return m_Biomes[iBiome]; }
+	void removeTile(int iPlot, int iBiome);
+	void addTile(int iPlot, int iBiome);
+	void flipToAdjacentBiome(int iPlot, bool bExcludeSame = false);
+	void addBiome(TerrainTypes eTerrain = NO_TERRAIN, FeatureTypes eFeature = NO_FEATURE, int iFeatureLevel = 0, int iHillLevel = 0, bool bRiver = false, bool bCoast = false, bool bCoastalSea = false, bool bOcean = false);
+	void addBiomeFromPlot(int iPlot);
+	void removeBiome(int iBiome);
+	int getMostSimilarBiome(int iPlot, std::vector< int > compareBiomes);
+	int countAdjacentBiomeTiles(int iPlot, int iCountBiome);
+	int maxAdjacentBiomeIndex(int iPlot, bool bExcludeSame = false, bool bSharedWinsTies = false);
+	void mergeBiome(int iBiome, int iNewBiome);
+	void setBiomeTerrain(int iBiome, TerrainTypes eTerrain);
+	void setBiomeFeature(int iBiome, FeatureTypes eFeature);
+	void setBiomeFeatureLevel(int iBiome, int iFeatureLevel);
+	void setBiomeHillLevel(int iBiome, int iHillLevel);
+	void setBiomeTypes(int iBiome, bool bRiver = false, bool bCoast = false, bool bCoastalSea = false, bool bOcean = false);
+	TerrainTypes getBiomeTerrain(int iBiome);
+	FeatureTypes getBiomeFeature(int iBiome);
+	int getBiomeFeatureLevel(int iBiome);
+	int getBiomeHillLevel(int iBiome);
+	bool isBiomeRiver(int iBiome);
+	bool isBiomeCoast(int iBiome);
+	bool isBiomeCoastalSea(int iBiome);
+	bool isBiomeOcean(int iBiome);
+	int getBiomeSize(int iBiome);
+	void setPlotBiome(int iPlot, int iNewBiome);
+	void carveUpBiome(int iBiome);
+	void unBiomePlot(int iPlot);
+	void updateBiomeCharacteristics(int iBiome);
+	void resetBiomes();
+	void initBiomes();
+	void biomesAdjCheck();
+	void biomesSizeCheck();
+	// merk.biome end
 
 protected:
 
@@ -617,6 +682,12 @@ protected:
 	void updateLakes();
 	// </advc.030>
 	void updateNumPlots(); // advc.opt
+
+	// merk.biome
+	std::vector< int > m_aiBiomesMap;
+	std::vector< Biome > m_Biomes;
+	void calculateBiomes();
+	// merk.biome end
 };
 
 /*	advc.304: Interface for CvMap::syncRandPlot weights. Would prefer to
