@@ -555,7 +555,12 @@ void CvArea::changeNumBonuses(BonusTypes eBonus, int iChange)
 	m_aiBonuses.add(eBonus, iChange);
 	FAssert(getNumBonuses(eBonus) >= 0);
 }
-
+// merk.rasa: sets barbarian spawn channel for the area
+void CvArea::setBarbarianSpawnChannel(int iChannel)
+{
+	m_iBarbarianSpawnChannel = iChannel;
+}
+// merk.rasa end
 // advc.opt: No longer used
 /*int CvArea::getNumImprovements(ImprovementTypes eImprovement) const
 {

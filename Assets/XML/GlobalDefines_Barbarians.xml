@@ -55,14 +55,13 @@
 	<!-- minimum turns before animals can spawn, no exceptions; default 5 -->
 	<Define>
 		<DefineName>MIN_TURNS_BEFORE_ANIMALS</DefineName>
-		<iDefineIntVal>5</iDefineIntVal>
+		<iDefineIntVal>0</iDefineIntVal>
 	</Define>
 	
-	<!-- require a multiple of this and the number of cities existing to be greater than the number of players to spawn animals
-	 default 100, setting to 0 disables the city requirement, between 0 and 100 is a percent -->	
+	<!-- number of cities * this / 100 < number of civs means don't spawn animals yet. Set to 0 to completely ignore.  -->	
 	<Define>
 		<DefineName>CITIES_BEFORE_ANIMALS_MULT</DefineName>
-		<iDefineIntVal>100</iDefineIntVal>
+		<iDefineIntVal>0</iDefineIntVal>
 	</Define>
 	<!-- if an area has no civs in it, divide the animals needed by this (default 2)-->
 	<Define>
@@ -84,6 +83,23 @@
 	<Define>
 		<DefineName>ANIMAL_UNITS_PER_TILE_LIMIT</DefineName>
 		<iDefineIntVal>3</iDefineIntVal>
+	</Define>
+	
+	<!-- "killbarbarian" tells the game whether or not to subtract a unit from the total number in the area being considered. Less than or equal to this number is considered universally 'fine', i.e. don't kill any. Default 5. -->
+	<Define>
+		<DefineName>NEVER_A_CROWD_OF_BARBS</DefineName>
+		<iDefineIntVal>5</iDefineIntVal>
+	</Define>
+	<!-- For water areas, the number of animals is divided by this. -->
+	<Define>
+		<DefineName>WATER_ANIMALS_DIVISOR</DefineName>
+		<iDefineIntVal>5</iDefineIntVal>
+	</Define>
+	
+	<!-- Added to spawn value if native feature is on tile. Value also includes a rand(1000) and the unit's speciic spawn weight  -->
+	<Define>
+		<DefineName>ANIMAL_FEATURE_NATIVE_WEIGHT</DefineName>
+		<iDefineIntVal>500</iDefineIntVal>
 	</Define>
 
 </Civ4Defines>

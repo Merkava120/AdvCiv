@@ -194,6 +194,10 @@ public:
 	// advc.opt: No longer used
 	/*int getNumImprovements(ImprovementTypes eImprovement) const;										// Exposed to Python
 	void changeNumImprovements(ImprovementTypes eImprovement, int iChange);*/
+	// merk.rasa
+	int getBarbarianSpawnChannel() const { return m_iBarbarianSpawnChannel; }
+	void setBarbarianSpawnChannel(int iChannel);
+	// merk.rasa end
 
 protected:
 
@@ -206,6 +210,7 @@ protected:
 	int m_iTotalPopulation;
 	int m_iNumStartingPlots;
 	int m_iBarbarianCitiesEver; // advc.300
+	int m_iBarbarianSpawnChannel; // merk.rasa
 
 	bool m_bWater;
 	// <advc.030>
