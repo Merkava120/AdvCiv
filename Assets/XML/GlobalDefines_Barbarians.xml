@@ -55,7 +55,7 @@
 	<!-- minimum turns before animals can spawn, no exceptions; default 5 -->
 	<Define>
 		<DefineName>MIN_TURNS_BEFORE_ANIMALS</DefineName>
-		<iDefineIntVal>5</iDefineIntVal>
+		<iDefineIntVal>1</iDefineIntVal>
 	</Define>
 	
 	<!-- require a multiple of this and the number of cities existing to be greater than the number of players to spawn animals
@@ -85,5 +85,19 @@
 		<DefineName>ANIMAL_UNITS_PER_TILE_LIMIT</DefineName>
 		<iDefineIntVal>3</iDefineIntVal>
 	</Define>
+	
+	
+	<!-- multiply the normal "unowned tiles per animal" by this for water animals (the product is in the denominator) -->
+	<Define>
+		<DefineName>WATER_ANIMALS_DIVISOR</DefineName>
+		<iDefineIntVal>3</iDefineIntVal>
+	</Define>
+	
+	<!-- if the game is trying to despawn barbarians, yeet out of that if there are less than / equal to this many barbarians. Default 5 -->
+	<Define>
+		<DefineName>TOO_MANY_BARBARIANS</DefineName>
+		<iDefineIntVal>5</iDefineIntVal>
+	</Define>
+	
 
 </Civ4Defines>

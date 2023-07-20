@@ -116,8 +116,8 @@ m_iLeaderExperience(0),
 m_iLeaderPromotion(NO_PROMOTION),
 // </kmodx>
 m_bAnimal(false),
-m_iSpawnChannel(0), // dynamica 0.2.3
-m_iSpawnWeight(0), // dynamica 0.2.3
+m_iSpawnChannel(0), // merk.rasa
+m_iSpawnWeight(0), // merk.rasa
 m_bFoodProduction(false),
 m_bNoBadGoodies(false),
 m_bOnlyDefensive(false),
@@ -878,8 +878,8 @@ void CvUnitInfo::read(FDataStreamBase* stream)
 	stream->Read(&m_iNumUnitNames);
 	stream->Read((int*)&m_eCommandType);
 	stream->Read(&m_bAnimal);
-	stream->Read(&m_iAnimalChannel); // dynamica 0.2.3
-	stream->Read(&m_iSpawnWeight); // dynamica 0.2.3
+	stream->Read(&m_iAnimalChannel); // merk.rasa
+	stream->Read(&m_iSpawnWeight); // merk.rasa
 	stream->Read(&m_bFoodProduction);
 	stream->Read(&m_bNoBadGoodies);
 	stream->Read(&m_bOnlyDefensive);
@@ -1184,8 +1184,8 @@ void CvUnitInfo::write(FDataStreamBase* stream)
 	stream->Write(m_iNumUnitNames);
 	stream->Write(m_eCommandType);
 	stream->Write(m_bAnimal);
-	stream->Write(m_iAnimalChannel); // dynamica 0.2.3
-	stream->Write(m_iSpawnWeight); // dynamica 0.2.3
+	stream->Write(m_iAnimalChannel); // merk.rasa
+	stream->Write(m_iSpawnWeight); // merk.rasa
 	stream->Write(m_bFoodProduction);
 	stream->Write(m_bNoBadGoodies);
 	stream->Write(m_bOnlyDefensive);
@@ -1319,8 +1319,8 @@ bool CvUnitInfo::read(CvXMLLoadUtility* pXML)
 	pXML->SetInfoIDFromChildXmlVal(m_eAdvisorType, "Advisor");
 
 	pXML->GetChildXmlValByName(&m_bAnimal, "bAnimal");
-	pXML->GetChildXmlValByName(&m_iSpawnChannel, "iSpawnChannel", 0); // dynamica 0.2.3
-	pXML->GetChildXmlValByName(&m_iSpawnWeight, "iSpawnWeight", 0); // dynamica 0.2.3
+	pXML->GetChildXmlValByName(&m_iSpawnChannel, "iSpawnChannel", 0); // merk.rasa
+	pXML->GetChildXmlValByName(&m_iSpawnWeight, "iSpawnWeight", 0); // merk.rasa
 	pXML->GetChildXmlValByName(&m_bFoodProduction, "bFood");
 	pXML->GetChildXmlValByName(&m_bNoBadGoodies, "bNoBadGoodies");
 	pXML->GetChildXmlValByName(&m_bOnlyDefensive, "bOnlyDefensive");

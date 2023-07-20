@@ -327,11 +327,6 @@ public: // advc: made several functions const
 	// </advc.004r>
 	CvSelectionGroup* findSelectionGroup(int iX, int iY, PlayerTypes eOwner = NO_PLAYER,					// Exposed to Python
 			bool bReadyToSelect = false, bool bWorkers = false) const;
-	// dynamica 0.2.4
-	int getNearestStoredYieldAmount(int iX, int iY, int iYield, PlayerTypes eOwner = NO_PLAYER, bool bSameArea = true) const;
-	void changeNearestStoredYieldAmount(int iX, int iY, int iYield, int iChange, PlayerTypes eOwner = NO_PLAYER, bool bSameArea = true);
-	int getNearestStoredCommerceAmount(int iX, int iY, int iCommerce, PlayerTypes eOwner = NO_PLAYER, bool bSameArea = true) const;
-	void changeNearestStoredCommerceAmount(int iX, int iY, int iCommerce, int iChange, PlayerTypes eOwner = NO_PLAYER, bool bSameArea = true);
 	// end
 	CvArea* findBiggestArea(bool bWater);																						// Exposed to Python
 
@@ -512,14 +507,6 @@ public: // advc: made several functions const
 		return m_areas.getCount();
 	}
 	int getNumLandAreas() const;
-	// Merkava120 1.1.1
-	void initMappingArrays();
-	void setMapping(int iPlot, int iMapping);
-	void setVariation(int iPlot, int iVar);
-	int getMapping(int iPlot) const;
-	int getVariation(int iPlot)  const;
-	bool isMappingInitDone() const { return m_bMappingInitDone; }
-	// Merkava120 end
 	CvArea* getArea(int iID) const																	// Exposed to Python
 	{
 		return m_areas.getAt(iID);
@@ -608,7 +595,6 @@ protected:
 
 	bool m_bWrapX;
 	bool m_bWrapY;
-	bool m_bMappingInitDone; // Merkava120 1.1.1 terrain adj
 	/*	<advc.enum> (Can't use eager allocation here b/c the map is created
 		before XML is loaded.) */
 	ArrayEnumMap<BonusTypes,int,PlotNumInt> m_aiNumBonus;
@@ -618,10 +604,6 @@ protected:
 	ListEnumMap2D<PlotNumTypes,YieldTypes,int,char> m_aeiPlotExtraYield;
 	ListEnumMap<PlotNumTypes,int> m_aiPlotExtraCost;
 	// </advc.enum>
-	// Merkava120 1.1.1 terrain adjuster
-	int* m_aiPlotMappings;
-	int* m_aiPlotVariations;
-	// END
 	CvPlot* m_pMapPlots;
 	std::map<Shelf::Id,Shelf*> m_shelves; // advc.300
 	FFreeListTrashArray<CvArea> m_areas;

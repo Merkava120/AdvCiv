@@ -201,9 +201,6 @@ bool CvXMLLoadUtility::SetGlobalDefines()
 	// merk.dt begin
 	if (!ReadGlobalDefines("xml\\GlobalDefines_Dynamica.xml", cache))
 		return false; 
-	// merk.map begin
-	if (!ReadGlobalDefines("xml\\GlobalDefines_TerrainAdjuster.xml", cache))
-		return false;
 	// merkava120 end
 
 	// BETTER_BTS_AI_MOD, XML Options, 02/21/10, jdog5000: START
