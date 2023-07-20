@@ -612,16 +612,16 @@ public: // advc: made several functions const
 	int getBiomePlot(int iBiome, int iIndex);
 	Biome getPlotBiome(int iPlot) { return m_Biomes[getPlotBiomeIndex(iPlot)]; }
 	bool isBiomeInRange(int iBiome);
-	Biome getBiome(int iBiome) { return m_Biomes[iBiome]; }
 	void removeTile(int iPlot, int iBiome);
 	void addTile(int iPlot, int iBiome);
-	void flipToAdjacentBiome(int iPlot, bool bExcludeSame = false);
+	void flipToAdjacentBiome(int iPlot, int iBiomeRuleset, int iTileRuleset, bool bExcludeSame = false);
 	void addBiome(TerrainTypes eTerrain = NO_TERRAIN, FeatureTypes eFeature = NO_FEATURE, int iFeatureLevel = 0, int iHillLevel = 0, bool bRiver = false, bool bCoast = false, bool bCoastalSea = false, bool bOcean = false);
 	void addBiomeFromPlot(int iPlot);
 	void removeBiome(int iBiome);
-	int getMostSimilarBiome(int iPlot, std::vector< int > compareBiomes);
+	int getMostSimilarBiome(int iBiome);
 	int countAdjacentBiomeTiles(int iPlot, int iCountBiome);
-	int maxAdjacentBiomeIndex(int iPlot, bool bExcludeSame = false, bool bSharedWinsTies = false);
+	int maxAdjacentBiomeIndex(int iPlot, int iBiomeRuleset, int iTileRuleset, bool bExcludeSame = false, bool bSharedWinsTies = false);
+	bool isNewBiomeValid(int iNewBiome, int iOriginalBiome, bool bExcludeSame, int iPlot);
 	void mergeBiome(int iBiome, int iNewBiome);
 	void setBiomeTerrain(int iBiome, TerrainTypes eTerrain);
 	void setBiomeFeature(int iBiome, FeatureTypes eFeature);
@@ -638,13 +638,18 @@ public: // advc: made several functions const
 	bool isBiomeOcean(int iBiome);
 	int getBiomeSize(int iBiome);
 	void setPlotBiome(int iPlot, int iNewBiome);
-	void carveUpBiome(int iBiome);
+	void carveUpBiome(int iBiome, int iBiomeRuleset, int iTileRuleset);
 	void unBiomePlot(int iPlot);
 	void updateBiomeCharacteristics(int iBiome);
 	void resetBiomes();
 	void initBiomes();
-	void biomesAdjCheck(bool bBackwards = false);
-	void biomesSizeCheck();
+	void biomesAdjCheck(int iBiomeRuleset, int iTileRuleset, bool bBackwards = false);
+	void biomesSizeCheck(int iBiomeRuleset, int iTileRuleset);
+	void biomesNeighborsCheck();
+	void flipEmptyTiles(int iBiomeRuleset, int iTileRuleset);
+	void biomesFortifyCheck();
+	void biomesFortifyCheck2(); // much lighter version
+	void calculateBiomes();
 	// merk.biome end
 
 protected:
@@ -686,7 +691,7 @@ protected:
 	// merk.biome
 	std::vector< int > m_aiBiomesMap;
 	std::vector< Biome > m_Biomes;
-	void calculateBiomes();
+	bool isAdjacentRulesetValid(CvPlot& kPlot, CvPlot_const_t* pAdj, int iBiome, int iPlacementBiome, int iPlacementTile);
 	// merk.biome end
 };
 

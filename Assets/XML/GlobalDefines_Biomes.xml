@@ -14,7 +14,7 @@
 		<DefineName>PEAKS_NO_BIOME</DefineName>
 		<iDefineIntVal>1</iDefineIntVal>
 	</Define>
-	<!-- step 2 flips tiles to nearby biomes if they don't have enough of their own biome adjacent to them. How many is 'enough'? -->
+	<!-- adjacency check flips tiles to nearby biomes if they don't have enough of their own biome adjacent to them. How many is 'enough'? -->
 	<Define> 
 		<DefineName>MIN_ADJ_SHARE</DefineName>
 		<iDefineIntVal>3</iDefineIntVal>
@@ -24,32 +24,145 @@
 		<DefineName>PRIORITIZE_MATCHING_BIOMES</DefineName>
 		<iDefineIntVal>1</iDefineIntVal>
 	</Define>
-	<!-- step 3 flips small biomes to join bigger ones if they are under this size -->
+	<!-- size check flips small biomes to join bigger ones if they are under this size -->
 	<Define> 
 		<DefineName>MIN_BIOME_SIZE</DefineName>
-		<iDefineIntVal>6</iDefineIntVal>
+		<iDefineIntVal>8</iDefineIntVal>
 	</Define>
-	
-	<!-- configure ordering of steps / how many of each to do. -->
+	<!-- neighbor check merges biomes that are within this distance in FeatureLevel or HillLevel AND match terrain / feature / river /coast / etc -->
 	<Define> 
-		<DefineName>FIRST_ADJ_CHECKS</DefineName>
-		<iDefineIntVal>1</iDefineIntVal>
-	</Define>
-	<Define> 
-		<DefineName>THEN_SIZE_CHECKS</DefineName>
-		<iDefineIntVal>1</iDefineIntVal>
-	</Define>
-	<Define> 
-		<DefineName>THEN_ADJ_CHECKS</DefineName>
+		<DefineName>LEVEL_SIMILARITY</DefineName>
 		<iDefineIntVal>2</iDefineIntVal>
 	</Define>
+	<!-- if this is set to 1, river biomes will not be merged or flipped to adjacent non-river biomes. If set to 0, they will still not be merged with non-river biomes but individual tiles might get flipped -->
 	<Define> 
-		<DefineName>AND_THEN_SIZE_CHECKS</DefineName>
-		<iDefineIntVal>0</iDefineIntVal>
+		<DefineName>KEEP_RIVER_BIOMES_SEPARATE</DefineName>
+		<iDefineIntVal>1</iDefineIntVal>
+	</Define>
+	<!-- same for coasts (i.e. beaches, not sea coasts) -->
+	<Define> 
+		<DefineName>KEEP_COASTAL_BIOMES_SEPARATE</DefineName>
+		<iDefineIntVal>1</iDefineIntVal>
+	</Define>
+	
+	<!-- Does a new tile match current biome? If new tile has no feature, feature level must be less than or equal to this. If new tile has matching feature, feature level must be greater than or equal to this.
+	So this level is the "middle" where it doesn't matter. -->
+	<!-- note: levels are hardcoded as 0, 1, 2, 3, 4. -->
+	<Define> 
+		<DefineName>FEATURELEVEL_CUTOFF</DefineName>
+		<iDefineIntVal>1</iDefineIntVal>
+	</Define>
+	
+	<!-- Same thing for hills -->
+	<Define> 
+		<DefineName>HILLLEVEL_CUTOFF</DefineName>
+		<iDefineIntVal>1</iDefineIntVal>
+	</Define>
+	<!-- by default a feature that doesn't match is considered not matching the FeatureLevel regardless. Set this to 1 to consider non-matching features as 'no_feature' -->
+	<Define> 
+		<DefineName>DISREGARD_NONMATCHING_FEATURES</DefineName>
+		<iDefineIntVal>1</iDefineIntVal>
+	</Define>
+	
+	
+	<!-- CONFIGURE RULESETS
+	
+	Other options using prime number encoding thingy (it's strange but it works): Multiply desired results together, separate number for tile matching the new biome and matching the two tiles.  
+	2: terrains must match
+	3: features must match
+	5: both tiles are peaks or are not peaks, or feature level must match
+	7: hills / hill level must match 
+	11: rivers must match 
+	13: coastal land must match 
+	Note that 11 and 13 can also be required separately, they are here in case you want to only require them here and not in ALL adjacency checks. 
+	
+	Set a pair of checks both to 1 to always return true (i.e. skip that check)
+	Set a single check to 1 and it will be 'true' for all its rules 
+	Set a single check to 0 and it will check every rule (so probably 'false')
+	-->
+	
+	<!-- some examples
+	70 - standard biome check
+	42 - more specific biome check / standard tile check 
+	6006, 10010, 30030 - strict biome checks with features / feature levels / both
+	30030 - strict tile check (everything)
+	35 - levels / elevation check
+	generally multiply a tile check by 5 if you are including peaks in biomes -->
+	
+	<!-- for initial placement only, override the above with 
+	-1 for "place a biome in every plot"
+	-2 for "use the adjacency ruleset, then if none found place a biome"-->
+	<Define> 
+		<DefineName>INITIAL_PLACEMENT_RULESET_BIOME</DefineName>
+		<iDefineIntVal>1</iDefineIntVal>
 	</Define>
 	<Define> 
-		<DefineName>LAST_ADJ_CHECKS</DefineName>
-		<iDefineIntVal>0</iDefineIntVal>
+		<DefineName>INITIAL_PLACEMENT_RULESET_TILE</DefineName>
+		<iDefineIntVal>6006</iDefineIntVal>
+	</Define>
+	<!-- used by adjacency checks -->
+	<Define> 
+		<DefineName>ADJACENCY_RULESET_BIOME</DefineName>
+		<iDefineIntVal>10010</iDefineIntVal>
+	</Define>
+	<Define> 
+		<DefineName>ADJACENCY_RULESET_TILE</DefineName>
+		<iDefineIntVal>1</iDefineIntVal>
+	</Define>
+	<!-- second way, so you can apply two layers of checks if you want -->
+	<Define> 
+		<DefineName>SECOND_ADJACENCY_RULESET_BIOME</DefineName>
+		<iDefineIntVal>1</iDefineIntVal>
+	</Define>
+	<Define> 
+		<DefineName>SECOND_ADJACENCY_RULESET_TILE</DefineName>
+		<iDefineIntVal>1</iDefineIntVal>
+	</Define>
+	<!-- ruleset used when a biome is distributed to its neighbors -->
+	<Define> 
+		<DefineName>CARVE_UP_RULESET_BIOME</DefineName>
+		<iDefineIntVal>6</iDefineIntVal>
+	</Define>
+	<Define> 
+		<DefineName>CARVE_UP_RULESET_TILE</DefineName>
+		<iDefineIntVal>1</iDefineIntVal>
+	</Define>
+	<!-- if less than this size, small biomes will be merged into nearby ones rather than carved up and distributed. Merging finds the MOST similar rather than using hard rules. -->
+	<Define> 
+		<DefineName>MERGE_INSTEAD_OF_CARVE_CUTOFF</DefineName>
+		<iDefineIntVal>4</iDefineIntVal>
+	</Define>
+	
+	<!-- configure ordering of steps / how many of each to do. Type a code; 
+	1= do adjacency check (adj same biome < MIN_ADJ_SHARE), 
+	2=do biome neighbor check (merges adj and identical biomes), 
+	3=do biome size check (min biome size < MIN_BIOME_SIZE, merge or carve),
+	4=do adjacency check but go through plots backwards, 
+	5=adjacency check with second ruleset, 
+	6=adjacency check with second ruleset backwards,
+	7=flip empty tiles to adjacent biomes using first ruleset, 
+	8=flip empty tiles to adjacent biomes using second ruleset,
+	9=check over biomes to make sure they are fully interconnected
+	-->
+	<!-- note that these are applied in REVERSE order -->
+	<!-- also, there's a limit to how many you can do, because integers -->
+	<Define> 
+		<DefineName>BIOME_CHECK_LIST</DefineName>
+		<iDefineIntVal>583295832</iDefineIntVal>
+	</Define>
+	<!-- for strict 30030 initial placement, 5931932 does okay, or 58393212 -->
+	<!-- 1953952395 does well with loosey goosey initial placement -->
+	
+	
+	
+	<!-- these are used only when redoing all the biomes as part of check #9. a biome is considered a river biome if its percentage of rivers is greater than this, etc. -->
+	<Define> 
+		<DefineName>PERCENT_RIVERS</DefineName>
+		<iDefineIntVal>80</iDefineIntVal>
+	</Define>
+	<Define> 
+		<DefineName>PERCENT_BEACHES</DefineName>
+		<iDefineIntVal>80</iDefineIntVal>
 	</Define>
 	
 	<!-- minimum percentages to be considered a 'level' -->

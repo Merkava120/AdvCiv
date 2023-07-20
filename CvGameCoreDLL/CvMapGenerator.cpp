@@ -978,6 +978,7 @@ void CvMapGenerator::afterGeneration()
 	// Allows for user-defined Python Actions for map generation after it's already been created
 	GC.getPythonCaller()->callMapFunction("afterGeneration");
 	GC.getLogger().logMapStats(); // advc.mapstat
+
 }
 
 void CvMapGenerator::setPlotTypes(const int* paiPlotTypes)
