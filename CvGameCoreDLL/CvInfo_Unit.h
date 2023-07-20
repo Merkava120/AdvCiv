@@ -492,8 +492,8 @@ protected:
 	int m_iLeaderExperience;
 
 	bool m_bAnimal;
-	bool m_iSpawnChannel; // merk.rasa
-	bool m_iSpawnWeight; // merk.rasa
+	int m_iSpawnChannel; // merk.rasa
+	int m_iSpawnWeight; // merk.rasa
 	bool m_bFoodProduction;
 	bool m_bNoBadGoodies;
 	bool m_bOnlyDefensive;

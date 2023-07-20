@@ -101,5 +101,12 @@
 		<DefineName>ANIMAL_FEATURE_NATIVE_WEIGHT</DefineName>
 		<iDefineIntVal>500</iDefineIntVal>
 	</Define>
+	
+	
+	<!-- only spawn each channel once; i.e. each area will be unique -->
+	<Define>
+		<DefineName>UNIQUE_SPAWN_CHANNELS</DefineName>
+		<iDefineIntVal>1</iDefineIntVal>
+	</Define>
 
 </Civ4Defines>

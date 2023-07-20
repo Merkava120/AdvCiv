@@ -7297,15 +7297,16 @@ void CvGame::createAnimals()
 					pLoopArea, iMinAnimalStartingDist);
 			if (pPlot == NULL)
 				continue;
+			// merk.rasa2: there is a simpler way
 			// merk.rasa: let's make a list of animal channels that are already here, eh?
-			std::vector<UnitTypes> aiChannelUnits;
+			/*std::vector<UnitTypes> aiChannelUnits;
 			FOR_EACH_UNIT(pAnimal, GET_PLAYER(BARBARIAN_PLAYER))
 			{
 				if (!(pAnimal->plot()->isArea(*pLoopArea)))
 					continue;
 				if (pAnimal->getUnitInfo().getSpawnChannel() != -1)
 					aiChannelUnits.push_back(pAnimal->getUnitType());
-			}
+			}*/
 			// merk.rasa END
 
 			UnitTypes eBestUnit = NO_UNIT;
@@ -7333,10 +7334,51 @@ void CvGame::createAnimals()
 				// below also weights toward feature natives. 
 				// I might add further conditions later. 
 				{
-					if ((int)(aiChannelUnits.size()) <= 0)
+					// merk.rasa2 new method that is less intensive
+					/*if ((int)(aiChannelUnits.size()) <= 0)
+					{*/
+					// does restrict animals to spawning with the same group every game though
+					// debugging
+					if (kUnit.getUnitClassType() == GC.getInfoTypeForString("UNITCLASS_PANTHER")) 
+						int fart = 0;
+					if (kUnit.getUnitClassType() == GC.getInfoTypeForString("UNITCLASS_LION"))
+						int fart = 4;
+					bool bCanSpawn = false;
+					int iSpawnChannel = kUnit.getSpawnChannel();
+					int iAreaChannel = pPlot->area()->getBarbarianSpawnChannel();
+					if (iSpawnChannel == -1)
+						bCanSpawn = true;
+					else if (iSpawnChannel != iAreaChannel)
+					{
+						// Does the area have a channel yet? 
+						if (iAreaChannel <= 0)
+						{
+							// see if there is a different area this unit could spawn in 
+							bool bAlreadySpawned = false;
+							if (GC.getDefineINT("UNIQUE_SPAWN_CHANNELS")) // only if global define is set
+							{
+								FOR_EACH_AREA(pArea)
+								{
+									if (pArea->getBarbarianSpawnChannel() != iSpawnChannel)
+										continue;
+									bAlreadySpawned = true;
+									break;
+								}
+							}
+							// Set to ours
+							if (!bAlreadySpawned)
+							{
+								pPlot->area()->setBarbarianSpawnChannel(kUnit.getSpawnChannel());
+								bCanSpawn = true;
+							}
+						}
+					}
+					else if (iSpawnChannel == iAreaChannel)
+						bCanSpawn = true;
+					if (bCanSpawn)
 					{
 						int iValue = 1 + SyncRandNum(1000) + kUnit.getSpawnWeight(); // can weight units in xml.
-							// much more likely to choose this animal if the feature native matches. 
+// much more likely to choose this animal if the feature native matches. 
 						if (kUnit.getFeatureNative(pPlot->getFeatureType()))
 							iValue += GC.getDefineINT("ANIMAL_FEATURE_NATIVE_WEIGHT");
 						if (iValue > iBestValue)
@@ -7345,27 +7387,28 @@ void CvGame::createAnimals()
 							iBestValue = iValue;
 						}
 					}
-					else
-					{
-						for (int anim = 0; anim < (int)(aiChannelUnits.size()); anim++)
-						{
-							// if the channel matches another channel in this area (as determined above),
-							// then unless the other channel unit is the same unit as this one, can't place this.
-							if (GC.getUnitInfo(aiChannelUnits[anim]).getSpawnChannel() != kUnit.getSpawnChannel() ||
-								eLoopUnit == aiChannelUnits[anim])
-							{
-								int iValue = 1 + SyncRandNum(1000) + kUnit.getSpawnWeight(); // can weight units in xml.
-								// much more likely to choose this animal if the feature native matches. 
-								if (kUnit.getFeatureNative(pPlot->getFeatureType()))
-									iValue += GC.getDefineINT("ANIMAL_FEATURE_NATIVE_WEIGHT");
-								if (iValue > iBestValue)
-								{
-									eBestUnit = eLoopUnit;
-									iBestValue = iValue;
-								}
-							}
-						}
-					}
+					//}
+					/*else
+					{*/
+					/*for (int anim = 0; anim < (int)(aiChannelUnits.size()); anim++)
+					{*/
+						// if the channel matches another channel in this area (as determined above),
+						// then unless the other channel unit is the same unit as this one, can't place this.
+					//	if (GC.getUnitInfo(aiChannelUnits[anim]).getSpawnChannel() != kUnit.getSpawnChannel() ||
+					//		eLoopUnit == aiChannelUnits[anim])
+					//	{
+					//		int iValue = 1 + SyncRandNum(1000) + kUnit.getSpawnWeight(); // can weight units in xml.
+					//		// much more likely to choose this animal if the feature native matches. 
+					//		if (kUnit.getFeatureNative(pPlot->getFeatureType()))
+					//			iValue += GC.getDefineINT("ANIMAL_FEATURE_NATIVE_WEIGHT");
+					//		if (iValue > iBestValue)
+					//		{
+					//			eBestUnit = eLoopUnit;
+					//			iBestValue = iValue;
+					//		}
+					//	}
+					//}
+					//}
 				}
 			}
 			// merk.rasa END			

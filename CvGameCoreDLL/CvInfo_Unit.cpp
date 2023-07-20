@@ -116,7 +116,7 @@ m_iLeaderExperience(0),
 m_iLeaderPromotion(NO_PROMOTION),
 // </kmodx>
 m_bAnimal(false),
-m_iSpawnChannel(0), // merk.rasa
+m_iSpawnChannel(-1), // merk.rasa
 m_iSpawnWeight(0), // merk.rasa
 m_bFoodProduction(false),
 m_bNoBadGoodies(false),
@@ -1319,7 +1319,7 @@ bool CvUnitInfo::read(CvXMLLoadUtility* pXML)
 	pXML->SetInfoIDFromChildXmlVal(m_eAdvisorType, "Advisor");
 
 	pXML->GetChildXmlValByName(&m_bAnimal, "bAnimal");
-	pXML->GetChildXmlValByName(&m_iSpawnChannel, "iSpawnChannel", 0); // merk.rasa
+	pXML->GetChildXmlValByName(&m_iSpawnChannel, "iSpawnChannel", -1); // merk.rasa
 	pXML->GetChildXmlValByName(&m_iSpawnWeight, "iSpawnWeight", 0); // merk.rasa
 	pXML->GetChildXmlValByName(&m_bFoodProduction, "bFood");
 	pXML->GetChildXmlValByName(&m_bNoBadGoodies, "bNoBadGoodies");
