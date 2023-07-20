@@ -1433,34 +1433,6 @@ void CvMap::calculateAreas()
 		{
 			CvArea* pArea = addArea();
 			pArea->init(kLoopPlot.isWater());
-			// merk.rasa begin
-			iNumAreas++; 
-			// This area might have already had a channel set, which may have been deleted, or may not have been. 
-			// so let's just set the area's channel equal to the channel of any barbarian unit on this tile. 
-			// this will overwrite accidental random channels set by other tiles in the area. 
-			if (pArea->getBarbarianSpawnChannel() <= 0)
-			{
-				FOR_EACH_UNIT_IN(pUnit, kLoopPlot)
-				{
-					// skip non-barbarians, they can have channels but it doesn't affect anything. 
-					if (pUnit->getOwner() != GET_PLAYER(BARBARIAN_PLAYER).getID())
-						continue;
-					// skip animals, their channel stuff is different
-					if (pUnit->isAnimal())
-						continue;
-					int iChannel = GC.getUnitInfo(pUnit->getUnitType()).getSpawnChannel();
-					if (iChannel > 0)
-					{
-						pArea->setBarbarianSpawnChannel(iChannel);
-						break;
-					}
-				}
-			}
-			// It's important to note that the above may not have set a channel for the area. 
-			// If not, the channel will end up being set to whatever units spawn. 
-			// This means barbarians can be localized to terrains AND split between continents,
-			// so you can have a few different tribes of desert barbarians, for example. 
-			// merk.rasa END
 			kLoopPlot.setArea(pArea);
 			gDLL->getFAStarIFace()->GeneratePath(&GC.getAreaFinder(),
 					kLoopPlot.getX(), kLoopPlot.getY(), -1, -1,

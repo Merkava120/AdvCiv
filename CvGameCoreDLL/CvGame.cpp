@@ -7334,47 +7334,54 @@ void CvGame::createAnimals()
 				// below also weights toward feature natives. 
 				// I might add further conditions later. 
 				{
-					// merk.rasa2 new method that is less intensive
-					/*if ((int)(aiChannelUnits.size()) <= 0)
-					{*/
-					// does restrict animals to spawning with the same group every game though
-					// debugging
-					if (kUnit.getUnitClassType() == GC.getInfoTypeForString("UNITCLASS_PANTHER")) 
-						int fart = 0;
-					if (kUnit.getUnitClassType() == GC.getInfoTypeForString("UNITCLASS_LION"))
-						int fart = 4;
 					bool bCanSpawn = false;
 					int iSpawnChannel = kUnit.getSpawnChannel();
-					int iAreaChannel = pPlot->area()->getBarbarianSpawnChannel();
+					// merk.rasniche system
 					if (iSpawnChannel == -1)
 						bCanSpawn = true;
-					else if (iSpawnChannel != iAreaChannel)
+					else if (GC.getDefineINT("NICHE_SYSTEM"))
 					{
-						// Does the area have a channel yet? 
-						if (iAreaChannel <= 0)
+						bCanSpawn = !(pPlot->area()->isNichePlaced(iSpawnChannel, eLoopUnit)); // this returns false if the unit matches the chosen unit for the niche
+					}
+					else
+					{
+
+
+						// merk.rasa2 new method that is less intensive
+						/*if ((int)(aiChannelUnits.size()) <= 0)
+						{*/
+						// does restrict animals to spawning with the same group every game though
+						// debugging
+						
+						int iAreaChannel = pPlot->area()->getBarbarianSpawnChannel();
+						if (iSpawnChannel != iAreaChannel)
 						{
-							// see if there is a different area this unit could spawn in 
-							bool bAlreadySpawned = false;
-							if (GC.getDefineINT("UNIQUE_SPAWN_CHANNELS")) // only if global define is set
+							// Does the area have a channel yet? 
+							if (iAreaChannel <= 0)
 							{
-								FOR_EACH_AREA(pArea)
+								// see if there is a different area this unit could spawn in 
+								bool bAlreadySpawned = false;
+								if (GC.getDefineINT("UNIQUE_SPAWN_CHANNELS")) // only if global define is set
 								{
-									if (pArea->getBarbarianSpawnChannel() != iSpawnChannel)
-										continue;
-									bAlreadySpawned = true;
-									break;
+									FOR_EACH_AREA(pArea)
+									{
+										if (pArea->getBarbarianSpawnChannel() != iSpawnChannel)
+											continue;
+										bAlreadySpawned = true;
+										break;
+									}
+								}
+								// Set to ours
+								if (!bAlreadySpawned)
+								{
+									pPlot->area()->setBarbarianSpawnChannel(kUnit.getSpawnChannel());
+									bCanSpawn = true;
 								}
 							}
-							// Set to ours
-							if (!bAlreadySpawned)
-							{
-								pPlot->area()->setBarbarianSpawnChannel(kUnit.getSpawnChannel());
-								bCanSpawn = true;
-							}
 						}
+						else 
+							bCanSpawn = true;
 					}
-					else if (iSpawnChannel == iAreaChannel)
-						bCanSpawn = true;
 					if (bCanSpawn)
 					{
 						int iValue = 1 + SyncRandNum(1000) + kUnit.getSpawnWeight(); // can weight units in xml.

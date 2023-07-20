@@ -28,6 +28,32 @@ CvArea::~CvArea()
 void CvArea::init(bool bWater) // advc: iID param removed; always gets set beforehand.
 {
 	reset(getID(), bWater);
+	// merk.rasniche
+	if (GC.getDefineINT("NICHE_SYSTEM"))
+		resetAnimalNiches();
+	// merk.rasa begin
+	// This area might have already had a channel set, which may have been deleted, or may not have been. 
+	// so let's just set the area's channel equal to the channel of any barbarian unit on this tile. 
+	// this will overwrite accidental random channels set by other tiles in the area. 
+	if (getBarbarianSpawnChannel() <= 0)
+	{
+		FOR_EACH_UNIT(pBarb, GET_PLAYER(BARBARIAN_PLAYER))
+		{
+			if (!(pBarb->plot()->isArea(*this)))
+				continue;
+			int iChannel = GC.getUnitInfo(pBarb->getUnitType()).getSpawnChannel();
+			if (iChannel > 0)
+			{
+				setBarbarianSpawnChannel(iChannel);
+				break;
+			}
+		}
+	}
+	// It's important to note that the above may not have set a channel for the area. 
+	// If not, the channel will end up being set to whatever units spawn. 
+	// This means barbarians can be localized to terrains AND split between continents,
+	// so you can have a few different tribes of desert barbarians, for example. 
+	// merk.rasa END
 }
 
 
@@ -560,7 +586,48 @@ void CvArea::setBarbarianSpawnChannel(int iChannel)
 {
 	m_iBarbarianSpawnChannel = iChannel;
 }
-// merk.rasa end
+// merk.rasniche
+bool CvArea::isNichePlaced(int iNiche, UnitTypes eUnit)
+{
+	if (m_aiAnimalNiches[iNiche] == NO_UNIT)
+	{
+		setNichePlaced(iNiche, eUnit);
+		return false;
+	}
+	else if (m_aiAnimalNiches[iNiche] != eUnit)
+		return true;
+	else
+		return false;
+}
+void CvArea::setNichePlaced(int iNiche, UnitTypes eUnit)
+{
+	m_aiAnimalNiches[iNiche] = eUnit;
+	return;
+}
+// merk.rasniche: loop through units, find max niche, and make the list that size
+void CvArea::resetAnimalNiches()
+{
+	m_aiAnimalNiches.clear();
+	int iMax = -1;
+	for (int i = 0; i < GC.getNumUnitInfos(); i++)
+	{
+		if (GC.getUnitInfo(i).getSpawnChannel() > iMax)
+			iMax = GC.getUnitInfo(i).getSpawnChannel();
+	}
+	for (int a = 0; a <= iMax; a++)
+	{
+		m_aiAnimalNiches.push_back(NO_UNIT);
+	}
+	// Check units in area already
+	FOR_EACH_UNIT(pAnimal, GET_PLAYER(BARBARIAN_PLAYER))
+	{
+		if (!(pAnimal->plot()->isArea(*this)))
+			continue;
+		if (pAnimal->getUnitInfo().getSpawnChannel() > -1)
+			setNichePlaced(pAnimal->getUnitInfo().getSpawnChannel(), pAnimal->getUnitType());
+	}
+}
+// merkava120 end
 // advc.opt: No longer used
 /*int CvArea::getNumImprovements(ImprovementTypes eImprovement) const
 {
