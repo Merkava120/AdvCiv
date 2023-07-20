@@ -1187,6 +1187,7 @@ protected:
 	void createBarbarianCities();
 	void createBarbarianUnits();
 	void createAnimals();
+	bool isCanSpawnBarb(const CvUnitInfo& kUnit, CvPlot* pPlot, UnitTypes eLoopUnit); // merk.rasboth
 	// <advc.300>
 	void createBarbarianCity(bool bNoCivCities, int iProbModifierPercent = 100);
 	int numBarbariansToCreate(int iTilesPerUnit, int iTiles, int iUnowned,

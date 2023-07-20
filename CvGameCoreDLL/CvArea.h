@@ -199,7 +199,7 @@ public:
 	void setBarbarianSpawnChannel(int iChannel);
 	// merk.rasa end
 	// merk.rasniche begin
-	bool isNichePlaced(int iNiche, UnitTypes eUnit);
+	bool isAlreadyFilledNiche(int iNiche, UnitTypes eUnit);
 	void setNichePlaced(int iNiche, UnitTypes eUnit); 
 	void resetAnimalNiches();
 	// merk.rasniche end

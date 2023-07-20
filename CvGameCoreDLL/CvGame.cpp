@@ -7334,58 +7334,11 @@ void CvGame::createAnimals()
 				// below also weights toward feature natives. 
 				// I might add further conditions later. 
 				{
-					bool bCanSpawn = false;
-					int iSpawnChannel = kUnit.getSpawnChannel();
-					// merk.rasniche system
-					if (iSpawnChannel == -1)
-						bCanSpawn = true;
-					else if (GC.getDefineINT("NICHE_SYSTEM"))
-					{
-						bCanSpawn = !(pPlot->area()->isNichePlaced(iSpawnChannel, eLoopUnit)); // this returns false if the unit matches the chosen unit for the niche
-					}
-					else
-					{
-
-
-						// merk.rasa2 new method that is less intensive
-						/*if ((int)(aiChannelUnits.size()) <= 0)
-						{*/
-						// does restrict animals to spawning with the same group every game though
-						// debugging
-						
-						int iAreaChannel = pPlot->area()->getBarbarianSpawnChannel();
-						if (iSpawnChannel != iAreaChannel)
-						{
-							// Does the area have a channel yet? 
-							if (iAreaChannel <= 0)
-							{
-								// see if there is a different area this unit could spawn in 
-								bool bAlreadySpawned = false;
-								if (GC.getDefineINT("UNIQUE_SPAWN_CHANNELS")) // only if global define is set
-								{
-									FOR_EACH_AREA(pArea)
-									{
-										if (pArea->getBarbarianSpawnChannel() != iSpawnChannel)
-											continue;
-										bAlreadySpawned = true;
-										break;
-									}
-								}
-								// Set to ours
-								if (!bAlreadySpawned)
-								{
-									pPlot->area()->setBarbarianSpawnChannel(kUnit.getSpawnChannel());
-									bCanSpawn = true;
-								}
-							}
-						}
-						else 
-							bCanSpawn = true;
-					}
-					if (bCanSpawn)
+					// merk.rasboth: I like both systems so now this uses both. 
+					if (isCanSpawnBarb(kUnit, pPlot, eLoopUnit))
 					{
 						int iValue = 1 + SyncRandNum(1000) + kUnit.getSpawnWeight(); // can weight units in xml.
-// much more likely to choose this animal if the feature native matches. 
+						// can make it more likely to choose this animal if the feature native matches. 
 						if (kUnit.getFeatureNative(pPlot->getFeatureType()))
 							iValue += GC.getDefineINT("ANIMAL_FEATURE_NATIVE_WEIGHT");
 						if (iValue > iBestValue)
@@ -7394,28 +7347,6 @@ void CvGame::createAnimals()
 							iBestValue = iValue;
 						}
 					}
-					//}
-					/*else
-					{*/
-					/*for (int anim = 0; anim < (int)(aiChannelUnits.size()); anim++)
-					{*/
-						// if the channel matches another channel in this area (as determined above),
-						// then unless the other channel unit is the same unit as this one, can't place this.
-					//	if (GC.getUnitInfo(aiChannelUnits[anim]).getSpawnChannel() != kUnit.getSpawnChannel() ||
-					//		eLoopUnit == aiChannelUnits[anim])
-					//	{
-					//		int iValue = 1 + SyncRandNum(1000) + kUnit.getSpawnWeight(); // can weight units in xml.
-					//		// much more likely to choose this animal if the feature native matches. 
-					//		if (kUnit.getFeatureNative(pPlot->getFeatureType()))
-					//			iValue += GC.getDefineINT("ANIMAL_FEATURE_NATIVE_WEIGHT");
-					//		if (iValue > iBestValue)
-					//		{
-					//			eBestUnit = eLoopUnit;
-					//			iBestValue = iValue;
-					//		}
-					//	}
-					//}
-					//}
 				}
 			}
 			// merk.rasa END			
@@ -7426,6 +7357,54 @@ void CvGame::createAnimals()
 			}
 		}
 	}
+}
+// merk.rasboth extracted this into its own method
+bool CvGame::isCanSpawnBarb(const CvUnitInfo& kUnit, CvPlot* pPlot, UnitTypes eLoopUnit)
+{
+	if (kUnit.getFeatureImpassable(pPlot->getFeatureType()))
+		return false;
+	if (kUnit.getTerrainImpassable(pPlot->getTerrainType()))
+		return false;
+	// will add more stuff here later. 
+	bool bCanSpawn = false;
+	int iSpawnChannel = kUnit.getSpawnChannel();
+	int iAreaChannel = pPlot->area()->getBarbarianSpawnChannel();
+	if (iSpawnChannel != iAreaChannel)
+	{
+		// Does the area have a channel yet? 
+		if (iAreaChannel <= 0)
+		{
+			// see if there is a different area this unit could spawn in 
+			bool bAlreadySpawned = false;
+			if (GC.getDefineINT("UNIQUE_SPAWN_CHANNELS")) // only if global define is set
+			{
+				FOR_EACH_AREA(pArea)
+				{
+					if (pArea->getBarbarianSpawnChannel() != iSpawnChannel)
+						continue;
+					bAlreadySpawned = true;
+					break;
+				}
+			}
+			// Set to ours
+			if (!bAlreadySpawned)
+			{
+				pPlot->area()->setBarbarianSpawnChannel(kUnit.getSpawnChannel());
+				bCanSpawn = true;
+			}
+		}
+	}
+	else
+		bCanSpawn = true;
+	if (bCanSpawn) // if it matches the area correctly, THEN check the niches (otherwise you get units of different area channels stuck in the same one)
+	{
+		int iNiche = kUnit.getNiche();
+		if (iSpawnChannel == -1 && iNiche == -1)
+			bCanSpawn = true;
+		else
+			bCanSpawn = !(pPlot->area()->isAlreadyFilledNiche(iNiche, eLoopUnit)); // this returns false if the unit matches the chosen unit for the niche
+	}
+	return bCanSpawn;
 }
 
 // advc.307:
@@ -7748,7 +7727,7 @@ UnitTypes CvGame::randomBarbarianUnit(UnitAITypes eUnitAI, CvArea const& kArea, 
 	FOR_EACH_ENUM(Tech)
 	{
 		if (GET_TEAM(BARBARIAN_TEAM).isHasTech(eLoopTech) &&
-			GC.getInfo(eLoopTech).getResearchCost() > 100)
+			GC.getInfo(eLoopTech).getResearchCost() > /*merk.rasboth global define*/GC.getDefineINT("BARB_TECH_EXPENSIVE_THRESHOLD"))
 		{
 			bAnyExpensiveTech = true;
 			break;
@@ -7773,14 +7752,18 @@ UnitTypes CvGame::randomBarbarianUnit(UnitAITypes eUnitAI, CvArea const& kArea, 
 		{
 			continue;
 		}
-		// merk.rasa: skip units that do not match the channel. If the area does not have a channel then this will be ignored, so units are spawned randomly instead, and then that ends up determining the area channel. 
-		if (kUnit.getSpawnChannel() > 0 && kArea.getBarbarianSpawnChannel() != kUnit.getSpawnChannel() && kArea.getBarbarianSpawnChannel() > 0)
+		// merk.rasboth: applying the canSpawn function to regular barbarians too. No reason not to. 
+		if (!isCanSpawnBarb(kUnit, &kPlot, eUnit))
 			continue;
+		//// merk.rasa: skip units that do not match the channel. If the area does not have a channel then this will be ignored, so units are spawned randomly instead, and then that ends up determining the area channel. 
+		//if (kUnit.getSpawnChannel() > 0 && kArea.getBarbarianSpawnChannel() != kUnit.getSpawnChannel() && kArea.getBarbarianSpawnChannel() > 0)
+		//	continue;
 		// prevent units from being considered for their impassable tiles. 
-		if (kUnit.getFeatureImpassable(kPlot.getFeatureType()))
+		// merk.rasboth wrapped into the can spawn function
+		/*if (kUnit.getFeatureImpassable(kPlot.getFeatureType()))
 			continue;
 		if (kUnit.getTerrainImpassable(kPlot.getTerrainType()))
-			continue;
+			continue;*/
 		// merk.rasa end
 		// <advc.301>
 		BonusTypes const eAndBonus = kUnit.getPrereqAndBonus();

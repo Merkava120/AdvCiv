@@ -201,6 +201,7 @@ public: /*  All const functions are exposed to Python except some related to art
 	void setCommandType(CommandTypes eNewType);
 
 	bool isAnimal() const { return m_bAnimal; }
+	int getNiche() const { return m_iNiche; } // merk.rasboth
 	int getSpawnChannel() const { return m_iSpawnChannel; } // merk.rasa
 	int getSpawnWeight() const { return m_iSpawnWeight; } // merk.rasa
 	bool isFoodProduction() const { return m_bFoodProduction; }
@@ -492,6 +493,7 @@ protected:
 	int m_iLeaderExperience;
 
 	bool m_bAnimal;
+	int m_iNiche; // merk.rasboth
 	int m_iSpawnChannel; // merk.rasa
 	int m_iSpawnWeight; // merk.rasa
 	bool m_bFoodProduction;

@@ -116,6 +116,7 @@ m_iLeaderExperience(0),
 m_iLeaderPromotion(NO_PROMOTION),
 // </kmodx>
 m_bAnimal(false),
+m_iNiche(-1), // merk.rasboth
 m_iSpawnChannel(-1), // merk.rasa
 m_iSpawnWeight(0), // merk.rasa
 m_bFoodProduction(false),
@@ -878,6 +879,7 @@ void CvUnitInfo::read(FDataStreamBase* stream)
 	stream->Read(&m_iNumUnitNames);
 	stream->Read((int*)&m_eCommandType);
 	stream->Read(&m_bAnimal);
+	stream->Read(&m_iNiche); // merk.rasboth
 	stream->Read(&m_iSpawnChannel); // merk.rasa
 	stream->Read(&m_iSpawnWeight); // merk.rasa
 	stream->Read(&m_bFoodProduction);
@@ -1184,6 +1186,7 @@ void CvUnitInfo::write(FDataStreamBase* stream)
 	stream->Write(m_iNumUnitNames);
 	stream->Write(m_eCommandType);
 	stream->Write(m_bAnimal);
+	stream->Write(m_iNiche); // merk.rasboth
 	stream->Write(m_iSpawnChannel); // merk.rasa
 	stream->Write(m_iSpawnWeight); // merk.rasa
 	stream->Write(m_bFoodProduction);
@@ -1319,6 +1322,7 @@ bool CvUnitInfo::read(CvXMLLoadUtility* pXML)
 	pXML->SetInfoIDFromChildXmlVal(m_eAdvisorType, "Advisor");
 
 	pXML->GetChildXmlValByName(&m_bAnimal, "bAnimal");
+	pXML->GetChildXmlValByName(&m_iNiche, "iNiche", -1); // merk.rasboth
 	pXML->GetChildXmlValByName(&m_iSpawnChannel, "iSpawnChannel", -1); // merk.rasa
 	pXML->GetChildXmlValByName(&m_iSpawnWeight, "iSpawnWeight", 0); // merk.rasa
 	pXML->GetChildXmlValByName(&m_bFoodProduction, "bFood");
