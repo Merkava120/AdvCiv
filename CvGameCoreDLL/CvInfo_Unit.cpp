@@ -2558,19 +2558,19 @@ bool CvPromotionInfo::read(CvXMLLoadUtility* pXML)
 	// merk.promo1 begin
 	pXML->SetInfoIDFromChildXmlVal(m_eSeeInvisible, "SeeInvisible");
 	pXML->SetInfoIDFromChildXmlVal(m_eInvisible, "Invisible");
-	pXML->GetChildXmlValByName(&m_bDoubleMoveOpen, "bDoubleMoveOpen");
-	pXML->GetChildXmlValByName(&m_bDoubleMoveFlatlands, "bDoubleMoveFlatlands");
-	pXML->GetChildXmlValByName(&m_iOpenAttack, "iOpenAttack");
-	pXML->GetChildXmlValByName(&m_iOpenDefense, "iOpenDefense");
-	pXML->GetChildXmlValByName(&m_iFlatlandsAttack, "iFlatlandsAttack");
-	pXML->GetChildXmlValByName(&m_iFlatlandsDefense, "iFlatlandsDefense");
-	pXML->GetChildXmlValByName(&m_bUnitCombatAttack, "bUnitCombatAttack");
-	pXML->GetChildXmlValByName(&m_bUnitCombatDefense, "bUnitCombatDefense");
-	pXML->GetChildXmlValByName(&m_bCanMoveImpassable, "bCanMoveImpassable");
+	pXML->GetChildXmlValByName(&m_bDoubleMoveOpen, "bDoubleMoveOpen", false);
+	pXML->GetChildXmlValByName(&m_bDoubleMoveFlatlands, "bDoubleMoveFlatlands", false);
+	pXML->GetChildXmlValByName(&m_iOpenAttack, "iOpenAttack", 0);
+	pXML->GetChildXmlValByName(&m_iOpenDefense, "iOpenDefense", 0);
+	pXML->GetChildXmlValByName(&m_iFlatlandsAttack, "iFlatlandsAttack", 0);
+	pXML->GetChildXmlValByName(&m_iFlatlandsDefense, "iFlatlandsDefense", 0);
+	pXML->GetChildXmlValByName(&m_bUnitCombatAttack, "bUnitCombatAttack", false);
+	pXML->GetChildXmlValByName(&m_bUnitCombatDefense, "bUnitCombatDefense", false);
+	pXML->GetChildXmlValByName(&m_bCanMoveImpassable, "bCanMoveImpassable", false);
 	// merk.dp begin
-	pXML->GetChildXmlValByName(&m_iChanceGain, "iChanceGain");
-	pXML->GetChildXmlValByName(&m_bGainMatchConditions, "bGainMatchConditions");
-	pXML->GetChildXmlValByName(&m_bNoDirect, "bNoDirect");
+	pXML->GetChildXmlValByName(&m_iChanceGain, "iChanceGain", 0);
+	pXML->GetChildXmlValByName(&m_bGainMatchConditions, "bGainMatchConditions", false);
+	pXML->GetChildXmlValByName(&m_bNoDirect, "bNoDirect", false);
 	// merkava120 end
 	pXML->GetChildXmlValByName(&m_bAmphib, "bAmphib");
 	pXML->GetChildXmlValByName(&m_bRiver, "bRiver");

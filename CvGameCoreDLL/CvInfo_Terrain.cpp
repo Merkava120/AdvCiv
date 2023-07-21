@@ -39,9 +39,9 @@ m_bPlaceOnce(false),
 m_bPlaceInGroup(false),
 m_bSurroundedByBase(false),
 m_piTerrainWeights(NULL),
-m_piFeatureWeights(NULL),
+//m_piFeatureWeights(NULL),
 m_piAdjTerrainWeights(NULL),
-m_piAdjFeatureWeights(NULL),
+//m_piAdjFeatureWeights(NULL),
 m_iCoastAdjacentWeight(0),
 m_iHillsAdjacentWeight(0),
 // merk.msm end
@@ -65,9 +65,7 @@ CvTerrainInfo::~CvTerrainInfo()
 	SAFE_DELETE_ARRAY(m_pi3DAudioScriptFootstepIndex);
 	// merk.msm
 	SAFE_DELETE_ARRAY(m_piTerrainWeights);
-	SAFE_DELETE_ARRAY(m_piFeatureWeights);
 	SAFE_DELETE_ARRAY(m_piAdjTerrainWeights);
-	SAFE_DELETE_ARRAY(m_piAdjFeatureWeights);
 	// merk.msm end
 }
 
@@ -112,21 +110,21 @@ int CvTerrainInfo::getTerrainWeight(int i) const
 	FAssertBounds(0, GC.getNumTerrainInfos(), i);
 	return m_piTerrainWeights ? m_piTerrainWeights[i] : false;
 }
-int CvTerrainInfo::getFeatureWeight(int i) const
-{
-	FAssertBounds(0, GC.getNumFeatureInfos(), i);
-	return m_piFeatureWeights ? m_piFeatureWeights[i] : false;
-}
+//int CvTerrainInfo::getFeatureWeight(int i) const
+//{
+//	FAssertBounds(0, GC.getNumFeatureInfos(), i);
+//	return m_piFeatureWeights[i];
+//}
 int CvTerrainInfo::getTerrainAdjWeight(int i) const
 {
 	FAssertBounds(0, GC.getNumTerrainInfos(), i);
 	return m_piAdjTerrainWeights ? m_piAdjTerrainWeights[i] : false;
 }
-int CvTerrainInfo::getFeatureAdjWeight(int i) const
-{
-	FAssertBounds(0, GC.getNumFeatureInfos(), i);
-	return m_piAdjFeatureWeights ? m_piAdjFeatureWeights[i] : false;
-}
+//int CvTerrainInfo::getFeatureAdjWeight(int i) const
+//{
+//	FAssertBounds(0, GC.getNumFeatureInfos(), i);
+//	return m_piAdjFeatureWeights[i];
+//}
 // merk.msm end
 
 bool CvTerrainInfo::read(CvXMLLoadUtility* pXML)
@@ -207,6 +205,110 @@ bool CvTerrainInfo::read(CvXMLLoadUtility* pXML)
 	}
 	return true;
 }
+
+// merk.msm
+bool CvTerrainInfo::readPass2(CvXMLLoadUtility* pXML)
+{
+	CvString szTextVal;
+	pXML->GetChildXmlValByName(szTextVal, "TerrainWeights", "");
+	pXML->SetVariableListTagPair(&m_piTerrainWeights, szTextVal, GC.getNumTerrainInfos());
+	pXML->GetChildXmlValByName(szTextVal, "TerrainAdjacentWeights", "");
+	pXML->SetVariableListTagPair(&m_piAdjTerrainWeights, szTextVal, GC.getNumTerrainInfos());
+	// skipping feature weights for now.
+	// still can't read features yet, but can stick a third pass in the order later, but need to save some info first
+	//if (gDLL->getXMLIFace()->SetToChildByTagName(pXML->GetXML(), "FeatureWeights"))
+	//{
+	//	if (pXML->SkipToNextVal()) // on FeatureWeight now
+	//	{
+	//		int const iNumSibs = gDLL->getXMLIFace()->GetNumChildren(pXML->GetXML()); // num FeatureWeights
+	//		if (iNumSibs > 0)
+	//		{
+	//			CvString szTextVal;
+	//			if (pXML->GetChildXmlVal(szTextVal)) // on FeatureType now
+	//			{
+	//				for (int j = 0; j < iNumSibs; j++)
+	//				{
+	//					pXML->GetChildXmlValByName(szTextVal, "FeatureType");
+	//					m_aszExtraXMLforPass3.push_back(szTextVal); // feature type
+	//					pXML->GetChildXmlValByName(szTextVal, "iFeatureWeight");
+	//					m_aszExtraXMLforPass3.push_back(szTextVal); // feature weight
+	//					if (!pXML->GetNextXmlVal(szTextVal))
+	//						break;
+	//				}
+	//				gDLL->getXMLIFace()->SetToParent(pXML->GetXML()); // back to FeatureWeight
+	//			}
+	//		}
+	//	}
+	//	gDLL->getXMLIFace()->SetToParent(pXML->GetXML()); // back to FeatureWeights
+	//}
+	//if (gDLL->getXMLIFace()->SetToChildByTagName(pXML->GetXML(), "FeatureAdjacentWeights"))
+	//{
+	//	if (pXML->SkipToNextVal()) // on FeatureAdjacentWeight now
+	//	{
+	//		int const iNumSibs = gDLL->getXMLIFace()->GetNumChildren(pXML->GetXML()); // num FeatureAdjacentWeights
+	//		if (iNumSibs > 0)
+	//		{
+	//			CvString szTextVal;
+	//			if (pXML->GetChildXmlVal(szTextVal)) // on FeatureType now
+	//			{
+	//				for (int j = 0; j < iNumSibs; j++)
+	//				{
+	//					pXML->GetChildXmlValByName(szTextVal, "FeatureType");
+	//					m_aszExtraXMLforPass3.push_back(szTextVal); // feature type
+	//					pXML->GetChildXmlValByName(szTextVal, "iFeatureWeight");
+	//					m_aszExtraXMLforPass3.push_back(szTextVal); // feature adjacent weight
+	//					if (!pXML->GetNextXmlVal(szTextVal))
+	//						break;
+	//				}
+	//				gDLL->getXMLIFace()->SetToParent(pXML->GetXML()); // back to FeatureAdjacentWeight
+	//			}
+	//		}
+	//	}
+	//	gDLL->getXMLIFace()->SetToParent(pXML->GetXML()); // back to FeatureAdjacentWeights
+	//}
+	return true;
+}
+//bool CvTerrainInfo::readPass3()
+//{
+//	if (m_aszExtraXMLforPass3.size() < 2)
+//	{
+//		FAssertMsg(false, "Something went wrong loading Feature / Adj Weights for Terrains");
+//		return false;
+//	}
+//	// init the lists
+//	for (int i = 0; i < GC.getNumFeatureInfos(); i++)
+//	{
+//		m_piFeatureWeights.push_back(0);
+//		m_piAdjFeatureWeights.push_back(0);
+//	}
+//	bool bNotAdj = true; // these will always be second
+//	bool bFirst = true;
+//	int iWhich = -1;
+//	for (int a = 0; a < (int)(m_aszExtraXMLforPass3.size()); a++)
+//	{
+//		CvString yup = m_aszExtraXMLforPass3[a];
+//		if (yup == "fart")
+//		{
+//			bNotAdj = false;
+//			continue;
+//		}
+//		if (bNotAdj)
+//		{
+//			if (bFirst) // we're on the FeatureType part
+//			{
+//				iWhich = GC.getInfoTypeForString(yup);
+//				bFirst = false;
+//			}
+//			else if (iWhich != -1)
+//			{
+//				m_piFeatureWeights[iWhich] = (int)yup;
+//			}
+//		}
+//	}
+//
+//	return true;
+//}
+// merk.msm end
 
 const TCHAR* CvTerrainInfo::getButton() const
 {
@@ -536,6 +638,10 @@ bool CvFeatureInfo::read(CvXMLLoadUtility* pXML)
 	pXML->GetChildXmlValByName(&m_bPlaceOnce, "bPlaceOnce", 0);
 	pXML->GetChildXmlValByName(&m_bPlaceInGroup, "bPlaceInGroup", 0);
 	pXML->GetChildXmlValByName(&m_bSurroundedByBase, "bSurroundedByBase", 0);
+
+	pXML->SetVariableListTagPair(&m_piTerrainWeights, "TerrainWeights", GC.getNumTerrainInfos());
+	pXML->SetVariableListTagPair(&m_piAdjTerrainWeights, "TerrainAdjacentWeights", GC.getNumTerrainInfos());
+
 	pXML->GetChildXmlValByName(&m_iHillsAdjacentWeight, "iHillsAdjacentWeight", 0);
 	pXML->GetChildXmlValByName(&m_iCoastAdjacentWeight, "iCoastAdjacentWeight", 0);
 	// merk.msm end
@@ -579,6 +685,18 @@ bool CvFeatureInfo::read(CvXMLLoadUtility* pXML)
 
 	return true;
 }
+
+// merk.msm handily copied from advc.255
+bool CvFeatureInfo::readPass2(CvXMLLoadUtility* pXML)
+{
+	CvString szTextVal;
+	pXML->GetChildXmlValByName(szTextVal, "FeatureWeights", "");
+	pXML->SetVariableListTagPair(&m_piFeatureWeights, szTextVal, GC.getNumFeatureInfos());
+	pXML->GetChildXmlValByName(szTextVal, "FeatureAdjacentWeights", "");
+	pXML->SetVariableListTagPair(&m_piAdjFeatureWeights, szTextVal, GC.getNumFeatureInfos());
+	return true;
+}
+// merk.msm
 
 CvBonusInfo::CvBonusInfo() :
 m_eBonusClassType(NO_BONUSCLASS),
@@ -1673,6 +1791,12 @@ bool CvImprovementInfo::read(CvXMLLoadUtility* pXML)
 	pXML->GetChildXmlValByName(&m_bPlaceOnce, "bPlaceOnce", 0);
 	pXML->GetChildXmlValByName(&m_bPlaceInGroup, "bPlaceInGroup", 0);
 	pXML->GetChildXmlValByName(&m_bSurroundedByBase, "bSurroundedByBase", 0);
+
+	pXML->SetVariableListTagPair(&m_piTerrainWeights, "TerrainWeights", GC.getNumTerrainInfos());
+	pXML->SetVariableListTagPair(&m_piFeatureWeights, "FeatureWeights", GC.getNumFeatureInfos());
+	pXML->SetVariableListTagPair(&m_piAdjTerrainWeights, "TerrainAdjacentWeights", GC.getNumTerrainInfos());
+	pXML->SetVariableListTagPair(&m_piAdjFeatureWeights, "FeatureAdjacentWeights", GC.getNumFeatureInfos());
+
 	pXML->GetChildXmlValByName(&m_iHillsAdjacentWeight, "iHillsAdjacentWeight", 0);
 	pXML->GetChildXmlValByName(&m_iCoastAdjacentWeight, "iCoastAdjacentWeight", 0);
 	// merk.msm end

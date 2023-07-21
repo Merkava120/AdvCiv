@@ -78,15 +78,17 @@ public: // All the const functions are exposed to Python except for those relate
 	int get3DAudioScriptFootstepIndex(int i) const;
 	// merk.msm begin
 	int getTerrainWeight(int iTerrain) const;
-	int getFeatureWeight(int iFeature) const;
+	//int getFeatureWeight(int iFeature) const;
 	int getTerrainAdjWeight(int iTerrain) const;
-	int getFeatureAdjWeight(int iFeature) const;
+	//int getFeatureAdjWeight(int iFeature) const;
 	// merk.msm end
 
 	const CvArtInfoTerrain* getArtInfo() const;
 	const TCHAR* getButton() const;
 
 	bool read(CvXMLLoadUtility* pXML);
+	bool readPass2(CvXMLLoadUtility* pXML); // merk.msm
+	//bool readPass3(); // merk.msm
 
 protected:
 	int m_iMovementCost;
@@ -143,9 +145,9 @@ protected:
 	int* m_pi3DAudioScriptFootstepIndex;
 	// merk.msm begin
 	int* m_piTerrainWeights;
-	int* m_piFeatureWeights;
+	//std::vector< int > m_piFeatureWeights;
 	int* m_piAdjTerrainWeights;
-	int* m_piAdjFeatureWeights;
+	//std::vector< int > m_piAdjFeatureWeights;
 	// merk.msm end
 
 
@@ -260,6 +262,7 @@ public: /*  All the const functions are exposed to Python except for those deali
 	const TCHAR* getButton() const;
 
 	bool read(CvXMLLoadUtility* pXML);
+	bool readPass2(CvXMLLoadUtility* pXML); // merk.msm
 
 protected:
 	int m_iMovementCost;
