@@ -2193,6 +2193,79 @@ int CvPromotionInfo::getBlitz() const
 {
 	return m_iBlitz;
 } // </advc.164>
+// merk.promo1 begin
+InvisibleTypes CvPromotionInfo::getSeeInvisible() const
+{
+	return m_eSeeInvisible;
+}
+
+InvisibleTypes CvPromotionInfo::getInvisible() const
+{
+	return m_eInvisible;
+}
+
+bool CvPromotionInfo::isDoubleMoveOpen() const
+{
+	return m_bDoubleMoveOpen;
+}
+
+bool CvPromotionInfo::isDoubleMoveFlatlands() const
+{
+	return m_bDoubleMoveFlatlands;
+}
+
+int CvPromotionInfo::getOpenAttack() const
+{
+	return m_iOpenAttack;
+}
+
+int CvPromotionInfo::getOpenDefense() const
+{
+	return m_iOpenDefense;
+}
+
+int CvPromotionInfo::getFlatlandsAttack() const
+{
+	return m_iFlatlandsAttack;
+}
+
+int CvPromotionInfo::getFlatlandsDefense() const
+{
+	return m_iFlatlandsDefense;
+}
+
+bool CvPromotionInfo::isUnitCombatAttack() const
+{
+	return m_bUnitCombatAttack;
+}
+
+bool CvPromotionInfo::isUnitCombatDefense() const
+{
+	return m_bUnitCombatDefense;
+}
+
+bool CvPromotionInfo::isCanMoveImpassable() const
+{
+	return m_bCanMoveImpassable;
+}
+
+// merk.dp begin
+
+int CvPromotionInfo::getChanceGain() const
+{
+	return m_iChanceGain;
+}
+
+bool CvPromotionInfo::isGainMatchConditions() const
+{
+	return m_bGainMatchConditions;
+}
+
+bool CvPromotionInfo::isNoDirect() const
+{
+	return m_bNoDirect;
+}
+// merkava120 end
 
 bool CvPromotionInfo::isAmphib() const
 {

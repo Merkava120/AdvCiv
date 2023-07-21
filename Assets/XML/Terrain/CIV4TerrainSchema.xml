@@ -273,6 +273,8 @@
 		<element type="iWtCoastal" minOccurs="0"/> 
 		<element type="iWtCoast" minOccurs="0"/> 
 		<element type="iWtOcean" minOccurs="0"/> 
+		<element type="iMinLatitude" minOccurs="0"/> 
+		<element type="iMaxLatitude" minOccurs="0"/>
 		<element type="iMinAreaSize" minOccurs="0"/> 
 		<element type="iMaxAreaSize" minOccurs="0"/> 
 		<element type="iMinAreaProportion" minOccurs="0"/> 

@@ -176,6 +176,7 @@ public: /*  All const functions are exposed to Python except some related to art
 	DomainTypes getDomainType() const { return m_eDomainType; }
 	UnitAITypes getDefaultUnitAIType() const { return m_eDefaultUnitAIType; }
 	InvisibleTypes getInvisibleType() const { return m_eInvisibleType; }
+	bool isInvisibleRevealInOpen() const { return m_bRevealInOpen; } // merk.advinv
 	InvisibleTypes getSeeInvisibleType(int i) const
 	{
 		FAssertBounds(0, m_aeSeeInvisibleTypes.size(), i);
@@ -204,15 +205,26 @@ public: /*  All const functions are exposed to Python except some related to art
 	int getNiche() const { return m_iNiche; } // merk.rasboth
 	int getSpawnChannel() const { return m_iSpawnChannel; } // merk.rasa
 	int getSpawnWeight() const { return m_iSpawnWeight; } // merk.rasa
-	// merk.rasmore begin
+	// merk.rasmore begin // merk.rasem
 	bool isRiverNative() const { return m_bRiverNative; } 
 	bool isHillsNative() const { return m_bHillsNative; }
 	bool isFlatlandsNative() const { return m_bFlatlandsNative; }
+	bool isCoastalNative() const { return m_bCoastalNative; }
+	bool isOpenNative() const { return m_bOpenNative; }
+	int getFeatureNativeWeight() const { return m_iFeatureNativeWeight; }
 	bool isCannotMoveRivers() const { return m_bCannotMoveRivers; }
 	bool isCannotLeaveRivers() const { return m_bCannotLeaveRivers; }
 	int getRiverRestrictDistance() const { return m_iRiverRestrictDistance; }
 	bool isCannotMoveHills() const { return m_bCannotMoveHills; }
+	int getHillsRestrictDistance() const { return m_iHillsRestrictDistance; }
+	int getPeakRestrictDistance() const { return m_iPeakRestrictDistance; }
 	bool isCannotMoveFlatlands() const { return m_bCannotMoveFlatlands; }
+	bool isCannotMoveCoastal() const { return m_bCannotMoveCoastal; }
+	bool isCannotLeaveCoastal() const { return m_bCannotLeaveCoastal; }
+	int getCoastalRestrictDistance() const { return m_iCoastalRestrictDistance; }
+	bool isCanSwim() const { return m_bCanSwim; }
+	bool isCannotMoveFeatures() const { return m_bCannotMoveFeatures; }
+	bool isCannotMoveOpen() const { return m_bCannotMoveOpen; }
 	int getMinSpawnTemp() const { return m_iMinSpawnTemp; }
 	int getMaxSpawnTemp() const { return m_iMaxSpawnTemp; }
 	int getMinMoveTemp() const { return m_iMinMoveTemp; }
@@ -491,6 +503,7 @@ protected:
 	DomainTypes m_eDomainType;
 	UnitAITypes m_eDefaultUnitAIType;
 	InvisibleTypes m_eInvisibleType;
+	bool m_bRevealInOpen; // merk.advinv
 	AdvisorTypes m_eAdvisorType;
 	ReligionTypes m_eHolyCity;
 	ReligionTypes m_eReligionType;
@@ -510,17 +523,29 @@ protected:
 
 	bool m_bAnimal;
 	int m_iNiche; // merk.rasboth
+	// the original devs are probably lying awake at night with the nagging feeling that somebody is messing with their sorting of bools and ints
 	int m_iSpawnChannel; // merk.rasa
 	int m_iSpawnWeight; // merk.rasa
-	// merk.rasmore begin
+	// merk.rasmore begin // merk.rasem
 	bool m_bRiverNative;
 	bool m_bHillsNative;
 	bool m_bFlatlandsNative;
+	bool m_bCoastalNative;
+	bool m_bOpenNative;
+	int m_iFeatureNativeWeight;
 	bool m_bCannotMoveRivers;
 	bool m_bCannotLeaveRivers;
 	int m_iRiverRestrictDistance;
 	bool m_bCannotMoveHills;
+	int m_iHillsRestrictDistance;
+	int m_iPeakRestrictDistance;
 	bool m_bCannotMoveFlatlands;
+	bool m_bCannotMoveCoastal;
+	bool m_bCannotLeaveCoastal;
+	int m_iCoastalRestrictDistance;
+	bool m_bCanSwim;
+	bool m_bCannotMoveFeatures;
+	bool m_bCannotMoveOpen;
 	int m_iMinSpawnTemp;
 	int m_iMaxSpawnTemp;
 	int m_iMinMoveTemp;
@@ -727,6 +752,23 @@ public: // All the const functions are exposed to Python
 	bool isLeader() const;
 	// advc.164: was isBlitz
 	int getBlitz() const;
+	// merk.promo1 begin
+	InvisibleTypes getSeeInvisible() const;
+	InvisibleTypes getInvisible() const;
+	bool isDoubleMoveOpen() const;
+	bool isDoubleMoveFlatlands() const;
+	int getOpenAttack() const;
+	int getOpenDefense() const;
+	int getFlatlandsAttack() const;
+	int getFlatlandsDefense() const;
+	bool isUnitCombatAttack() const;
+	bool isUnitCombatDefense() const;
+	bool isCanMoveImpassable() const;
+	// merk.dp begin
+	int getChanceGain() const;
+	bool isGainMatchConditions() const;
+	bool isNoDirect() const;
+	// merkava120 end
 	bool isAmphib() const;
 	bool isRiver() const;
 	bool isEnemyRoute() const;
@@ -797,6 +839,23 @@ protected:
 	bool m_bLeader;
 	//bool m_bBlitz;
 	int m_iBlitz; // advc.164
+	// merk.promo1 begin
+	InvisibleTypes m_eSeeInvisible;
+	InvisibleTypes m_eInvisible;
+	bool m_bDoubleMoveOpen;
+	bool m_bDoubleMoveFlatlands;
+	int m_iOpenAttack;
+	int m_iOpenDefense;
+	int m_iFlatlandsAttack;
+	int m_iFlatlandsDefense;
+	bool m_bUnitCombatAttack;
+	bool m_bUnitCombatDefense;
+	bool m_bCanMoveImpassable;
+	// merk.dp begin
+	int m_iChanceGain;
+	int m_bGainMatchConditions;
+	bool m_bNoDirect;
+	// merkava120 end
 	bool m_bAmphib;
 	bool m_bRiver;
 	bool m_bEnemyRoute;

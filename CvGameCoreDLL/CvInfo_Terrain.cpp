@@ -67,6 +67,29 @@ int CvTerrainInfo::get3DAudioScriptFootstepIndex(int i) const
 			: 0; // advc.003t: see get3DAudioScriptFootstepIndex
 }
 
+// merk.msm begin
+int CvTerrainInfo::getTerrainWeight(int i) const
+{
+	FAssertBounds(0, GC.getNumTerrainInfos(), i);
+	return m_piTerrainWeights ? m_piTerrainWeights[i] : false;
+}
+int CvTerrainInfo::getFeatureWeight(int i) const
+{
+	FAssertBounds(0, GC.getNumFeatureInfos(), i);
+	return m_piFeatureWeights ? m_piFeatureWeights[i] : false;
+}
+int CvTerrainInfo::getTerrainAdjWeight(int i) const
+{
+	FAssertBounds(0, GC.getNumTerrainInfos(), i);
+	return m_piAdjTerrainWeights ? m_piAdjTerrainWeights[i] : false;
+}
+int CvTerrainInfo::getFeatureAdjWeight(int i) const
+{
+	FAssertBounds(0, GC.getNumFeatureInfos(), i);
+	return m_piAdjFeatureWeights ? m_piAdjFeatureWeights[i] : false;
+}
+// merk.msm end
+
 bool CvTerrainInfo::read(CvXMLLoadUtility* pXML)
 {
 	if (!base_t::read(pXML))
@@ -319,6 +342,29 @@ const CvArtInfoFeature* CvFeatureInfo::getArtInfo() const
 {
 	return ARTFILEMGR.getFeatureArtInfo( getArtDefineTag());
 }
+
+// merk.msm begin
+int CvFeatureInfo::getTerrainWeight(int i) const
+{
+	FAssertBounds(0, GC.getNumTerrainInfos(), i);
+	return m_piTerrainWeights ? m_piTerrainWeights[i] : false;
+}
+int CvFeatureInfo::getFeatureWeight(int i) const
+{
+	FAssertBounds(0, GC.getNumFeatureInfos(), i);
+	return m_piFeatureWeights ? m_piFeatureWeights[i] : false;
+}
+int CvFeatureInfo::getTerrainAdjWeight(int i) const
+{
+	FAssertBounds(0, GC.getNumTerrainInfos(), i);
+	return m_piAdjTerrainWeights ? m_piAdjTerrainWeights[i] : false;
+}
+int CvFeatureInfo::getFeatureAdjWeight(int i) const
+{
+	FAssertBounds(0, GC.getNumFeatureInfos(), i);
+	return m_piAdjFeatureWeights ? m_piAdjFeatureWeights[i] : false;
+}
+// merk.msm end
 
 bool CvFeatureInfo::read(CvXMLLoadUtility* pXML)
 {
@@ -1197,6 +1243,29 @@ const TCHAR* CvImprovementInfo::getButton() const
 
 	return NULL;
 }
+
+// merk.msm begin
+int CvImprovementInfo::getTerrainWeight(int i) const
+{
+	FAssertBounds(0, GC.getNumTerrainInfos(), i);
+	return m_piTerrainWeights ? m_piTerrainWeights[i] : false;
+}
+int CvImprovementInfo::getFeatureWeight(int i) const
+{
+	FAssertBounds(0, GC.getNumFeatureInfos(), i);
+	return m_piFeatureWeights ? m_piFeatureWeights[i] : false;
+}
+int CvImprovementInfo::getTerrainAdjWeight(int i) const
+{
+	FAssertBounds(0, GC.getNumTerrainInfos(), i);
+	return m_piAdjTerrainWeights ? m_piAdjTerrainWeights[i] : false;
+}
+int CvImprovementInfo::getFeatureAdjWeight(int i) const
+{
+	FAssertBounds(0, GC.getNumFeatureInfos(), i);
+	return m_piAdjFeatureWeights ? m_piAdjFeatureWeights[i] : false;
+}
+// merk.msm end
 
 const CvArtInfoImprovement* CvImprovementInfo::getArtInfo() const
 {

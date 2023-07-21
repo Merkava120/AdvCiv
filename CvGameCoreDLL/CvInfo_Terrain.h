@@ -30,12 +30,43 @@ public: // All the const functions are exposed to Python except for those relate
 	int getBuildModifier() const { return m_iBuildModifier; }
 	int getDefenseModifier() const { return m_iDefenseModifier; }
 	int getTemp() const { return m_iTemp; } // merk.rasmore
+	// merk.msm begin
+	int getBaseTerrain() const { return m_iBaseTerrain; }
+	int getBaseFeature() const { return m_iBaseFeature; }
+	int getChanceInclude() const { return m_iChanceInclude; }
+	int getChanceMap() const { return m_iChanceMap; }
+	int getWtRiver() const { return m_iWtRiver; }
+	int getWtHills() const { return m_iWtHills; }
+	int getWtCoastal() const { return m_iWtCoastal; }
+	int getWtCoast() const { return m_iWtCoast; }
+	int getWtOcean() const { return m_iWtOcean; }
+	int getMinLatitude() const { return m_iMinLatitude; }
+	int getMaxLatitude() const { return m_iMaxLatitude; }
+	int getMinAreaSize() const { return m_iMinAreaSize; }
+	int getMaxAreaSize() const { return m_iMaxAreaSize; }
+	int getMinAreaProportion() const { return m_iMinAreaProportion; }
+	int getMaxAreaProportion() const { return m_iMaxAreaProportion; }
+	int getAreaChannel() const { return m_iAreaChannel; }
+	int getHillsAdjWeight() const { return m_iHillsAdjacentWeight; }
+	int getCoastAdjWeight() const { return m_iCoastAdjacentWeight; }
+	// merk.msm end
 
 	bool isWater() const { return m_bWater; }
 	bool isImpassable() const { return m_bImpassable; }
 	bool isFound() const { return m_bFound; }
 	bool isFoundCoast() const { return m_bFoundCoast; }
 	bool isFoundFreshWater() const { return m_bFoundFreshWater; }
+	// merk.msm begin
+	bool isReqRiver() const { return m_bReqRiver; }
+	bool isReqFlatlands() const { return m_bRequiresFlatlands; }
+	bool isReqHills() const { return m_bReqHills; }
+	bool isReqCoastal() const { return m_bReqCoastal; }
+	bool isReqCoast() const { return m_bReqCoast; }
+	bool isReqOcean() const { return m_bReqOcean; }
+	bool isPlaceOnce() const { return m_bPlaceOnce; }
+	bool isPlaceInGroup() const { return m_bPlaceInGroup; }
+	bool isSurroundedByBase() const { return m_bSurroundedByBase; }
+	// merk.msm end
 
 	DllExport const TCHAR* getArtDefineTag() const;
 
@@ -45,6 +76,12 @@ public: // All the const functions are exposed to Python except for those relate
 	int getRiverYieldChange(int i) const;
 	int getHillsYieldChange(int i) const;
 	int get3DAudioScriptFootstepIndex(int i) const;
+	// merk.msm begin
+	int getTerrainWeight(int iTerrain) const;
+	int getFeatureWeight(int iFeature) const;
+	int getTerrainAdjWeight(int iTerrain) const;
+	int getFeatureAdjWeight(int iFeature) const;
+	// merk.msm end
 
 	const CvArtInfoTerrain* getArtInfo() const;
 	const TCHAR* getButton() const;
@@ -58,12 +95,45 @@ protected:
 	int m_iBuildModifier;
 	int m_iDefenseModifier;
 	int m_iTemp; // merk.rasmore
+	// merk.msm begin
+	int m_iBaseTerrain;
+	int m_iBaseFeature;
+	int m_iChanceInclude;
+	int m_iChanceMap;
+	int m_iWtRiver;
+	int m_iWtHills;
+	int m_iWtCoastal;
+	int m_iWtCoast;
+	int m_iWtOcean;
+	int m_iMinLatitude;
+	int m_iMaxLatitude;
+	int m_iMinAreaSize;
+	int m_iMaxAreaSize;
+	int m_iMinAreaProportion;
+	int m_iMaxAreaProportion;
+	int m_iAreaChannel;
+	int m_iHillsAdjacentWeight;
+	int m_iCoastAdjacentWeight;
+	// merk.msm end
+
 
 	bool m_bWater;
 	bool m_bImpassable;
 	bool m_bFound;
 	bool m_bFoundCoast;
 	bool m_bFoundFreshWater;
+	// merk.msm begin
+	bool m_bReqRiver;
+	bool m_bRequiresFlatlands;
+	bool m_bReqHills;
+	bool m_bReqCoastal;
+	bool m_bReqCoast;
+	bool m_bReqOcean;
+	bool m_bPlaceOnce;
+	bool m_bPlaceInGroup;
+	bool m_bSurroundedByBase;
+	// merk.msm end
+	
 
 	int m_iWorldSoundscapeScriptId;
 
@@ -71,6 +141,13 @@ protected:
 	int* m_piRiverYieldChange;
 	int* m_piHillsYieldChange;
 	int* m_pi3DAudioScriptFootstepIndex;
+	// merk.msm begin
+	int* m_piTerrainWeights;
+	int* m_piFeatureWeights;
+	int* m_piAdjTerrainWeights;
+	int* m_piAdjFeatureWeights;
+	// merk.msm end
+
 
 private:
 	CvString m_szArtDefineTag;
@@ -100,6 +177,26 @@ public: /*  All the const functions are exposed to Python except for those deali
 	int getTurnDamage() const;
 	int getWarmingDefense() const; //GWmod new xml field M.A. // Exposed to Python
 	int getTempAdd() const { return m_iTempAdd; } // merk.rasmore
+	// merk.msm begin
+	int getBaseTerrain() const { return m_iBaseTerrain; }
+	int getBaseFeature() const { return m_iBaseFeature; }
+	int getChanceInclude() const { return m_iChanceInclude; }
+	int getChanceMap() const { return m_iChanceMap; }
+	int getWtRiver() const { return m_iWtRiver; }
+	int getWtHills() const { return m_iWtHills; }
+	int getWtCoastal() const { return m_iWtCoastal; }
+	int getWtCoast() const { return m_iWtCoast; }
+	int getWtOcean() const { return m_iWtOcean; }
+	int getMinLatitude() const { return m_iMinLatitude; }
+	int getMaxLatitude() const { return m_iMaxLatitude; }
+	int getMinAreaSize() const { return m_iMinAreaSize; }
+	int getMaxAreaSize() const { return m_iMaxAreaSize; }
+	int getMinAreaProportion() const { return m_iMinAreaProportion; }
+	int getMaxAreaProportion() const { return m_iMaxAreaProportion; }
+	int getAreaChannel() const { return m_iAreaChannel; }
+	int getHillsAdjWeight() const { return m_iHillsAdjacentWeight; }
+	int getCoastAdjWeight() const { return m_iCoastAdjacentWeight; }
+	// merk.msm end
 
 	bool isNoCoast() const;
 	bool isNoRiver() const;
@@ -115,6 +212,15 @@ public: /*  All the const functions are exposed to Python except for those deali
 	bool isVisibleAlways() const;
 	bool isNukeImmune() const;
 	const TCHAR* getOnUnitChangeTo() const;
+	// merk.msm begin
+	bool isReqHills() const { return m_bReqHills; }
+	bool isReqCoastal() const { return m_bReqCoastal; }
+	bool isReqCoast() const { return m_bReqCoast; }
+	bool isReqOcean() const { return m_bReqOcean; }
+	bool isPlaceOnce() const { return m_bPlaceOnce; }
+	bool isPlaceInGroup() const { return m_bPlaceInGroup; }
+	bool isSurroundedByBase() const { return m_bSurroundedByBase; }
+	// merk.msm end
 
 	const TCHAR* getArtDefineTag() const;
 
@@ -122,6 +228,13 @@ public: /*  All the const functions are exposed to Python except for those deali
 
 	const TCHAR* getEffectType() const;
 	int getEffectProbability() const;
+
+	// merk.msm begin
+	int getTerrainWeight(int iTerrain) const;
+	int getFeatureWeight(int iFeature) const;
+	int getTerrainAdjWeight(int iTerrain) const;
+	int getFeatureAdjWeight(int iFeature) const;
+	// merk.msm end
 
 	int getYieldChange(int i) const
 	{
@@ -161,6 +274,26 @@ protected:
 	int m_iTurnDamage;
 	int m_iWarmingDefense; //GWMod
 	int m_iTempAdd; // merk.rasmore
+	// merk.msm begin
+	int m_iBaseTerrain;
+	int m_iBaseFeature;
+	int m_iChanceInclude;
+	int m_iChanceMap;
+	int m_iWtRiver;
+	int m_iWtHills;
+	int m_iWtCoastal;
+	int m_iWtCoast;
+	int m_iWtOcean;
+	int m_iMinLatitude;
+	int m_iMaxLatitude;
+	int m_iMinAreaSize;
+	int m_iMaxAreaSize;
+	int m_iMinAreaProportion;
+	int m_iMaxAreaProportion;
+	int m_iAreaChannel;
+	int m_iHillsAdjacentWeight;
+	int m_iCoastAdjacentWeight;
+	// merk.msm end
 
 	bool m_bNoCoast;
 	bool m_bNoRiver;
@@ -176,6 +309,15 @@ protected:
 	bool m_bVisibleAlways;
 	bool m_bNukeImmune;
 	CvString m_szOnUnitChangeTo;
+	// merk.msm begin
+	bool m_bReqHills;
+	bool m_bReqCoastal;
+	bool m_bReqCoast;
+	bool m_bReqOcean;
+	bool m_bPlaceOnce;
+	bool m_bPlaceInGroup;
+	bool m_bSurroundedByBase;
+	// merk.msm end
 
 	int m_iWorldSoundscapeScriptId;
 
@@ -186,6 +328,12 @@ protected:
 	int* m_piRiverYieldChange;
 	int* m_piHillsYieldChange;
 	int* m_pi3DAudioScriptFootstepIndex;
+	// merk.msm begin
+	int* m_piTerrainWeights;
+	int* m_piFeatureWeights;
+	int* m_piAdjTerrainWeights;
+	int* m_piAdjFeatureWeights;
+	// merk.msm end
 
 	bool* m_pbTerrain;
 
@@ -282,7 +430,6 @@ protected:
 	int m_iUniqueRange;
 	int m_iGroupRange;
 	int m_iGroupRand;
-	int m_iTemp; // merk.rasmore
 
 	bool m_bOneArea;
 	bool m_bHills;
@@ -424,6 +571,26 @@ public:
 	int getPillageGold() const;
 	ImprovementTypes getImprovementPillage() const { return m_eImprovementPillage; }
 	ImprovementTypes getImprovementUpgrade() const { return m_eImprovementUpgrade; }
+	// merk.msm begin
+	int getBaseTerrain() const { return m_iBaseTerrain; }
+	int getBaseFeature() const { return m_iBaseFeature; }
+	int getChanceInclude() const { return m_iChanceInclude; }
+	int getChanceMap() const { return m_iChanceMap; }
+	int getWtRiver() const { return m_iWtRiver; }
+	int getWtHills() const { return m_iWtHills; }
+	int getWtCoastal() const { return m_iWtCoastal; }
+	int getWtCoast() const { return m_iWtCoast; }
+	int getWtOcean() const { return m_iWtOcean; }
+	int getMinLatitude() const { return m_iMinLatitude; }
+	int getMaxLatitude() const { return m_iMaxLatitude; }
+	int getMinAreaSize() const { return m_iMinAreaSize; }
+	int getMaxAreaSize() const { return m_iMaxAreaSize; }
+	int getMinAreaProportion() const { return m_iMinAreaProportion; }
+	int getMaxAreaProportion() const { return m_iMaxAreaProportion; }
+	int getAreaChannel() const { return m_iAreaChannel; }
+	int getHillsAdjWeight() const { return m_iHillsAdjacentWeight; }
+	int getCoastAdjWeight() const { return m_iCoastAdjacentWeight; }
+	// merk.msm end
 
 	bool isActsAsCity() const { return m_bActsAsCity; }
 	bool isHillsMakesValid() const { return m_bHillsMakesValid; }
@@ -439,6 +606,14 @@ public:
 	DllExport bool isGoody() const { return m_bGoody; }
 	bool isPermanent() const { return m_bPermanent; }
 	bool isOutsideBorders() const { return m_bOutsideBorders; }
+	// merk.msm begin
+	bool isReqCoastal() const { return m_bReqCoastal; }
+	bool isReqCoast() const { return m_bReqCoast; }
+	bool isReqOcean() const { return m_bReqOcean; }
+	bool isPlaceOnce() const { return m_bPlaceOnce; }
+	bool isPlaceInGroup() const { return m_bPlaceInGroup; }
+	bool isSurroundedByBase() const { return m_bSurroundedByBase; }
+	// merk.msm end
 
 	const TCHAR* getArtDefineTag() const;
 
@@ -476,6 +651,13 @@ public:
 	bool isImprovementBonusTrade(int i) const;
 	int getImprovementBonusDiscoverRand(int i) const;
 
+	// merk.msm begin
+	int getTerrainWeight(int iTerrain) const;
+	int getFeatureWeight(int iFeature) const;
+	int getTerrainAdjWeight(int iTerrain) const;
+	int getFeatureAdjWeight(int iFeature) const;
+	// merk.msm end
+
 	/*	advc.003w: Moved from CvGameCoreUtils; still exposed to Python through CyGameCoreUtils.
 		Renamed from "finalImprovementUpgrade".
 		Can't turn it into a non-static function b/c a CvImprovementInfo object
@@ -506,6 +688,26 @@ protected:
 	ImprovementTypes m_eImprovementPillage;
 	ImprovementTypes m_eImprovementUpgrade;
 	int m_iWorldSoundscapeScriptId;
+	// merk.msm begin
+	int m_iBaseTerrain;
+	int m_iBaseFeature;
+	int m_iChanceInclude;
+	int m_iChanceMap;
+	int m_iWtRiver;
+	int m_iWtHills;
+	int m_iWtCoastal;
+	int m_iWtCoast;
+	int m_iWtOcean;
+	int m_iMinLatitude;
+	int m_iMaxLatitude;
+	int m_iMinAreaSize;
+	int m_iMaxAreaSize;
+	int m_iMinAreaProportion;
+	int m_iMaxAreaProportion;
+	int m_iAreaChannel;
+	int m_iHillsAdjacentWeight;
+	int m_iCoastAdjacentWeight;
+	// merk.msm end
 
 	CvString m_szArtDefineTag;
 
@@ -523,12 +725,26 @@ protected:
 	bool m_bGoody;
 	bool m_bPermanent;
 	bool m_bOutsideBorders;
+	// merk.msm begin
+	bool m_bReqCoastal;
+	bool m_bReqCoast;
+	bool m_bReqOcean;
+	bool m_bPlaceOnce;
+	bool m_bPlaceInGroup;
+	bool m_bSurroundedByBase;
+	// merk.msm end
 
 	int* m_piPrereqNatureYield;
 	int* m_piYieldChange;
 	int* m_piRiverSideYieldChange;
 	int* m_piHillsYieldChange;
 	int* m_piIrrigatedChange;
+	// merk.msm begin
+	int* m_piTerrainWeights;
+	int* m_piFeatureWeights;
+	int* m_piAdjTerrainWeights;
+	int* m_piAdjFeatureWeights;
+	// merk.msm end
 
 	bool* m_pbTerrainMakesValid;
 	bool* m_pbFeatureMakesValid;
