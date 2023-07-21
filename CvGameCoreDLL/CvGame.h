@@ -766,7 +766,7 @@ public:
 
 	bool isGreatPersonBorn(CvWString& szName) const;
 	void addGreatPersonBornName(CvWString const& szName);
-
+	int getWaterTemp(const CvPlot& kPlot); // merk.rasmore
 	DllExport int getIndexAfterLastDeal();																// Exposed to Python
 	int getNumDeals() { return m_deals.getCount(); }													// Exposed to Python
 
@@ -1187,6 +1187,7 @@ protected:
 	void createBarbarianCities();
 	void createBarbarianUnits();
 	void createAnimals();
+	bool isCanSpawnBarb(const CvUnitInfo& kUnit, CvPlot* pPlot, UnitTypes eLoopUnit); // merk.rasboth
 	// <advc.300>
 	void createBarbarianCity(bool bNoCivCities, int iProbModifierPercent = 100);
 	int numBarbariansToCreate(int iTilesPerUnit, int iTiles, int iUnowned,
@@ -1197,7 +1198,7 @@ protected:
 			Shelf const* pShelf = NULL);
 	bool killBarbarian(int iUnitsPresent, int iTiles, int iPop,
 			CvArea& kArea, Shelf* pShelf = NULL);
-	UnitTypes randomBarbarianUnit(UnitAITypes eUnitAI, CvPlot const& kPlot);
+	UnitTypes randomBarbarianUnit(UnitAITypes eUnitAI, CvArea const& kArea, CvPlot& kPlot); // merk.rasa
 	scaled barbarianPeakLandRatio() const;
 	// </advc.300>
 

@@ -7104,12 +7104,13 @@ void CvGame::createBarbarianUnits()
 	// advc.300: Moved into new function
 	if (getGameTurn() < getBarbarianStartTurn())
 		bAnimals = true;
-
+	// merk.rasa not sure how to balance animals + barbarians yet, so
+	bAnimals = true; // will do for now
 	if (bAnimals)
 		createAnimals();
 	// <advc.300>
-	if (bAnimals)
-		return;
+	//if (bAnimals)
+		//return; // merk.rasa  
 	CvHandicapInfo const& kGameHandicap = GC.getInfo(getHandicapType());
 	int iBaseTilesPerLandUnit = kGameHandicap.getUnownedTilesPerBarbarianUnit();
 	// Divided by 10 b/c now only shelf water tiles count
@@ -7217,16 +7218,19 @@ void CvGame::createBarbarianUnits()
 			createBarbarians */
 		// </advc.300>
 	}
-	FOR_EACH_UNIT_VAR(pLoopUnit, GET_PLAYER(BARBARIAN_PLAYER))
-	{
-		if (pLoopUnit->isAnimal() &&
-			// advc.309: Don't cull animals where there are no civ cities
-			pLoopUnit->getArea().getNumCivCities() > 0)
-		{
-			pLoopUnit->kill(false);
-			break;
-		}
-	}
+	// merk.rasa absolutely do not slaughter all the animals no way
+	//FOR_EACH_UNIT_VAR(pLoopUnit, GET_PLAYER(BARBARIAN_PLAYER))
+	//{
+	//	
+
+	//	if (pLoopUnit->isAnimal() &&
+	//		// advc.309: Don't cull animals where there are no civ cities
+	//		pLoopUnit->getArea().getNumCivCities() > 0)
+	//	{
+	//		pLoopUnit->kill(false);
+	//		break;
+	//	}
+	//}
 	// <advc.300>
 	FOR_EACH_CITY(pCity, GET_PLAYER(BARBARIAN_PLAYER))
 	{
@@ -7253,9 +7257,11 @@ void CvGame::createAnimals()
 	// merk.ras1 note - leaving this alone, I think it's a bug check?
 	if (kGameHandicap.getUnownedTilesPerGameAnimal() <= 0)
 		return;
-
-	if (intdiv::uround(getNumCivCities() * GC.getDefineINT("CITIES_BEFORE_ANIMALS_MULT"), 100) < countCivPlayersAlive()) // merk.ras1
-		return;
+	if (GC.getDefineINT("CITIES_BEFORE_ANIMALS_MULT") > 0) // merk.rasa: allows nomads to see animals by setting this to 0
+	{
+		if (intdiv::uround(getNumCivCities() * GC.getDefineINT("CITIES_BEFORE_ANIMALS_MULT"), 100) < countCivPlayersAlive()) // merk.ras1
+			return;
+	}	
 
 	if (getElapsedGameTurns() < GC.getDefineINT("MIN_TURNS_BEFORE_ANIMALS")) // merk.ras1
 		return;
@@ -7263,16 +7269,22 @@ void CvGame::createAnimals()
 	int const iMinAnimalStartingDist = GC.getDefineINT("MIN_ANIMAL_STARTING_DISTANCE"); // advc.300
 	FOR_EACH_AREA(pLoopArea)
 	{
+		// merk.rasa BEGIN: I want water animals.
+		int iNeededAnimals = 0;
 		if (pLoopArea->isWater())
-			continue;
-
-		int iNeededAnimals = pLoopArea->getNumUnownedTiles() /
+		{
+			iNeededAnimals = pLoopArea->getNumUnownedTiles() / (kGameHandicap.getUnownedTilesPerGameAnimal() * GC.getDefineINT("WATER_ANIMALS_DIVISOR"));
+		}
+		else
+		{
+			iNeededAnimals = pLoopArea->getNumUnownedTiles() /
 				kGameHandicap.getUnownedTilesPerGameAnimal();
-		/*	<advc.300> Will allow animals to survive longer on landmasses w/o
-			civ cities. But only want a couple of animals there. */
-		if (pLoopArea->getNumCivCities() <= 0)
-			iNeededAnimals /= GC.getDefineINT("ANIMALS_ON_EMPTY_LANDS_DIVISOR"); // </advc.300> // merk.ras1
-		iNeededAnimals -= pLoopArea->getUnitsPerPlayer(BARBARIAN_PLAYER);
+
+			/*  <advc.300> Will allow animals to survive longer on landmasses w/o
+				civ cities. But only want a couple of animals there. */
+			if (pLoopArea->getNumCivCities() <= 0)
+				iNeededAnimals /= /*merk.rasa global define added*/GC.getDefineINT("ANIMALS_ON_EMPTY_LANDS_DIVISOR"); // </advc.300>
+		}
 		if (iNeededAnimals <= 0)
 			continue;
 
@@ -7285,23 +7297,48 @@ void CvGame::createAnimals()
 					pLoopArea, iMinAnimalStartingDist);
 			if (pPlot == NULL)
 				continue;
+			// merk.rasa2: there is a simpler way
+			// merk.rasa: let's make a list of animal channels that are already here, eh?
+			/*std::vector<UnitTypes> aiChannelUnits;
+			FOR_EACH_UNIT(pAnimal, GET_PLAYER(BARBARIAN_PLAYER))
+			{
+				if (!(pAnimal->plot()->isArea(*pLoopArea)))
+					continue;
+				if (pAnimal->getUnitInfo().getSpawnChannel() != -1)
+					aiChannelUnits.push_back(pAnimal->getUnitType());
+			}*/
+			// merk.rasa END
 
 			UnitTypes eBestUnit = NO_UNIT;
 			int iBestValue = 0;
 			// advc (comment): This loop picks an animal that is suitable for pPlot
-			// merk.ras1 note - this will be heavily modded later
 			CvCivilization const& kCiv = GET_PLAYER(BARBARIAN_PLAYER).getCivilization();
 			for (int j = 0; j < kCiv.getNumUnits(); j++)
 			{
+				
 				UnitTypes eLoopUnit = kCiv.unitAt(j);
 				CvUnitInfo const& kUnit = GC.getInfo(eLoopUnit);
-				if (!kUnit.getUnitAIType(UNITAI_ANIMAL))
+				// merk.rasa more useful animal selection. First of all:
+				/*if (!kUnit.getUnitAIType(UNITAI_ANIMAL))
+					continue;*/
+				// This way any unit set to bAnimal will be spawned in this method no matter what their UnitAI is. 
+				// Because why limit ourselves? 
+				
+				// old if statement: 
+				//if (pPlot->isFeature() ?
+				//	kUnit.getFeatureNative(pPlot->getFeatureType()) :
+				//	kUnit.getTerrainNative(pPlot->getTerrainType()))
+				// merk.rasmore version: all checks in one function
+				// and also this check that never existed before:
+				if (!kUnit.isAnimal())
 					continue;
-				if (pPlot->isFeature() ?
-					kUnit.getFeatureNative(pPlot->getFeatureType()) :
-					kUnit.getTerrainNative(pPlot->getTerrainType()))
+				// apparently the devs previously relied on feature / terrain natives + unitAI, not actually being an animal. huh. 
+				if (isCanSpawnBarb(kUnit, pPlot, eLoopUnit))
 				{
-					int iValue = 1 + SyncRandNum(1000);
+					int iValue = 1 + SyncRandNum(1000) + kUnit.getSpawnWeight(); // can weight units in xml.
+					// can make it more likely to choose this animal if the feature native matches. 
+					if (kUnit.getFeatureNative(pPlot->getFeatureType()))
+						iValue += GC.getDefineINT("ANIMAL_FEATURE_NATIVE_WEIGHT");
 					if (iValue > iBestValue)
 					{
 						eBestUnit = eLoopUnit;
@@ -7309,6 +7346,7 @@ void CvGame::createAnimals()
 					}
 				}
 			}
+			// merk.rasa END			
 			if (eBestUnit != NO_UNIT)
 			{
 				GET_PLAYER(BARBARIAN_PLAYER).initUnit(eBestUnit,
@@ -7316,6 +7354,139 @@ void CvGame::createAnimals()
 			}
 		}
 	}
+}
+// merk.rasboth extracted this into its own method
+bool CvGame::isCanSpawnBarb(const CvUnitInfo& kUnit, CvPlot* pPlot, UnitTypes eLoopUnit)
+{
+	if (kUnit.getFeatureImpassable(pPlot->getFeatureType()))
+		return false;
+	if (kUnit.getTerrainImpassable(pPlot->getTerrainType()))
+		return false;
+	// merk.rasmore
+	if (kUnit.isCannotMoveRivers())
+		if (pPlot->isRiver())
+			return false;
+	if (kUnit.isCannotLeaveRivers())
+		if (!(pPlot->isRiver()))
+			return false;
+	if (kUnit.getRiverRestrictDistance() > 0)
+	{
+		bool bFoundRiver = false;
+		for (SquareIter itPlot(*pPlot, kUnit.getRiverRestrictDistance()); itPlot.hasNext(); ++itPlot)
+		{
+			int iDistance = itPlot.currPlotDist();
+			if (itPlot->isRiver())
+			{
+				bFoundRiver = true;
+				break;
+			}
+		}
+		if (!bFoundRiver)
+			return false; // technically a unit placed away from a river will be rendered immobile so don't do that lol
+	}
+	if (kUnit.isCannotMoveHills())
+		if (pPlot->isHills())
+			return false;
+	if (kUnit.isCannotMoveFlatlands())
+		if (pPlot->isFlatlands())
+			return false;
+	if (!(kUnit.getMinMoveTemp() == 0 && kUnit.getMaxMoveTemp() == 0))
+	{
+		// if water, use latitude instead
+		if (pPlot->isWater())
+		{
+			int iWaterTemp = getWaterTemp(*pPlot);
+			if (iWaterTemp > kUnit.getMaxMoveTemp() || iWaterTemp < kUnit.getMinMoveTemp())
+				return false;
+		}
+		if (GC.getTerrainInfo(pPlot->getTerrainType()).getTemp() > kUnit.getMaxMoveTemp())
+			return false;
+		if (GC.getTerrainInfo(pPlot->getTerrainType()).getTemp() < kUnit.getMinMoveTemp())
+			return false;
+	}
+	// NATIVES
+	if (kUnit.isAnyTerrainNative() && !kUnit.getTerrainNative(pPlot->getTerrainType()))
+		return false;
+	else if (kUnit.isAnyFeatureNative() && !kUnit.getFeatureNative(pPlot->getFeatureType())) // else because features not strictly required
+		return false;
+	if (kUnit.isRiverNative() && !pPlot->isRiver())
+		return false;
+	if (kUnit.isHillsNative() && !pPlot->isHills())
+		return false;
+	if (kUnit.isFlatlandsNative() && !pPlot->isFlatlands())
+		return false;
+	if (!(kUnit.getMinSpawnTemp() == 0 && kUnit.getMaxSpawnTemp() == 0))
+	{
+		// if water, use latitude instead
+		if (pPlot->isWater())
+		{
+			int iWaterTemp = getWaterTemp(*pPlot);
+			if (iWaterTemp > kUnit.getMaxSpawnTemp() || iWaterTemp < kUnit.getMinSpawnTemp())
+				return false;
+		}
+		if (GC.getTerrainInfo(pPlot->getTerrainType()).getTemp() > kUnit.getMaxSpawnTemp())
+			return false;
+		if (GC.getTerrainInfo(pPlot->getTerrainType()).getTemp() < kUnit.getMinSpawnTemp())
+			return false;
+	}
+	// can set area size too why not
+	if (kUnit.getMinAreaSize() > pPlot->area()->getNumTiles())
+		return false;
+
+	bool bCanSpawn = false;
+	int iSpawnChannel = kUnit.getSpawnChannel();
+	int iAreaChannel = pPlot->area()->getBarbarianSpawnChannel();
+	if (iSpawnChannel != iAreaChannel)
+	{
+		// Does the area have a channel yet? 
+		if (iAreaChannel <= 0)
+		{
+			// see if there is a different area this unit could spawn in 
+			bool bAlreadySpawned = false;
+			if (GC.getDefineINT("UNIQUE_SPAWN_CHANNELS")) // only if global define is set
+			{
+				FOR_EACH_AREA(pArea)
+				{
+					if (pArea->getBarbarianSpawnChannel() != iSpawnChannel)
+						continue;
+					bAlreadySpawned = true;
+					break;
+				}
+			}
+			// Set to ours
+			if (!bAlreadySpawned)
+			{
+				pPlot->area()->setBarbarianSpawnChannel(kUnit.getSpawnChannel());
+				bCanSpawn = true;
+			}
+		}
+	}
+	else
+		bCanSpawn = true;
+	if (bCanSpawn) // if it matches the area correctly, THEN check the niches (otherwise you get units of different area channels stuck in the same one)
+	{
+		int iNiche = kUnit.getNiche();
+		if (iSpawnChannel == -1 && iNiche == -1)
+			bCanSpawn = true;
+		else
+			bCanSpawn = !(pPlot->area()->isAlreadyFilledNiche(iNiche, eLoopUnit)); // this returns false if the unit matches the chosen unit for the niche
+	}
+	return bCanSpawn;
+}
+
+// merk.rasmore, lots of ints lol
+int CvGame::getWaterTemp(const CvPlot& kPlot)
+{
+	int iPoleTemp = GC.getDefineINT("POLE_TEMP");
+	int iEquatorTemp = GC.getDefineINT("EQUATOR_TEMP");
+	int iPoleLatitude = GC.getDefineINT("POLE_LATITUDE");
+	int iEquatorLatitude = GC.getDefineINT("EQUATOR_LATITUDE");
+	int iLatitude = kPlot.getLatitude();
+	int iTempRange = iEquatorTemp - iPoleTemp;
+	int iLatitudeRange = iPoleLatitude - iEquatorLatitude;
+	int iLatitudePercent = 100 * iLatitude / iLatitudeRange;
+	int iWaterTemp = (iLatitudePercent * iTempRange) / 100;
+	return iWaterTemp;
 }
 
 // advc.307:
@@ -7439,7 +7610,7 @@ int CvGame::createBarbarianUnits(int iUnitsToCreate, int iUnitsPresent,
 			UnitAITypes eLoadAI = UNITAI_ATTACK;
 			for (int i = 0; i < 2; i++)
 			{
-				UnitTypes eLoadUnit = randomBarbarianUnit(eLoadAI,
+				UnitTypes eLoadUnit = randomBarbarianUnit(eLoadAI, /*merk.rasa*/ kArea,
 						pTransport->getPlot());
 				if (eLoadUnit == NO_UNIT)
 					break;
@@ -7501,11 +7672,17 @@ int CvGame::createBarbarianUnits(int iUnitsToCreate, int iUnitsPresent,
 		if (pShelf != NULL)
 			eUnitAI = UNITAI_ATTACK_SEA;
 		// Original code moved into new function:
-		UnitTypes eUnitType = randomBarbarianUnit(eUnitAI, *pPlot);
+		CvPlot& kPlot = GC.getMap().getPlotByIndex(pPlot->plotNum());
+		UnitTypes eUnitType = randomBarbarianUnit(eUnitAI, kArea, kPlot); // merk.rasa
 		if (eUnitType == NO_UNIT)
 			return iCreated;
 		/*CvUnit* pNewUnit =*/GET_PLAYER(BARBARIAN_PLAYER).initUnit(eUnitType,
 				pPlot->getX(), pPlot->getY(), eUnitAI);
+		// merk.rasa: if the area does not yet have a channel set it to this one
+		// merge note: I don't know why this is commented out but I'm leaving that for now ? ? 
+		/*if (kArea.getBarbarianSpawnChannel() <= 0)
+			kArea.setBarbarianSpawnChannel(GC.getUnitInfo(pNewUnit->getUnitType()).getSpawnChannel());*/
+		// END
 		if (!pPlot->isWater())
 			iCreated++;
 		// </advc.300>
@@ -7530,6 +7707,8 @@ int CvGame::createBarbarianUnits(int iUnitsToCreate, int iUnitsPresent,
 }
 
 // <advc.300>
+/* merk.rasa comment - leaving 'habitable' because although animals 
+	need to spawn everywhere, barbarians are fine being limited to habitable areas.*/
 CvPlot* CvGame::randomBarbarianPlot(/* out-param */int& iValid,
 	CvArea const& kArea, Shelf const* pShelf)
 {
@@ -7564,7 +7743,7 @@ CvPlot* CvGame::randomBarbarianPlot(/* out-param */int& iValid,
 bool CvGame::killBarbarian(int iUnitsPresent, int iTiles, int iPop,
 	CvArea& kArea, Shelf* pShelf)
 {
-	if (iUnitsPresent <= 5) // 5 is never a crowd
+	if (iUnitsPresent <= GC.getDefineINT("NEVER_A_CROWD_OF_BARBS")) // merk.rasa: original comment, "5 is never a crowd" - let's let modders decide that. Global Define added. 
 		return false;
 	scaled rDivisor = std::max(1, 4 * iPop);
 	if (pShelf != NULL)
@@ -7614,7 +7793,7 @@ bool CvGame::killBarbarian(int iUnitsPresent, int iTiles, int iPop,
 }
 
 // Based on BtS code originally in createBarbarianUnits
-UnitTypes CvGame::randomBarbarianUnit(UnitAITypes eUnitAI, CvPlot const& kPlot)
+UnitTypes CvGame::randomBarbarianUnit(UnitAITypes eUnitAI, CvArea const& kArea, CvPlot& kPlot)
 {
 	bool bSea;
 	switch (eUnitAI)
@@ -7630,7 +7809,7 @@ UnitTypes CvGame::randomBarbarianUnit(UnitAITypes eUnitAI, CvPlot const& kPlot)
 	FOR_EACH_ENUM(Tech)
 	{
 		if (GET_TEAM(BARBARIAN_TEAM).isHasTech(eLoopTech) &&
-			GC.getInfo(eLoopTech).getResearchCost() > 100)
+			GC.getInfo(eLoopTech).getResearchCost() > /*merk.rasboth global define*/GC.getDefineINT("BARB_TECH_EXPENSIVE_THRESHOLD"))
 		{
 			bAnyExpensiveTech = true;
 			break;
@@ -7644,13 +7823,30 @@ UnitTypes CvGame::randomBarbarianUnit(UnitAITypes eUnitAI, CvPlot const& kPlot)
 		UnitTypes const eUnit = kCiv.unitAt(i);
 		CvUnitInfo const& kUnit = GC.getInfo(eUnit);
 		DomainTypes const eDomain = kUnit.getDomainType();
-		if (kUnit.getCombat() <= 0 || eDomain == DOMAIN_AIR ||
+		if (/*kUnit.getCombat() <= 0 || merk.rasa, I might spawn zero-strength barbs.
+			Also, it's perfectly fine to ban units from being spawned in the CivilizationInfo so let's 
+			remove the consideration for air & defensive units. Don't have specific plans to spawn barbarian planes, 
+			but you never know. 'isMostlyDefensive' means 'can only attack barbarians or animals' so that stays
+			eDomain == DOMAIN_AIR || */
 			kUnit.isMostlyDefensive() || // advc.315
 			(eDomain == DOMAIN_SEA) != bSea ||
 			!GET_PLAYER(BARBARIAN_PLAYER).canTrain(eUnit))
 		{
 			continue;
 		}
+		// merk.rasboth: applying the canSpawn function to regular barbarians too. No reason not to. 
+		if (!isCanSpawnBarb(kUnit, &kPlot, eUnit))
+			continue;
+		//// merk.rasa: skip units that do not match the channel. If the area does not have a channel then this will be ignored, so units are spawned randomly instead, and then that ends up determining the area channel. 
+		//if (kUnit.getSpawnChannel() > 0 && kArea.getBarbarianSpawnChannel() != kUnit.getSpawnChannel() && kArea.getBarbarianSpawnChannel() > 0)
+		//	continue;
+		// prevent units from being considered for their impassable tiles. 
+		// merk.rasboth wrapped into the can spawn function
+		/*if (kUnit.getFeatureImpassable(kPlot.getFeatureType()))
+			continue;
+		if (kUnit.getTerrainImpassable(kPlot.getTerrainType()))
+			continue;*/
+		// merk.rasa end
 		// <advc.301>
 		BonusTypes const eAndBonus = kUnit.getPrereqAndBonus();
 		std::vector<TechTypes> aeAndBonusTechs;
@@ -7705,8 +7901,8 @@ UnitTypes CvGame::randomBarbarianUnit(UnitAITypes eUnitAI, CvPlot const& kPlot)
 		if (eAndTech != NO_TECH)
 			iUnitEra = GC.getInfo(eAndTech).getEra();
 		// No units from more than 1 era behind the civs
-		if (iUnitEra + 1 < getCurrentEra())
-			continue;
+		if (iUnitEra + /* merk.rasa using a global define */ GC.getDefineINT("BARBS_BEHIND_ERAS") < getCurrentEra())
+			continue; // </advc.301>
 		// Treat Warrior as pre-Ancient in the following
 		if (eAndTech == NO_TECH)
 			iUnitEra = -1;
@@ -7742,13 +7938,19 @@ UnitTypes CvGame::randomBarbarianUnit(UnitAITypes eUnitAI, CvPlot const& kPlot)
 		{
 			iDieSides = (iDieSides * rNoBonusReqDieSidesMult).uround();
 		} // </advc.301>
-		int iValue = 1 + SyncRandNum(iDieSides);
+		int iValue = 1 + SyncRandNum(iDieSides) /* merk.rasa */ + kUnit.getSpawnWeight();
 		if (kUnit.getUnitAIType(eUnitAI))
 		{
 			//iValue += 200;
 			// <advc.301>
 			iValue += (rNoBonusReqDieSidesMult + 1).getPercent();
 		}
+		// merk.rasa - add weight for barb units native terrains and features. 
+		if (kUnit.getTerrainNative(kPlot.getTerrainType()))
+			iValue += GC.getDefineINT("BARBARIAN_TERRAN_NATIVE_WEIGHT");
+		if (kUnit.getFeatureNative(kPlot.getFeatureType()))
+			iValue += GC.getDefineINT("BARBARIAN_FEATURE_NATIVE_WEIGHT");
+		// merk.rasa END
 		for (size_t j = 0; j < aeAndBonusTechs.size(); j++)
 		{
 			iUnitEra = std::max<int>(iUnitEra,

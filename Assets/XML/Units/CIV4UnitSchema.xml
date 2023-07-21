@@ -105,6 +105,23 @@
 	<ElementType name="SeeInvisible" content="textOnly"/>
 	<ElementType name="Advisor" content="textOnly"/>
 	<ElementType name="bAnimal" content="textOnly" dt:type="boolean"/>
+	<!-- merk.rasa merk.rasboth merk.rasniche -->
+	<ElementType name="iNiche" content="textOnly" dt:type="int"/>
+	<ElementType name="iSpawnChannel" content="textOnly" dt:type="int"/>
+	<ElementType name="iSpawnWeight" content="textOnly" dt:type="int"/>
+	<!-- merk.rasmore-->
+	<ElementType name="bRiverNative" content="textOnly" dt:type="boolean"/>
+	<ElementType name="bHillsNative" content="textOnly" dt:type="boolean"/>
+	<ElementType name="bFlatlandsNative" content="textOnly" dt:type="boolean"/>
+	<ElementType name="bCannotMoveRivers" content="textOnly" dt:type="boolean"/>
+	<ElementType name="bCannotLeaveRivers" content="textOnly" dt:type="boolean"/>
+	<ElementType name="iRiverRestrictDistance" content="textOnly" dt:type="int"/>
+	<ElementType name="bCannotMoveHills" content="textOnly" dt:type="boolean"/>
+	<ElementType name="bCannotMoveFlatlands" content="textOnly" dt:type="boolean"/>
+	<ElementType name="iMinSpawnTemp" content="textOnly" dt:type="int"/>
+	<ElementType name="iMaxSpawnTemp" content="textOnly" dt:type="int"/>
+	<ElementType name="iMinMoveTemp" content="textOnly" dt:type="int"/>
+	<ElementType name="iMaxMoveTemp" content="textOnly" dt:type="int"/>
 	<ElementType name="bFood" content="textOnly" dt:type="boolean"/>
 	<ElementType name="bNoBadGoodies" content="textOnly" dt:type="boolean"/>
 	<ElementType name="bOnlyDefensive" content="textOnly" dt:type="boolean"/>
@@ -582,6 +599,23 @@
 		<element type="Help" minOccurs="0"/>
 		<element type="Advisor"/>
 		<element type="bAnimal"/>
+		<!-- merk.rasboth merk.rasniche merk.rasa -->
+		<element type="iNiche" minOccurs="0"/>
+		<element type="iSpawnChannel" minOccurs="0"/>
+		<element type="iSpawnWeight" minOccurs="0"/>
+		<!-- merk.rasmore -->
+		<element type="bRiverNative" minOccurs="0"/>
+		<element type="bHillsNative" minOccurs="0"/>
+		<element type="bFlatlandsNative" minOccurs="0"/>
+		<element type="bCannotMoveRivers" minOccurs="0"/>
+		<element type="bCannotLeaveRivers" minOccurs="0"/>
+		<element type="iRiverRestrictDistance" minOccurs="0"/>
+		<element type="bCannotMoveHills" minOccurs="0"/>
+		<element type="bCannotMoveFlatlands" minOccurs="0"/>
+		<element type="iMinSpawnTemp" minOccurs="0"/>
+		<element type="iMaxSpawnTemp" minOccurs="0"/>
+		<element type="iMinMoveTemp" minOccurs="0"/>
+		<element type="iMaxMoveTemp" minOccurs="0"/>
 		<element type="bFood"/>
 		<element type="bNoBadGoodies"/>
 		<element type="bOnlyDefensive"/>

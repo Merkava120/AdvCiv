@@ -30,6 +30,8 @@
 	<ElementType name="iSeeThrough" content="textOnly" dt:type="int"/>
 	<ElementType name="iBuildModifier" content="textOnly" dt:type="int"/>
 	<ElementType name="iDefense" content="textOnly" dt:type="int"/>
+	<!-- merk.rasmore-->
+	<ElementType name="iTemp" content="textOnly" dt:type="int"/>
 	<!-- advc.012 -->
 	<ElementType name="iRivalDefense" content="textOnly" dt:type="int"/>
 	<ElementType name="Button" content="textOnly"/>
@@ -63,6 +65,8 @@
 		<element type="iSeeThrough"/>
 		<element type="iBuildModifier"/>
 		<element type="iDefense"/>
+		<!-- merk.rasmore -->
+		<element type="iTemp" minOccurs="0"/> 
 		<element type="Button"/>
 		<element type="FootstepSounds"/>
 		<element type="WorldSoundscapeAudioScript" minOccurs="0"/>
@@ -121,6 +125,8 @@
 	<ElementType name="iTurnDamage" content="textOnly" dt:type="int"/>
 	<!-- GWMod new XML field M.A. -->
 	<ElementType name="iWarmingDefense" content="textOnly" dt:type="int"/>
+	<!-- merk.rasmore-->
+	<ElementType name="iTempAdd" content="textOnly" dt:type="int"/>
 	<ElementType name="bNoCoast" content="textOnly" dt:type="boolean"/>
 	<ElementType name="bNoRiver" content="textOnly" dt:type="boolean"/>
 	<ElementType name="bNoAdjacent" content="textOnly" dt:type="boolean"/>
@@ -163,6 +169,8 @@
 		<element type="iTurnDamage"/>
 		<!-- GWMod (advc: now optional; 0 by default) -->
 		<element type="iWarmingDefense" minOccurs="0"/>
+		<!-- merk.rasmore -->
+		<element type="iTempAdd" minOccurs="0"/>
 		<element type="bNoCoast"/>
 		<element type="bNoRiver"/>
 		<!-- advc.129b (set to false by default in the DLL; currently unused)

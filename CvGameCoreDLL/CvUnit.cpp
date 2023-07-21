@@ -2676,6 +2676,51 @@ bool CvUnit::canMoveInto(CvPlot const& kPlot, bool bAttack, bool bDeclareWar,
 		}
 	}
 
+	// merk.rasmore
+	if (getUnitInfo().isCannotMoveRivers())
+		if (kPlot.isRiver())
+			return false;
+	if (getUnitInfo().isCannotLeaveRivers())
+		if (!(kPlot.isRiver()))
+			return false;
+	if (getUnitInfo().getRiverRestrictDistance() > 0)
+	{
+		bool bFoundRiver = false;
+		for (SquareIter itPlot(kPlot, getUnitInfo().getRiverRestrictDistance()); itPlot.hasNext(); ++itPlot)
+		{
+			int iDistance = itPlot.currPlotDist();
+			if (itPlot->isRiver())
+			{
+				bFoundRiver = true;
+				break;
+			}
+		}
+		if (!bFoundRiver)
+			return false; // technically a unit placed away from a river will be rendered immobile so don't do that lol
+	}
+	if (getUnitInfo().isCannotMoveHills())
+		if (kPlot.isHills())
+			return false;
+	if (getUnitInfo().isCannotMoveFlatlands())
+		if (kPlot.isFlatlands())
+			return false;
+	if (!(getUnitInfo().getMinMoveTemp() == 0 && getUnitInfo().getMaxMoveTemp() == 0))
+	{
+		// if water, use latitude instead
+		if (kPlot.isWater())
+		{
+			int iWaterTemp = GC.getGame().getWaterTemp(kPlot);
+			if (iWaterTemp > getUnitInfo().getMaxMoveTemp() || iWaterTemp < getUnitInfo().getMinMoveTemp())
+				return false;
+		}
+		if (GC.getTerrainInfo(kPlot.getTerrainType()).getTemp() > getUnitInfo().getMaxMoveTemp())
+			return false;
+		if (GC.getTerrainInfo(kPlot.getTerrainType()).getTemp() < getUnitInfo().getMinMoveTemp())
+			return false;
+	}
+	// merk.rasmore END
+	
+
 	if (isNoCityCapture())
 	{
 		if (!bAttack && isEnemyCity(kPlot))

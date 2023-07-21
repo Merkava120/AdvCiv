@@ -727,8 +727,6 @@ CvCity* CvMap::findCity(int iX, int iY, PlayerTypes eOwner, TeamTypes eTeam,
 	}
 	return pBestCity;
 }
-
-
 CvSelectionGroup* CvMap::findSelectionGroup(int iX, int iY, PlayerTypes eOwner,
 	bool bReadyToSelect, bool bWorkers) const
 {
@@ -1316,7 +1314,6 @@ void CvMap::read(FDataStreamBase* pStream)
 	} // </advc.106n>
 }
 
-
 void CvMap::write(FDataStreamBase* pStream)
 {
 	REPRO_TEST_BEGIN_WRITE("Map");
@@ -1427,6 +1424,7 @@ void CvMap::calculateAreas()
 		calculateReprAreas();
 		return;
 	} // </advc.030>
+	int iNumAreas = 0; // merk.rasa
 	for (int i = 0; i < numPlots(); i++)
 	{
 		CvPlot& kLoopPlot = getPlotByIndex(i);
@@ -1473,6 +1471,7 @@ public:
 
 void CvMap::calculateAreas_dfs()
 {
+	int iNumAreas = 0; // merk.rasa
 	for (int iPass = 0; iPass <= 1; iPass++)
 	{
 		FOR_EACH_ENUM(PlotNum)
@@ -1486,6 +1485,8 @@ void CvMap::calculateAreas_dfs()
 				continue;
 			FAssert(iPass == 0 || kPlot.isImpassable());
 			CvArea& kArea = *addArea();
+			//a.setAreaNum(iNumAreas); // merk.rasa
+			iNumAreas++; // merk.rasa
 			kArea.init(kPlot.isWater());
 			CvAreaAggregator aggr(*this, kArea);
 			DepthFirstPlotSearch<CvAreaAggregator> dfs(kPlot, aggr);
