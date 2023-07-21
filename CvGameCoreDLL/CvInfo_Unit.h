@@ -204,6 +204,20 @@ public: /*  All const functions are exposed to Python except some related to art
 	int getNiche() const { return m_iNiche; } // merk.rasboth
 	int getSpawnChannel() const { return m_iSpawnChannel; } // merk.rasa
 	int getSpawnWeight() const { return m_iSpawnWeight; } // merk.rasa
+	// merk.rasmore begin
+	bool isRiverNative() const { return m_bRiverNative; } 
+	bool isHillsNative() const { return m_bHillsNative; }
+	bool isFlatlandsNative() const { return m_bFlatlandsNative; }
+	bool isCannotMoveRivers() const { return m_bCannotMoveRivers; }
+	bool isCannotLeaveRivers() const { return m_bCannotLeaveRivers; }
+	int getRiverRestrictDistance() const { return m_iRiverRestrictDistance; }
+	bool isCannotMoveHills() const { return m_bCannotMoveHills; }
+	bool isCannotMoveFlatlands() const { return m_bCannotMoveFlatlands; }
+	int getMinSpawnTemp() const { return m_iMinSpawnTemp; }
+	int getMaxSpawnTemp() const { return m_iMaxSpawnTemp; }
+	int getMinMoveTemp() const { return m_iMinMoveTemp; }
+	int getMaxMoveTemp() const { return m_iMinSpawnTemp; }
+	// merk.rasmore end
 	bool isFoodProduction() const { return m_bFoodProduction; }
 	bool isNoBadGoodies() const { return m_bNoBadGoodies; }
 	bool isOnlyDefensive() const { return m_bOnlyDefensive; }
@@ -333,7 +347,9 @@ public: /*  All const functions are exposed to Python except some related to art
 	bool getFeatureImpassable(int i) const;
 	bool isAnyFeatureImpassable() const { return (m_pbFeatureImpassable != NULL); } // advc.003t
 	bool getTerrainNative(int i) const;
+	bool isAnyTerrainNative() const { return (m_pbTerrainNative != NULL); } // merk.rasmore
 	bool getFeatureNative(int i) const;
+	bool isAnyFeatureNative() const { return (m_pbFeatureNative != NULL); } // merk.rasmore
 	bool getFreePromotions(int i) const;
 	bool isAnyFreePromotions() const { return (m_pbFreePromotions != NULL); } // advc.003t
 	int getLeaderPromotion() const;
@@ -496,6 +512,20 @@ protected:
 	int m_iNiche; // merk.rasboth
 	int m_iSpawnChannel; // merk.rasa
 	int m_iSpawnWeight; // merk.rasa
+	// merk.rasmore begin
+	bool m_bRiverNative;
+	bool m_bHillsNative;
+	bool m_bFlatlandsNative;
+	bool m_bCannotMoveRivers;
+	bool m_bCannotLeaveRivers;
+	int m_iRiverRestrictDistance;
+	bool m_bCannotMoveHills;
+	bool m_bCannotMoveFlatlands;
+	int m_iMinSpawnTemp;
+	int m_iMaxSpawnTemp;
+	int m_iMinMoveTemp;
+	int m_iMaxMoveTemp;
+	// merk.rasmore end
 	bool m_bFoodProduction;
 	bool m_bNoBadGoodies;
 	bool m_bOnlyDefensive;

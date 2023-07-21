@@ -7315,6 +7315,7 @@ void CvGame::createAnimals()
 			CvCivilization const& kCiv = GET_PLAYER(BARBARIAN_PLAYER).getCivilization();
 			for (int j = 0; j < kCiv.getNumUnits(); j++)
 			{
+				
 				UnitTypes eLoopUnit = kCiv.unitAt(j);
 				CvUnitInfo const& kUnit = GC.getInfo(eLoopUnit);
 				// merk.rasa more useful animal selection. First of all:
@@ -7327,25 +7328,21 @@ void CvGame::createAnimals()
 				//if (pPlot->isFeature() ?
 				//	kUnit.getFeatureNative(pPlot->getFeatureType()) :
 				//	kUnit.getTerrainNative(pPlot->getTerrainType()))
-				// new if statement:
-				if (kUnit.getTerrainNative(pPlot->getTerrainType()) && 
-					!kUnit.getFeatureImpassable(pPlot->getFeatureType()))
-				// old version ignores terrain if feature matches, new version always checks terrain and bans impassable features
-				// below also weights toward feature natives. 
-				// I might add further conditions later. 
+				// merk.rasmore version: all checks in one function
+				// and also this check that never existed before:
+				if (!kUnit.isAnimal())
+					continue;
+				// apparently the devs previously relied on feature / terrain natives + unitAI, not actually being an animal. huh. 
+				if (isCanSpawnBarb(kUnit, pPlot, eLoopUnit))
 				{
-					// merk.rasboth: I like both systems so now this uses both. 
-					if (isCanSpawnBarb(kUnit, pPlot, eLoopUnit))
+					int iValue = 1 + SyncRandNum(1000) + kUnit.getSpawnWeight(); // can weight units in xml.
+					// can make it more likely to choose this animal if the feature native matches. 
+					if (kUnit.getFeatureNative(pPlot->getFeatureType()))
+						iValue += GC.getDefineINT("ANIMAL_FEATURE_NATIVE_WEIGHT");
+					if (iValue > iBestValue)
 					{
-						int iValue = 1 + SyncRandNum(1000) + kUnit.getSpawnWeight(); // can weight units in xml.
-						// can make it more likely to choose this animal if the feature native matches. 
-						if (kUnit.getFeatureNative(pPlot->getFeatureType()))
-							iValue += GC.getDefineINT("ANIMAL_FEATURE_NATIVE_WEIGHT");
-						if (iValue > iBestValue)
-						{
-							eBestUnit = eLoopUnit;
-							iBestValue = iValue;
-						}
+						eBestUnit = eLoopUnit;
+						iBestValue = iValue;
 					}
 				}
 			}
@@ -7365,7 +7362,60 @@ bool CvGame::isCanSpawnBarb(const CvUnitInfo& kUnit, CvPlot* pPlot, UnitTypes eL
 		return false;
 	if (kUnit.getTerrainImpassable(pPlot->getTerrainType()))
 		return false;
-	// will add more stuff here later. 
+	// merk.rasmore
+	if (kUnit.isCannotMoveRivers())
+		if (pPlot->isRiver())
+			return false;
+	if (kUnit.isCannotLeaveRivers())
+		if (!(pPlot->isRiver()))
+			return false;
+	if (kUnit.getRiverRestrictDistance() > 0)
+	{
+		bool bFoundRiver = false;
+		for (SquareIter itPlot(*pPlot, kUnit.getRiverRestrictDistance()); itPlot.hasNext(); ++itPlot)
+		{
+			int iDistance = itPlot.currPlotDist();
+			if (itPlot->isRiver())
+			{
+				bFoundRiver = true;
+				break;
+			}
+		}
+		if (!bFoundRiver)
+			return false; // technically a unit placed away from a river will be rendered immobile so don't do that lol
+	}
+	if (kUnit.isCannotMoveHills())
+		if (pPlot->isHills())
+			return false;
+	if (kUnit.isCannotMoveFlatlands())
+		if (pPlot->isFlatlands())
+			return false;
+	if (!(kUnit.getMinMoveTemp() == 0 && kUnit.getMaxMoveTemp() == 0))
+	{
+		if (GC.getTerrainInfo(pPlot->getTerrainType()).getTemp() > kUnit.getMaxMoveTemp())
+			return false;
+		if (GC.getTerrainInfo(pPlot->getTerrainType()).getTemp() < kUnit.getMinMoveTemp())
+			return false;
+	}
+	// NATIVES
+	if (kUnit.isAnyTerrainNative() && !kUnit.getTerrainNative(pPlot->getTerrainType()))
+		return false;
+	if (kUnit.isAnyFeatureNative() && !kUnit.getFeatureNative(pPlot->getFeatureType()))
+		return false;
+	if (kUnit.isRiverNative() && !pPlot->isRiver())
+		return false;
+	if (kUnit.isHillsNative() && !pPlot->isHills())
+		return false;
+	if (kUnit.isFlatlandsNative() && !pPlot->isFlatlands())
+		return false;
+	if (!(kUnit.getMinSpawnTemp() == 0 && kUnit.getMaxSpawnTemp() == 0))
+	{
+		if (GC.getTerrainInfo(pPlot->getTerrainType()).getTemp() > kUnit.getMaxSpawnTemp())
+			return false;
+		if (GC.getTerrainInfo(pPlot->getTerrainType()).getTemp() < kUnit.getMinSpawnTemp())
+			return false;
+	}
+
 	bool bCanSpawn = false;
 	int iSpawnChannel = kUnit.getSpawnChannel();
 	int iAreaChannel = pPlot->area()->getBarbarianSpawnChannel();
