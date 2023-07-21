@@ -102,6 +102,8 @@
 	<ElementType name="Domain" content="textOnly"/>
 	<ElementType name="DefaultUnitAI" content="textOnly"/>
 	<ElementType name="Invisible" content="textOnly"/>
+	<!-- merk.advinv -->
+	<ElementType name="bRevealInOpen" content="textOnly" dt:type="boolean"/>
 	<ElementType name="SeeInvisible" content="textOnly"/>
 	<ElementType name="Advisor" content="textOnly"/>
 	<ElementType name="bAnimal" content="textOnly" dt:type="boolean"/>
@@ -109,19 +111,31 @@
 	<ElementType name="iNiche" content="textOnly" dt:type="int"/>
 	<ElementType name="iSpawnChannel" content="textOnly" dt:type="int"/>
 	<ElementType name="iSpawnWeight" content="textOnly" dt:type="int"/>
-	<!-- merk.rasmore-->
+	<!-- merk.rasmore merk.rasem-->
 	<ElementType name="bRiverNative" content="textOnly" dt:type="boolean"/>
 	<ElementType name="bHillsNative" content="textOnly" dt:type="boolean"/>
 	<ElementType name="bFlatlandsNative" content="textOnly" dt:type="boolean"/>
+	<ElementType name="bCoastalNative" content="textOnly" dt:type="boolean"/>
+	<ElementType name="bOpenNative" content="textOnly" dt:type="boolean"/>
+	<ElementType name="iFeatureNativeWeight" content="textOnly" dt:type="int"/>
 	<ElementType name="bCannotMoveRivers" content="textOnly" dt:type="boolean"/>
 	<ElementType name="bCannotLeaveRivers" content="textOnly" dt:type="boolean"/>
 	<ElementType name="iRiverRestrictDistance" content="textOnly" dt:type="int"/>
 	<ElementType name="bCannotMoveHills" content="textOnly" dt:type="boolean"/>
+	<ElementType name="iHillsRestrictDistance" content="textOnly" dt:type="int"/>
+	<ElementType name="iPeakRestrictDistance" content="textOnly" dt:type="int"/>
 	<ElementType name="bCannotMoveFlatlands" content="textOnly" dt:type="boolean"/>
+	<ElementType name="bCannotMoveCoastal" content="textOnly" dt:type="boolean"/>
+	<ElementType name="bCannotLeaveCoastal" content="textOnly" dt:type="boolean"/>
+	<ElementType name="iCoastalRestrictDistance" content="textOnly" dt:type="int"/>
+	<ElementType name="bCanSwim" content="textOnly" dt:type="boolean"/>
+	<ElementType name="bCannotMoveFeatures" content="textOnly" dt:type="boolean"/>
+	<ElementType name="bCannotMoveOpen" content="textOnly" dt:type="boolean"/>
 	<ElementType name="iMinSpawnTemp" content="textOnly" dt:type="int"/>
 	<ElementType name="iMaxSpawnTemp" content="textOnly" dt:type="int"/>
 	<ElementType name="iMinMoveTemp" content="textOnly" dt:type="int"/>
 	<ElementType name="iMaxMoveTemp" content="textOnly" dt:type="int"/>
+	<!-- merkava120 end -->
 	<ElementType name="bFood" content="textOnly" dt:type="boolean"/>
 	<ElementType name="bNoBadGoodies" content="textOnly" dt:type="boolean"/>
 	<ElementType name="bOnlyDefensive" content="textOnly" dt:type="boolean"/>
@@ -592,6 +606,8 @@
 		<element type="Domain"/>
 		<element type="DefaultUnitAI"/>
 		<element type="Invisible"/>
+		<!-- merk.advinv -->
+		<element type="bRevealInOpen" minOccurs="0"/>
 		<element type="SeeInvisible"/>
 		<element type="Description"/>
 		<element type="Civilopedia"/>
@@ -603,19 +619,31 @@
 		<element type="iNiche" minOccurs="0"/>
 		<element type="iSpawnChannel" minOccurs="0"/>
 		<element type="iSpawnWeight" minOccurs="0"/>
-		<!-- merk.rasmore -->
+		<!-- merk.rasmore merk.rasem -->
 		<element type="bRiverNative" minOccurs="0"/>
 		<element type="bHillsNative" minOccurs="0"/>
 		<element type="bFlatlandsNative" minOccurs="0"/>
+		<element type="bCoastalNative" minOccurs="0"/>
+		<element type="bOpenNative" minOccurs="0"/>
+		<element type="iFeatureNativeWeight" minOccurs="0"/>
 		<element type="bCannotMoveRivers" minOccurs="0"/>
 		<element type="bCannotLeaveRivers" minOccurs="0"/>
 		<element type="iRiverRestrictDistance" minOccurs="0"/>
 		<element type="bCannotMoveHills" minOccurs="0"/>
+		<element type="iHillsRestrictDistance" minOccurs="0"/>
+		<element type="iPeakRestrictDistance" minOccurs="0"/>
 		<element type="bCannotMoveFlatlands" minOccurs="0"/>
+		<element type="bCannotMoveCoastal" minOccurs="0"/>
+		<element type="bCannotLeaveCoastal" minOccurs="0"/>
+		<element type="iCoastalRestrictDistance" minOccurs="0"/>
+		<element type="bCanSwim" minOccurs="0"/>
+		<element type="bCannotMoveFeatures" minOccurs="0"/>
+		<element type="bCannotMoveOpen" minOccurs="0"/>
 		<element type="iMinSpawnTemp" minOccurs="0"/>
 		<element type="iMaxSpawnTemp" minOccurs="0"/>
 		<element type="iMinMoveTemp" minOccurs="0"/>
 		<element type="iMaxMoveTemp" minOccurs="0"/>
+		<!-- merkava120 end -->
 		<element type="bFood"/>
 		<element type="bNoBadGoodies"/>
 		<element type="bOnlyDefensive"/>
@@ -920,6 +948,20 @@
 	<ElementType name="bLeader" content="textOnly" dt:type="boolean"/>
 	<!-- advc.164: was boolean -->
 	<ElementType name="iBlitz" content="textOnly" dt:type="int"/>
+	<!-- merk.promo1 -->
+	<ElementType name="bDoubleMoveOpen" content="textOnly" dt:type="boolean"/>
+	<ElementType name="bDoubleMoveFlatlands" content="textOnly" dt:type="boolean"/>
+	<ElementType name="iOpenAttack" content="textOnly" dt:type="int"/>
+	<ElementType name="iOpenDefense" content="textOnly" dt:type="int"/>
+	<ElementType name="iFlatlandsAttack" content="textOnly" dt:type="int"/>
+	<ElementType name="iFlatlandsDefense" content="textOnly" dt:type="int"/>
+	<ElementType name="bUnitCombatAttack" content="textOnly" dt:type="boolean"/>
+	<ElementType name="bUnitCombatDefense" content="textOnly" dt:type="boolean"/>
+	<!-- merk.dp -->
+	<ElementType name="iChanceGain" content="textOnly" dt:type="int"/>
+	<ElementType name="bGainMatchConditions" content="textOnly" dt:type="boolean"/>
+	<ElementType name="bNoDirect" content="textOnly" dt:type="boolean"/>
+	<!-- merkava120 end -->
 	<ElementType name="bAmphib" content="textOnly" dt:type="boolean"/>
 	<ElementType name="bRiver" content="textOnly" dt:type="boolean"/>
 	<ElementType name="bEnemyRoute" content="textOnly" dt:type="boolean"/>
@@ -984,6 +1026,23 @@
 		<element type="bLeader"/>
 		<!-- advc.164 -->
 		<element type="iBlitz"/>
+		<!-- merk.promo1 -->
+		<element type="SeeInvisible" minOccurs="0"/>
+		<element type="Invisible" minOccurs="0"/>
+		<element type="bDoubleMoveOpen" minOccurs="0"/>
+		<element type="bDoubleMoveFlatlands" minOccurs="0"/>
+		<element type="iOpenAttack" minOccurs="0"/>
+		<element type="iOpenDefense" minOccurs="0"/>
+		<element type="iFlatlandsAttack" minOccurs="0"/>
+		<element type="iFlatlandsDefense" minOccurs="0"/>
+		<element type="bUnitCombatAttack" minOccurs="0"/>
+		<element type="bUnitCombatDefense" minOccurs="0"/>
+		<element type="bCanMoveImpassable" minOccurs="0"/>
+		<!-- merk.dp -->
+		<element type="iChanceGain" minOccurs="0"/>
+		<element type="bGainMatchConditions" minOccurs="0"/>
+		<element type="bNoDirect" minOccurs="0"/>
+		<!-- merkava120 end -->
 		<element type="bAmphib"/>
 		<element type="bRiver"/>
 		<element type="bEnemyRoute"/>

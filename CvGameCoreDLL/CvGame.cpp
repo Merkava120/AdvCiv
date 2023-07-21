@@ -7433,10 +7433,17 @@ bool CvGame::isCanSpawnBarb(const CvUnitInfo& kUnit, CvPlot* pPlot, UnitTypes eL
 	if (kUnit.getMinAreaSize() > pPlot->area()->getNumTiles())
 		return false;
 
+	// merk.rasem - The rest of this is RAS system. So:
+	if (GC.getDefineINT("DISABLE_RAS_SYSTEM"))
+		return true;
+
+
 	bool bCanSpawn = false;
 	int iSpawnChannel = kUnit.getSpawnChannel();
+	if (GC.getDefineINT("DISABLE_ANIMAL_CHANNELS") && kUnit.isAnimal()) // merk.rasem
+		iSpawnChannel = -1;
 	int iAreaChannel = pPlot->area()->getBarbarianSpawnChannel();
-	if (iSpawnChannel != iAreaChannel)
+	if (iSpawnChannel != iAreaChannel && iSpawnChannel != -1)
 	{
 		// Does the area have a channel yet? 
 		if (iAreaChannel <= 0)
@@ -7466,7 +7473,9 @@ bool CvGame::isCanSpawnBarb(const CvUnitInfo& kUnit, CvPlot* pPlot, UnitTypes eL
 	if (bCanSpawn) // if it matches the area correctly, THEN check the niches (otherwise you get units of different area channels stuck in the same one)
 	{
 		int iNiche = kUnit.getNiche();
-		if (iSpawnChannel == -1 && iNiche == -1)
+		if (GC.getDefineINT("DISABLE_ANIMAL_NICHES") && kUnit.isAnimal()) // merk.rasem
+			iNiche = -1;
+		if (bCanSpawn && iNiche == -1)
 			bCanSpawn = true;
 		else
 			bCanSpawn = !(pPlot->area()->isAlreadyFilledNiche(iNiche, eLoopUnit)); // this returns false if the unit matches the chosen unit for the niche

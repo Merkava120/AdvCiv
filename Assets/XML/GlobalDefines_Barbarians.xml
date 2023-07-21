@@ -108,5 +108,48 @@
 		<DefineName>UNIQUE_SPAWN_CHANNELS</DefineName>
 		<iDefineIntVal>1</iDefineIntVal>
 	</Define>
+	
+	<!-- Disable channels for animals, so your continent can have mixes of channels but will still fill each niche only once. Don't want to just recreate Earth's groups of animals? I gotchoo.  -->
+	<Define>
+		<DefineName>DISABLE_ANIMAL_CHANNELS</DefineName>
+		<iDefineIntVal>0</iDefineIntVal>
+	</Define>
+	<!-- Same for niches. I'm never going to use this but who am I to limit you. -->
+	<Define>
+		<DefineName>DISABLE_ANIMAL_NICHES</DefineName>
+		<iDefineIntVal>0</iDefineIntVal>
+	</Define>
+	<!-- disable the entire niche / channel system including for other barbarians. Note this does not disable terrain / feature / etc. requirements -->
+	<Define>
+		<DefineName>DISABLE_RAS_SYSTEM</DefineName>
+		<iDefineIntVal>0</iDefineIntVal>
+	</Define>
+	
+	<!-- above this threshold of beakers the barb is considered to 'have expensive techs'. Default 100 -->
+	<Define>
+		<DefineName>BARB_TECH_EXPENSIVE_THRESHOLD</DefineName>
+		<iDefineIntVal>500</iDefineIntVal>
+	</Define>
+	
+	<!-- for the purposes of spawning, the middle of the world is how hot? -->
+	<Define>
+		<DefineName>EQUATOR_TEMP</DefineName>
+		<iDefineIntVal>8</iDefineIntVal>
+	</Define>
+	<!-- and the poles? -->
+	<Define>
+		<DefineName>POLE_TEMP</DefineName>
+		<iDefineIntVal>1</iDefineIntVal>
+	</Define>
+	<!-- latitudes (if you're on a non-global map definitely change these) -->
+	<Define>
+		<DefineName>EQUATOR_LATITUDE</DefineName>
+		<iDefineIntVal>0</iDefineIntVal>
+	</Define>
+	<!-- and the poles? -->
+	<Define>
+		<DefineName>POLE_LATITUDE</DefineName>
+		<iDefineIntVal>90</iDefineIntVal>
+	</Define>
 
 </Civ4Defines>
