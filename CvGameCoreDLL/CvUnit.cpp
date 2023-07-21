@@ -2706,6 +2706,13 @@ bool CvUnit::canMoveInto(CvPlot const& kPlot, bool bAttack, bool bDeclareWar,
 			return false;
 	if (!(getUnitInfo().getMinMoveTemp() == 0 && getUnitInfo().getMaxMoveTemp() == 0))
 	{
+		// if water, use latitude instead
+		if (kPlot.isWater())
+		{
+			int iWaterTemp = GC.getGame().getWaterTemp(kPlot);
+			if (iWaterTemp > getUnitInfo().getMaxMoveTemp() || iWaterTemp < getUnitInfo().getMinMoveTemp())
+				return false;
+		}
 		if (GC.getTerrainInfo(kPlot.getTerrainType()).getTemp() > getUnitInfo().getMaxMoveTemp())
 			return false;
 		if (GC.getTerrainInfo(kPlot.getTerrainType()).getTemp() < getUnitInfo().getMinMoveTemp())

@@ -7392,6 +7392,13 @@ bool CvGame::isCanSpawnBarb(const CvUnitInfo& kUnit, CvPlot* pPlot, UnitTypes eL
 			return false;
 	if (!(kUnit.getMinMoveTemp() == 0 && kUnit.getMaxMoveTemp() == 0))
 	{
+		// if water, use latitude instead
+		if (pPlot->isWater())
+		{
+			int iWaterTemp = getWaterTemp(*pPlot);
+			if (iWaterTemp > kUnit.getMaxMoveTemp() || iWaterTemp < kUnit.getMinMoveTemp())
+				return false;
+		}
 		if (GC.getTerrainInfo(pPlot->getTerrainType()).getTemp() > kUnit.getMaxMoveTemp())
 			return false;
 		if (GC.getTerrainInfo(pPlot->getTerrainType()).getTemp() < kUnit.getMinMoveTemp())
@@ -7400,7 +7407,7 @@ bool CvGame::isCanSpawnBarb(const CvUnitInfo& kUnit, CvPlot* pPlot, UnitTypes eL
 	// NATIVES
 	if (kUnit.isAnyTerrainNative() && !kUnit.getTerrainNative(pPlot->getTerrainType()))
 		return false;
-	if (kUnit.isAnyFeatureNative() && !kUnit.getFeatureNative(pPlot->getFeatureType()))
+	else if (kUnit.isAnyFeatureNative() && !kUnit.getFeatureNative(pPlot->getFeatureType())) // else because features not strictly required
 		return false;
 	if (kUnit.isRiverNative() && !pPlot->isRiver())
 		return false;
@@ -7410,11 +7417,21 @@ bool CvGame::isCanSpawnBarb(const CvUnitInfo& kUnit, CvPlot* pPlot, UnitTypes eL
 		return false;
 	if (!(kUnit.getMinSpawnTemp() == 0 && kUnit.getMaxSpawnTemp() == 0))
 	{
+		// if water, use latitude instead
+		if (pPlot->isWater())
+		{
+			int iWaterTemp = getWaterTemp(*pPlot);
+			if (iWaterTemp > kUnit.getMaxSpawnTemp() || iWaterTemp < kUnit.getMinSpawnTemp())
+				return false;
+		}
 		if (GC.getTerrainInfo(pPlot->getTerrainType()).getTemp() > kUnit.getMaxSpawnTemp())
 			return false;
 		if (GC.getTerrainInfo(pPlot->getTerrainType()).getTemp() < kUnit.getMinSpawnTemp())
 			return false;
 	}
+	// can set area size too why not
+	if (kUnit.getMinAreaSize() > pPlot->area()->getNumTiles())
+		return false;
 
 	bool bCanSpawn = false;
 	int iSpawnChannel = kUnit.getSpawnChannel();
@@ -7455,6 +7472,21 @@ bool CvGame::isCanSpawnBarb(const CvUnitInfo& kUnit, CvPlot* pPlot, UnitTypes eL
 			bCanSpawn = !(pPlot->area()->isAlreadyFilledNiche(iNiche, eLoopUnit)); // this returns false if the unit matches the chosen unit for the niche
 	}
 	return bCanSpawn;
+}
+
+// merk.rasmore, lots of ints lol
+int CvGame::getWaterTemp(const CvPlot& kPlot)
+{
+	int iPoleTemp = GC.getDefineINT("POLE_TEMP");
+	int iEquatorTemp = GC.getDefineINT("EQUATOR_TEMP");
+	int iPoleLatitude = GC.getDefineINT("POLE_LATITUDE");
+	int iEquatorLatitude = GC.getDefineINT("EQUATOR_LATITUDE");
+	int iLatitude = kPlot.getLatitude();
+	int iTempRange = iEquatorTemp - iPoleTemp;
+	int iLatitudeRange = iPoleLatitude - iEquatorLatitude;
+	int iLatitudePercent = 100 * iLatitude / iLatitudeRange;
+	int iWaterTemp = (iLatitudePercent * iTempRange) / 100;
+	return iWaterTemp;
 }
 
 // advc.307:

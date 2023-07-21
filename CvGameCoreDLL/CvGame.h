@@ -766,7 +766,7 @@ public:
 
 	bool isGreatPersonBorn(CvWString& szName) const;
 	void addGreatPersonBornName(CvWString const& szName);
-
+	int getWaterTemp(const CvPlot& kPlot); // merk.rasmore
 	DllExport int getIndexAfterLastDeal();																// Exposed to Python
 	int getNumDeals() { return m_deals.getCount(); }													// Exposed to Python
 
