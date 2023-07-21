@@ -12,6 +12,39 @@ m_iSeeThroughLevel(0),
 m_iBuildModifier(0),
 m_iDefenseModifier(0),
 m_iTemp(0), // merk.rasmore
+// merk.msm begin
+m_iBaseTerrain(-1),
+m_iBaseFeature(-1),
+m_iChanceInclude(0),
+m_iChanceMap(0),
+m_bReqRiver(false),
+m_bRequiresFlatlands(false),
+m_bReqHills(false),
+m_bReqCoastal(false),
+m_bReqCoast(false),
+m_bReqOcean(false),
+m_iWtRiver(0),
+m_iWtHills(0),
+m_iWtCoastal(0),
+m_iWtCoast(0),
+m_iWtOcean(0),
+m_iMinLatitude(0),
+m_iMaxLatitude(0),
+m_iMinAreaSize(0),
+m_iMaxAreaSize(0),
+m_iMinAreaProportion(0),
+m_iMaxAreaProportion(0),
+m_iAreaChannel(-1),
+m_bPlaceOnce(false),
+m_bPlaceInGroup(false),
+m_bSurroundedByBase(false),
+m_piTerrainWeights(NULL),
+m_piFeatureWeights(NULL),
+m_piAdjTerrainWeights(NULL),
+m_piAdjFeatureWeights(NULL),
+m_iCoastAdjacentWeight(0),
+m_iHillsAdjacentWeight(0),
+// merk.msm end
 m_bWater(false),
 m_bImpassable(false),
 m_bFound(false),
@@ -30,6 +63,12 @@ CvTerrainInfo::~CvTerrainInfo()
 	SAFE_DELETE_ARRAY(m_piRiverYieldChange);
 	SAFE_DELETE_ARRAY(m_piHillsYieldChange);
 	SAFE_DELETE_ARRAY(m_pi3DAudioScriptFootstepIndex);
+	// merk.msm
+	SAFE_DELETE_ARRAY(m_piTerrainWeights);
+	SAFE_DELETE_ARRAY(m_piFeatureWeights);
+	SAFE_DELETE_ARRAY(m_piAdjTerrainWeights);
+	SAFE_DELETE_ARRAY(m_piAdjFeatureWeights);
+	// merk.msm end
 }
 
 const TCHAR* CvTerrainInfo::getArtDefineTag() const
@@ -129,7 +168,34 @@ bool CvTerrainInfo::read(CvXMLLoadUtility* pXML)
 	pXML->GetChildXmlValByName(&m_iSeeThroughLevel, "iSeeThrough");
 	pXML->GetChildXmlValByName(&m_iBuildModifier, "iBuildModifier");
 	pXML->GetChildXmlValByName(&m_iDefenseModifier, "iDefense");
-	pXML->GetChildXmlValByName(&m_iTemp, "iTemp", 0);
+	pXML->GetChildXmlValByName(&m_iTemp, "iTemp", 0); // merk.rasmore
+	// merk.msm begin
+	pXML->GetChildXmlValByName(&m_iChanceInclude, "iChanceInclude", 0);
+	pXML->GetChildXmlValByName(&m_iChanceMap, "iChanceMap", 0);
+	pXML->GetChildXmlValByName(&m_bReqRiver, "bRequiresRiver", 0);
+	pXML->GetChildXmlValByName(&m_bRequiresFlatlands, "bRequiresFlatlands", 0);
+	pXML->GetChildXmlValByName(&m_bReqHills, "bReqHills", 0);
+	pXML->GetChildXmlValByName(&m_bReqCoastal, "bReqCoastal", 0);
+	pXML->GetChildXmlValByName(&m_bReqCoast, "bReqCoast", 0);
+	pXML->GetChildXmlValByName(&m_bReqOcean, "bReqOcean", 0);
+	pXML->GetChildXmlValByName(&m_iWtRiver, "iWtRiver", 0);
+	pXML->GetChildXmlValByName(&m_iWtHills, "iWtHills", 0);
+	pXML->GetChildXmlValByName(&m_iWtCoastal, "iWtCoastal", 0);
+	pXML->GetChildXmlValByName(&m_iWtCoast, "iWtCoast", 0);
+	pXML->GetChildXmlValByName(&m_iWtOcean, "iWtOcean", 0);
+	pXML->GetChildXmlValByName(&m_iMinLatitude, "iMinLatitude", 0);
+	pXML->GetChildXmlValByName(&m_iMaxLatitude, "iMaxLatitude", 0);
+	pXML->GetChildXmlValByName(&m_iMinAreaSize, "iMinAreaSize", 0);
+	pXML->GetChildXmlValByName(&m_iMaxAreaSize, "iMaxAreaSize", 0);
+	pXML->GetChildXmlValByName(&m_iMinAreaProportion, "iMinAreaProportion", 0);
+	pXML->GetChildXmlValByName(&m_iMaxAreaProportion, "iMaxAreaProportion", 0);
+	pXML->GetChildXmlValByName(&m_iAreaChannel, "iAreaChannel", -1);
+	pXML->GetChildXmlValByName(&m_bPlaceOnce, "bPlaceOnce", 0);
+	pXML->GetChildXmlValByName(&m_bPlaceInGroup, "bPlaceInGroup", 0);
+	pXML->GetChildXmlValByName(&m_bSurroundedByBase, "bSurroundedByBase", 0);
+	pXML->GetChildXmlValByName(&m_iHillsAdjacentWeight, "iHillsAdjacentWeight", 0);
+	pXML->GetChildXmlValByName(&m_iCoastAdjacentWeight, "iCoastAdjacentWeight", 0);
+	// merk.msm end
 
 	pXML->SetVariableListTagPairForAudioScripts(&m_pi3DAudioScriptFootstepIndex, "FootstepSounds", GC.getNumFootstepAudioTypes());
 	{
@@ -169,6 +235,37 @@ m_iAdvancedStartRemoveCost(0),
 m_iTurnDamage(0),
 m_iWarmingDefense(0), //GWMod
 m_iTempAdd(0), // merk.rasmore
+// merk.msm begin
+m_iBaseTerrain(-1),
+m_iBaseFeature(-1),
+m_iChanceInclude(0),
+m_iChanceMap(0),
+m_bReqHills(false),
+m_bReqCoastal(false),
+m_bReqCoast(false),
+m_bReqOcean(false),
+m_iWtRiver(0),
+m_iWtHills(0),
+m_iWtCoastal(0),
+m_iWtCoast(0),
+m_iWtOcean(0),
+m_iMinLatitude(0),
+m_iMaxLatitude(0),
+m_iMinAreaSize(0),
+m_iMaxAreaSize(0),
+m_iMinAreaProportion(0),
+m_iMaxAreaProportion(0),
+m_iAreaChannel(-1),
+m_bPlaceOnce(false),
+m_bPlaceInGroup(false),
+m_bSurroundedByBase(false),
+m_piTerrainWeights(NULL),
+m_piFeatureWeights(NULL),
+m_piAdjTerrainWeights(NULL),
+m_piAdjFeatureWeights(NULL),
+m_iCoastAdjacentWeight(0),
+m_iHillsAdjacentWeight(0),
+// merk.msm end
 m_bNoCoast(false),
 m_bNoRiver(false),
 m_bNoRiverSide(false), // advc.129b
@@ -198,6 +295,12 @@ CvFeatureInfo::~CvFeatureInfo()
 	SAFE_DELETE_ARRAY(m_piHillsYieldChange);
 	SAFE_DELETE_ARRAY(m_pi3DAudioScriptFootstepIndex);
 	SAFE_DELETE_ARRAY(m_pbTerrain);
+	// merk.msm
+	SAFE_DELETE_ARRAY(m_piTerrainWeights);
+	SAFE_DELETE_ARRAY(m_piFeatureWeights);
+	SAFE_DELETE_ARRAY(m_piAdjTerrainWeights);
+	SAFE_DELETE_ARRAY(m_piAdjFeatureWeights);
+	// merk.msm end
 }
 
 int CvFeatureInfo::getAppearanceProbability() const
@@ -411,6 +514,31 @@ bool CvFeatureInfo::read(CvXMLLoadUtility* pXML)
 	pXML->GetChildXmlValByName(&m_iWarmingDefense, "iWarmingDefense", // GWMod new xml field M.A.
 			0); // advc: Default value; now optional.
 	pXML->GetChildXmlValByName(&m_iTempAdd, "iTempAdd", 0); // merk.rasmore
+	// merk.msm begin
+	pXML->GetChildXmlValByName(&m_iChanceInclude, "iChanceInclude", 0);
+	pXML->GetChildXmlValByName(&m_iChanceMap, "iChanceMap", 0);
+	pXML->GetChildXmlValByName(&m_bReqHills, "bReqHills", 0);
+	pXML->GetChildXmlValByName(&m_bReqCoastal, "bReqCoastal", 0);
+	pXML->GetChildXmlValByName(&m_bReqCoast, "bReqCoast", 0);
+	pXML->GetChildXmlValByName(&m_bReqOcean, "bReqOcean", 0);
+	pXML->GetChildXmlValByName(&m_iWtRiver, "iWtRiver", 0);
+	pXML->GetChildXmlValByName(&m_iWtHills, "iWtHills", 0);
+	pXML->GetChildXmlValByName(&m_iWtCoastal, "iWtCoastal", 0);
+	pXML->GetChildXmlValByName(&m_iWtCoast, "iWtCoast", 0);
+	pXML->GetChildXmlValByName(&m_iWtOcean, "iWtOcean", 0);
+	pXML->GetChildXmlValByName(&m_iMinLatitude, "iMinLatitude", 0);
+	pXML->GetChildXmlValByName(&m_iMaxLatitude, "iMaxLatitude", 0);
+	pXML->GetChildXmlValByName(&m_iMinAreaSize, "iMinAreaSize", 0);
+	pXML->GetChildXmlValByName(&m_iMaxAreaSize, "iMaxAreaSize", 0);
+	pXML->GetChildXmlValByName(&m_iMinAreaProportion, "iMinAreaProportion", 0);
+	pXML->GetChildXmlValByName(&m_iMaxAreaProportion, "iMaxAreaProportion", 0);
+	pXML->GetChildXmlValByName(&m_iAreaChannel, "iAreaChannel", 0);
+	pXML->GetChildXmlValByName(&m_bPlaceOnce, "bPlaceOnce", 0);
+	pXML->GetChildXmlValByName(&m_bPlaceInGroup, "bPlaceInGroup", 0);
+	pXML->GetChildXmlValByName(&m_bSurroundedByBase, "bSurroundedByBase", 0);
+	pXML->GetChildXmlValByName(&m_iHillsAdjacentWeight, "iHillsAdjacentWeight", 0);
+	pXML->GetChildXmlValByName(&m_iCoastAdjacentWeight, "iCoastAdjacentWeight", 0);
+	// merk.msm end
 	pXML->GetChildXmlValByName(&m_iAppearanceProbability, "iAppearance");
 	pXML->GetChildXmlValByName(&m_iDisappearanceProbability, "iDisappearance");
 	pXML->GetChildXmlValByName(&m_iGrowthProbability, "iGrowth");
@@ -1049,6 +1177,36 @@ m_piHillsYieldChange(NULL),
 m_piIrrigatedChange(NULL),
 m_pbTerrainMakesValid(NULL),
 m_pbFeatureMakesValid(NULL),
+// merk.msm begin
+m_iBaseTerrain(-1),
+m_iBaseFeature(-1),
+m_iChanceInclude(0),
+m_iChanceMap(0),
+m_bReqCoastal(false),
+m_bReqCoast(false),
+m_bReqOcean(false),
+m_iWtRiver(0),
+m_iWtHills(0),
+m_iWtCoastal(0),
+m_iWtCoast(0),
+m_iWtOcean(0),
+m_iMinLatitude(0),
+m_iMaxLatitude(0),
+m_iMinAreaSize(0),
+m_iMaxAreaSize(0),
+m_iMinAreaProportion(0),
+m_iMaxAreaProportion(0),
+m_iAreaChannel(-1),
+m_bPlaceOnce(false),
+m_bPlaceInGroup(false),
+m_bSurroundedByBase(false),
+m_piTerrainWeights(NULL),
+m_piFeatureWeights(NULL),
+m_piAdjTerrainWeights(NULL),
+m_piAdjFeatureWeights(NULL),
+m_iCoastAdjacentWeight(0),
+m_iHillsAdjacentWeight(0),
+// merk.msm end
 m_ppiTechYieldChanges(NULL),
 m_ppiRouteYieldChanges(NULL),
 m_paImprovementBonus(NULL)
@@ -1063,6 +1221,12 @@ CvImprovementInfo::~CvImprovementInfo()
 	SAFE_DELETE_ARRAY(m_piIrrigatedChange);
 	SAFE_DELETE_ARRAY(m_pbTerrainMakesValid);
 	SAFE_DELETE_ARRAY(m_pbFeatureMakesValid);
+	// merk.msm
+	SAFE_DELETE_ARRAY(m_piTerrainWeights);
+	SAFE_DELETE_ARRAY(m_piFeatureWeights);
+	SAFE_DELETE_ARRAY(m_piAdjTerrainWeights);
+	SAFE_DELETE_ARRAY(m_piAdjFeatureWeights);
+	// merk.msm end
 
 	if (m_paImprovementBonus != NULL)
 	{
@@ -1487,6 +1651,31 @@ bool CvImprovementInfo::read(CvXMLLoadUtility* pXML)
 
 	pXML->SetVariableListTagPair(&m_pbTerrainMakesValid, "TerrainMakesValids", GC.getNumTerrainInfos());
 	pXML->SetVariableListTagPair(&m_pbFeatureMakesValid, "FeatureMakesValids", GC.getNumFeatureInfos());
+
+	// merk.msm begin
+	pXML->GetChildXmlValByName(&m_iChanceInclude, "iChanceInclude", 0);
+	pXML->GetChildXmlValByName(&m_iChanceMap, "iChanceMap", 0);
+	pXML->GetChildXmlValByName(&m_bReqCoastal, "bReqCoastal", 0);
+	pXML->GetChildXmlValByName(&m_bReqCoast, "bReqCoast", 0);
+	pXML->GetChildXmlValByName(&m_bReqOcean, "bReqOcean", 0);
+	pXML->GetChildXmlValByName(&m_iWtRiver, "iWtRiver", 0);
+	pXML->GetChildXmlValByName(&m_iWtHills, "iWtHills", 0);
+	pXML->GetChildXmlValByName(&m_iWtCoastal, "iWtCoastal", 0);
+	pXML->GetChildXmlValByName(&m_iWtCoast, "iWtCoast", 0);
+	pXML->GetChildXmlValByName(&m_iWtOcean, "iWtOcean", 0);
+	pXML->GetChildXmlValByName(&m_iMinLatitude, "iMinLatitude", 0);
+	pXML->GetChildXmlValByName(&m_iMaxLatitude, "iMaxLatitude", 0);
+	pXML->GetChildXmlValByName(&m_iMinAreaSize, "iMinAreaSize", 0);
+	pXML->GetChildXmlValByName(&m_iMaxAreaSize, "iMaxAreaSize", 0);
+	pXML->GetChildXmlValByName(&m_iMinAreaProportion, "iMinAreaProportion", 0);
+	pXML->GetChildXmlValByName(&m_iMaxAreaProportion, "iMaxAreaProportion", 0);
+	pXML->GetChildXmlValByName(&m_iAreaChannel, "iAreaChannel", 0);
+	pXML->GetChildXmlValByName(&m_bPlaceOnce, "bPlaceOnce", 0);
+	pXML->GetChildXmlValByName(&m_bPlaceInGroup, "bPlaceInGroup", 0);
+	pXML->GetChildXmlValByName(&m_bSurroundedByBase, "bSurroundedByBase", 0);
+	pXML->GetChildXmlValByName(&m_iHillsAdjacentWeight, "iHillsAdjacentWeight", 0);
+	pXML->GetChildXmlValByName(&m_iCoastAdjacentWeight, "iCoastAdjacentWeight", 0);
+	// merk.msm end
 
 	if (gDLL->getXMLIFace()->SetToChildByTagName(pXML->GetXML(),"BonusTypeStructs"))
 	{
