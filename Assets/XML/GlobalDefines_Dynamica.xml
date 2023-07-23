@@ -41,4 +41,55 @@
 	</Define>
 	
 	
+	<!-- set to 1 to disable the dynamic promotion system -->
+	<Define>
+		<DefineName>DISABLE_DYNAMIC_PROMOTIONS</DefineName>
+		<iDefineIntVal>0</iDefineIntVal>
+	</Define>
+	<!-- can units acquire more than one promotion at a time? -->
+	<Define>
+		<DefineName>ENABLE_MULTIPLE_PROMOTION_PER_COMBAT</DefineName>
+		<iDefineIntVal>0</iDefineIntVal>
+	</Define>
+	
+	<!-- set to 0 for units to be invisible if ANY of their invisible types can NOT be seen (favor invisibility). set to 1 for units to be invisible only if ALL of their invisible types can NOT be seen (favor see invisible) 
+	
+	
+	Side effect: if this is not 0 or 1 it will disable all invisibles / see invisibles. -->
+	<Define>
+		<DefineName>MULTIPLE_INVISIBLES_RULE</DefineName>
+		<iDefineIntVal>0</iDefineIntVal>
+	</Define>
+	
+	
+	<!-- MAPPER SETTINGS -->
+	<Define>
+		<DefineName>ENABLE_MAPPING_SYSTEM</DefineName>
+		<iDefineIntVal>1</iDefineIntVal>
+	</Define>
+	<!-- Use this to set the mapping method. Each digit refers to a single loop through all the tiles. 
+	1 = apply terrains,
+	2 = apply features, 
+	3 = apply improvements,
+	4 = apply terrains and features, 
+	5 = apply terrains and improvements, 
+	6 = apply features and improvements, 
+	7 = apply all three. 
+	Applied in REVERSE ORDER. 
+	-->
+	<Define>
+		<DefineName>MAPPER_LOOPS</DefineName>
+		<iDefineIntVal>321</iDefineIntVal>
+	</Define>
+	<!-- Chance per 100 that a tile otherwise matching an area will set the area to its channel. This makes it so areas tend toward channels they match the most. Channels will not be reused. -->
+	<Define>
+		<DefineName>MAPPING_SET_CHANNEL_CHANCE</DefineName>
+		<iDefineIntVal>10</iDefineIntVal>
+	</Define>
+	<!-- range to place 'groups' in, default 3 -->
+	<Define>
+		<DefineName>MAPPING_PLACEGROUP_SIZE</DefineName>
+		<iDefineIntVal>3</iDefineIntVal>
+	</Define>
+	
 </Civ4Defines>

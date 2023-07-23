@@ -46,6 +46,19 @@ public:
 	void afterGeneration();																// Exposed to Python
 
 	void setPlotTypes(const int* paiPlotTypes);						// Exposed to Python
+	// merk.msm
+	void applyMappings();
+	void applyFeatureMappings(int iTile);
+	void handleUnmappedArea(int iNewMapping, CvPlot& kPlot);
+	void applyTerrainMappings(int iTile);
+	void applyImprovementMappings(int iTile);
+	bool isMappingValid(CvPlot const& kPlot, FeatureTypes eFeatureMapping) const;
+	bool isMappingValid(CvPlot const& kPlot, TerrainTypes eTerrainMapping) const;
+	bool isMappingValid(CvPlot const& kPlot, ImprovementTypes eImprovementMapping) const;
+	int getMappingWeight(CvPlot const& kPlot, FeatureTypes eFeatureMapping) const;
+	int getMappingWeight(CvPlot const& kPlot, TerrainTypes eTerrainMapping) const;
+	int getMappingWeight(CvPlot const& kPlot, ImprovementTypes eImprovementMapping) const;
+	// merk.msm end
 
 protected:
 
@@ -54,7 +67,12 @@ protected:
 	// advc.129: To avoid duplicate code in addUniqueBonus and addNonUniqueBonus
 	int placeGroup(BonusTypes eBonus, CvPlot const& kCenter,
 			bool bIgnoreLatitude, int iLimit = 100);
-
+	// merk.msm
+	std::vector< FeatureTypes > m_aiIncludeFeatures;
+	std::vector< TerrainTypes > m_aiIncludeTerrains;
+	std::vector< ImprovementTypes > m_aiIncludeImprovements;
+	std::vector< int > m_aiPlacedChannels;
+	// merk.msm end
 private:
 	static CvMapGenerator* m_pInst;
 

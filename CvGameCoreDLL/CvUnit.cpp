@@ -1184,6 +1184,12 @@ void CvUnit::resolveCombat(CvUnit* pDefender, CvPlot* pPlot, bool bVisible)
 			setCurrentStrike(getUnitInfo().getDive() + getUnitInfo().getStrike());
 	}
 	// merk.ftac END
+	// merk.dp begin
+	// promotions FOR attacker ABOUT defender's plot
+	doDynamicPromotions(pDefender, pDefender->plot());
+	// promotions FOR defender ABOUT defender's plot
+	pDefender->doDynamicPromotions(this, pDefender->plot());
+	// merk.dp end
 
 	while (true)
 	{
@@ -2542,7 +2548,7 @@ bool CvUnit::canMoveInto(CvPlot const& kPlot, bool bAttack, bool bDeclareWar,
 
 	if (atPlot(&kPlot))
 		return false;
-	if (kPlot.isImpassable() && !canMoveImpassable())
+	if (kPlot.isImpassable() && !canMoveImpassable()/*merk.promo1*/ && !isCanMoveImpassablePromotion())
 		return false;
 	if (m_pUnitInfo->isNoRevealMap() && willRevealAnyPlotFrom(kPlot))
 		return false;
@@ -2604,7 +2610,8 @@ bool CvUnit::canMoveInto(CvPlot const& kPlot, bool bAttack, bool bDeclareWar,
 				fogged forts is leaked. */
 			(!isRevealedPlotValid(kPlot) || !kPlot.isCoastalLand())) // </advc.183>
 		{
-			return false;
+			if (!getUnitInfo().isCanSwim() && kPlot.isCoastalLand()) // merk.rasem
+				return false;
 		} // </advc>
 		break;
 
@@ -2718,7 +2725,61 @@ bool CvUnit::canMoveInto(CvPlot const& kPlot, bool bAttack, bool bDeclareWar,
 		if (GC.getTerrainInfo(kPlot.getTerrainType()).getTemp() < getUnitInfo().getMinMoveTemp())
 			return false;
 	}
-	// merk.rasmore END
+	// merk.rasem
+	if (getUnitInfo().isCannotMoveCoastal() && kPlot.isCoastalLand())
+		return false;
+	if (getUnitInfo().isCannotLeaveCoastal() && !kPlot.isCoastalLand())
+		return false;
+	if (getUnitInfo().isCannotMoveFeatures() && kPlot.getFeatureType() != NO_FEATURE)
+		return false;
+	if (getUnitInfo().isCannotMoveOpen() && kPlot.getFeatureType() == NO_FEATURE)
+		return false;
+	if (getUnitInfo().getPeakRestrictDistance() > 0)
+	{
+		bool bFound = false;
+		for (SquareIter itPlot(kPlot, getUnitInfo().getPeakRestrictDistance()); itPlot.hasNext(); ++itPlot)
+		{
+			int iDistance = itPlot.currPlotDist();
+			if (itPlot->isPeak())
+			{
+				bFound = true;
+				break;
+			}
+		}
+		if (!bFound)
+			return false; // technically a unit placed away from a peak will be rendered immobile so don't do that lol
+	}
+	if (getUnitInfo().getHillsRestrictDistance() > 0)
+	{
+		bool bFound = false;
+		for (SquareIter itPlot(kPlot, getUnitInfo().getHillsRestrictDistance()); itPlot.hasNext(); ++itPlot)
+		{
+			int iDistance = itPlot.currPlotDist();
+			if (itPlot->isHills())
+			{
+				bFound = true;
+				break;
+			}
+		}
+		if (!bFound)
+			return false; // technically a unit placed away from a hill will be rendered immobile so don't do that lol
+	}
+	if (getUnitInfo().getCoastalRestrictDistance() > 0)
+	{
+		bool bFound = false;
+		for (SquareIter itPlot(kPlot, getUnitInfo().getCoastalRestrictDistance()); itPlot.hasNext(); ++itPlot)
+		{
+			int iDistance = itPlot.currPlotDist();
+			if (itPlot->isCoastalLand())
+			{
+				bFound = true;
+				break;
+			}
+		}
+		if (!bFound)
+			return false; // technically a unit placed away from a coast will be rendered immobile so don't do that lol
+	}
+	// merkava120 END
 	
 
 	if (isNoCityCapture())
@@ -6509,6 +6570,10 @@ bool CvUnit::build(BuildTypes eBuild)
 
 bool CvUnit::canPromote(PromotionTypes ePromotion, int iLeaderUnitId) const
 {
+	// merk.dp
+	if (GC.getInfo(ePromotion).isNoDirect())
+		return false;
+	// merk.dp end
 	if (iLeaderUnitId /* advc (was >=0): */ != FFreeList::INVALID_INDEX)
 	{
 		if (iLeaderUnitId == getID())
@@ -6618,7 +6683,91 @@ int CvUnit::promotionHeal(PromotionTypes ePromotion) const
 			0 : 50);
 	return (getDamage() * iHealPercent) / 100;
 } // </advc>
+// merk.dp
+void CvUnit::doDynamicPromotions(CvUnit* pOtherUnit, CvPlot* pPlot)
+{
+	if (GC.getDefineINT("DISABLE_DYNAMIC_PROMOTIONS"))
+		return;
+	FOR_EACH_ENUM(Promotion)
+	{
+		if (canGainPromotion(eLoopPromotion, pPlot, pOtherUnit))
+		{
+			bool bSuccess = SyncRandSuccess100(GC.getInfo(eLoopPromotion).getChanceGain());
+			if (bSuccess)
+			{
+				// later put a message here
+				setHasPromotion(eLoopPromotion, true);
+				if (GC.getDefineINT("ENABLE_MULTIPLE_PROMOTION_PER_COMBAT") <= 0)
+					return;
+				// otherwise it'll keep going and you'll get as many as turn bSuccessful. 
+			}
+		}
+	}
+}
 
+bool CvUnit::canGainPromotion(PromotionTypes ePromotion, CvPlot* pPlot, CvUnit* pOtherUnit)
+{
+	if (GC.getInfo(ePromotion).getChanceGain() <= 0)
+		return false;
+	if (!canAcquirePromotion(ePromotion))
+		return false;
+	if (GC.getInfo(ePromotion).isGainMatchConditions())
+	{
+		CvPromotionInfo kPro = GC.getInfo(ePromotion);
+		if (kPro.getInterceptChange() > 0 && pOtherUnit->getDomainType() != DOMAIN_AIR)
+			return false;
+		if (kPro.getEvasionChange() > 0 && pOtherUnit->maxInterceptionProbability() <= 0)
+			return false;
+		if (kPro.getCityAttackPercent() > 0 && !pPlot->isCity())
+			return false;
+		if (kPro.getCityDefensePercent() > 0 && !pPlot->isCity())
+			return false;
+		if (kPro.getHillsAttackPercent() > 0 && !pPlot->isHills())
+			return false;
+		if (kPro.getHillsDefensePercent() > 0 && !pPlot->isHills())
+			return false;
+		FOR_EACH_ENUM(Terrain)
+		{
+			if (kPro.getTerrainAttackPercent((int)eLoopTerrain) > 0 && pPlot->getTerrainType() != eLoopTerrain)
+				return false;
+			if (kPro.getTerrainDefensePercent((int)eLoopTerrain) > 0 && pPlot->getTerrainType() != eLoopTerrain)
+				return false;
+		}
+		FOR_EACH_ENUM(Feature)
+		{
+			if (kPro.getFeatureAttackPercent((int)eLoopFeature) > 0 && pPlot->getFeatureType() != eLoopFeature)
+				return false;
+			if (kPro.getFeatureDefensePercent((int)eLoopFeature) > 0 && pPlot->getFeatureType() != eLoopFeature)
+				return false;
+		}
+		FOR_EACH_ENUM(UnitCombat)
+		{
+			if (kPro.getUnitCombatModifierPercent((int)eLoopUnitCombat) > 0 && pOtherUnit->getUnitCombatType() != eLoopUnitCombat)
+				return false;
+		}
+		FOR_EACH_ENUM(Domain)
+		{
+			if (kPro.getDomainModifierPercent((int)eLoopDomain) > 0 && pOtherUnit->getDomainType() != eLoopDomain)
+				return false;
+		}
+		if (kPro.getOpenAttack() > 0 && pPlot->isFeature())
+			return false;
+		if (kPro.getOpenDefense() > 0 && pPlot->isFeature())
+			return false;
+		if (kPro.getFlatlandsAttack() > 0 && !pPlot->isFlatlands())
+			return false;
+		if (kPro.getFlatlandsDefense() > 0 && !pPlot->isFlatlands())
+			return false;
+		if (kPro.getSeeInvisible() != pOtherUnit->getInvisibleType() && !(pOtherUnit->isInvisiblePromoted(kPro.getSeeInvisible())))
+			return false;
+		// doesn't make much sense to gain a promotion granting invisibility after combat with someone who can see it:
+		for (int p = 0; p < pOtherUnit->getNumSeeInvisibleTypes(); p++)
+			if (pOtherUnit->getSeeInvisibleType((int)p) == kPro.getInvisible() || pOtherUnit->isSeeInvisible(kPro.getInvisible()))
+				return false;
+	}
+	return true;
+}
+// merk.dp end
 bool CvUnit::lead(int iUnitId)
 {
 	if (!canLead(plot(), iUnitId))
@@ -7748,6 +7897,10 @@ int CvUnit::maxCombatStr(CvPlot const* pPlot, CvUnit const* pAttacker,
 			if (pCombatDetails != NULL)
 				pCombatDetails->iHillsDefenseModifier = iExtraModifier;
 		}
+		// merk.promo1
+		else
+			iModifier += getFlatlandsDefenseModifier();
+		// merk.promo1 end
 		if (pPlot->isFeature())
 		{
 			iExtraModifier = featureDefenseModifier(pPlot->getFeatureType());
@@ -7759,6 +7912,7 @@ int CvUnit::maxCombatStr(CvPlot const* pPlot, CvUnit const* pAttacker,
 		{
 			iExtraModifier = terrainDefenseModifier(pPlot->getTerrainType());
 			iModifier += iExtraModifier;
+			iModifier += getOpenDefenseModifier(); // merk.promo1
 			if (pCombatDetails != NULL)
 				pCombatDetails->iTerrainDefenseModifier = iExtraModifier;
 		}
@@ -7801,6 +7955,10 @@ int CvUnit::maxCombatStr(CvPlot const* pPlot, CvUnit const* pAttacker,
 			if (pCombatDetails != NULL)
 				pCombatDetails->iHillsAttackModifier = iExtraModifier;
 		}
+		// merk.promo1
+		else
+			iTempModifier += -pAttacker->getFlatlandsAttackModifier();
+		// merk.promo1 end
 		if (pAttackedPlot->isFeature())
 		{
 			iExtraModifier = -pAttacker->featureAttackModifier(pAttackedPlot->getFeatureType());
@@ -7811,7 +7969,10 @@ int CvUnit::maxCombatStr(CvPlot const* pPlot, CvUnit const* pAttacker,
 		else
 		{
 			iExtraModifier = -pAttacker->terrainAttackModifier(pAttackedPlot->getTerrainType());
-			iModifier += iExtraModifier;
+			// merk.promo1: copy paste error?
+			//iModifier += iExtraModifier;
+			iTempModifier += iExtraModifier;
+			iTempModifier += -pAttacker->getOpenAttackModifier(); // merk.promo1
 			if (pCombatDetails != NULL)
 				pCombatDetails->iTerrainAttackModifier = iExtraModifier;
 		}
@@ -7835,6 +7996,9 @@ int CvUnit::maxCombatStr(CvPlot const* pPlot, CvUnit const* pAttacker,
 			{
 				iExtraModifier = unitCombatModifier(pAttacker->getUnitCombatType());
 				iTempModifier += iExtraModifier;
+				// merk.promo1
+				iTempModifier += getUnitCombatDefenseModifier(pAttacker->getUnitCombatType());
+				// merk.promo1 end
 				if (pCombatDetails != NULL)
 					pCombatDetails->iCombatModifierA = iExtraModifier;
 			}
@@ -7842,6 +8006,9 @@ int CvUnit::maxCombatStr(CvPlot const* pPlot, CvUnit const* pAttacker,
 			{
 				iExtraModifier = -pAttacker->unitCombatModifier(getUnitCombatType());
 				iTempModifier += iExtraModifier;
+				// merk.promo1
+				iTempModifier += pAttacker->getUnitCombatAttackModifier(getUnitCombatType());
+				// merk.promo1 end
 				if (pCombatDetails != NULL)
 					pCombatDetails->iCombatModifierT = iExtraModifier;
 			}
@@ -8606,7 +8773,12 @@ bool CvUnit::immuneToFirstStrikes() const
 {
 	return (m_pUnitInfo->isFirstStrikeImmune() || getImmuneToFirstStrikesCount() > 0);
 }
-
+// merk.promo1, this turned out to be unnecessary lol
+bool CvUnit::canMoveImpassable() const
+{
+	return false;
+}
+// merk.promo1 end
 
 bool CvUnit::isNeverInvisible() const
 {
@@ -8624,9 +8796,43 @@ bool CvUnit::isInvisible(TeamTypes eTeam, bool bDebug, bool bCheckCargo) const
 		return true;
 	if (bCheckCargo && isCargo())
 		return true;
-	if (getInvisibleType() == NO_INVISIBLE)
+	// merk.promo1
+	// two ways to do this:
+	int iRule = GC.getDefineINT("MULTIPLE_INVISIBLES_RULE");
+	if (iRule == 0)
+	{
+		// Favor invisibility: if the unit has any invisible type that is not currently spotted, it's invisible
+		FOR_EACH_ENUM(Invisible)
+		{
+			if ((getInvisibleType() == eLoopInvisible || isInvisiblePromoted(eLoopInvisible))
+				&& !(getUnitInfo().isInvisibleRevealInOpen() && !getPlot().isFeature())
+				&& !(getPlot().isInvisibleVisible(eTeam, eLoopInvisible)))
+				return true;
+		}
+		// If made it through the whole loop
 		return false;
-	return !getPlot().isInvisibleVisible(eTeam, getInvisibleType());
+	}
+	else if (iRule == 1)
+	{
+		// Favor SeeInvisibles. If any of the invisible types of the unit are visible, it is visible. 
+		bool bHasAtLeastOne = false;
+		FOR_EACH_ENUM(Invisible)
+		{
+			if ((getInvisibleType() == eLoopInvisible || isInvisiblePromoted(eLoopInvisible)))
+			{
+				bHasAtLeastOne = true;
+				if (getUnitInfo().isInvisibleRevealInOpen() && !getPlot().isFeature())
+					return false; // spotted
+				if (getPlot().isInvisibleVisible(eTeam, eLoopInvisible))
+					return false; // spotted
+			}
+		}
+		// If made it through the whole loop
+		return bHasAtLeastOne;
+	}
+	else
+		return false; // provides unintentional way to disable invisibility entirely
+	// merk.promo1 end
 }
 
 
@@ -10886,6 +11092,41 @@ void CvUnit::setHasPromotion(PromotionTypes ePromotion, bool bNewValue)
 	changeExperiencePercent(GC.getInfo(ePromotion).getExperiencePercent() * iChange);
 	changeKamikazePercent((GC.getInfo(ePromotion).getKamikazePercent()) * iChange);
 	changeCargoSpace(GC.getInfo(ePromotion).getCargoChange() * iChange);
+	// merk.promo1
+	if (GC.getInfo(ePromotion).getSeeInvisible() != NO_INVISIBLE)
+	{
+		FOR_EACH_ENUM(Invisible)
+		{
+			if (GC.getInfo(ePromotion).getSeeInvisible() == eLoopInvisible)
+			{
+				changeSeeInvisiblePromoted(eLoopInvisible, iChange);
+				break;
+			}
+		}
+	}
+	if (GC.getInfo(ePromotion).getInvisible() != NO_INVISIBLE)
+	{
+		FOR_EACH_ENUM(Invisible)
+		{
+			if (GC.getInfo(ePromotion).getInvisible() == eLoopInvisible)
+			{
+				changeInvisiblePromoted(eLoopInvisible, iChange);
+				break;
+			}
+		}
+	}
+	if (GC.getInfo(ePromotion).isDoubleMoveOpen())
+		changeDoubleMoveOpen(iChange);
+	if (GC.getInfo(ePromotion).isDoubleMoveFlatlands())
+		changeDoubleMoveFlatlands(iChange);
+	if (GC.getInfo(ePromotion).isCanMoveImpassable())
+		changeCanMoveImpassablePromotion(iChange);
+	changeOpenAttackModifier(GC.getInfo(ePromotion).getOpenAttack() * iChange);
+	changeOpenDefenseModifier(GC.getInfo(ePromotion).getOpenDefense() * iChange);
+	changeFlatlandsAttackModifier(GC.getInfo(ePromotion).getFlatlandsAttack() * iChange);
+	changeFlatlandsDefenseModifier(GC.getInfo(ePromotion).getFlatlandsDefense() * iChange);
+	// merk.promo1 end
+	
 
 	FOR_EACH_ENUM(Terrain)
 	{
@@ -10909,7 +11150,13 @@ void CvUnit::setHasPromotion(PromotionTypes ePromotion, bool bNewValue)
 
 	FOR_EACH_ENUM(UnitCombat)
 	{
-		changeExtraUnitCombatModifier(eLoopUnitCombat,
+		// merk.promo1
+		if (GC.getInfo(ePromotion).isUnitCombatAttack())
+			changeUnitCombatAttackModifier(eLoopUnitCombat, GC.getInfo(ePromotion).getUnitCombatModifierPercent(eLoopUnitCombat) * iChange);
+		else if (GC.getInfo(ePromotion).isUnitCombatDefense())
+			changeUnitCombatDefenseModifier(eLoopUnitCombat, GC.getInfo(ePromotion).getUnitCombatModifierPercent(eLoopUnitCombat) * iChange);
+		else // merk.promo1 end
+			changeExtraUnitCombatModifier(eLoopUnitCombat,
 				GC.getInfo(ePromotion).getUnitCombatModifierPercent(eLoopUnitCombat) * iChange);
 	}
 
@@ -12741,3 +12988,61 @@ int CvUnit::LFGgetDefensiveValueAdjustment() const
 
 	return iValue;
 }
+// merk.promo1 begin
+
+void CvUnit::changeDoubleMoveOpen(int iChange)
+{
+	m_iDoubleMoveOpenCount += iChange;
+}
+
+void CvUnit::changeDoubleMoveFlatlands(int iChange)
+{
+	m_iDoubleMoveFlatlandsCount += iChange;
+}
+
+void CvUnit::changeOpenAttackModifier(int iChange)
+{
+	m_iOpenAttackModifier += iChange;
+}
+
+void CvUnit::changeOpenDefenseModifier(int iChange)
+{
+	m_iOpenDefenseModifier += iChange;
+}
+
+void CvUnit::changeFlatlandsAttackModifier(int iChange)
+{
+	m_iFlatlandsAttackModifier += iChange;
+}
+
+void CvUnit::changeFlatlandsDefenseModifier(int iChange)
+{
+	m_iFlatlandsDefenseModifier += iChange;
+}
+
+void CvUnit::changeCanMoveImpassablePromotion(int iChange)
+{
+	m_iCanMoveImpassableCount += iChange;
+}
+
+void CvUnit::changeSeeInvisiblePromoted(InvisibleTypes eInvisible, int iChange)
+{
+	m_aeiSeeInvisibles.add(eInvisible, iChange);
+}
+
+void CvUnit::changeInvisiblePromoted(InvisibleTypes eInvisible, int iChange)
+{
+	m_aeiInvisibles.add(eInvisible, iChange);
+}
+
+void CvUnit::changeUnitCombatAttackModifier(UnitCombatTypes eUnitCombat, int iChange)
+{
+	m_aeiUnitCombatAttackMods.add(eUnitCombat, iChange);
+}
+
+void CvUnit::changeUnitCombatDefenseModifier(UnitCombatTypes eUnitCombat, int iChange)
+{
+	m_aeiUnitCombatDefenseMods.add(eUnitCombat, iChange);
+}
+
+// merk.promo1 end

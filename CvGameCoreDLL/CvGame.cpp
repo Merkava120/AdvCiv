@@ -7338,7 +7338,7 @@ void CvGame::createAnimals()
 					int iValue = 1 + SyncRandNum(1000) + kUnit.getSpawnWeight(); // can weight units in xml.
 					// can make it more likely to choose this animal if the feature native matches. 
 					if (kUnit.getFeatureNative(pPlot->getFeatureType()))
-						iValue += GC.getDefineINT("ANIMAL_FEATURE_NATIVE_WEIGHT");
+						iValue += kUnit.getFeatureNativeWeight(); // merk.rasem replaced global define
 					if (iValue > iBestValue)
 					{
 						eBestUnit = eLoopUnit;
@@ -7382,7 +7382,7 @@ bool CvGame::isCanSpawnBarb(const CvUnitInfo& kUnit, CvPlot* pPlot, UnitTypes eL
 			}
 		}
 		if (!bFoundRiver)
-			return false; // technically a unit placed away from a river will be rendered immobile so don't do that lol
+			return false; 
 	}
 	if (kUnit.isCannotMoveHills())
 		if (pPlot->isHills())
@@ -7404,6 +7404,64 @@ bool CvGame::isCanSpawnBarb(const CvUnitInfo& kUnit, CvPlot* pPlot, UnitTypes eL
 		if (GC.getTerrainInfo(pPlot->getTerrainType()).getTemp() < kUnit.getMinMoveTemp())
 			return false;
 	}
+	// merk.rasem
+	if (kUnit.getHillsRestrictDistance() > 0)
+	{
+		bool bFound = false;
+		for (SquareIter itPlot(*pPlot, kUnit.getHillsRestrictDistance()); itPlot.hasNext(); ++itPlot)
+		{
+			int iDistance = itPlot.currPlotDist();
+			if (itPlot->isHills())
+			{
+				bFound = true;
+				break;
+			}
+		}
+		if (!bFound)
+			return false; 
+	}
+	if (kUnit.getPeakRestrictDistance() > 0)
+	{
+		bool bFound = false;
+		for (SquareIter itPlot(*pPlot, kUnit.getPeakRestrictDistance()); itPlot.hasNext(); ++itPlot)
+		{
+			int iDistance = itPlot.currPlotDist();
+			if (itPlot->isPeak())
+			{
+				bFound = true;
+				break;
+			}
+		}
+		if (!bFound)
+			return false; 
+	}
+	if (kUnit.getCoastalRestrictDistance() > 0)
+	{
+		bool bFound = false;
+		for (SquareIter itPlot(*pPlot, kUnit.getCoastalRestrictDistance()); itPlot.hasNext(); ++itPlot)
+		{
+			int iDistance = itPlot.currPlotDist();
+			if (itPlot->isCoastalLand())
+			{
+				bFound = true;
+				break;
+			}
+		}
+		if (!bFound)
+			return false;
+	}
+	if (kUnit.isCannotMoveCoastal() && pPlot->isCoastalLand())
+		return false;
+	if (kUnit.getDomainType() == DOMAIN_SEA && !pPlot->isWater() && !kUnit.isCanSwim())
+		return false;
+	if (kUnit.getDomainType() == DOMAIN_LAND && pPlot->isWater() && !kUnit.isCanSwim())
+		return false;
+	if (kUnit.isCannotMoveFeatures() && pPlot->getFeatureType() != NO_FEATURE)
+		return false;
+	if (kUnit.isCannotMoveOpen() && pPlot->getFeatureType() == NO_FEATURE)
+		return false;
+
+
 	// NATIVES
 	if (kUnit.isAnyTerrainNative() && !kUnit.getTerrainNative(pPlot->getTerrainType()))
 		return false;
@@ -7414,6 +7472,11 @@ bool CvGame::isCanSpawnBarb(const CvUnitInfo& kUnit, CvPlot* pPlot, UnitTypes eL
 	if (kUnit.isHillsNative() && !pPlot->isHills())
 		return false;
 	if (kUnit.isFlatlandsNative() && !pPlot->isFlatlands())
+		return false;
+	// merk.rasem
+	if (kUnit.isCoastalNative() && !pPlot->isCoastalLand())
+		return false;
+	if (kUnit.isOpenNative() && !(pPlot->getFeatureType() == NO_FEATURE))
 		return false;
 	if (!(kUnit.getMinSpawnTemp() == 0 && kUnit.getMaxSpawnTemp() == 0))
 	{

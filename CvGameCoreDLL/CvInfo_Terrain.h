@@ -88,7 +88,7 @@ public: // All the const functions are exposed to Python except for those relate
 
 	bool read(CvXMLLoadUtility* pXML);
 	bool readPass2(CvXMLLoadUtility* pXML); // merk.msm
-	//bool readPass3(); // merk.msm
+	bool readPass3(); // merk.msm
 
 protected:
 	int m_iMovementCost;

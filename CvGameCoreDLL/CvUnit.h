@@ -82,7 +82,7 @@ public:
 			case DOMAIN_SEA: return (bWater || canMoveAllTerrain());
 			case DOMAIN_AIR: return false;
 			case DOMAIN_LAND: // fall through
-			case DOMAIN_IMMOBILE: return (!bWater || canMoveAllTerrain());
+			case DOMAIN_IMMOBILE: return (!bWater || canMoveAllTerrain() /*merk.rasem*/ || getUnitInfo().isCanSwim());
 			default: FAssert(false); return false;
 		}
 	}
@@ -267,6 +267,8 @@ public:
 	void promote(PromotionTypes ePromotion,																	// Exposed to Python
 			int iLeaderUnitId /* advc: */ = FFreeList::INVALID_INDEX);
 	int promotionHeal(PromotionTypes ePromotion = NO_PROMOTION) const; // advc
+	void doDynamicPromotions(CvUnit* pOtherUnit, CvPlot* pPlot); // merk.dp
+	bool canGainPromotion(PromotionTypes ePromotion, CvPlot* pPlot, CvUnit* pOtherUnit); // merk.dp
 
 	int canLead(const CvPlot* pPlot, int iUnitId) const;
 	bool lead(int iUnitId);
@@ -553,10 +555,7 @@ public:
 	{
 		return m_pUnitInfo->isIgnoreBuildingDefense();
 	}
-	bool canMoveImpassable() const																			// Exposed to Python
-	{
-		return m_pUnitInfo->canMoveImpassable();
-	}
+	bool canMoveImpassable() const;		// merk.promo1														// Exposed to Python
 	bool canMoveAllTerrain() const																			// Exposed to Python
 	{
 		return m_pUnitInfo->isCanMoveAllTerrain();
@@ -852,6 +851,33 @@ public:
 
 	int getKamikazePercent() const;																			// Exposed to Python
 	void changeKamikazePercent(int iChange);
+
+	// merk.promo1
+	bool isSeeInvisible(InvisibleTypes eInvisible) const { return m_aeiSeeInvisibles.get(eInvisible) > 0; }
+	bool isInvisiblePromoted(InvisibleTypes eInvisible) const { return m_aeiInvisibles.get(eInvisible) > 0; }
+	bool isDoubleMoveOpen() const { return m_iDoubleMoveOpenCount > 0; }
+	bool isDoubleMoveFlatlands() const { return m_iDoubleMoveFlatlandsCount > 0; }
+	int getOpenAttackModifier() const { return m_iOpenAttackModifier; }
+	int getOpenDefenseModifier() const { return m_iOpenDefenseModifier; }
+	int getFlatlandsAttackModifier() const { return m_iFlatlandsAttackModifier; }
+	int getFlatlandsDefenseModifier() const { return m_iFlatlandsDefenseModifier; }
+	bool isCanMoveImpassablePromotion() const { return m_iCanMoveImpassableCount > 0; }
+	void changeDoubleMoveOpen(int iChange);
+	void changeDoubleMoveFlatlands(int iChange);
+	void changeOpenAttackModifier(int iChange);
+	void changeOpenDefenseModifier(int iChange);
+	void changeFlatlandsAttackModifier(int iChange);
+	void changeFlatlandsDefenseModifier(int iChange);
+	void changeCanMoveImpassablePromotion(int iChange);
+	void changeSeeInvisiblePromoted(InvisibleTypes eInvisible, int iChange);
+	void changeInvisiblePromoted(InvisibleTypes eInvisible, int iChange);
+	int getUnitCombatAttackModifier(UnitCombatTypes eUnitCombat) const { return m_aeiUnitCombatAttackMods.get(eUnitCombat); }
+	int getUnitCombatDefenseModifier(UnitCombatTypes eUnitCombat) const { return m_aeiUnitCombatDefenseMods.get(eUnitCombat); }
+	void changeUnitCombatAttackModifier(UnitCombatTypes eUnitCombat, int iChange);
+	void changeUnitCombatDefenseModifier(UnitCombatTypes eUnitCombat, int iChange);
+
+	// merk.promo1 end
+	
 
 	DllExport DirectionTypes getFacingDirection(bool bCheckLineOfSightProperty) const;
 	void setFacingDirection(DirectionTypes facingDirection);
@@ -1191,6 +1217,19 @@ protected:
 	int m_iBaseCombat;
 	DirectionTypes m_eFacingDirection;
 	int m_iImmobileTimer;
+	// merk.promo1
+	ListEnumMap<InvisibleTypes, int> m_aeiSeeInvisibles;
+	ListEnumMap<InvisibleTypes, int> m_aeiInvisibles;
+	int m_iDoubleMoveOpenCount;
+	int m_iDoubleMoveFlatlandsCount;
+	int m_iOpenAttackModifier;
+	int m_iOpenDefenseModifier;
+	int m_iFlatlandsAttackModifier;
+	int m_iFlatlandsDefenseModifier;
+	int m_iCanMoveImpassableCount;
+	ListEnumMap<UnitCombatTypes, int> m_aeiUnitCombatAttackMods;
+	ListEnumMap<UnitCombatTypes, int> m_aeiUnitCombatDefenseMods;
+	// merk.promo1 end
 
 	//bool m_bMadeAttack;
 	int m_iMadeAttacks; // advc.164
