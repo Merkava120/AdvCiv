@@ -223,10 +223,9 @@ bool CvTerrainInfo::readPass2(CvXMLLoadUtility* pXML)
 		m_iBaseTerrain = (int)(GC.getInfoTypeForString(someText));
 	pXML->GetChildXmlValByName(someText, "BaseFeature", "NO_FEATURE");
 	m_aszExtraXMLforPass3.push_back(someText);
-	pXML->GetChildXmlValByName(szTextVal, "TerrainWeights", "");
-	pXML->SetVariableListTagPair(&m_piTerrainWeights, szTextVal, GC.getNumTerrainInfos());
-	pXML->GetChildXmlValByName(szTextVal, "TerrainAdjacentWeights", "");
-	pXML->SetVariableListTagPair(&m_piAdjTerrainWeights, szTextVal, GC.getNumTerrainInfos());
+	int iterrains = GC.getNumTerrainInfos();
+	pXML->SetVariableListTagPair(&m_piTerrainWeights, "TerrainWeights", GC.getNumTerrainInfos());
+	pXML->SetVariableListTagPair(&m_piAdjTerrainWeights, "TerrainAdjacentWeights", GC.getNumTerrainInfos());
 	// skipping feature weights for now.
 	// still can't read features yet, but can stick a third pass in the order later, but need to save some info first
 	//if (gDLL->getXMLIFace()->SetToChildByTagName(pXML->GetXML(), "FeatureWeights"))
@@ -594,7 +593,7 @@ int CvFeatureInfo::getFeatureAdjWeight(int i) const
 		return false;
 	return m_piAdjFeatureWeights ? m_piAdjFeatureWeights[i] : false;
 }
-// merk.msm end
+//merk.msm end
 
 bool CvFeatureInfo::read(CvXMLLoadUtility* pXML)
 {
@@ -670,8 +669,8 @@ bool CvFeatureInfo::read(CvXMLLoadUtility* pXML)
 	pXML->GetChildXmlValByName(&m_bPlaceInGroup, "bPlaceInGroup", 0);
 	pXML->GetChildXmlValByName(&m_bSurroundedByBase, "bSurroundedByBase", 0);
 
-	//pXML->SetVariableListTagPair(&m_piTerrainWeights, "TerrainWeights", GC.getNumTerrainInfos());
-	//pXML->SetVariableListTagPair(&m_piAdjTerrainWeights, "TerrainAdjacentWeights", GC.getNumTerrainInfos());
+	pXML->SetVariableListTagPair(&m_piTerrainWeights, "TerrainWeights", GC.getNumTerrainInfos());
+	pXML->SetVariableListTagPair(&m_piAdjTerrainWeights, "TerrainAdjacentWeights", GC.getNumTerrainInfos());
 
 	pXML->GetChildXmlValByName(&m_iHillsAdjacentWeight, "iHillsAdjacentWeight", 0);
 	pXML->GetChildXmlValByName(&m_iCoastAdjacentWeight, "iCoastAdjacentWeight", 0);
@@ -726,10 +725,8 @@ bool CvFeatureInfo::readPass2(CvXMLLoadUtility* pXML)
 		m_iBaseFeature = -1;
 	else
 		m_iBaseFeature = (int)(GC.getInfoTypeForString(someText));
-	pXML->GetChildXmlValByName(someText, "FeatureWeights", "");
-	pXML->SetVariableListTagPair(&m_piFeatureWeights, someText, GC.getNumFeatureInfos());
-	pXML->GetChildXmlValByName(someText, "FeatureAdjacentWeights", "");
-	pXML->SetVariableListTagPair(&m_piAdjFeatureWeights, someText, GC.getNumFeatureInfos());
+	pXML->SetVariableListTagPair(&m_piFeatureWeights, "FeatureWeights", GC.getNumFeatureInfos());
+	pXML->SetVariableListTagPair(&m_piAdjFeatureWeights, "FeatureAdjacentWeights", GC.getNumFeatureInfos());
 	return true;
 }
 // merk.msm

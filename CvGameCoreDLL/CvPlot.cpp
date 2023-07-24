@@ -4511,7 +4511,6 @@ void CvPlot::setTerrainType(TerrainTypes eNewValue, bool bRecalculate, bool bReb
 {
 	if(getTerrainType() == eNewValue)
 		return;
-
 	bool bUpdateSight = (getTerrainType() != NO_TERRAIN && // advc
 			eNewValue != NO_TERRAIN &&
 			(GC.getInfo(getTerrainType()).getSeeFromLevel() !=

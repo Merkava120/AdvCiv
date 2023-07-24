@@ -1050,24 +1050,18 @@ void CvMapGenerator::applyMappings()
 	// load up lists of the mappings. 
 	FOR_EACH_ENUM(Feature)
 	{
-		if (GC.getFeatureInfo(eLoopFeature).getChanceMap() <= 0)
-			continue;
 		CvFeatureInfo& kMapping = GC.getFeatureInfo(eLoopFeature);
 		if (SyncRandSuccess100(kMapping.getChanceInclude()))
 			m_aiIncludeFeatures.push_back(eLoopFeature);
 	}
 	FOR_EACH_ENUM(Terrain)
 	{
-		if (GC.getTerrainInfo(eLoopTerrain).getChanceMap() <= 0)
-			continue;
 		CvTerrainInfo& kMapping = GC.getTerrainInfo(eLoopTerrain);
 		if (SyncRandSuccess100(kMapping.getChanceInclude()))
 			m_aiIncludeTerrains.push_back(eLoopTerrain);
 	}
 	FOR_EACH_ENUM(Improvement)
 	{
-		if (GC.getImprovementInfo(eLoopImprovement).getChanceMap() <= 0)
-			continue;
 		CvImprovementInfo& kMapping = GC.getImprovementInfo(eLoopImprovement);
 		if (SyncRandSuccess100(kMapping.getChanceInclude()))
 			m_aiIncludeImprovements.push_back(eLoopImprovement);
@@ -1078,6 +1072,9 @@ void CvMapGenerator::applyMappings()
 	{
 		for (int tile = 0; tile < GC.getMap().numPlots(); tile++)
 		{
+			// skip peaks
+			if (GC.getMap().plotByIndex(tile)->isPeak())
+				continue;
 			if (aiMapCode[run] == 1)
 			{
 				applyTerrainMappings(tile);
@@ -1158,7 +1155,7 @@ void CvMapGenerator::handleUnmappedArea(int iNewMapping, CvPlot& kPlot)
 	if (!bPlaced && SyncRandSuccess100(GC.getDefineINT("MAPPING_SET_CHANNEL_CHANCE")))
 	{
 		kPlot.area()->setBarbarianSpawnChannel(iNewMapping);
-
+		m_aiPlacedChannels.push_back(iNewMapping);
 	}
 }
 
@@ -1180,7 +1177,8 @@ void CvMapGenerator::applyTerrainMappings(int iTile)
 			if (kPlot.area()->getBarbarianSpawnChannel() != kMapping.getAreaChannel())
 				continue;
 		}
-		if (SyncRandSuccess1000(getMappingWeight(kPlot, m_aiIncludeTerrains[i])))
+		int iWeight = getMappingWeight(kPlot, m_aiIncludeTerrains[i]);
+		if (SyncRandSuccess1000(iWeight))
 		{
 			// place that baby
 			kPlot.setTerrainType(m_aiIncludeTerrains[i]);
@@ -1259,8 +1257,6 @@ void CvMapGenerator::applyImprovementMappings(int iTile)
 bool CvMapGenerator::isMappingValid(CvPlot const& kPlot, FeatureTypes eFeatureMapping) const
 {
 	CvFeatureInfo& kMapping = GC.getFeatureInfo(eFeatureMapping);
-	if (kMapping.getChanceMap() <= 0)
-		return false;
 	if (kPlot.getTerrainType() != (TerrainTypes)kMapping.getBaseTerrain() && (TerrainTypes)kMapping.getBaseTerrain() != NO_TERRAIN)
 		return false;
 	if (kPlot.getFeatureType() != (FeatureTypes)kMapping.getBaseFeature() && (FeatureTypes)kMapping.getBaseFeature() != NO_FEATURE)
@@ -1323,8 +1319,6 @@ bool CvMapGenerator::isMappingValid(CvPlot const& kPlot, FeatureTypes eFeatureMa
 bool CvMapGenerator::isMappingValid(CvPlot const& kPlot, TerrainTypes eTerrainMapping) const
 {
 	CvTerrainInfo& kMapping = GC.getTerrainInfo(eTerrainMapping);
-	if (kMapping.getChanceMap() <= 0)
-		return false;
 	if (kPlot.getTerrainType() != (TerrainTypes)kMapping.getBaseTerrain() && (TerrainTypes)kMapping.getBaseTerrain() != NO_TERRAIN)
 		return false;
 	if (kPlot.getFeatureType() != (FeatureTypes)kMapping.getBaseFeature() && (FeatureTypes)kMapping.getBaseFeature() != NO_FEATURE)
@@ -1376,8 +1370,6 @@ bool CvMapGenerator::isMappingValid(CvPlot const& kPlot, TerrainTypes eTerrainMa
 bool CvMapGenerator::isMappingValid(CvPlot const& kPlot, ImprovementTypes eImprovementMapping) const
 {
 	CvImprovementInfo& kMapping = GC.getImprovementInfo(eImprovementMapping);
-	if (kMapping.getChanceMap() <= 0)
-		return false;
 	if (kPlot.getTerrainType() != (TerrainTypes)kMapping.getBaseTerrain() && (TerrainTypes)kMapping.getBaseTerrain() != NO_TERRAIN)
 		return false;
 	if (kPlot.getFeatureType() != (FeatureTypes)kMapping.getBaseFeature() && (FeatureTypes)kMapping.getBaseFeature() != NO_FEATURE)
@@ -1451,13 +1443,12 @@ int CvMapGenerator::getMappingWeight(CvPlot const& kPlot, FeatureTypes eFeatureM
 		iWeight += kMapping.getWtCoast();
 	else if (!kPlot.isAdjacentToLand())
 		iWeight += kMapping.getWtOcean();
-	iWeight += kMapping.getTerrainWeight(kPlot.getTerrainType());
-	iWeight += kMapping.getFeatureWeight(kPlot.getFeatureType());
+	iWeight += kMapping.getTerrainWeight((int)kPlot.getTerrainType());
+	iWeight += kMapping.getFeatureWeight((int)kPlot.getFeatureType());
 	FOR_EACH_ADJ_PLOT(kPlot)
 	{
-		int adjweight = kMapping.getTerrainAdjWeight(pAdj->getTerrainType());
-		iWeight += kMapping.getTerrainWeight(pAdj->getTerrainType());
-		iWeight += kMapping.getFeatureWeight(pAdj->getFeatureType());
+		iWeight += kMapping.getTerrainAdjWeight((int)pAdj->getTerrainType());
+		iWeight += kMapping.getFeatureAdjWeight((int)pAdj->getFeatureType());
 		if (pAdj->isHills())
 			iWeight += kMapping.getHillsAdjWeight();
 		else if (pAdj->isWater() && pAdj->isAdjacentToLand())
@@ -1472,8 +1463,6 @@ int CvMapGenerator::getMappingWeight(CvPlot const& kPlot, TerrainTypes eTerrainM
 	int iWeight = kMapping.getChanceMap();
 	if (kPlot.isRiver())
 		iWeight += kMapping.getWtRiver();
-	if (kPlot.isFlatlands())
-		iWeight -= kMapping.getWtHills();
 	else if (kPlot.isHills())
 		iWeight += kMapping.getWtHills();
 	if (kPlot.isCoastalLand())
@@ -1482,12 +1471,14 @@ int CvMapGenerator::getMappingWeight(CvPlot const& kPlot, TerrainTypes eTerrainM
 		iWeight += kMapping.getWtCoast();
 	else if (!kPlot.isAdjacentToLand())
 		iWeight += kMapping.getWtOcean();
-	iWeight += kMapping.getTerrainWeight(kPlot.getTerrainType());
+	iWeight += kMapping.getTerrainWeight((int)kPlot.getTerrainType());
 	//iWeight += kMapping.getFeatureWeight(kPlot.getFeatureType());
 	FOR_EACH_ADJ_PLOT(kPlot)
 	{
-		iWeight += kMapping.getTerrainWeight(pAdj->getTerrainType());
+		iWeight += kMapping.getTerrainAdjWeight((int)pAdj->getTerrainType());
 		//iWeight += kMapping.getFeatureWeight(pAdj->getFeatureType());
+		if (iWeight > 5)
+			int fart = 0;
 		if (pAdj->isHills())
 			iWeight += kMapping.getHillsAdjWeight();
 		else if (pAdj->isWater() && pAdj->isAdjacentToLand())
@@ -1512,12 +1503,12 @@ int CvMapGenerator::getMappingWeight(CvPlot const& kPlot, ImprovementTypes eImpr
 		iWeight += kMapping.getWtCoast();
 	else if (!kPlot.isAdjacentToLand())
 		iWeight += kMapping.getWtOcean();
-	iWeight += kMapping.getTerrainWeight(kPlot.getTerrainType());
-	iWeight += kMapping.getFeatureWeight(kPlot.getFeatureType());
+	iWeight += kMapping.getTerrainWeight((int)kPlot.getTerrainType());
+	iWeight += kMapping.getFeatureWeight((int)kPlot.getFeatureType());
 	FOR_EACH_ADJ_PLOT(kPlot)
 	{
-		iWeight += kMapping.getTerrainWeight(pAdj->getTerrainType());
-		iWeight += kMapping.getFeatureWeight(pAdj->getFeatureType());
+		iWeight += kMapping.getTerrainAdjWeight((int)pAdj->getTerrainType());
+		iWeight += kMapping.getFeatureAdjWeight((int)pAdj->getFeatureType());
 		if (pAdj->isHills())
 			iWeight += kMapping.getHillsAdjWeight();
 		else if (pAdj->isWater() && pAdj->isAdjacentToLand())
