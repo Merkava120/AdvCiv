@@ -205,6 +205,7 @@ public: /*  All const functions are exposed to Python except some related to art
 	int getNiche() const { return m_iNiche; } // merk.rasboth
 	int getSpawnChannel() const { return m_iSpawnChannel; } // merk.rasa
 	int getSpawnWeight() const { return m_iSpawnWeight; } // merk.rasa
+	int getPackSize() const { return m_iPackSize; } // merk.raspack
 	// merk.rasmore begin // merk.rasem
 	bool isRiverNative() const { return m_bRiverNative; } 
 	bool isHillsNative() const { return m_bHillsNative; }
@@ -526,6 +527,7 @@ protected:
 	// the original devs are probably lying awake at night with the nagging feeling that somebody is messing with their sorting of bools and ints
 	int m_iSpawnChannel; // merk.rasa
 	int m_iSpawnWeight; // merk.rasa
+	int m_iPackSize; // merk.raspack
 	// merk.rasmore begin // merk.rasem
 	bool m_bRiverNative;
 	bool m_bHillsNative;

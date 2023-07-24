@@ -7349,8 +7349,14 @@ void CvGame::createAnimals()
 			// merk.rasa END			
 			if (eBestUnit != NO_UNIT)
 			{
-				GET_PLAYER(BARBARIAN_PLAYER).initUnit(eBestUnit,
+				// merk.raspack begin
+				int num = 1;
+				if (GC.getUnitInfo(eBestUnit).getPackSize() > 0)
+					num = GC.getUnitInfo(eBestUnit).getPackSize();
+				for (int anims = 0; anims < num; anims++)
+					GET_PLAYER(BARBARIAN_PLAYER).initUnit(eBestUnit,
 						pPlot->getX(), pPlot->getY(), UNITAI_ANIMAL);
+				// merk.raspack end
 			}
 		}
 	}
