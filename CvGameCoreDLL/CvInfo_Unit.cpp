@@ -121,6 +121,10 @@ m_iNiche(-1), // merk.rasboth
 m_iSpawnChannel(-1), // merk.rasa
 m_iSpawnWeight(0), // merk.rasa
 m_iPackSize(0), // merk.raspack
+// merk.raspack1 next three
+m_eSpawnWithUnit(NO_UNITCLASS),
+m_eSpawnWithUnit2(NO_UNITCLASS),
+m_eSpawnWithUnit3(NO_UNITCLASS),
 // merk.rasmore begin // merk.rasem
 m_bRiverNative(false),
 m_bHillsNative(false),
@@ -1356,7 +1360,11 @@ bool CvUnitInfo::read(CvXMLLoadUtility* pXML)
 	pXML->GetChildXmlValByName(&m_iNiche, "iNiche", -1); // merk.rasboth
 	pXML->GetChildXmlValByName(&m_iSpawnChannel, "iSpawnChannel", -1); // merk.rasa
 	pXML->GetChildXmlValByName(&m_iSpawnWeight, "iSpawnWeight", 0); // merk.rasa
-	pXML->GetChildXmlValByName(&m_iPackSize, "iPackSize", 0);
+	pXML->GetChildXmlValByName(&m_iPackSize, "iPackSize", 0); // merk.raspack
+	// merk.raspack1
+	pXML->SetInfoIDFromChildXmlVal(m_eSpawnWithUnit, "SpawnWithUnit");
+	pXML->SetInfoIDFromChildXmlVal(m_eSpawnWithUnit2, "SpawnWithUnit2");
+	pXML->SetInfoIDFromChildXmlVal(m_eSpawnWithUnit3, "SpawnWithUnit3");
 	// merk.rasmore merk. rasem begin
 	pXML->GetChildXmlValByName(&m_bRiverNative, "bRiverNative", false);
 	pXML->GetChildXmlValByName(&m_bHillsNative, "bHillsNative", false);

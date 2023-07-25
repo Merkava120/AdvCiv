@@ -33,6 +33,8 @@ public: // All the const functions are exposed to Python except for those relate
 	// merk.msm begin
 	int getBaseTerrain() const { return m_iBaseTerrain; }
 	int getBaseFeature() const { return m_iBaseFeature; }
+	int getBaseFeatureWeight() const { return m_iUseBFWt; } // merk.msmfix
+	int getBaseFeatureAdjWeight() const { return m_iAdjBFWt; } // merk.msmfix
 	int getChanceInclude() const { return m_iChanceInclude; }
 	int getChanceMap() const { return m_iChanceMap; }
 	int getWtRiver() const { return m_iWtRiver; }
@@ -101,6 +103,8 @@ protected:
 	int m_iBaseTerrain;
 	int m_iBaseFeature;
 	int m_iChanceInclude;
+	int m_iUseBFWt; // merk.msmfix
+	int m_iAdjBFWt; // merk.msmfix
 	int m_iChanceMap;
 	int m_iWtRiver;
 	int m_iWtHills;
@@ -198,6 +202,7 @@ public: /*  All the const functions are exposed to Python except for those deali
 	int getAreaChannel() const { return m_iAreaChannel; }
 	int getHillsAdjWeight() const { return m_iHillsAdjacentWeight; }
 	int getCoastAdjWeight() const { return m_iCoastAdjacentWeight; }
+	TerrainTypes getPlaceTerrain() const { return m_ePlaceTerrain; } // merk.msmadd
 	// merk.msm end
 
 	bool isNoCoast() const;
@@ -296,6 +301,7 @@ protected:
 	int m_iAreaChannel;
 	int m_iHillsAdjacentWeight;
 	int m_iCoastAdjacentWeight;
+	TerrainTypes m_ePlaceTerrain;
 	// merk.msm end
 
 	bool m_bNoCoast;

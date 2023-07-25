@@ -164,6 +164,7 @@ void CvMapGenerator::addGameElements()
 	gDLL->logMemState("CvMapGen after add features");
 	// merk.msm right here
 	applyMappings();
+	m_aiPlacedChannels.clear(); // allows regenerating the map
 	// merk.msm end
 	addBonuses();
 	gDLL->logMemState("CvMapGen after add bonuses");
@@ -1099,20 +1100,23 @@ void CvMapGenerator::applyFeatureMappings(int iTile)
 		if (!isMappingValid(kPlot, m_aiIncludeFeatures[i]))
 			continue;
 		CvFeatureInfo& kMapping = GC.getFeatureInfo(m_aiIncludeFeatures[i]);
-		if (kMapping.getAreaChannel() > 0)
-		{
-			if (kPlot.area()->getBarbarianSpawnChannel() < 0)
-			{
-				int iNewMapping = kMapping.getAreaChannel();
-				handleUnmappedArea(iNewMapping, kPlot);
-			}
-			if (kPlot.area()->getBarbarianSpawnChannel() != kMapping.getAreaChannel())
-				continue;
-		}
 		if (SyncRandSuccess1000(getMappingWeight(kPlot, m_aiIncludeFeatures[i])))
 		{
+			if (kMapping.getAreaChannel() > 0)
+			{
+				if (kPlot.area()->getBarbarianSpawnChannel() < 0)
+				{
+					int iNewMapping = kMapping.getAreaChannel();
+					handleUnmappedArea(iNewMapping, kPlot);
+				}
+				if (kPlot.area()->getBarbarianSpawnChannel() != kMapping.getAreaChannel())
+					continue;
+			}
 			// place that baby
 			kPlot.setFeatureType(m_aiIncludeFeatures[i]);
+			// merk.msmadd
+			if (kMapping.getPlaceTerrain() != NO_TERRAIN)
+				kPlot.setTerrainType(kMapping.getPlaceTerrain());
 			// Two more things to deal with:
 			if (kMapping.isPlaceInGroup())
 			{
@@ -1123,10 +1127,20 @@ void CvMapGenerator::applyFeatureMappings(int iTile)
 						if (!(SyncRandSuccess1000(getMappingWeight(GC.getMap().getPlotByIndex(itPlot->plotNum()), m_aiIncludeFeatures[i]))))
 							continue;
 					}
+					else if (GC.getDefineINT("PLACEGROUP_REGULAR"))
+					{
+						if (!isMappingValid(GC.getMap().getPlotByIndex(itPlot->plotNum()), m_aiIncludeFeatures[i]))
+							continue;
+						if (!(SyncRandSuccess1000(getMappingWeight(GC.getMap().getPlotByIndex(itPlot->plotNum()), m_aiIncludeFeatures[i]))))
+							continue;
+					}
 					else if (!isMappingValid(GC.getMap().getPlotByIndex(itPlot->plotNum()), m_aiIncludeFeatures[i]))
 						continue;
 					// otherwise place that baby
 					kPlot.setFeatureType(m_aiIncludeFeatures[i]);
+					// merk.msmadd
+					if (kMapping.getPlaceTerrain() != NO_TERRAIN)
+						kPlot.setTerrainType(kMapping.getPlaceTerrain());
 				}
 			}
 			if (kMapping.isPlaceOnce())
@@ -1167,19 +1181,21 @@ void CvMapGenerator::applyTerrainMappings(int iTile)
 		if (!isMappingValid(kPlot, m_aiIncludeTerrains[i]))
 			continue;
 		CvTerrainInfo& kMapping = GC.getTerrainInfo(m_aiIncludeTerrains[i]);
-		if (kMapping.getAreaChannel() > 0)
-		{
-			if (kPlot.area()->getBarbarianSpawnChannel() < 0)
-			{
-				int iNewMapping = kMapping.getAreaChannel();
-				handleUnmappedArea(iNewMapping, kPlot);
-			}
-			if (kPlot.area()->getBarbarianSpawnChannel() != kMapping.getAreaChannel())
-				continue;
-		}
 		int iWeight = getMappingWeight(kPlot, m_aiIncludeTerrains[i]);
+		if ((TerrainTypes)m_aiIncludeTerrains[i] == GC.getInfoTypeForString("TERRAIN_STEPPE") && iWeight > 0)
+			int fart = 0;
 		if (SyncRandSuccess1000(iWeight))
 		{
+			if (kMapping.getAreaChannel() > 0)
+			{
+				if (kPlot.area()->getBarbarianSpawnChannel() < 0)
+				{
+					int iNewMapping = kMapping.getAreaChannel();
+					handleUnmappedArea(iNewMapping, kPlot);
+				}
+				if (kPlot.area()->getBarbarianSpawnChannel() != kMapping.getAreaChannel())
+					continue;
+			}
 			// place that baby
 			kPlot.setTerrainType(m_aiIncludeTerrains[i]);
 			// Two more things to deal with:
@@ -1189,6 +1205,13 @@ void CvMapGenerator::applyTerrainMappings(int iTile)
 				{
 					if (GC.getDefineINT("PLACEGROUP_WEIGHTED"))
 					{
+						if (!(SyncRandSuccess1000(getMappingWeight(GC.getMap().getPlotByIndex(itPlot->plotNum()), m_aiIncludeTerrains[i]))))
+							continue;
+					}
+					else if (GC.getDefineINT("PLACEGROUP_REGULAR") )
+					{
+						if (!isMappingValid(GC.getMap().getPlotByIndex(itPlot->plotNum()), m_aiIncludeTerrains[i]))
+							continue;
 						if (!(SyncRandSuccess1000(getMappingWeight(GC.getMap().getPlotByIndex(itPlot->plotNum()), m_aiIncludeTerrains[i]))))
 							continue;
 					}
@@ -1215,18 +1238,18 @@ void CvMapGenerator::applyImprovementMappings(int iTile)
 		if (!isMappingValid(kPlot, m_aiIncludeImprovements[i]))
 			continue;
 		CvImprovementInfo& kMapping = GC.getImprovementInfo(m_aiIncludeImprovements[i]);
-		if (kMapping.getAreaChannel() > 0)
-		{
-			if (kPlot.area()->getBarbarianSpawnChannel() < 0)
-			{
-				int iNewMapping = kMapping.getAreaChannel();
-				handleUnmappedArea(iNewMapping, kPlot);
-			}
-			if (kPlot.area()->getBarbarianSpawnChannel() != kMapping.getAreaChannel())
-				continue;
-		}
 		if (SyncRandSuccess1000(getMappingWeight(kPlot, m_aiIncludeImprovements[i])))
 		{
+			if (kMapping.getAreaChannel() > 0)
+			{
+				if (kPlot.area()->getBarbarianSpawnChannel() < 0)
+				{
+					int iNewMapping = kMapping.getAreaChannel();
+					handleUnmappedArea(iNewMapping, kPlot);
+				}
+				if (kPlot.area()->getBarbarianSpawnChannel() != kMapping.getAreaChannel())
+					continue;
+			}
 			// place that baby
 			kPlot.setImprovementType(m_aiIncludeImprovements[i]);
 			// Two more things to deal with:
@@ -1236,6 +1259,13 @@ void CvMapGenerator::applyImprovementMappings(int iTile)
 				{
 					if (GC.getDefineINT("PLACEGROUP_WEIGHTED"))
 					{
+						if (!(SyncRandSuccess1000(getMappingWeight(GC.getMap().getPlotByIndex(itPlot->plotNum()), m_aiIncludeImprovements[i]))))
+							continue;
+					}
+					else if (GC.getDefineINT("PLACEGROUP_REGULAR"))
+					{
+						if (!isMappingValid(GC.getMap().getPlotByIndex(itPlot->plotNum()), m_aiIncludeImprovements[i]))
+							continue;
 						if (!(SyncRandSuccess1000(getMappingWeight(GC.getMap().getPlotByIndex(itPlot->plotNum()), m_aiIncludeImprovements[i]))))
 							continue;
 					}
@@ -1321,7 +1351,7 @@ bool CvMapGenerator::isMappingValid(CvPlot const& kPlot, TerrainTypes eTerrainMa
 	CvTerrainInfo& kMapping = GC.getTerrainInfo(eTerrainMapping);
 	if (kPlot.getTerrainType() != (TerrainTypes)kMapping.getBaseTerrain() && (TerrainTypes)kMapping.getBaseTerrain() != NO_TERRAIN)
 		return false;
-	if (kPlot.getFeatureType() != (FeatureTypes)kMapping.getBaseFeature() && (FeatureTypes)kMapping.getBaseFeature() != NO_FEATURE)
+	if (kPlot.getFeatureType() != (FeatureTypes)kMapping.getBaseFeature() && (FeatureTypes)kMapping.getBaseFeature() != NO_FEATURE/*merk.msmfix*/ && kMapping.getBaseFeatureWeight() == 0)
 		return false;
 	if (kMapping.isReqRiver() && !kPlot.isRiver())
 		return false;
@@ -1460,6 +1490,11 @@ int CvMapGenerator::getMappingWeight(CvPlot const& kPlot, FeatureTypes eFeatureM
 int CvMapGenerator::getMappingWeight(CvPlot const& kPlot, TerrainTypes eTerrainMapping) const
 {
 	CvTerrainInfo& kMapping = GC.getTerrainInfo(eTerrainMapping);
+	int blah = 0;
+	if (kMapping.getBaseTerrain() == GC.getInfoTypeForString("TERRAIN_GRASS"))
+		blah = kMapping.getBaseFeature();
+	if (kMapping.getBaseFeatureWeight() > 0 && kPlot.getTerrainType() == GC.getInfoTypeForString("TERRAIN_GRASS") && !kPlot.isFeature())
+		int fart = 0;
 	int iWeight = kMapping.getChanceMap();
 	if (kPlot.isRiver())
 		iWeight += kMapping.getWtRiver();
@@ -1472,10 +1507,16 @@ int CvMapGenerator::getMappingWeight(CvPlot const& kPlot, TerrainTypes eTerrainM
 	else if (!kPlot.isAdjacentToLand())
 		iWeight += kMapping.getWtOcean();
 	iWeight += kMapping.getTerrainWeight((int)kPlot.getTerrainType());
+	// merk.msmfix
+	if (kPlot.getFeatureType() == kMapping.getBaseFeature())
+		iWeight += kMapping.getBaseFeatureWeight(); // end
 	//iWeight += kMapping.getFeatureWeight(kPlot.getFeatureType());
 	FOR_EACH_ADJ_PLOT(kPlot)
 	{
 		iWeight += kMapping.getTerrainAdjWeight((int)pAdj->getTerrainType());
+		// merk.msmfix
+		if (pAdj->getFeatureType() == kMapping.getBaseFeature())
+			iWeight += kMapping.getBaseFeatureAdjWeight();
 		//iWeight += kMapping.getFeatureWeight(pAdj->getFeatureType());
 		if (iWeight > 5)
 			int fart = 0;

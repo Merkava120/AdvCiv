@@ -15,6 +15,8 @@ m_iTemp(0), // merk.rasmore
 // merk.msm begin
 m_iBaseTerrain(-1),
 m_iBaseFeature(-1),
+m_iUseBFWt(0), // merk.msmfix
+m_iAdjBFWt(0), // merk.msmfix
 m_iChanceInclude(0),
 m_iChanceMap(0),
 m_bReqRiver(false),
@@ -42,8 +44,8 @@ m_piTerrainWeights(NULL),
 //m_piFeatureWeights(NULL),
 m_piAdjTerrainWeights(NULL),
 //m_piAdjFeatureWeights(NULL),
-m_iCoastAdjacentWeight(0),
 m_iHillsAdjacentWeight(0),
+m_iCoastAdjacentWeight(0),
 // merk.msm end
 m_bWater(false),
 m_bImpassable(false),
@@ -172,6 +174,8 @@ bool CvTerrainInfo::read(CvXMLLoadUtility* pXML)
 	pXML->GetChildXmlValByName(&m_iDefenseModifier, "iDefense");
 	pXML->GetChildXmlValByName(&m_iTemp, "iTemp", 0); // merk.rasmore
 	// merk.msm begin
+	pXML->GetChildXmlValByName(&m_iUseBFWt, "iUseBFWt", 0); // merk.msmfix
+	pXML->GetChildXmlValByName(&m_iAdjBFWt, "iAdjBFWt", 0); // merk.msmfix
 	pXML->GetChildXmlValByName(&m_iChanceInclude, "iChanceInclude", 0);
 	pXML->GetChildXmlValByName(&m_iChanceMap, "iChanceMap", 0);
 	pXML->GetChildXmlValByName(&m_bReqRiver, "bRequiresRiver", 0);
@@ -222,6 +226,8 @@ bool CvTerrainInfo::readPass2(CvXMLLoadUtility* pXML)
 	else
 		m_iBaseTerrain = (int)(GC.getInfoTypeForString(someText));
 	pXML->GetChildXmlValByName(someText, "BaseFeature", "NO_FEATURE");
+	if (someText != "NO_FEATURE")
+		int fart = 0;
 	m_aszExtraXMLforPass3.push_back(someText);
 	int iterrains = GC.getNumTerrainInfos();
 	pXML->SetVariableListTagPair(&m_piTerrainWeights, "TerrainWeights", GC.getNumTerrainInfos());
@@ -283,7 +289,8 @@ bool CvTerrainInfo::readPass2(CvXMLLoadUtility* pXML)
 // merk.msm
 bool CvTerrainInfo::readPass3()
 {
-	if (m_aszExtraXMLforPass3.size() < 1)
+	// merk.msmfix here some
+	if (m_aszExtraXMLforPass3.size() < 1 || m_aszExtraXMLforPass3[0] == "NO_FEATURE")
 	{
 		// no assert because I don't want to add BaseFeature to every single terrain
 		return false; 
@@ -387,6 +394,7 @@ m_piAdjTerrainWeights(NULL),
 m_piAdjFeatureWeights(NULL),
 m_iCoastAdjacentWeight(0),
 m_iHillsAdjacentWeight(0),
+m_ePlaceTerrain(NO_TERRAIN), // merk.msmadd
 // merk.msm end
 m_bNoCoast(false),
 m_bNoRiver(false),
@@ -674,6 +682,11 @@ bool CvFeatureInfo::read(CvXMLLoadUtility* pXML)
 
 	pXML->GetChildXmlValByName(&m_iHillsAdjacentWeight, "iHillsAdjacentWeight", 0);
 	pXML->GetChildXmlValByName(&m_iCoastAdjacentWeight, "iCoastAdjacentWeight", 0);
+	pXML->GetChildXmlValByName(someText, "PlaceTerrain", "NO_TERRAIN");
+	if (someText == "NO_TERRAIN")
+		m_ePlaceTerrain = NO_TERRAIN;
+	else
+		m_ePlaceTerrain = (TerrainTypes)GC.getInfoTypeForString(someText);
 	// merk.msm end
 	pXML->GetChildXmlValByName(&m_iAppearanceProbability, "iAppearance");
 	pXML->GetChildXmlValByName(&m_iDisappearanceProbability, "iDisappearance");

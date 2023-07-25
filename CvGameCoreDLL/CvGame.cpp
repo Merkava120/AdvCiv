@@ -7349,13 +7349,26 @@ void CvGame::createAnimals()
 			// merk.rasa END			
 			if (eBestUnit != NO_UNIT)
 			{
-				// merk.raspack begin
-				int num = 1;
-				if (GC.getUnitInfo(eBestUnit).getPackSize() > 0)
-					num = GC.getUnitInfo(eBestUnit).getPackSize();
+				// merk.raspack - all moved to initUnit so it applies to any unit. 
+				/*int num = 1;
+				CvUnitInfo& kUnit = GC.getUnitInfo(eBestUnit);
+				if (kUnit.getPackSize() > 0)
+					num = kUnit.getPackSize();
 				for (int anims = 0; anims < num; anims++)
-					GET_PLAYER(BARBARIAN_PLAYER).initUnit(eBestUnit,
+				{*/
+				GET_PLAYER(BARBARIAN_PLAYER).initUnit(eBestUnit,
 						pPlot->getX(), pPlot->getY(), UNITAI_ANIMAL);
+					// merk.raspack1 - decided to put this directly in initUnit
+					/*if (kUnit.getSpawnWith() != NO_UNITCLASS)
+						GET_PLAYER(BARBARIAN_PLAYER).initUnit(GC.getUnitClassInfo(kUnit.getSpawnWith()).getDefaultUnit(),
+							pPlot->getX(), pPlot->getY(), UNITAI_ANIMAL);
+					if (kUnit.getSpawnWith2() != NO_UNITCLASS)
+						GET_PLAYER(BARBARIAN_PLAYER).initUnit(GC.getUnitClassInfo(kUnit.getSpawnWith()).getDefaultUnit(),
+							pPlot->getX(), pPlot->getY(), UNITAI_ANIMAL);
+					if (kUnit.getSpawnWith3() != NO_UNITCLASS)
+						GET_PLAYER(BARBARIAN_PLAYER).initUnit(GC.getUnitClassInfo(kUnit.getSpawnWith()).getDefaultUnit(),
+							pPlot->getX(), pPlot->getY(), UNITAI_ANIMAL);*/
+				//}
 				// merk.raspack end
 			}
 		}
@@ -7564,6 +7577,9 @@ int CvGame::getWaterTemp(const CvPlot& kPlot)
 	int iLatitudeRange = iPoleLatitude - iEquatorLatitude;
 	int iLatitudePercent = 100 * iLatitude / iLatitudeRange;
 	int iWaterTemp = (iLatitudePercent * iTempRange) / 100;
+	// merk.rasm
+	if (kPlot.isFeature())
+		iWaterTemp += GC.getFeatureInfo(kPlot.getFeatureType()).getTempAdd(); // merk.rasm end
 	return iWaterTemp;
 }
 

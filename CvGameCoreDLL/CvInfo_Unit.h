@@ -206,6 +206,10 @@ public: /*  All const functions are exposed to Python except some related to art
 	int getSpawnChannel() const { return m_iSpawnChannel; } // merk.rasa
 	int getSpawnWeight() const { return m_iSpawnWeight; } // merk.rasa
 	int getPackSize() const { return m_iPackSize; } // merk.raspack
+	// merk.raspack1 next three
+	UnitClassTypes getSpawnWith() const { return m_eSpawnWithUnit; }
+	UnitClassTypes getSpawnWith2() const { return m_eSpawnWithUnit2; }
+	UnitClassTypes getSpawnWith3() const { return m_eSpawnWithUnit3; }
 	// merk.rasmore begin // merk.rasem
 	bool isRiverNative() const { return m_bRiverNative; } 
 	bool isHillsNative() const { return m_bHillsNative; }
@@ -528,6 +532,10 @@ protected:
 	int m_iSpawnChannel; // merk.rasa
 	int m_iSpawnWeight; // merk.rasa
 	int m_iPackSize; // merk.raspack
+	// merk.raspack1 next three
+	UnitClassTypes m_eSpawnWithUnit;
+	UnitClassTypes m_eSpawnWithUnit2;
+	UnitClassTypes m_eSpawnWithUnit3;
 	// merk.rasmore begin // merk.rasem
 	bool m_bRiverNative;
 	bool m_bHillsNative;

@@ -2173,8 +2173,7 @@ bool CvPlayer::isCityNameValid(CvWString& szName, bool bTestDestroyed) const
 CvUnit* CvPlayer::initUnit(UnitTypes eUnit, int iX, int iY, UnitAITypes eUnitAI,
 	DirectionTypes eFacingDirection)
 {
-	//PROFILE_FUNC(); // advc.003o
-
+	//PROFILE_FUNC(); // advc.003o  
 	CvUnitAI* pUnit = m_units.AI_add(); // advc.003u: was = addUnit()
 	if (pUnit == NULL)
 	{
@@ -2182,9 +2181,45 @@ CvUnit* CvPlayer::initUnit(UnitTypes eUnit, int iX, int iY, UnitAITypes eUnitAI,
 		return NULL;
 	}
 	FAssert(eUnit != NO_UNIT);
-	pUnit->init(pUnit->getID(), eUnit, (UnitAITypes)
+	// merk.raspack moved here
+	int num = 1;
+	if (GC.getUnitInfo(eUnit).getPackSize() > 1)
+		num = GC.getUnitInfo(eUnit).getPackSize();
+	for (int i = 0; i < num; i++)
+	{
+		if (i > 0)
+		{
+			CvUnitAI* pNewUnit = m_units.AI_add(); // advc.003u: was = addUnit()
+			if (pNewUnit == NULL)
+			{
+				FAssertMsg(pNewUnit != NULL, "FLTA failed to allocate storage");
+				return NULL;
+			}
+			FAssert(eUnit != NO_UNIT);
+			pNewUnit->init(pNewUnit->getID(), eUnit, (UnitAITypes)
+				(eUnitAI == NO_UNITAI ? GC.getInfo(eUnit).getDefaultUnitAIType() : eUnitAI),
+				getID(), iX, iY, eFacingDirection);
+		}
+		else
+			pUnit->init(pUnit->getID(), eUnit, (UnitAITypes)
 			(eUnitAI == NO_UNITAI ? GC.getInfo(eUnit).getDefaultUnitAIType() : eUnitAI),
 			getID(), iX, iY, eFacingDirection);
+		if (GC.getUnitInfo(eUnit).getSpawnWith() != NO_UNITCLASS)
+		{
+			UnitTypes eSpawnUnit = isBarbarian() ? GC.getUnitClassInfo(GC.getUnitInfo(eUnit).getSpawnWith()).getDefaultUnit() : GC.getCivilizationInfo(getCivilizationType()).getCivilizationUnits(GC.getUnitInfo(eUnit).getSpawnWith());
+			initUnit(eSpawnUnit, iX, iY, eUnitAI, eFacingDirection);
+		}
+		if (GC.getUnitInfo(eUnit).getSpawnWith2() != NO_UNITCLASS)
+		{
+			UnitTypes eSpawnUnit = isBarbarian() ? GC.getUnitClassInfo(GC.getUnitInfo(eUnit).getSpawnWith2()).getDefaultUnit() : GC.getCivilizationInfo(getCivilizationType()).getCivilizationUnits(GC.getUnitInfo(eUnit).getSpawnWith2());
+			initUnit(eSpawnUnit, iX, iY, eUnitAI, eFacingDirection);
+		}
+		if (GC.getUnitInfo(eUnit).getSpawnWith3() != NO_UNITCLASS)
+		{
+			UnitTypes eSpawnUnit = isBarbarian() ? GC.getUnitClassInfo(GC.getUnitInfo(eUnit).getSpawnWith3()).getDefaultUnit() : GC.getCivilizationInfo(getCivilizationType()).getCivilizationUnits(GC.getUnitInfo(eUnit).getSpawnWith3());
+			initUnit(eSpawnUnit, iX, iY, eUnitAI, eFacingDirection);
+		}
+	} // merk.raspack end
 	return pUnit;
 }
 

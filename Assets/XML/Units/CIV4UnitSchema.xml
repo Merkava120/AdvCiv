@@ -111,6 +111,11 @@
 	<ElementType name="iNiche" content="textOnly" dt:type="int"/>
 	<ElementType name="iSpawnChannel" content="textOnly" dt:type="int"/>
 	<ElementType name="iSpawnWeight" content="textOnly" dt:type="int"/>
+	<!-- merk.raspack -->
+	<ElementType name="iPackSize" content="textOnly" dt:type="int"/>
+	<ElementType name="SpawnWithUnit" content="textOnly"/>
+	<ElementType name="SpawnWithUnit2" content="textOnly"/>
+	<ElementType name="SpawnWithUnit3" content="textOnly"/>
 	<!-- merk.rasmore merk.rasem-->
 	<ElementType name="bRiverNative" content="textOnly" dt:type="boolean"/>
 	<ElementType name="bHillsNative" content="textOnly" dt:type="boolean"/>
@@ -619,6 +624,11 @@
 		<element type="iNiche" minOccurs="0"/>
 		<element type="iSpawnChannel" minOccurs="0"/>
 		<element type="iSpawnWeight" minOccurs="0"/>
+		<!-- merk.raspack -->
+		<element type="iPackSize" minOccurs="0"/>
+		<element type="SpawnWithUnit" minOccurs="0"/>
+		<element type="SpawnWithUnit2" minOccurs="0"/>
+		<element type="SpawnWithUnit3" minOccurs="0"/>
 		<!-- merk.rasmore merk.rasem -->
 		<element type="bRiverNative" minOccurs="0"/>
 		<element type="bHillsNative" minOccurs="0"/>
