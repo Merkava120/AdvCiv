@@ -40,6 +40,8 @@ CvUnit::CvUnit() // advc.003u: Body cut from the deleted reset function
 	m_iRangeAttacksLeft = 0; // merk.rcs
 	m_iCurrentStrike = 0; // merk.ftac
 	m_iCurrentLevel = 0; // merk.ftac
+	m_iAlertState = 0; // merk.ac
+	m_iAlertFlagRaised = 0; // merk.ac
 	m_iExperience = 0;
 	m_iLevel = 1;
 	m_iCargo = 0;
@@ -707,6 +709,19 @@ void CvUnit::doTurn()
 
 	setMadeAttack(false);
 	setMadeInterception(false);
+	// merk.ac
+	if (getUnitInfo().getAlertType() > 0)
+	{
+		if (getAlertState() > 0)
+			changeAlertState(-1); // decrease alert turns
+		if (getAlertState() <= 0 && isHasPromotion(getUnitInfo().getAlertPromotion()))
+		{
+			setHasPromotion(getUnitInfo().getAlertPromotion(), false); 
+		}
+	}
+	if (getAlertFlag() > 0)
+		lowerAlertFlag(); 
+	// merk.ac end
 
 	//setReconPlot(NULL); // advc.029: Handled at end of turn now
 	// <advc.001b> Allow double spent moves to carry over to the next turn
@@ -764,6 +779,62 @@ void CvUnit::doTurnPost()
 {
 	if(GC.getGame().getGameTurn() > m_iLastReconTurn)
 		setReconPlot(NULL);
+	// merk.ac: alerting handled here
+	if (getUnitInfo().getAlertType() != 0 && getAlertState() <= 0)
+	{
+		int iAlert = getUnitInfo().getAlertType();
+		for (PlotCircleIter itLoopPlot(*this, GC.getDefineINT("UNIT_VISIBILITY_RANGE"));
+			itLoopPlot.hasNext(); ++itLoopPlot)
+		{
+			bool bActivated = false;
+			FOR_EACH_UNIT_IN(pOtherUnit, GC.getMap().getPlotByIndex(itLoopPlot->plotNum()))
+			{
+				// Are we enemies?
+				if (isEnemy(pOtherUnit->getTeam()))
+				{
+					// Are they visible to us?
+					if (!pOtherUnit->isInvisible(getTeam(), false))
+					{
+						if (iAlert == 1 || iAlert == 6 || iAlert == 7)
+						{
+							activateAlerted();
+							bActivated = true;
+							break;
+						}
+						else if (!isInvisible(pOtherUnit->getTeam(), false) && (iAlert == 2 || iAlert == 8 || iAlert == 9))
+						{
+							activateAlerted();
+							bActivated = true;
+							break;
+						}
+					}
+					// Don't need to check about alerting THEM, they will handle that on their own doTurnPost. 
+				}
+				else
+				{
+					// do they have an alert flag up? 
+					if (pOtherUnit->getAlertFlag() > 0)
+					{
+						if (iAlert == 3 || iAlert == 6 || iAlert == 8)
+						{
+							activateAlerted();
+							bActivated = true;
+							break;
+						}
+						else if (pOtherUnit->getUnitType() == getUnitType() && (iAlert == 4 || iAlert == 7 || iAlert == 9))
+						{
+							activateAlerted();
+							bActivated = true;
+							break;
+						}
+					}
+				}
+			}
+			if (bActivated)
+				break;
+		}
+	}
+	// merk.ac end
 }
 
 // advc.004c: Return type was void. Now returns false when intercepted.
@@ -1110,6 +1181,33 @@ void CvUnit::updateAirCombat(bool bQuick)
 	be changed if the combat resolution rules are changed. */
 void CvUnit::resolveCombat(CvUnit* pDefender, CvPlot* pPlot, bool bVisible)
 {
+	// merk.ac: before anything happens check for InvisiblePromotion
+	bool bAttackerWasInv = false; // can't be sure invisibility isn't getting updated in this method
+	if (!isInvisible(pDefender->getTeam(), false) && getUnitInfo().getInvisiblePromotion() != NO_PROMOTION)
+	{
+		//if (!isHasPromotion(getUnitInfo().getInvisiblePromotion())) // actually, could get promotion in other ways in ADDITION to this
+		setHasPromotion(getUnitInfo().getInvisiblePromotion(), true);
+		bAttackerWasInv = true;
+	}
+	bool bDefenderWasInv = false;
+	if (pDefender->isInvisible(getTeam(), false) && pDefender->getUnitInfo().getInvisiblePromotion() != NO_PROMOTION)
+	{
+		//if (!isHasPromotion(pDefender->getUnitInfo().getInvisiblePromotion()))
+		setHasPromotion(pDefender->getUnitInfo().getInvisiblePromotion(), true);
+		bDefenderWasInv = true;
+	}
+	// alert check
+	// only matters for defender with alert types 3+
+	if (pDefender->getUnitInfo().getAlertType() > 2 && pDefender->getAlertState() <= 0)
+	{
+		pDefender->activateAlerted();
+	}
+	// raise twice so it sticks around long enough to alert friends
+	if (pDefender->getAlertFlag() < 1)
+		pDefender->raiseAlertFlag();
+	if (pDefender->getAlertFlag() < 2)
+		pDefender->raiseAlertFlag();
+	// merk.ac end
 	// <advc.048c> Preserve info for interface message (based on K-Mod code)
 	m_iAttackOdds = -1;
 #ifndef LOG_COMBAT_OUTCOMES
@@ -1358,7 +1456,11 @@ void CvUnit::resolveCombat(CvUnit* pDefender, CvPlot* pPlot, bool bVisible)
 			gDLL->getEntityIFace()->AddMission(&kBattle);
 		}
 	}
-
+	// merk.ac remove invisibility promotion after combat is over
+	if (bDefenderWasInv)
+		pDefender->setHasPromotion(pDefender->getUnitInfo().getInvisiblePromotion(), false);
+	if (bAttackerWasInv)
+		setHasPromotion(getUnitInfo().getInvisiblePromotion(), false);
 	// merk.dt1: get beakers for techs!
 	// merk.dt2 here too, beakers toward upgrades. 
 	if (GC.getDefineINT("DYNAMIC_TECHS") > 0)
@@ -2871,7 +2973,7 @@ bool CvUnit::canMoveInto(CvPlot const& kPlot, bool bAttack, bool bDeclareWar,
 				}
 			}
 
-			if (bAttack)
+			if (bAttack) // merk.ac note - invisible defenders should end up here (technically they 'can' coexist), and hasDefender looks for bestDefender, which takes defendWhenInvisible into account. 
 			{
 				/* CvUnit* pDefender = pPlot->getBestDefender(NO_PLAYER, getOwner(), this, true);
 				if (NULL != pDefender) {
@@ -8245,7 +8347,8 @@ bool CvUnit::canBeAttackedBy(PlayerTypes eAttackingPlayer,
 	if (/* advc.028: */ bTestVisible &&
 		isInvisible(TEAMID(eAttackingPlayer), /* advc.028: */ false))
 	{
-		return false;
+		if (!getUnitInfo().isDefendWhenInvisible()) // merk.ac
+			return false;
 	}
 	if (bTestEnemy)
 	{
@@ -8297,6 +8400,10 @@ bool CvUnit::isBetterDefenderThan(const CvUnit* pDefender, const CvUnit* pAttack
 	{
 		return false;
 	}
+	// merk.ac: units with bDefendWhenInvisible == false cannot defend
+	if (bInvisible && !getUnitInfo().isDefendWhenInvisible())
+		return false;
+	// merk.ac end
 	/*  ... and if there is some visible team unit that could get attacked otherwise
 		(better: check if our team has the best visible defender; tbd.) ... */
 	if (bInvisible &&
@@ -8315,9 +8422,9 @@ bool CvUnit::isBetterDefenderThan(const CvUnit* pDefender, const CvUnit* pAttack
 	if (pDefender == NULL)
 		return true;
 	// <advc.028>
-	if(pDefender->getTeam() != getTeam() && bInvisible)
+	if(pDefender->getTeam() != getTeam() && bInvisible /*merk.ac: could still be better defender even if we're invisible*/ && !getUnitInfo().isDefendWhenInvisible())
 		return false; // </advc.028>
-	if (canCoexistWithEnemyUnit(eAttackerTeam))
+	if (canCoexistWithEnemyUnit(eAttackerTeam) /*merk.ac: can't actually coexist in THIS way if can defend*/ && !getUnitInfo().isDefendWhenInvisible())
 		return false;
 
 	if (!canDefend())
@@ -9620,7 +9727,6 @@ void CvUnit::setXY(int iX, int iY, bool bGroup, bool bUpdate, bool bShow, bool b
 			pNewPlot->setFlagDirty(true);
 		}
 	}
-
 	FAssert(pOldPlot != pNewPlot);
 	//GET_PLAYER(getOwner()).updateGroupCycle(this);
 	// K-Mod. Only update the group cycle here if we are placing this unit on the map for the first time.
@@ -9647,6 +9753,13 @@ void CvUnit::setXY(int iX, int iY, bool bGroup, bool bUpdate, bool bShow, bool b
 
 	// report event to Python, along with some other key state
 	CvEventReporter::getInstance().unitSetXY(pNewPlot, this);
+}
+
+void CvUnit::activateAlerted()
+{
+	changeAlertState(getUnitInfo().getAlertTurns());
+	if (!isHasPromotion(getUnitInfo().getAlertPromotion()))
+		setHasPromotion(getUnitInfo().getAlertPromotion(), true);
 }
 
 // advc.opt: Update cached CvPlot and CvArea pointer
@@ -10429,6 +10542,20 @@ void CvUnit::changeImmobileTimer(int iChange)
 	if (iChange != 0)
 		setImmobileTimer(std::max(0, getImmobileTimer() + iChange));
 }
+// merk.ac
+void CvUnit::changeAlertState(int iChange)
+{
+	m_iAlertState += iChange;
+}
+void CvUnit::raiseAlertFlag()
+{
+	m_iAlertFlagRaised++;
+}
+void CvUnit::lowerAlertFlag()
+{
+	m_iAlertFlagRaised--;
+}
+// merk.ac
 
 void CvUnit::setMadeAttack(bool bNewValue)
 {

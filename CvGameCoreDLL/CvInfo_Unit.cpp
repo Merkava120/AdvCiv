@@ -97,6 +97,15 @@ m_eDomainType(NO_DOMAIN),
 m_eDefaultUnitAIType(NO_UNITAI),
 m_eInvisibleType(NO_INVISIBLE),
 m_bRevealInOpen(false), // merk.advinv
+// merk.ac
+m_bDefendWhenInvisible(false),
+m_eInvisiblePromotion(NO_PROMOTION),
+m_eAlertPromotion(NO_PROMOTION),
+m_iAlertType(0),
+m_iAlertChance(0),
+m_iAlertTurns(0),
+m_bAlertCanAttack(false),
+// merk.ac end
 m_eAdvisorType(NO_ADVISOR),
 m_eHolyCity(NO_RELIGION),
 m_eReligionType(NO_RELIGION),
@@ -1356,6 +1365,15 @@ bool CvUnitInfo::read(CvXMLLoadUtility* pXML)
 	pXML->SetInfoIDFromChildXmlVal(m_eAdvisorType, "Advisor");
 
 	pXML->GetChildXmlValByName(&m_bRevealInOpen, "bRevealInOpen", false); // merk.advinv
+	// merk.ac
+	pXML->GetChildXmlValByName(&m_bDefendWhenInvisible, "bDefendWhenInvisible", false);
+	pXML->SetInfoIDFromChildXmlVal(m_eInvisiblePromotion, "InvisiblePromotion");
+	pXML->SetInfoIDFromChildXmlVal(m_eAlertPromotion, "AlertPromotion");
+	pXML->GetChildXmlValByName(&m_iAlertType, "iAlertType", 0);
+	pXML->GetChildXmlValByName(&m_iAlertChance, "iAlertChance", 0);
+	pXML->GetChildXmlValByName(&m_iAlertTurns, "iAlertTurns", 0);
+	pXML->GetChildXmlValByName(&m_bAlertCanAttack, "bAlertCanAttack", false);
+	// merk.ac end
 	pXML->GetChildXmlValByName(&m_bAnimal, "bAnimal");
 	pXML->GetChildXmlValByName(&m_iNiche, "iNiche", -1); // merk.rasboth
 	pXML->GetChildXmlValByName(&m_iSpawnChannel, "iSpawnChannel", -1); // merk.rasa

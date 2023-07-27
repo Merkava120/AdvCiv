@@ -105,6 +105,14 @@
 	<!-- merk.advinv -->
 	<ElementType name="bRevealInOpen" content="textOnly" dt:type="boolean"/>
 	<ElementType name="SeeInvisible" content="textOnly"/>
+	<!-- merk.ac -->
+	<ElementType name="bDefendWhenInvisible" content="textOnly" dt:type="boolean"/>
+	<ElementType name="InvisiblePromotion" content="textOnly"/>
+	<ElementType name="AlertPromotion" content="textOnly"/>
+	<ElementType name="iAlertType" content="textOnly" dt:type="int"/>
+	<ElementType name="iAlertChance" content="textOnly" dt:type="int"/>
+	<ElementType name="iAlertTurns" content="textOnly" dt:type="int"/>
+	<ElementType name="bAlertCanAttack" content="textOnly" dt:type="boolean"/>
 	<ElementType name="Advisor" content="textOnly"/>
 	<ElementType name="bAnimal" content="textOnly" dt:type="boolean"/>
 	<!-- merk.rasa merk.rasboth merk.rasniche -->
@@ -614,6 +622,15 @@
 		<!-- merk.advinv -->
 		<element type="bRevealInOpen" minOccurs="0"/>
 		<element type="SeeInvisible"/>
+		<!-- merk.ac -->
+		<element type="InvisiblePromotion" minOccurs="0"/>
+		<element type="bDefendWhenInvisible" minOccurs="0"/>
+		<element type="AlertPromotion" minOccurs="0"/>
+		<element type="iAlertType" minOccurs="0"/>
+		<element type="iAlertChance" minOccurs="0"/>
+		<element type="iAlertTurns" minOccurs="0"/>
+		<element type="bAlertCanAttack" minOccurs="0"/>
+		<!-- merk.ac end -->
 		<element type="Description"/>
 		<element type="Civilopedia"/>
 		<element type="Strategy"/>

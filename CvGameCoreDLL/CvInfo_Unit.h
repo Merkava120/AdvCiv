@@ -183,6 +183,15 @@ public: /*  All const functions are exposed to Python except some related to art
 		return m_aeSeeInvisibleTypes[i];
 	}
 	int getNumSeeInvisibleTypes() const { return (int)m_aeSeeInvisibleTypes.size(); }
+	// merk.ac 
+	bool isDefendWhenInvisible() const { return m_bDefendWhenInvisible; }
+	PromotionTypes getInvisiblePromotion() const { return m_eInvisiblePromotion; }
+	PromotionTypes getAlertPromotion() const { return m_eAlertPromotion; }
+	int getAlertType() const { return m_iAlertType; }
+	int getAlertChance() const { return m_iAlertChance; }
+	int getAlertTurns() const { return m_iAlertTurns; }
+	bool isAlertCanAttack() const { return m_bAlertCanAttack; }
+	// merk.ac end
 	AdvisorTypes getAdvisorType() const { return m_eAdvisorType; }
 	ReligionTypes getHolyCity() const { return m_eHolyCity; }
 	ReligionTypes getReligionType() const { return m_eReligionType; }
@@ -509,6 +518,15 @@ protected:
 	UnitAITypes m_eDefaultUnitAIType;
 	InvisibleTypes m_eInvisibleType;
 	bool m_bRevealInOpen; // merk.advinv
+	// merk.ac
+	bool m_bDefendWhenInvisible;
+	PromotionTypes m_eInvisiblePromotion;
+	PromotionTypes m_eAlertPromotion;
+	int m_iAlertType;
+	int m_iAlertChance;
+	int m_iAlertTurns;
+	bool m_bAlertCanAttack;
+	// merk.ac end
 	AdvisorTypes m_eAdvisorType;
 	ReligionTypes m_eHolyCity;
 	ReligionTypes m_eReligionType;

@@ -390,6 +390,9 @@ public:
 	}
 	bool isOnlyDefensive() const																			// Exposed to Python
 	{
+		// merk.ac
+		if (m_pUnitInfo->isAlertCanAttack() && getAlertState() >= 0)
+			return false; // merk.ac end
 		return m_pUnitInfo->isOnlyDefensive();
 	}
 	bool isNoCityCapture() const;																			// Exposed to Python
@@ -660,6 +663,8 @@ public:
 	DllExport int getY() const { return m_iY; } // advc.inl: was "getY_INLINE"								// Exposed to Python
 	void setXY(int iX, int iY, bool bGroup = false, bool bUpdate = true, bool bShow = false,				// Exposed to Python
 			bool bCheckPlotVisible = false);
+
+	void activateAlerted();
 	
 	bool at(int iX, int iY) const { return (getX() == iX && getY() == iY); }								// Exposed to Python
 	bool at(CvPlot const& kPlot) const { return atPlot(&kPlot); }
@@ -1071,6 +1076,13 @@ public:
 	int getImmobileTimer() const;																			// Exposed to Python
 	void setImmobileTimer(int iNewValue);																	// Exposed to Python
 	void changeImmobileTimer(int iChange);
+	// merk.ac
+	int getAlertState() const { return m_iAlertState; }
+	void changeAlertState(int iChange);
+	int getAlertFlag() const { return m_iAlertFlagRaised; }
+	void raiseAlertFlag();
+	void lowerAlertFlag();
+	// merk.ac end
 
 	// (advc: potentialWarAction has become CvUnitAI::AI_mayAttack(CvPlot const&))
 	bool willRevealAnyPlotFrom(CvPlot const& kFrom) const;
@@ -1230,6 +1242,8 @@ protected:
 	ListEnumMap<UnitCombatTypes, int> m_aeiUnitCombatAttackMods;
 	ListEnumMap<UnitCombatTypes, int> m_aeiUnitCombatDefenseMods;
 	// merk.promo1 end
+	int m_iAlertState; // merk.ac
+	int m_iAlertFlagRaised; // merk.ac
 
 	//bool m_bMadeAttack;
 	int m_iMadeAttacks; // advc.164
