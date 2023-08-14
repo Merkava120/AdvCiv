@@ -6952,6 +6952,57 @@ void CvPlot::doFeature()
 
 void CvPlot::doCulture()
 {
+	// Super Forts begin *culture*
+	doImprovementCulture();
+
+	ImprovementTypes eImprovement = getImprovementType();
+	if(eImprovement != NO_IMPROVEMENT)
+	{
+		// Check for a fort culture flip
+		if(GC.getImprovementInfo(eImprovement).isActsAsCity() && (getOwnershipDuration() > GC.getDefineINT("SUPER_FORTS_DURATION_BEFORE_REVOLT")))
+		{
+			eCulturalOwner = calculateCulturalOwner();
+			if(eCulturalOwner != NO_PLAYER)
+			{
+				if(GET_PLAYER(eCulturalOwner).getTeam() != getTeam())
+				{
+					bool bDefenderFound = false;
+					CLinkList<IDInfo> oldUnits;
+					pUnitNode = headUnitNode();
+
+					while (pUnitNode != NULL)
+					{
+						oldUnits.insertAtEnd(pUnitNode->m_data);
+						pUnitNode = nextUnitNode(pUnitNode);
+					}
+
+					pUnitNode = oldUnits.head();
+
+					while (pUnitNode != NULL)
+					{
+						pLoopUnit = ::getUnit(pUnitNode->m_data);
+						pUnitNode = nextUnitNode(pUnitNode);
+						if(pLoopUnit->canDefend(this))
+						{
+							if(pLoopUnit->getOwner() == getOwnerINLINE())
+							{
+								bDefenderFound = true;
+								break;
+							}
+						}
+					}
+					if(!bDefenderFound)
+					{
+						szBuffer = gDLL->getText("TXT_KEY_MISC_CITY_REVOLTED_JOINED", GC.getImprovementInfo(getImprovementType()).getText(), GET_PLAYER(eCulturalOwner).getCivilizationDescriptionKey());
+						gDLL->getInterfaceIFace()->addMessage(getOwnerINLINE(), false, GC.getEVENT_MESSAGE_TIME(), szBuffer, "AS2D_CULTUREFLIP", MESSAGE_TYPE_INFO, GC.getImprovementInfo(getImprovementType()).getButton(), (ColorTypes)GC.getInfoTypeForString("COLOR_RED"), getX_INLINE(), getY_INLINE(), true, true);
+						gDLL->getInterfaceIFace()->addMessage(eCulturalOwner, false, GC.getEVENT_MESSAGE_TIME(), szBuffer, "AS2D_CULTUREFLIP", MESSAGE_TYPE_INFO, GC.getImprovementInfo(getImprovementType()).getButton(), (ColorTypes)GC.getInfoTypeForString("COLOR_GREEN"), getX_INLINE(), getY_INLINE(), true, true);
+						setOwner(eCulturalOwner,true,true);
+					}
+				}
+			}
+		}
+	}
+	// Super Forts end
 	// <advc> Moved the bulk of the code into a new CvCity member function
 	CvCity* pPlotCity = getPlotCity();
 	if(pPlotCity != NULL)
@@ -7264,7 +7315,14 @@ void CvPlot::read(FDataStreamBase* pStream)
 		else pStream->Read(&m_iLatitude);
 	}
 	else m_iLatitude = calculateLatitude(); // </advc.tsl>
-
+	// Super Forts begin *canal* *choke*
+	pStream->Read(&m_iCanalValue);
+	pStream->Read(&m_iChokeValue);
+	// Super Forts end
+	// Super Forts begin *bombard*
+	pStream->Read(&m_iDefenseDamage);
+	pStream->Read(&m_bBombarded);
+	// Super Forts end
 	bool bVal;
 	pStream->Read(&bVal);
 	m_bStartingPlot = bVal;
@@ -7367,6 +7425,7 @@ void CvPlot::read(FDataStreamBase* pStream)
 	if (uiFlag >= 13)
 	{
 		m_aiCulture.read(pStream);
+		m_aiCultureRangeForts.read(pStream); // merkava120 super forts merge
 		m_aiFoundValue.read(pStream);
 		m_aiPlayerCityRadiusCount.read(pStream);
 		m_aiPlotGroup.read(pStream);
@@ -7504,6 +7563,14 @@ void CvPlot::write(FDataStreamBase* pStream)
 	pStream->Write(m_iReconCount);
 	pStream->Write(m_iRiverCrossingCount);
 	pStream->Write(m_iLatitude); // advc.tsl
+	// Super Forts begin *canal* *choke*
+	pStream->Write(m_iCanalValue);
+	pStream->Write(m_iChokeValue);
+	// Super Forts end
+	// Super Forts begin *bombard*
+	pStream->Write(m_iDefenseDamage);
+	pStream->Write(m_bBombarded);
+	// Super Forts end
 
 	pStream->Write(m_bStartingPlot);
 	pStream->Write(m_bNOfRiver);
@@ -7543,6 +7610,7 @@ void CvPlot::write(FDataStreamBase* pStream)
 	REPRO_TEST_BEGIN_WRITE(CvString::format("Plot pt2(%d,%d)", getX(), getY()).GetCString());
 	m_aiYield.write(pStream);
 	m_aiCulture.write(pStream);
+	m_aiCultureRangeForts.write(pStream); // merkava120 super forts merge
 	m_aiFoundValue.write(pStream);
 	m_aiPlayerCityRadiusCount.write(pStream);
 	m_aiPlotGroup.write(pStream);

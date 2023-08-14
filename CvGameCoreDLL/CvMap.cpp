@@ -1132,11 +1132,18 @@ void CvMap::resetPathDistance()
 }
 
 
-int CvMap::calculatePathDistance(CvPlot const* pSource, CvPlot const* pDest) const
+// Super Forts begin *canal* *choke*
+int CvMap::calculatePathDistance(CvPlot *pSource, CvPlot *pDest, CvPlot *pInvalidPlot)
+// Super Forts end
 {
 	if(pSource == NULL || pDest == NULL)
 		return -1;
-	if (gDLL->getFAStarIFace()->GeneratePath(&GC.getStepFinder(),
+	// Super Forts begin *canal* *choke*
+	// 1 must be added because 0 is already being used as the default value for iInfo in GeneratePath()
+	int iInvalidPlot = (pInvalidPlot == NULL) ? 0 : GC.getMapINLINE().plotNum(pInvalidPlot->getX_INLINE(), pInvalidPlot->getY_INLINE()) + 1;
+
+	if (gDLL->getFAStarIFace()->GeneratePath(&GC.getStepFinder(), pSource->getX_INLINE(), pSource->getY_INLINE(), pDest->getX_INLINE(), pDest->getY_INLINE(), false, iInvalidPlot, true))
+	// Super Forts end
 		pSource->getX(), pSource->getY(), pDest->getX(), pDest->getY(), false, 0, true))
 	{
 		FAStarNode* pNode = gDLL->getFAStarIFace()->GetLastNode(&GC.getStepFinder());
@@ -1221,6 +1228,28 @@ void CvMap::invalidateBorderDangerCache(TeamTypes eTeam)
 	for(int i = 0; i < numPlots(); i++)
 		getPlotByIndex(i).setBorderDangerCache(eTeam, false);
 } // BETTER_BTS_AI_MOD: END
+
+// Super Forts begin *canal* *choke*
+void CvMap::calculateCanalAndChokePoints()
+{
+	int iI;
+	for(iI = 0; iI < numPlotsINLINE(); iI++)
+	{
+		plotByIndexINLINE(iI)->calculateCanalValue();
+		plotByIndexINLINE(iI)->calculateChokeValue();
+		// TEMPORARY HARD CODE for testing purposes
+		/*if((plotByIndexINLINE(iI)->getChokeValue() > 0) || (plotByIndexINLINE(iI)->getCanalValue() > 0))
+		{
+			ImprovementTypes eImprovement = (ImprovementTypes) (plotByIndexINLINE(iI)->isWater() ? GC.getInfoTypeForString("IMPROVEMENT_OFFSHORE_PLATFORM") : GC.getInfoTypeForString("IMPROVEMENT_FORT"));
+			plotByIndexINLINE(iI)->setImprovementType(eImprovement);
+		}
+		else
+		{
+			plotByIndexINLINE(iI)->setImprovementType(NO_IMPROVEMENT);
+		}*/
+	}
+}
+// Super Forts end
 
 // read object from a stream. used during load
 void CvMap::read(FDataStreamBase* pStream)

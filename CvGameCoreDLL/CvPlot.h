@@ -185,7 +185,32 @@ public:
 	//int AI_sumStrength(PlayerTypes eOwner, PlayerTypes eAttackingPlayer = NO_PLAYER, DomainTypes eDomainType = NO_DOMAIN, bool bDefensiveBonuses = true, bool bTestAtWar = false, bool bTestPotentialEnemy = false) const;
 	CvUnit* getSelectedUnit() const;																// Exposed to Python
 	int getUnitPower(PlayerTypes eOwner = NO_PLAYER) const;											// Exposed to Python
-
+	// Super Forts begin *bombard*
+	bool isBombardable(const CvUnit* pUnit) const;
+	bool isBombarded() const;
+	void setBombarded(bool bNewValue);
+	int getDefenseDamage() const;
+	void changeDefenseDamage(int iChange);
+	// Super Forts end
+	// Super Forts begin *culture*
+	int getCultureRangeForts(PlayerTypes ePlayer) const;
+	void setCultureRangeForts(PlayerTypes ePlayer, int iNewValue);
+	void changeCultureRangeForts(PlayerTypes ePlayer, int iChange);
+	bool isWithinFortCultureRange(PlayerTypes ePlayer) const;
+	void changeCultureRangeFortsWithinRange(PlayerTypes ePlayer, int iChange, int iRange, bool bUpdate);
+	void doImprovementCulture();
+	// Super Forts end
+	// Super Forts begin *canal* *choke*
+	int countRegionPlots(const CvPlot* pInvalidPlot = NULL) const;
+	int countAdjacentPassableSections(bool bWater) const;
+	int countImpassableCardinalDirections() const;
+	int getCanalValue() const;
+	void setCanalValue(int iNewValue);
+	void calculateCanalValue();
+	int getChokeValue() const;
+	void setChokeValue(int iNewValue);
+	void calculateChokeValue();
+	// Super Forts end
 	int defenseModifier(TeamTypes eDefender, bool bIgnoreBuilding,									// Exposed to Python
 		/*  advc.012: NO_TEAM means rival defense applies; moved bHelp to the
 			end b/c that parameter is rarely set */
@@ -854,7 +879,14 @@ protected:
 	char m_iCityRadiusCount;
 	char m_iRiverCrossingCount;
 	char /*PlayerTypes*/ m_eOwner;
-
+	// Super Forts begin *canal* *choke*
+	int m_iCanalValue;
+	int m_iChokeValue;
+	// Super Forts end
+	// Super Forts begin *bombard*
+	int m_iDefenseDamage;
+	bool m_bBombarded;
+	// Super Forts end
 	bool m_bStartingPlot:1;
 	bool m_bNOfRiver:1;
 	bool m_bWOfRiver:1;
@@ -905,6 +937,7 @@ protected:
 
 	YieldChangeMap m_aiYield;
 	ArrayEnumMap<PlayerTypes,int> m_aiCulture;
+	ArrayEnumMap<PlayerTypes, int> m_aiCultureRangeForts; // merkava120 super forts merge
 	ArrayEnumMap<PlayerTypes,int,int,FFreeList::INVALID_INDEX> m_aiPlotGroup;
 	mutable ArrayEnumMap<PlayerTypes,short> m_aiFoundValue; // advc: mutable
 	ListEnumMap<PlayerTypes,int,char> m_aiPlayerCityRadiusCount;

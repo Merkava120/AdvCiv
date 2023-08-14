@@ -3502,7 +3502,10 @@ void CvGameTextMgr::setPlotHelp(CvWStringBuffer& szString, CvPlot const& kPlot)
 
 		if (GC.getInfo(ePlotImprovement).getImprovementUpgrade() != NO_IMPROVEMENT)
 		{
-			if (kPlot.getUpgradeProgress() > 0 || kPlot.isBeingWorked())
+			// Super Forts begin *text* *upgrade*
+			if ((pPlot->getUpgradeProgress() > 0) || (pPlot->isBeingWorked() && !GC.getImprovementInfo(eImprovement).isUpgradeRequiresFortify()))
+			// if ((pPlot->getUpgradeProgress() > 0) || pPlot->isBeingWorked()) - Original Code
+			// Super Forts end
 			{
 				int iTurns = kPlot.getUpgradeTimeLeft(ePlotImprovement, eRevealedOwner);
 				// <advc.912f>
@@ -3522,9 +3525,18 @@ void CvGameTextMgr::setPlotHelp(CvWStringBuffer& szString, CvPlot const& kPlot)
 			}
 			else
 			{
-				szString.append(gDLL->getText("TXT_KEY_PLOT_WORK_TO_UPGRADE",
-						GC.getInfo(GC.getInfo(ePlotImprovement).getImprovementUpgrade()).
-						getTextKeyWide()));
+				// Super Forts begin *text* *upgrade*
+				if (GC.getImprovementInfo(eImprovement).isUpgradeRequiresFortify())
+				{
+					szString.append(gDLL->getText("TXT_KEY_PLOT_FORTIFY_TO_UPGRADE", GC.getImprovementInfo((ImprovementTypes) GC.getImprovementInfo(eImprovement).getImprovementUpgrade()).getTextKeyWide()));
+				}
+				else
+				{
+					szString.append(gDLL->getText("TXT_KEY_PLOT_WORK_TO_UPGRADE",
+					GC.getInfo(GC.getInfo(ePlotImprovement).getImprovementUpgrade()).
+					getTextKeyWide()));
+				// Super Forts end
+				
 			}
 		}
 	}
@@ -15920,6 +15932,13 @@ void CvGameTextMgr::setImprovementHelp(CvWStringBuffer &szBuffer, ImprovementTyp
 		szBuffer.append(NEWLINE);
 		szBuffer.append(gDLL->getText("TXT_KEY_IMPROVEMENT_EVOLVES",
 				GC.getInfo(kImprov.getImprovementUpgrade()).getTextKeyWide(), iTurns));
+		// Super Forts begin *text* *upgrade*
+		if (info.isUpgradeRequiresFortify())
+		{
+			szBuffer.append(NEWLINE);
+			szBuffer.append(gDLL->getText("TXT_KEY_IMPROVEMENT_FORTIFY_TO_UPGRADE"));
+		}
+		// Super Forts end
 	}
 	{
 		/*	advc: Was iLast. Since we're not showing the chance of discovery,
@@ -16000,9 +16019,43 @@ void CvGameTextMgr::setImprovementHelp(CvWStringBuffer &szBuffer, ImprovementTyp
 		szBuffer.append(gDLL->getText("TXT_KEY_IMPROVEMENT_PROTECTS_FEATURE_FROM_GW",
 				iGWFeatureProtection));
 	} // </advc.055>
+	// Super Forts begin *text* *bombard*
+	if (info.isBombardable() && (info.getDefenseModifier() > 0))
+	{
+		szBuffer.append(NEWLINE);
+		szBuffer.append(gDLL->getText("TXT_KEY_IMPROVEMENT_BOMBARD"));
+	}
+	if (info.getUniqueRange() > 0)
+	{
+		szBuffer.append(NEWLINE);
+		szBuffer.append(gDLL->getText("TXT_KEY_IMPROVEMENT_UNIQUE_RANGE", info.getUniqueRange()));
+	}
+	// Super Forts end
 	if (bCivilopediaText)
 	{
-		if (kImprov.getPillageGold() > 0)
+		// Super Forts begin *text*
+		if (info.getCulture() > 0)
+		{
+			szBuffer.append(NEWLINE);
+			szBuffer.append(gDLL->getText("TXT_KEY_IMPROVEMENT_PLOT_CULTURE", info.getCulture()));
+		}
+		if (info.getCultureRange() > 0 && ((info.getCulture() > 0) || info.isActsAsCity()))
+		{
+			szBuffer.append(NEWLINE);
+			szBuffer.append(gDLL->getText("TXT_KEY_IMPROVEMENT_CULTURE_RANGE", info.getCultureRange()));
+		}
+		if (info.getVisibilityChange() > 0)
+		{
+			szBuffer.append(NEWLINE);
+			szBuffer.append(gDLL->getText("TXT_KEY_IMPROVEMENT_VISIBILITY_RANGE", info.getVisibilityChange()));
+		}
+		if (info.getSeeFrom() > 0)
+		{
+			szBuffer.append(NEWLINE);
+			szBuffer.append(gDLL->getText("TXT_KEY_IMPROVEMENT_SEE_FROM", info.getSeeFrom()));
+		}
+		// Super Forts end
+		if (info.getPillageGold() > 0)
 		{
 			szBuffer.append(NEWLINE);
 			szBuffer.append(gDLL->getText("TXT_KEY_IMPROVEMENT_PILLAGE_YIELDS", kImprov.getPillageGold()));

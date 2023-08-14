@@ -176,7 +176,10 @@ public:
 
 	bool canAirStrike(CvPlot const& kPlot) const; // (advc.004c: was protected)
 
-	CvCity* bombardTarget(CvPlot const& kFrom) const;														// Exposed to Python
+	CvCity* bombardTarget(CvPlot const& kFrom) const;
+	// Super Forts begin *bombard*
+	CvPlot* bombardImprovementTarget(const CvPlot* pPlot) const;
+	// Super Forts end														// Exposed to Python
 	bool canBombard(CvPlot const& kFrom) const;																// Exposed to Python
 	int damageToBombardTarget(CvPlot const& kFrom) const; // advc
 	bool bombard();
