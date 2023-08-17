@@ -26428,7 +26428,7 @@ void CvPlayerAI::AI_convertUnitAITypesForCrush()
 				}
 			}
 			// Super Forts begin *AI_defense* - don't convert units guarding a fort
-			else if (pLoopUnit->plot()->isCity(true))
+			else if (pLoopUnit->plot()->isCityExternal(true))
 			{
 				if (pLoopUnit->plot()->getNumDefenders(pLoopUnit->getOwner()) == 1)
 				{
@@ -26864,7 +26864,7 @@ int CvPlayerAI::AI_getTotalFloatingDefendersNeeded(CvArea const& kArea, // advc:
 				iCultureDefendersNeeded * fixp(0.3));
 	} // </advc.099c>
 	// Super Forts begin *AI_defense* - Build a few extra floating defenders for occupying forts
-	rDefenders += iAreaCities / 2;
+	rDefenders += kArea.getNumCities() / 2;
 	// Super Forts end
 	return rDefenders.round();
 }
@@ -28806,9 +28806,6 @@ int CvPlayerAI::AI_getPlotAirbaseValue(CvPlot const& kPlot) const // advc: param
 	int iMinFriendlyCityDistance = MAX_INT;
 	/*CvPlot const* pMinOtherCityPlot = NULL;
 	CvPlot const* pMinFriendlyCityPlot = NULL;*/ // advc: unused
-	// Super Forts begin *choke* *canal* - commenting out unnecessary code
-//	int iMinFriendlyCityDistance = MAX_INT;
-//	CvPlot* iMinFriendlyCityPlot = NULL;
 	
 	int iOtherCityCount = 0;
 	for (SquareIter it(kPlot, 4, false); it.hasNext(); ++it)
@@ -28861,24 +28858,26 @@ int CvPlayerAI::AI_getPlotAirbaseValue(CvPlot const& kPlot) const // advc: param
 		if (plotDistance(pNearestCity->getX(), pNearestCity->getY(), pMinOtherCityPlot->getX(), pMinOtherCityPlot->getY()) < iRange)
 			return 0;
 	}*/
-		// Super Forts begin *canal* *choke*
-	if(iOtherCityCount == 1)
+		
+	// Super Forts begin *canal* *choke*
+	/*if(iOtherCityCount == 1)
 	{
 		if (iMinOtherCityPlot != NULL)
 		{
-			CvCity* pNearestCity = GC.getMapINLINE().findCity(iMinOtherCityPlot->getX_INLINE(), iMinOtherCityPlot->getY_INLINE(), NO_PLAYER, getTeam(), false);
+			CvCity* pNearestCity = GC.getMap().findCity(iMinOtherCityPlot->getX(), iMinOtherCityPlot->getY(), NO_PLAYER, getTeam(), false);
 			if (NULL != pNearestCity)
 			{
-				if (plotDistance(pNearestCity->getX_INLINE(), pNearestCity->getY_INLINE(), iMinOtherCityPlot->getX_INLINE(), iMinOtherCityPlot->getY_INLINE()) < iMinOtherCityDistance)
+				if (plotDistance(pNearestCity->getX(), pNearestCity->getY(), iMinOtherCityPlot->getX(), iMinOtherCityPlot->getY()) < iMinOtherCityDistance)
 				{
 					return 0;
 				}
 			}
 		}
-	}
+	}*/
 	int iDefenseModifier = kPlot.defenseModifier(getTeam(), false);
 	/*if (iDefenseModifier <= 0)
 		return 0;*/
+	int iValue = iOtherCityCount * 50;
 	iValue += iDefenseModifier;
 /*	Original Code	
 	iValue *= 100 + (2 * (iDefenseModifier + (pPlot->isHills() ? 25 : 0)));
@@ -28964,11 +28963,12 @@ int CvPlayerAI::AI_getPlotChokeValue(CvPlot* pPlot) const
 			}
 			if (pPlot->isCityRadius())
 			{
-				CvCity* pWorkingCity = pPlot->getWorkingCity();
+				//CvCity* pWorkingCity = pPlot->getWorkingCity();
+				CvCityAI* pWorkingCity = pPlot->AI_getWorkingCity(); // merk
 				if (pWorkingCity != NULL)
 				{
 					// Left in this part from the original code. Might be needed to avoid workers from getting stuck in a loop?
-					if (pWorkingCity->AI_getBestBuild(pWorkingCity->getCityPlotIndex(pPlot)) != NO_BUILD)
+					if (pWorkingCity->AI_getBestBuild(pWorkingCity->getCityPlotIndex(*pPlot)) != NO_BUILD)
 					{
 						return 0;
 					}
@@ -28988,10 +28988,10 @@ int CvPlayerAI::AI_getPlotChokeValue(CvPlot* pPlot) const
 	
 		for (int iI = 0; iI < NUM_DIRECTION_TYPES; iI++)
 		{
-			CvPlot* pLoopPlot = plotDirection(pPlot->getX_INLINE(), pPlot->getY_INLINE(), (DirectionTypes)iI);
+			CvPlot* pLoopPlot = plotDirection(pPlot->getX(), pPlot->getY(), (DirectionTypes)iI);
 			if (pLoopPlot != NULL)
 			{
-				if (pLoopPlot->isCity(true) && (pLoopPlot->getChokeValue() > 0))
+				if (pLoopPlot->isCityExternal(true) && (pLoopPlot->getChokeValue() > 0))
 				{
 					// Decrease value when adjacent to a city or fort with a choke value
 					iChokeValue -= 10;

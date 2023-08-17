@@ -1474,13 +1474,13 @@ bool CvImprovementInfo::read(CvXMLLoadUtility* pXML)
 	pXML->GetChildXmlValByName(&m_iPillageGold, "iPillageGold");
 	pXML->GetChildXmlValByName(&m_bOutsideBorders, "bOutsideBorders");
 	// Super Forts begin *XML*
-	pXML->GetChildXmlValByName(&m_iCulture, "iCulture");
-	pXML->GetChildXmlValByName(&m_iCultureRange, "iCultureRange");
-	pXML->GetChildXmlValByName(&m_iVisibilityChange, "iVisibilityChange");
-	pXML->GetChildXmlValByName(&m_iSeeFrom, "iSeeFrom");
-	pXML->GetChildXmlValByName(&m_iUniqueRange, "iUnique");
-	pXML->GetChildXmlValByName(&m_bBombardable, "bBombardable");
-	pXML->GetChildXmlValByName(&m_bUpgradeRequiresFortify, "bUpgradeRequiresFortify");
+	pXML->GetChildXmlValByName(&m_iCulture, "iCulture", 0);
+	pXML->GetChildXmlValByName(&m_iCultureRange, "iCultureRange", 0);
+	pXML->GetChildXmlValByName(&m_iVisibilityChange, "iVisibilityChange", 0);
+	pXML->GetChildXmlValByName(&m_iSeeFrom, "iSeeFrom", 0);
+	pXML->GetChildXmlValByName(&m_iUniqueRange, "iUnique", 0);
+	pXML->GetChildXmlValByName(&m_bBombardable, "bBombardable", false);
+	pXML->GetChildXmlValByName(&m_bUpgradeRequiresFortify, "bUpgradeRequiresFortify", false);
 	// Super Forts end
 	pXML->SetVariableListTagPair(&m_pbTerrainMakesValid, "TerrainMakesValids", GC.getNumTerrainInfos());
 	pXML->SetVariableListTagPair(&m_pbFeatureMakesValid, "FeatureMakesValids", GC.getNumFeatureInfos());

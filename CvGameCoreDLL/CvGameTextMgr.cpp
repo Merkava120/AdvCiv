@@ -3469,17 +3469,17 @@ void CvGameTextMgr::setPlotHelp(CvWStringBuffer& szString, CvPlot const& kPlot)
 		szString.append(NEWLINE);
 		// <advc.005c>
 		bool bNamedRuin = false;
-		if(ePlotImprovement == GC.getRUINS_IMPROVEMENT())
+		if (ePlotImprovement == GC.getRUINS_IMPROVEMENT())
 		{
 			wchar const* szRuinsName = kPlot.getRuinsName();
-			if(szRuinsName != NULL/*&& wcslen(szRuinsName) > 0*/)
+			if (szRuinsName != NULL/*&& wcslen(szRuinsName) > 0*/)
 			{
 				szString.append(gDLL->getText("TXT_KEY_IMPROVEMENT_CITY_RUINS_NAMED",
-						szRuinsName));
+					szRuinsName));
 				bNamedRuin = true;
 			}
 		}
-		if(!bNamedRuin) // from Volcano event // </advc.005c>
+		if (!bNamedRuin) // from Volcano event // </advc.005c>
 			szString.append(GC.getInfo(ePlotImprovement).getDescription());
 
 		bool bFound = false;
@@ -3503,9 +3503,9 @@ void CvGameTextMgr::setPlotHelp(CvWStringBuffer& szString, CvPlot const& kPlot)
 		if (GC.getInfo(ePlotImprovement).getImprovementUpgrade() != NO_IMPROVEMENT)
 		{
 			// Super Forts begin *text* *upgrade*
-			if ((pPlot->getUpgradeProgress() > 0) || (pPlot->isBeingWorked() && !GC.getImprovementInfo(eImprovement).isUpgradeRequiresFortify()))
-			// if ((pPlot->getUpgradeProgress() > 0) || pPlot->isBeingWorked()) - Original Code
-			// Super Forts end
+			if ((kPlot.getUpgradeProgress() > 0) || (kPlot.isBeingWorked() && !GC.getImprovementInfo(ePlotImprovement).isUpgradeRequiresFortify()))
+				// if ((pPlot->getUpgradeProgress() > 0) || pPlot->isBeingWorked()) - Original Code
+				// Super Forts end
 			{
 				int iTurns = kPlot.getUpgradeTimeLeft(ePlotImprovement, eRevealedOwner);
 				// <advc.912f>
@@ -3514,11 +3514,11 @@ void CvGameTextMgr::setPlotHelp(CvWStringBuffer& szString, CvPlot const& kPlot)
 				{
 					iTurns *= -1;
 					szString.append(CvWString::format(SETCOLR,
-							TEXT_COLOR("COLOR_LIGHT_GREY")));
+						TEXT_COLOR("COLOR_LIGHT_GREY")));
 				} // </advc.912f>
 				szString.append(gDLL->getText("TXT_KEY_PLOT_IMP_UPGRADE", iTurns,
-						GC.getInfo(GC.getInfo(ePlotImprovement).getImprovementUpgrade()).
-						getTextKeyWide()));
+					GC.getInfo(GC.getInfo(ePlotImprovement).getImprovementUpgrade()).
+					getTextKeyWide()));
 				// <advc.912f>
 				if (bStagnant)
 					szString.append(ENDCOLR); // </advc.912f>
@@ -3526,127 +3526,128 @@ void CvGameTextMgr::setPlotHelp(CvWStringBuffer& szString, CvPlot const& kPlot)
 			else
 			{
 				// Super Forts begin *text* *upgrade*
-				if (GC.getImprovementInfo(eImprovement).isUpgradeRequiresFortify())
+				if (GC.getImprovementInfo(ePlotImprovement).isUpgradeRequiresFortify())
 				{
-					szString.append(gDLL->getText("TXT_KEY_PLOT_FORTIFY_TO_UPGRADE", GC.getImprovementInfo((ImprovementTypes) GC.getImprovementInfo(eImprovement).getImprovementUpgrade()).getTextKeyWide()));
+					szString.append(gDLL->getText("TXT_KEY_PLOT_FORTIFY_TO_UPGRADE", GC.getImprovementInfo((ImprovementTypes)GC.getImprovementInfo(ePlotImprovement).getImprovementUpgrade()).getTextKeyWide()));
 				}
 				else
 				{
 					szString.append(gDLL->getText("TXT_KEY_PLOT_WORK_TO_UPGRADE",
-					GC.getInfo(GC.getInfo(ePlotImprovement).getImprovementUpgrade()).
-					getTextKeyWide()));
-				// Super Forts end
-				
-			}
-		}
-	}
-	// <advc.059>
-	if (!bHealthHappyShown)
-		setPlotHealthHappyHelp(szString, kPlot); // </advc.059>
-	if (kPlot.getRevealedRouteType(eActiveTeam, true) != NO_ROUTE)
-	{
-		szString.append(NEWLINE);
-		szString.append(GC.getInfo(kPlot.getRevealedRouteType(eActiveTeam, true)).getDescription());
-	}
-	// <advc.011c>
-	FOR_EACH_ENUM2(Build, eBuild)
-	{
-		if(kPlot.getBuildProgress(eBuild) <= 0 ||
-			!kPlot.canBuild(eBuild, eActivePlayer, false, false))
-		{
-			continue;
-		}
-		int iTurnsLeft = kPlot.getBuildTurnsLeft(eBuild, eActivePlayer);
-		if(iTurnsLeft <= 0 || iTurnsLeft == MAX_INT)
-			continue; // </advc.011c>
-		// <advc.011b>
-		int iInitialTurnsNeeded = scaled(
-				kPlot.getBuildTime(eBuild, eActivePlayer),
-				GET_PLAYER(eActivePlayer).getWorkRate(eBuild)).
-				ceil();
-		int iTurnsSpent = iInitialTurnsNeeded - iTurnsLeft;
-		if(iTurnsSpent <= 0)
-			continue;
-		CvBuildInfo const& kBuild = GC.getInfo(eBuild);
-		CvWString szBuildDescr = kBuild.getDescription();
-		/*  Nicer to use the structure (improvement or route) name if it isn't a
-			build that only removes a feature. */
-		ImprovementTypes eImprovement = kBuild.getImprovement();
-		if(eImprovement != NO_IMPROVEMENT)
-			szBuildDescr = GC.getInfo(eImprovement).getDescription();
-		else
-		{
-			RouteTypes eRoute = kBuild.getRoute();
-			if(eRoute != NO_ROUTE)
-				szBuildDescr = GC.getInfo(eRoute).getDescription();
-		}
-		szTempBuffer.Format(SETCOLR L"%s" ENDCOLR,
-				TEXT_COLOR("COLOR_HIGHLIGHT_TEXT"),
-				szBuildDescr.c_str());
-		szBuildDescr = szTempBuffer;
-		bool bDecay = (GC.getDefineINT(CvGlobals::DELAY_UNTIL_BUILD_DECAY) > 0 &&
-				kPlot.isBuildProgressDecaying(true));
-		if(bDecay) // Check if Workers are getting on the task this turn
-		{
-			FOR_EACH_UNIT_IN(pUnit, kPlot)
-			{
-				if(pUnit->getTeam() == eActiveTeam && pUnit->movesLeft() > 0 &&
-					pUnit->getGroup()->getMissionType(0) == MISSION_BUILD)
-				{
-					bDecay = false;
-					break;
+						GC.getInfo(GC.getInfo(ePlotImprovement).getImprovementUpgrade()).
+						getTextKeyWide()));
+					// Super Forts end
+
 				}
 			}
 		}
-		if(GC.ctrlKey() || BUGOption::isEnabled("MiscHover__PartialBuildsAlways", false))
+		// <advc.059>
+		if (!bHealthHappyShown)
+			setPlotHealthHappyHelp(szString, kPlot); // </advc.059>
+		if (kPlot.getRevealedRouteType(eActiveTeam, true) != NO_ROUTE)
 		{
 			szString.append(NEWLINE);
-			szString.append(szBuildDescr);
-			szString.append(CvWString::format(L" (%d/%d %s%s)",
+			szString.append(GC.getInfo(kPlot.getRevealedRouteType(eActiveTeam, true)).getDescription());
+		}
+		// <advc.011c>
+		FOR_EACH_ENUM2(Build, eBuild)
+		{
+			if (kPlot.getBuildProgress(eBuild) <= 0 ||
+				!kPlot.canBuild(eBuild, eActivePlayer, false, false))
+			{
+				continue;
+			}
+			int iTurnsLeft = kPlot.getBuildTurnsLeft(eBuild, eActivePlayer);
+			if (iTurnsLeft <= 0 || iTurnsLeft == MAX_INT)
+				continue; // </advc.011c>
+			// <advc.011b>
+			int iInitialTurnsNeeded = scaled(
+				kPlot.getBuildTime(eBuild, eActivePlayer),
+				GET_PLAYER(eActivePlayer).getWorkRate(eBuild)).
+				ceil();
+			int iTurnsSpent = iInitialTurnsNeeded - iTurnsLeft;
+			if (iTurnsSpent <= 0)
+				continue;
+			CvBuildInfo const& kBuild = GC.getInfo(eBuild);
+			CvWString szBuildDescr = kBuild.getDescription();
+			/*  Nicer to use the structure (improvement or route) name if it isn't a
+				build that only removes a feature. */
+			ImprovementTypes eImprovement = kBuild.getImprovement();
+			if (eImprovement != NO_IMPROVEMENT)
+				szBuildDescr = GC.getInfo(eImprovement).getDescription();
+			else
+			{
+				RouteTypes eRoute = kBuild.getRoute();
+				if (eRoute != NO_ROUTE)
+					szBuildDescr = GC.getInfo(eRoute).getDescription();
+			}
+			szTempBuffer.Format(SETCOLR L"%s" ENDCOLR,
+				TEXT_COLOR("COLOR_HIGHLIGHT_TEXT"),
+				szBuildDescr.c_str());
+			szBuildDescr = szTempBuffer;
+			bool bDecay = (GC.getDefineINT(CvGlobals::DELAY_UNTIL_BUILD_DECAY) > 0 &&
+				kPlot.isBuildProgressDecaying(true));
+			if (bDecay) // Check if Workers are getting on the task this turn
+			{
+				FOR_EACH_UNIT_IN(pUnit, kPlot)
+				{
+					if (pUnit->getTeam() == eActiveTeam && pUnit->movesLeft() > 0 &&
+						pUnit->getGroup()->getMissionType(0) == MISSION_BUILD)
+					{
+						bDecay = false;
+						break;
+					}
+				}
+			}
+			if (GC.ctrlKey() || BUGOption::isEnabled("MiscHover__PartialBuildsAlways", false))
+			{
+				szString.append(NEWLINE);
+				szString.append(szBuildDescr);
+				szString.append(CvWString::format(L" (%d/%d %s%s)",
 					iTurnsSpent, iInitialTurnsNeeded, gDLL->getText("TXT_KEY_REPLAY_SCREEN_TURNS").c_str(),
 					bDecay ? CvWString::format(L"; " SETCOLR L"%s" ENDCOLR,
-					TEXT_COLOR("COLOR_WARNING_TEXT"),
-					gDLL->getText("TXT_KEY_MISC_DECAY_WARNING").c_str()).c_str() : L""));
-		}
-	} // </advc.011b>
+						TEXT_COLOR("COLOR_WARNING_TEXT"),
+						gDLL->getText("TXT_KEY_MISC_DECAY_WARNING").c_str()).c_str() : L""));
+			}
+		} // </advc.011b>
 
-	// advc.003h (BBAI code from 07/11/08 by jdog5000 moved into setPlotHelpDebug)
-	if (kPlot.getBlockadedCount(eActiveTeam) > 0)
-	{
-		szString.append(CvWString::format(SETCOLR, TEXT_COLOR("COLOR_NEGATIVE_TEXT")));
-		szString.append(NEWLINE);
-		szString.append(gDLL->getText("TXT_KEY_PLOT_BLOCKADED"));
-		szString.append(CvWString::format(ENDCOLR));
-	}
-	// <advc.004k>
-	if (pHeadSelectedUnit != NULL && pHeadSelectedUnit->isSeaPatrolling() &&
-		pHeadSelectedUnit->canReachBySeaPatrol(kPlot))
-	{
-		szString.append(CvWString::format(SETCOLR, TEXT_COLOR("COLOR_CITY_BLUE_TEXT")));
-		szString.append(NEWLINE);
-		szString.append(gDLL->getText("TXT_KEY_PLOT_SEA_PATROLLED"));
-		szString.append(CvWString::format(ENDCOLR));
-	} // </advc.004k>
-
-	if (kPlot.isFeature())
-	{
-		int iDamage = GC.getInfo(kPlot.getFeatureType()).getTurnDamage();
-
-		if (iDamage > 0)
+		// advc.003h (BBAI code from 07/11/08 by jdog5000 moved into setPlotHelpDebug)
+		if (kPlot.getBlockadedCount(eActiveTeam) > 0)
 		{
 			szString.append(CvWString::format(SETCOLR, TEXT_COLOR("COLOR_NEGATIVE_TEXT")));
 			szString.append(NEWLINE);
-			szString.append(gDLL->getText("TXT_KEY_PLOT_DAMAGE", iDamage));
-			szString.append(CvWString::format( ENDCOLR));
+			szString.append(gDLL->getText("TXT_KEY_PLOT_BLOCKADED"));
+			szString.append(CvWString::format(ENDCOLR));
 		}
-		// UNOFFICIAL_PATCH, User interface (FeatureDamageFix), 06/02/10, LunarMongoose: START
-		else if (iDamage < 0)
+		// <advc.004k>
+		if (pHeadSelectedUnit != NULL && pHeadSelectedUnit->isSeaPatrolling() &&
+			pHeadSelectedUnit->canReachBySeaPatrol(kPlot))
 		{
-			szString.append(CvWString::format(SETCOLR, TEXT_COLOR("COLOR_POSITIVE_TEXT")));
+			szString.append(CvWString::format(SETCOLR, TEXT_COLOR("COLOR_CITY_BLUE_TEXT")));
 			szString.append(NEWLINE);
-			szString.append(gDLL->getText("TXT_KEY_PLOT_DAMAGE", iDamage));
-			szString.append(CvWString::format( ENDCOLR));
-		} // UNOFFICIAL_PATCH: END
+			szString.append(gDLL->getText("TXT_KEY_PLOT_SEA_PATROLLED"));
+			szString.append(CvWString::format(ENDCOLR));
+		} // </advc.004k>
+
+		if (kPlot.isFeature())
+		{
+			int iDamage = GC.getInfo(kPlot.getFeatureType()).getTurnDamage();
+
+			if (iDamage > 0)
+			{
+				szString.append(CvWString::format(SETCOLR, TEXT_COLOR("COLOR_NEGATIVE_TEXT")));
+				szString.append(NEWLINE);
+				szString.append(gDLL->getText("TXT_KEY_PLOT_DAMAGE", iDamage));
+				szString.append(CvWString::format(ENDCOLR));
+			}
+			// UNOFFICIAL_PATCH, User interface (FeatureDamageFix), 06/02/10, LunarMongoose: START
+			else if (iDamage < 0)
+			{
+				szString.append(CvWString::format(SETCOLR, TEXT_COLOR("COLOR_POSITIVE_TEXT")));
+				szString.append(NEWLINE);
+				szString.append(gDLL->getText("TXT_KEY_PLOT_DAMAGE", iDamage));
+				szString.append(CvWString::format(ENDCOLR));
+			} // UNOFFICIAL_PATCH: END
+		}
 	}
 }
 
@@ -15933,7 +15934,7 @@ void CvGameTextMgr::setImprovementHelp(CvWStringBuffer &szBuffer, ImprovementTyp
 		szBuffer.append(gDLL->getText("TXT_KEY_IMPROVEMENT_EVOLVES",
 				GC.getInfo(kImprov.getImprovementUpgrade()).getTextKeyWide(), iTurns));
 		// Super Forts begin *text* *upgrade*
-		if (info.isUpgradeRequiresFortify())
+		if (kImprov.isUpgradeRequiresFortify())
 		{
 			szBuffer.append(NEWLINE);
 			szBuffer.append(gDLL->getText("TXT_KEY_IMPROVEMENT_FORTIFY_TO_UPGRADE"));
@@ -16020,42 +16021,42 @@ void CvGameTextMgr::setImprovementHelp(CvWStringBuffer &szBuffer, ImprovementTyp
 				iGWFeatureProtection));
 	} // </advc.055>
 	// Super Forts begin *text* *bombard*
-	if (info.isBombardable() && (info.getDefenseModifier() > 0))
+	if (kImprov.isBombardable() && (kImprov.getDefenseModifier() > 0))
 	{
 		szBuffer.append(NEWLINE);
 		szBuffer.append(gDLL->getText("TXT_KEY_IMPROVEMENT_BOMBARD"));
 	}
-	if (info.getUniqueRange() > 0)
+	if (kImprov.getUniqueRange() > 0)
 	{
 		szBuffer.append(NEWLINE);
-		szBuffer.append(gDLL->getText("TXT_KEY_IMPROVEMENT_UNIQUE_RANGE", info.getUniqueRange()));
+		szBuffer.append(gDLL->getText("TXT_KEY_IMPROVEMENT_UNIQUE_RANGE", kImprov.getUniqueRange()));
 	}
 	// Super Forts end
 	if (bCivilopediaText)
 	{
 		// Super Forts begin *text*
-		if (info.getCulture() > 0)
+		if (kImprov.getCulture() > 0)
 		{
 			szBuffer.append(NEWLINE);
-			szBuffer.append(gDLL->getText("TXT_KEY_IMPROVEMENT_PLOT_CULTURE", info.getCulture()));
+			szBuffer.append(gDLL->getText("TXT_KEY_IMPROVEMENT_PLOT_CULTURE", kImprov.getCulture()));
 		}
-		if (info.getCultureRange() > 0 && ((info.getCulture() > 0) || info.isActsAsCity()))
+		if (kImprov.getCultureRange() > 0 && ((kImprov.getCulture() > 0) || kImprov.isActsAsCity()))
 		{
 			szBuffer.append(NEWLINE);
-			szBuffer.append(gDLL->getText("TXT_KEY_IMPROVEMENT_CULTURE_RANGE", info.getCultureRange()));
+			szBuffer.append(gDLL->getText("TXT_KEY_IMPROVEMENT_CULTURE_RANGE", kImprov.getCultureRange()));
 		}
-		if (info.getVisibilityChange() > 0)
+		if (kImprov.getVisibilityChange() > 0)
 		{
 			szBuffer.append(NEWLINE);
-			szBuffer.append(gDLL->getText("TXT_KEY_IMPROVEMENT_VISIBILITY_RANGE", info.getVisibilityChange()));
+			szBuffer.append(gDLL->getText("TXT_KEY_IMPROVEMENT_VISIBILITY_RANGE", kImprov.getVisibilityChange()));
 		}
-		if (info.getSeeFrom() > 0)
+		if (kImprov.getSeeFrom() > 0)
 		{
 			szBuffer.append(NEWLINE);
-			szBuffer.append(gDLL->getText("TXT_KEY_IMPROVEMENT_SEE_FROM", info.getSeeFrom()));
+			szBuffer.append(gDLL->getText("TXT_KEY_IMPROVEMENT_SEE_FROM", kImprov.getSeeFrom()));
 		}
 		// Super Forts end
-		if (info.getPillageGold() > 0)
+		if (kImprov.getPillageGold() > 0) // merkava120: this was info.getPillageGold...why???
 		{
 			szBuffer.append(NEWLINE);
 			szBuffer.append(gDLL->getText("TXT_KEY_IMPROVEMENT_PILLAGE_YIELDS", kImprov.getPillageGold()));

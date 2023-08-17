@@ -660,8 +660,8 @@ public:
 	DllExport int getHotKeyNumber();																													// Exposed to Python
 	void setHotKeyNumber(int iNewValue);																											// Exposed to Python
 	
-	DllExport int getX() const { return m_iX; } // advc.inl: was "getX_INLINE"								// Exposed to Python
-	DllExport int getY() const { return m_iY; } // advc.inl: was "getY_INLINE"								// Exposed to Python
+	DllExport int getX() const { return m_iX; } // advc.inl: was "getX"								// Exposed to Python
+	DllExport int getY() const { return m_iY; } // advc.inl: was "getY"								// Exposed to Python
 	void setXY(int iX, int iY, bool bGroup = false, bool bUpdate = true, bool bShow = false,				// Exposed to Python
 			bool bCheckPlotVisible = false);
 	
@@ -900,7 +900,7 @@ public:
 	void setBlockading(bool bNewValue);
 	void collectBlockadeGold();
 
-	DllExport PlayerTypes getOwner() const // advc.inl: was "getOwnerINLINE"								// Exposed to Python
+	DllExport PlayerTypes getOwner() const // advc.inl: was "getOwner"								// Exposed to Python
 	{
 		return m_eOwner;
 	}

@@ -531,7 +531,7 @@ public: // advc: made several functions const
 	// </advc.300>
 	void resetPathDistance();																		// Exposed to Python
 	// Super Forts begin *canal* *choke*
-	int calculatePathDistance(CvPlot *pSource, CvPlot *pDest, CvPlot *pInvalidPlot = NULL);	// Exposed to Python
+	int calculatePathDistance(CvPlot const* pSource, CvPlot const* pDest, CvPlot *pInvalidPlot = NULL) const;	// Exposed to Python
 	void calculateCanalAndChokePoints();	// Exposed to Python
 	// Super Forts end
 	void updateIrrigated(CvPlot& kPlot); // advc.pf

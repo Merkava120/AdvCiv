@@ -1133,18 +1133,17 @@ void CvMap::resetPathDistance()
 
 
 // Super Forts begin *canal* *choke*
-int CvMap::calculatePathDistance(CvPlot *pSource, CvPlot *pDest, CvPlot *pInvalidPlot)
+int CvMap::calculatePathDistance(CvPlot const* pSource, CvPlot const* pDest, CvPlot *pInvalidPlot) const
 // Super Forts end
 {
 	if(pSource == NULL || pDest == NULL)
 		return -1;
 	// Super Forts begin *canal* *choke*
 	// 1 must be added because 0 is already being used as the default value for iInfo in GeneratePath()
-	int iInvalidPlot = (pInvalidPlot == NULL) ? 0 : GC.getMapINLINE().plotNum(pInvalidPlot->getX_INLINE(), pInvalidPlot->getY_INLINE()) + 1;
+	int iInvalidPlot = (pInvalidPlot == NULL) ? 0 : GC.getMap().plotNum(pInvalidPlot->getX(), pInvalidPlot->getY()) + 1;
 
-	if (gDLL->getFAStarIFace()->GeneratePath(&GC.getStepFinder(), pSource->getX_INLINE(), pSource->getY_INLINE(), pDest->getX_INLINE(), pDest->getY_INLINE(), false, iInvalidPlot, true))
+	if (gDLL->getFAStarIFace()->GeneratePath(&GC.getStepFinder(), pSource->getX(), pSource->getY(), pDest->getX(), pDest->getY(), false, iInvalidPlot, true))
 	// Super Forts end
-		pSource->getX(), pSource->getY(), pDest->getX(), pDest->getY(), false, 0, true))
 	{
 		FAStarNode* pNode = gDLL->getFAStarIFace()->GetLastNode(&GC.getStepFinder());
 		if (pNode != NULL)
@@ -1233,10 +1232,10 @@ void CvMap::invalidateBorderDangerCache(TeamTypes eTeam)
 void CvMap::calculateCanalAndChokePoints()
 {
 	int iI;
-	for(iI = 0; iI < numPlotsINLINE(); iI++)
+	for(iI = 0; iI < numPlots(); iI++)
 	{
-		plotByIndexINLINE(iI)->calculateCanalValue();
-		plotByIndexINLINE(iI)->calculateChokeValue();
+		plotByIndex(iI)->calculateCanalValue();
+		plotByIndex(iI)->calculateChokeValue();
 		// TEMPORARY HARD CODE for testing purposes
 		/*if((plotByIndexINLINE(iI)->getChokeValue() > 0) || (plotByIndexINLINE(iI)->getCanalValue() > 0))
 		{

@@ -201,7 +201,7 @@ public:
 	// void doForceUpdate(); // K-Mod. (disabled. force update doesn't work the same way anymore.)
 
 	//DllExport PlayerTypes getOwner() const; // advc.inl: Not called externally
-	PlayerTypes getOwner() const { return m_eOwner; } // advc.inl: was "getOwnerINLINE"
+	PlayerTypes getOwner() const { return m_eOwner; } // advc.inl: was "getOwner"
 	TeamTypes getTeam() const;																				// Exposed to Python
 	// <advc>
 	bool isActiveOwned() const { return (GC.getInitCore().getActivePlayer() == getOwner()); }

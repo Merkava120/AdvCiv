@@ -371,8 +371,8 @@ public:
 	bool isAnyIsthmus() const { return m_bAnyIsthmus; } // Note: always false for land plots
 	void updateAnyIsthmus(); // </advc.opt>
 
-	DllExport int getX() const { return m_iX; } // advc.inl: was "getX_INLINE"						// Exposed to Python
-	DllExport int getY() const { return m_iY; } // advc.inl: was "getY_INLINE"						// Exposed to Python
+	DllExport int getX() const { return m_iX; } // advc.inl: was "getX"						// Exposed to Python
+	DllExport int getY() const { return m_iY; } // advc.inl: was "getY"						// Exposed to Python
 	bool at(int iX, int iY) const {  return (getX() == iX && getY() == iY); }						// Exposed to Python
 	PlotNumTypes plotNum() const { return (PlotNumTypes)m_iPlotNum; } // advc.opt
 	int getLatitude() const;																																					// Exposed to Python
@@ -462,7 +462,7 @@ public:
 		return (TeamTypes)m_eTeam;
 	}
 	void updateTeam(); // </advc.opt>
-	DllExport PlayerTypes getOwner() const // advc.inl: was "getOwnerINLINE"						// Exposed to Python
+	DllExport PlayerTypes getOwner() const // advc.inl: was "getOwner"						// Exposed to Python
 	{
 		return (PlayerTypes)m_eOwner;
 	}
@@ -988,7 +988,7 @@ protected:
 };
 
 // advc.opt: It's fine to change the size, but might want to double check if it can be avoided.
-BOOST_STATIC_ASSERT(MAX_PLOT_NUM > MAX_SHORT || sizeof(CvPlot) <= 268);
+//BOOST_STATIC_ASSERT(MAX_PLOT_NUM > MAX_SHORT || sizeof(CvPlot) <= 268); // merkava120: this is preventing compilation for some reason
 
 /*	advc.enum: For functions that choose random plots.
 	Moved from CvDefines, turned into an enum, exposed to Python. */

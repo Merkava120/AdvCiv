@@ -362,7 +362,7 @@ void CvGame::regenerateMap(/* advc.tsl: */ bool bAutomated)
 	m_eInitialActivePlayer = NO_PLAYER; // advc.106h
 	setInitialItems();
 	// Super Forts begin *choke* *canal*
-	GC.getMapINLINE().calculateCanalAndChokePoints();
+	GC.getMap().calculateCanalAndChokePoints();
 	// Super Forts end
 	// <advc.tsl>
 	if (bAutomated)
