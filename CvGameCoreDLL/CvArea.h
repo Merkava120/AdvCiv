@@ -194,6 +194,15 @@ public:
 	// advc.opt: No longer used
 	/*int getNumImprovements(ImprovementTypes eImprovement) const;										// Exposed to Python
 	void changeNumImprovements(ImprovementTypes eImprovement, int iChange);*/
+	// merk.rasa
+	int getBarbarianSpawnChannel() const { return m_iBarbarianSpawnChannel; }
+	void setBarbarianSpawnChannel(int iChannel);
+	// merk.rasa end
+	// merk.rasniche begin
+	bool isAlreadyFilledNiche(int iNiche, UnitTypes eUnit);
+	void setNichePlaced(int iNiche, UnitTypes eUnit); 
+	void resetAnimalNiches();
+	// merk.rasniche end
 
 protected:
 
@@ -206,6 +215,7 @@ protected:
 	int m_iTotalPopulation;
 	int m_iNumStartingPlots;
 	int m_iBarbarianCitiesEver; // advc.300
+	int m_iBarbarianSpawnChannel; // merk.rasa
 
 	bool m_bWater;
 	// <advc.030>
@@ -235,6 +245,7 @@ protected:
 			YieldChangeMap> m_aaiYieldRateModifier;
 	ArrayEnumMap2D<PlayerTypes,UnitAITypes,int,short> m_aaiNumTrainAIUnits;
 	ArrayEnumMap2D<PlayerTypes,UnitAITypes,int,short> m_aaiNumAIUnits; // </advc.enum>
+	std::vector< UnitTypes > m_aiAnimalNiches; // merk.rasniche
 
 	IDInfo* m_aTargetCities;
 

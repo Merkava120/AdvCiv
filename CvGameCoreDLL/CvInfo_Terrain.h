@@ -29,6 +29,7 @@ public: // All the const functions are exposed to Python except for those relate
 	int getSeeThroughLevel() const { return m_iSeeThroughLevel; }
 	int getBuildModifier() const { return m_iBuildModifier; }
 	int getDefenseModifier() const { return m_iDefenseModifier; }
+	int getTemp() const { return m_iTemp; } // merk.rasmore
 
 	bool isWater() const { return m_bWater; }
 	bool isImpassable() const { return m_bImpassable; }
@@ -56,6 +57,7 @@ protected:
 	int m_iSeeThroughLevel;
 	int m_iBuildModifier;
 	int m_iDefenseModifier;
+	int m_iTemp; // merk.rasmore
 
 	bool m_bWater;
 	bool m_bImpassable;
@@ -97,6 +99,7 @@ public: /*  All the const functions are exposed to Python except for those deali
 	int getAdvancedStartRemoveCost() const;
 	int getTurnDamage() const;
 	int getWarmingDefense() const; //GWmod new xml field M.A. // Exposed to Python
+	int getTempAdd() const { return m_iTempAdd; } // merk.rasmore
 
 	bool isNoCoast() const;
 	bool isNoRiver() const;
@@ -157,6 +160,7 @@ protected:
 	int m_iAdvancedStartRemoveCost;
 	int m_iTurnDamage;
 	int m_iWarmingDefense; //GWMod
+	int m_iTempAdd; // merk.rasmore
 
 	bool m_bNoCoast;
 	bool m_bNoRiver;
@@ -278,6 +282,7 @@ protected:
 	int m_iUniqueRange;
 	int m_iGroupRange;
 	int m_iGroupRand;
+	int m_iTemp; // merk.rasmore
 
 	bool m_bOneArea;
 	bool m_bHills;

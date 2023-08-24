@@ -30,6 +30,63 @@
 	<ElementType name="iSeeThrough" content="textOnly" dt:type="int"/>
 	<ElementType name="iBuildModifier" content="textOnly" dt:type="int"/>
 	<ElementType name="iDefense" content="textOnly" dt:type="int"/>
+	<!-- merk.rasmore-->
+	<ElementType name="iTemp" content="textOnly" dt:type="int"/>
+	<!-- merk.msm -->
+	<ElementType name="BaseTerrain" content="textOnly"/>
+	<ElementType name="BaseFeature" content="textOnly"/>
+	<ElementType name="iChanceInclude" content="textOnly" dt:type="int"/>
+	<ElementType name="iChanceMap" content="textOnly" dt:type="int"/>
+	<ElementType name="bReqHills" content="textOnly" dt:type="boolean"/>
+	<ElementType name="bReqCoastal" content="textOnly" dt:type="boolean"/>
+	<ElementType name="bReqCoast" content="textOnly" dt:type="boolean"/>
+	<ElementType name="bReqOcean" content="textOnly" dt:type="boolean"/>
+	<ElementType name="iWtRiver" content="textOnly" dt:type="int"/>
+	<ElementType name="iWtHills" content="textOnly" dt:type="int"/>
+	<ElementType name="iWtCoastal" content="textOnly" dt:type="int"/>
+	<ElementType name="iWtCoast" content="textOnly" dt:type="int"/>
+	<ElementType name="iWtOcean" content="textOnly" dt:type="int"/>
+	<ElementType name="iMaxAreaSize" content="textOnly" dt:type="int"/>
+	<ElementType name="iMinAreaProportion" content="textOnly" dt:type="int"/>
+	<ElementType name="iMaxAreaProportion" content="textOnly" dt:type="int"/>
+	<ElementType name="iAreaChannel" content="textOnly" dt:type="int"/>
+	<ElementType name="bPlaceOnce" content="textOnly" dt:type="boolean"/>
+	<ElementType name="bPlaceInGroup" content="textOnly" dt:type="boolean"/>
+	<ElementType name="bSurroundedByBase" content="textOnly" dt:type="boolean"/>
+	<ElementType name="iTerrainWeight" content="textOnly" dt:type="int"/>
+	<ElementType name="TerrainWeight" content="eltOnly">
+		<element type="TerrainType" minOccurs="0"/>
+		<element type="iTerrainWeight" minOccurs="0"/>
+	</ElementType>
+	<ElementType name="TerrainWeights" content="eltOnly">
+		<element type="TerrainWeight" minOccurs="0"/>
+	</ElementType>
+	<ElementType name="iFeatureWeight" content="textOnly" dt:type="int"/>
+	<ElementType name="FeatureWeight" content="eltOnly">
+		<element type="FeatureType" minOccurs="0"/>
+		<element type="iFeatureWeight" minOccurs="0"/>
+	</ElementType>
+	<ElementType name="FeatureWeights" content="eltOnly">
+		<element type="iFeatureWeight" minOccurs="0"/>
+	</ElementType>
+	<ElementType name="iTerrainAdjacentWeight" content="textOnly" dt:type="int"/>
+	<ElementType name="TerrainAdjacentWeight" content="eltOnly">
+		<element type="TerrainType" minOccurs="0"/>
+		<element type="iTerrainAdjacentWeight" minOccurs="0"/>
+	</ElementType>
+	<ElementType name="TerrainAdjacentWeights" content="eltOnly">
+		<element type="TerrainAdjacentWeight" minOccurs="0"/>
+	</ElementType>
+	<ElementType name="iFeatureAdjacentWeight" content="textOnly" dt:type="int"/>
+	<ElementType name="FeatureAdjacentWeight" content="eltOnly">
+		<element type="FeatureType" minOccurs="0"/>
+		<element type="iFeatureAdjacentWeight" minOccurs="0"/>
+	</ElementType>
+	<ElementType name="FeatureAdjacentWeights" content="eltOnly">
+		<element type="iFeatureAdjacentWeight" minOccurs="0"/>
+	</ElementType>
+	<ElementType name="iHillsAdjacentWeight" content="textOnly" dt:type="int"/>
+	<ElementType name="iCoastAdjacentWeight" content="textOnly" dt:type="int"/>
 	<!-- advc.012 -->
 	<ElementType name="iRivalDefense" content="textOnly" dt:type="int"/>
 	<ElementType name="Button" content="textOnly"/>
@@ -63,6 +120,41 @@
 		<element type="iSeeThrough"/>
 		<element type="iBuildModifier"/>
 		<element type="iDefense"/>
+		<!-- merk.rasmore -->
+		<element type="iTemp" minOccurs="0"/> 
+		<!-- merk.msm -->
+		<element type="BaseTerrain" minOccurs="0"/> 
+		<element type="BaseFeature" minOccurs="0"/> 
+		<element type="iChanceInclude" minOccurs="0"/> 
+		<element type="iChanceMap" minOccurs="0"/> 
+		<element type="bRequiresRiver" minOccurs="0"/> 
+		<element type="bRequiresFlatlands" minOccurs="0"/> 
+		<element type="bReqHills" minOccurs="0"/> 
+		<element type="bReqCoastal" minOccurs="0"/> 
+		<element type="bReqCoast" minOccurs="0"/> 
+		<element type="bReqOcean" minOccurs="0"/> 
+		<element type="iWtRiver" minOccurs="0"/> 
+		<element type="iWtHills" minOccurs="0"/> 
+		<element type="iWtCoastal" minOccurs="0"/> 
+		<element type="iWtCoast" minOccurs="0"/> 
+		<element type="iWtOcean" minOccurs="0"/> 
+		<element type="iMinLatitude" minOccurs="0"/> 
+		<element type="iMaxLatitude" minOccurs="0"/> 
+		<element type="iMinAreaSize" minOccurs="0"/> 
+		<element type="iMaxAreaSize" minOccurs="0"/> 
+		<element type="iMinAreaProportion" minOccurs="0"/> 
+		<element type="iMaxAreaProportion" minOccurs="0"/> 
+		<element type="iAreaChannel" minOccurs="0"/> 
+		<element type="bPlaceOnce" minOccurs="0"/> 
+		<element type="bPlaceInGroup" minOccurs="0"/> 
+		<element type="bSurroundedByBase" minOccurs="0"/> 
+		<element type="TerrainWeights" minOccurs="0"/> 
+		<element type="FeatureWeights" minOccurs="0"/> 
+		<element type="TerrainAdjacentWeights" minOccurs="0"/> 
+		<element type="FeatureAdjacentWeights" minOccurs="0"/> 
+		<element type="iHillsAdjacentWeight" minOccurs="0"/> 
+		<element type="iCoastAdjacentWeight" minOccurs="0"/>
+		<!-- merkava120 end -->
 		<element type="Button"/>
 		<element type="FootstepSounds"/>
 		<element type="WorldSoundscapeAudioScript" minOccurs="0"/>
@@ -121,6 +213,8 @@
 	<ElementType name="iTurnDamage" content="textOnly" dt:type="int"/>
 	<!-- GWMod new XML field M.A. -->
 	<ElementType name="iWarmingDefense" content="textOnly" dt:type="int"/>
+	<!-- merk.rasmore-->
+	<ElementType name="iTempAdd" content="textOnly" dt:type="int"/>
 	<ElementType name="bNoCoast" content="textOnly" dt:type="boolean"/>
 	<ElementType name="bNoRiver" content="textOnly" dt:type="boolean"/>
 	<ElementType name="bNoAdjacent" content="textOnly" dt:type="boolean"/>
@@ -163,6 +257,37 @@
 		<element type="iTurnDamage"/>
 		<!-- GWMod (advc: now optional; 0 by default) -->
 		<element type="iWarmingDefense" minOccurs="0"/>
+		<!-- merk.rasmore -->
+		<element type="iTempAdd" minOccurs="0"/>
+		<!-- merk.msm -->
+		<element type="BaseTerrain" minOccurs="0"/> 
+		<element type="BaseFeature" minOccurs="0"/> 
+		<element type="iChanceInclude" minOccurs="0"/> 
+		<element type="iChanceMap" minOccurs="0"/> 
+		<element type="bReqHills" minOccurs="0"/> 
+		<element type="bReqCoastal" minOccurs="0"/> 
+		<element type="bReqCoast" minOccurs="0"/> 
+		<element type="bReqOcean" minOccurs="0"/> 
+		<element type="iWtRiver" minOccurs="0"/> 
+		<element type="iWtHills" minOccurs="0"/> 
+		<element type="iWtCoastal" minOccurs="0"/> 
+		<element type="iWtCoast" minOccurs="0"/> 
+		<element type="iWtOcean" minOccurs="0"/> 
+		<element type="iMinAreaSize" minOccurs="0"/> 
+		<element type="iMaxAreaSize" minOccurs="0"/> 
+		<element type="iMinAreaProportion" minOccurs="0"/> 
+		<element type="iMaxAreaProportion" minOccurs="0"/> 
+		<element type="iAreaChannel" minOccurs="0"/> 
+		<element type="bPlaceOnce" minOccurs="0"/> 
+		<element type="bPlaceInGroup" minOccurs="0"/> 
+		<element type="bSurroundedByBase" minOccurs="0"/> 
+		<element type="TerrainWeights" minOccurs="0"/> 
+		<element type="FeatureWeights" minOccurs="0"/> 
+		<element type="TerrainAdjacentWeights" minOccurs="0"/> 
+		<element type="FeatureAdjacentWeights" minOccurs="0"/> 
+		<element type="iHillsAdjacentWeight" minOccurs="0"/> 
+		<element type="iCoastAdjacentWeight" minOccurs="0"/>
+		<!-- merkava120 end -->
 		<element type="bNoCoast"/>
 		<element type="bNoRiver"/>
 		<!-- advc.129b (set to false by default in the DLL; currently unused)
@@ -489,6 +614,36 @@
 		<!-- merkava120 super forts end -->
 		<element type="TerrainMakesValids"/>
 		<element type="FeatureMakesValids"/>
+		<!-- merk.msm -->
+		<element type="BaseTerrain" minOccurs="0"/> 
+		<element type="BaseFeature" minOccurs="0"/> 
+		<element type="iChanceInclude" minOccurs="0"/> 
+		<element type="iChanceMap" minOccurs="0"/> 
+		<element type="bReqCoastal" minOccurs="0"/> 
+		<element type="bReqCoast" minOccurs="0"/> 
+		<element type="bReqOcean" minOccurs="0"/> 
+		<element type="iWtRiver" minOccurs="0"/> 
+		<element type="iWtHills" minOccurs="0"/> 
+		<element type="iWtCoastal" minOccurs="0"/> 
+		<element type="iWtCoast" minOccurs="0"/> 
+		<element type="iWtOcean" minOccurs="0"/> 
+		<element type="iMinLatitude" minOccurs="0"/> 
+		<element type="iMaxLatitude" minOccurs="0"/> 
+		<element type="iMinAreaSize" minOccurs="0"/> 
+		<element type="iMaxAreaSize" minOccurs="0"/> 
+		<element type="iMinAreaProportion" minOccurs="0"/> 
+		<element type="iMaxAreaProportion" minOccurs="0"/> 
+		<element type="iAreaChannel" minOccurs="0"/> 
+		<element type="bPlaceOnce" minOccurs="0"/> 
+		<element type="bPlaceInGroup" minOccurs="0"/> 
+		<element type="bSurroundedByBase" minOccurs="0"/> 
+		<element type="TerrainWeights" minOccurs="0"/> 
+		<element type="FeatureWeights" minOccurs="0"/> 
+		<element type="TerrainAdjacentWeights" minOccurs="0"/> 
+		<element type="FeatureAdjacentWeights" minOccurs="0"/> 
+		<element type="iHillsAdjacentWeight" minOccurs="0"/> 
+		<element type="iCoastAdjacentWeight" minOccurs="0"/>
+		<!-- merkava120 end -->
 		<element type="BonusTypeStructs" minOccurs="0" maxOccurs="*"/>
 		<element type="ImprovementPillage"/>
 		<element type="ImprovementUpgrade"/>

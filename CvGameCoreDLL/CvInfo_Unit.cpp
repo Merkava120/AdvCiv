@@ -116,6 +116,23 @@ m_iLeaderExperience(0),
 m_iLeaderPromotion(NO_PROMOTION),
 // </kmodx>
 m_bAnimal(false),
+m_iNiche(-1), // merk.rasboth
+m_iSpawnChannel(-1), // merk.rasa
+m_iSpawnWeight(0), // merk.rasa
+// merk.rasmore begin
+m_bRiverNative(false),
+m_bHillsNative(false),
+m_bFlatlandsNative(false),
+m_bCannotMoveRivers(false),
+m_bCannotLeaveRivers(false),
+m_iRiverRestrictDistance(0),
+m_bCannotMoveHills(false),
+m_bCannotMoveFlatlands(false),
+m_iMinSpawnTemp(0),
+m_iMaxSpawnTemp(0),
+m_iMinMoveTemp(0),
+m_iMaxMoveTemp(0),
+// merk.rasmore end
 m_bFoodProduction(false),
 m_bNoBadGoodies(false),
 m_bOnlyDefensive(false),
@@ -545,7 +562,7 @@ bool CvUnitInfo::getTerrainImpassable(int i) const
 
 bool CvUnitInfo::getFeatureImpassable(int i) const
 {
-	FAssertBounds(0, GC.getNumFeatureInfos(), i);
+	FAssertBounds(NO_FEATURE, GC.getNumFeatureInfos(), i); // merk.rasa - experimenting
 	return m_pbFeatureImpassable ? m_pbFeatureImpassable[i] : false;
 }
 
@@ -557,7 +574,7 @@ bool CvUnitInfo::getTerrainNative(int i) const
 
 bool CvUnitInfo::getFeatureNative(int i) const
 {
-	FAssertBounds(0, GC.getNumFeatureInfos(), i);
+	FAssertBounds(NO_FEATURE, GC.getNumFeatureInfos(), i); // merk.rasa - experimenting
 	return m_pbFeatureNative ? m_pbFeatureNative[i] : false;
 }
 
@@ -876,6 +893,10 @@ void CvUnitInfo::read(FDataStreamBase* stream)
 	stream->Read(&m_iNumUnitNames);
 	stream->Read((int*)&m_eCommandType);
 	stream->Read(&m_bAnimal);
+	stream->Read(&m_iNiche); // merk.rasboth
+	stream->Read(&m_iSpawnChannel); // merk.rasa
+	stream->Read(&m_iSpawnWeight); // merk.rasa
+	// merk.rasmore...later
 	stream->Read(&m_bFoodProduction);
 	stream->Read(&m_bNoBadGoodies);
 	stream->Read(&m_bOnlyDefensive);
@@ -1180,6 +1201,10 @@ void CvUnitInfo::write(FDataStreamBase* stream)
 	stream->Write(m_iNumUnitNames);
 	stream->Write(m_eCommandType);
 	stream->Write(m_bAnimal);
+	stream->Write(m_iNiche); // merk.rasboth
+	stream->Write(m_iSpawnChannel); // merk.rasa
+	stream->Write(m_iSpawnWeight); // merk.rasa
+	// merk.rasmore...later
 	stream->Write(m_bFoodProduction);
 	stream->Write(m_bNoBadGoodies);
 	stream->Write(m_bOnlyDefensive);
@@ -1313,6 +1338,23 @@ bool CvUnitInfo::read(CvXMLLoadUtility* pXML)
 	pXML->SetInfoIDFromChildXmlVal(m_eAdvisorType, "Advisor");
 
 	pXML->GetChildXmlValByName(&m_bAnimal, "bAnimal");
+	pXML->GetChildXmlValByName(&m_iNiche, "iNiche", -1); // merk.rasboth
+	pXML->GetChildXmlValByName(&m_iSpawnChannel, "iSpawnChannel", -1); // merk.rasa
+	pXML->GetChildXmlValByName(&m_iSpawnWeight, "iSpawnWeight", 0); // merk.rasa
+	// merk.rasmore begin
+	pXML->GetChildXmlValByName(&m_bRiverNative, "bRiverNative", false);
+	pXML->GetChildXmlValByName(&m_bHillsNative, "bHillsNative", false);
+	pXML->GetChildXmlValByName(&m_bFlatlandsNative, "bFlatlandsNative", false);
+	pXML->GetChildXmlValByName(&m_bCannotMoveRivers, "bCannotMoveRivers", false);
+	pXML->GetChildXmlValByName(&m_bCannotLeaveRivers, "bCannotLeaveRivers", false);
+	pXML->GetChildXmlValByName(&m_iRiverRestrictDistance, "iRiverRestrictDistance", 0);
+	pXML->GetChildXmlValByName(&m_bCannotMoveHills, "bCannotMoveHills", false);
+	pXML->GetChildXmlValByName(&m_bCannotMoveFlatlands, "bCannotMoveFlatlands", false);
+	pXML->GetChildXmlValByName(&m_iMinSpawnTemp, "iMinSpawnTemp", 0);
+	pXML->GetChildXmlValByName(&m_iMaxSpawnTemp, "iMaxSpawnTemp", 0);
+	pXML->GetChildXmlValByName(&m_iMinMoveTemp, "iMinMoveTemp", 0);
+	pXML->GetChildXmlValByName(&m_iMaxMoveTemp, "iMaxMoveTemp", 0);
+	// merk.rasmore end
 	pXML->GetChildXmlValByName(&m_bFoodProduction, "bFood");
 	pXML->GetChildXmlValByName(&m_bNoBadGoodies, "bNoBadGoodies");
 	pXML->GetChildXmlValByName(&m_bOnlyDefensive, "bOnlyDefensive");

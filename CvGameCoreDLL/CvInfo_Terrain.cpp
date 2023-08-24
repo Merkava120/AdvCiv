@@ -11,6 +11,7 @@ m_iSeeFromLevel(0),
 m_iSeeThroughLevel(0),
 m_iBuildModifier(0),
 m_iDefenseModifier(0),
+m_iTemp(0), // merk.rasmore
 m_bWater(false),
 m_bImpassable(false),
 m_bFound(false),
@@ -105,6 +106,7 @@ bool CvTerrainInfo::read(CvXMLLoadUtility* pXML)
 	pXML->GetChildXmlValByName(&m_iSeeThroughLevel, "iSeeThrough");
 	pXML->GetChildXmlValByName(&m_iBuildModifier, "iBuildModifier");
 	pXML->GetChildXmlValByName(&m_iDefenseModifier, "iDefense");
+	pXML->GetChildXmlValByName(&m_iTemp, "iTemp", 0);
 
 	pXML->SetVariableListTagPairForAudioScripts(&m_pi3DAudioScriptFootstepIndex, "FootstepSounds", GC.getNumFootstepAudioTypes());
 	{
@@ -143,6 +145,7 @@ m_iRivalDefenseModifier(0), // advc.012
 m_iAdvancedStartRemoveCost(0),
 m_iTurnDamage(0),
 m_iWarmingDefense(0), //GWMod
+m_iTempAdd(0), // merk.rasmore
 m_bNoCoast(false),
 m_bNoRiver(false),
 m_bNoRiverSide(false), // advc.129b
@@ -361,6 +364,7 @@ bool CvFeatureInfo::read(CvXMLLoadUtility* pXML)
 	pXML->GetChildXmlValByName(&m_iTurnDamage, "iTurnDamage");
 	pXML->GetChildXmlValByName(&m_iWarmingDefense, "iWarmingDefense", // GWMod new xml field M.A.
 			0); // advc: Default value; now optional.
+	pXML->GetChildXmlValByName(&m_iTempAdd, "iTempAdd", 0); // merk.rasmore
 	pXML->GetChildXmlValByName(&m_iAppearanceProbability, "iAppearance");
 	pXML->GetChildXmlValByName(&m_iDisappearanceProbability, "iDisappearance");
 	pXML->GetChildXmlValByName(&m_iGrowthProbability, "iGrowth");

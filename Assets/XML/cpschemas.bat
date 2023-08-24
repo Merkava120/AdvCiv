@@ -1,0 +1,3 @@
+xcopy /s/y "C:\Program Files (x86)\Firaxis Games\Sid Meier's Civilization 4\Beyond the Sword\Mods\AdvCiv\Assets\XML\Units\CIV4UnitSchema.xml" "C:\Program Files (x86)\Firaxis Games\Sid Meier's Civilization 4\Beyond the Sword\Mods\Dynamica\Assets\XML\Units"
+xcopy /s/y "C:\Program Files (x86)\Firaxis Games\Sid Meier's Civilization 4\Beyond the Sword\Mods\AdvCiv\Assets\XML\Terrain\CIV4TerrainSchema.xml" "C:\Program Files (x86)\Firaxis Games\Sid Meier's Civilization 4\Beyond the Sword\Mods\Dynamica\Assets\XML\Terrain"
+pause
