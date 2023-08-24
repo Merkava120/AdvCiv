@@ -461,8 +461,14 @@ void CvPlot::updateCulture(bool bBumpUnits, bool bUpdatePlotGroups)
 				" should imply eSecondOwner!=NO_PLAYER");
 		}
 	}
+	if (eCulturalOwner != getOwner())
+		if (getOwner() == NO_PLAYER)
+			int fart = 5;
+		else if (eCulturalOwner == NO_PLAYER)
+			int fart = 6;
 	setOwner(eCulturalOwner, // </advc.035>
 			bBumpUnits, bUpdatePlotGroups);
+	
 }
 
 
@@ -2754,6 +2760,10 @@ void CvPlot::doImprovementCulture()
 								{
 									int iChange = ((iCultureRange - ((iCultureDistance == 0) ? 1 : iCultureDistance)) * iCulture) + iCulture;
 									pLoopPlot->changeCulture(ePlayer, iChange, false);
+									if (pLoopPlot->getOwner() == NO_PLAYER) // added by merkava120
+										pLoopPlot->setOwner(ePlayer, true, true);
+									// merkava120 added this here, got dropped in the merge somewhere
+									changeCultureRangeFortsWithinRange(ePlayer, iCulture, iCultureRange, true);
 								}
 							}
 						}
@@ -2762,10 +2772,15 @@ void CvPlot::doImprovementCulture()
 				else
 				{
 					changeCulture(ePlayer, iCulture, false);
+					if (getOwner() == NO_PLAYER) // added by merkava120
+						setOwner(ePlayer, true, true);
+					// merkava120 added this here, got dropped in the merge somewhere
+					changeCultureRangeFortsWithinRange(ePlayer, iCulture, iCultureRange, true);
 				}
 			}
 		}
 	}
+	
 }
 // Super Forts end
 
@@ -3297,6 +3312,10 @@ bool CvPlot::isWithinCultureRange(PlayerTypes ePlayer) const
 		within their owner's culture range */
 	if (isCity() && getOwner() == ePlayer)
 		return true; // </advc.099c>
+	// merkava120 super forts merge
+	if (isWithinFortCultureRange(ePlayer))
+		return true;
+	// merkava120 end
 	return false;
 }
 
@@ -3372,7 +3391,7 @@ PlayerTypes CvPlot::calculateCulturalOwner(/* advc.099c: */ bool bIgnoreCultureR
 			if (iCulture <= iBestCulture) // </advc.035>
 				continue;
 			if (bIgnoreCultureRange || // advc.099c
-				isWithinCultureRange(ePlayer))
+				isWithinCultureRange(ePlayer) /*merkava120 super forts*/ || isWithinFortCultureRange(ePlayer))
 			{
 				if (iCulture > iBestCulture ||
 					(iCulture == iBestCulture && getOwner() == ePlayer))

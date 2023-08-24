@@ -1582,7 +1582,7 @@
 			<iPillageGold>0</iPillageGold>
 			<bOutsideBorders>1</bOutsideBorders>
 			<iCulture>5</iCulture>
-			<iCultureRange>2</iCultureRange>
+			<iCultureRange>1</iCultureRange>
 			<TerrainMakesValids>
 				<TerrainMakesValid>
 					<TerrainType>TERRAIN_GRASS</TerrainType>
