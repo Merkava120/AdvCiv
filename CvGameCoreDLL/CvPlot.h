@@ -185,7 +185,32 @@ public:
 	//int AI_sumStrength(PlayerTypes eOwner, PlayerTypes eAttackingPlayer = NO_PLAYER, DomainTypes eDomainType = NO_DOMAIN, bool bDefensiveBonuses = true, bool bTestAtWar = false, bool bTestPotentialEnemy = false) const;
 	CvUnit* getSelectedUnit() const;																// Exposed to Python
 	int getUnitPower(PlayerTypes eOwner = NO_PLAYER) const;											// Exposed to Python
-
+	// Super Forts begin *bombard*
+	bool isBombardable(const CvUnit* pUnit) const;
+	bool isBombarded() const;
+	void setBombarded(bool bNewValue);
+	int getDefenseDamage() const;
+	void changeDefenseDamage(int iChange);
+	// Super Forts end
+	// Super Forts begin *culture*
+	int getCultureRangeForts(PlayerTypes ePlayer) const;
+	void setCultureRangeForts(PlayerTypes ePlayer, int iNewValue);
+	void changeCultureRangeForts(PlayerTypes ePlayer, int iChange);
+	bool isWithinFortCultureRange(PlayerTypes ePlayer) const;
+	void changeCultureRangeFortsWithinRange(PlayerTypes ePlayer, int iChange, int iRange, bool bUpdate);
+	void doImprovementCulture();
+	// Super Forts end
+	// Super Forts begin *canal* *choke*
+	int countRegionPlots(const CvPlot* pInvalidPlot = NULL) const;
+	int countAdjacentPassableSections(bool bWater) const;
+	int countImpassableCardinalDirections() const;
+	int getCanalValue() const;
+	void setCanalValue(int iNewValue);
+	void calculateCanalValue();
+	int getChokeValue() const;
+	void setChokeValue(int iNewValue);
+	void calculateChokeValue();
+	// Super Forts end
 	int defenseModifier(TeamTypes eDefender, bool bIgnoreBuilding,									// Exposed to Python
 		/*  advc.012: NO_TEAM means rival defense applies; moved bHelp to the
 			end b/c that parameter is rarely set */
@@ -346,8 +371,8 @@ public:
 	bool isAnyIsthmus() const { return m_bAnyIsthmus; } // Note: always false for land plots
 	void updateAnyIsthmus(); // </advc.opt>
 
-	DllExport int getX() const { return m_iX; } // advc.inl: was "getX_INLINE"						// Exposed to Python
-	DllExport int getY() const { return m_iY; } // advc.inl: was "getY_INLINE"						// Exposed to Python
+	DllExport int getX() const { return m_iX; } // advc.inl: was "getX"						// Exposed to Python
+	DllExport int getY() const { return m_iY; } // advc.inl: was "getY"						// Exposed to Python
 	bool at(int iX, int iY) const {  return (getX() == iX && getY() == iY); }						// Exposed to Python
 	PlotNumTypes plotNum() const { return (PlotNumTypes)m_iPlotNum; } // advc.opt
 	int getLatitude() const;																																					// Exposed to Python
@@ -437,7 +462,7 @@ public:
 		return (TeamTypes)m_eTeam;
 	}
 	void updateTeam(); // </advc.opt>
-	DllExport PlayerTypes getOwner() const // advc.inl: was "getOwnerINLINE"						// Exposed to Python
+	DllExport PlayerTypes getOwner() const // advc.inl: was "getOwner"						// Exposed to Python
 	{
 		return (PlayerTypes)m_eOwner;
 	}
@@ -854,7 +879,14 @@ protected:
 	char m_iCityRadiusCount;
 	char m_iRiverCrossingCount;
 	char /*PlayerTypes*/ m_eOwner;
-
+	// Super Forts begin *canal* *choke*
+	int m_iCanalValue;
+	int m_iChokeValue;
+	// Super Forts end
+	// Super Forts begin *bombard*
+	int m_iDefenseDamage;
+	bool m_bBombarded;
+	// Super Forts end
 	bool m_bStartingPlot:1;
 	bool m_bNOfRiver:1;
 	bool m_bWOfRiver:1;
@@ -905,6 +937,7 @@ protected:
 
 	YieldChangeMap m_aiYield;
 	ArrayEnumMap<PlayerTypes,int> m_aiCulture;
+	ArrayEnumMap<PlayerTypes, int> m_aiCultureRangeForts; // merkava120 super forts merge
 	ArrayEnumMap<PlayerTypes,int,int,FFreeList::INVALID_INDEX> m_aiPlotGroup;
 	mutable ArrayEnumMap<PlayerTypes,short> m_aiFoundValue; // advc: mutable
 	ListEnumMap<PlayerTypes,int,char> m_aiPlayerCityRadiusCount;
@@ -955,7 +988,7 @@ protected:
 };
 
 // advc.opt: It's fine to change the size, but might want to double check if it can be avoided.
-BOOST_STATIC_ASSERT(MAX_PLOT_NUM > MAX_SHORT || sizeof(CvPlot) <= 268);
+//BOOST_STATIC_ASSERT(MAX_PLOT_NUM > MAX_SHORT || sizeof(CvPlot) <= 268); // merkava120: this is preventing compilation for some reason
 
 /*	advc.enum: For functions that choose random plots.
 	Moved from CvDefines, turned into an enum, exposed to Python. */

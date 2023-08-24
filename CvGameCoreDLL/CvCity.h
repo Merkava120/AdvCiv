@@ -328,8 +328,8 @@ public:
 	void setID(int iID);
 	PlotNumTypes plotNum() const { return m_ePlot; } // advc.104
 
-	DllExport int getX() const { return m_iX; } // advc.inl: was "getX_INLINE"									// Exposed to Python	
-	DllExport int getY() const { return m_iY; } // advc.inl: was "getY_INLINE"									// Exposed to Python
+	DllExport int getX() const { return m_iX; } // advc.inl: was "getX"									// Exposed to Python	
+	DllExport int getY() const { return m_iY; } // advc.inl: was "getY"									// Exposed to Python
 
 	bool at(int iX, int iY) const  { return (getX() == iX && getY() == iY); }									// Exposed to Python
 	bool at(CvPlot const* pPlot) const // advc: const CvPlot*													// Exposed to Python as atPlot
@@ -693,7 +693,7 @@ public:
 	DllExport bool isLayoutDirty() const;
 	DllExport void setLayoutDirty(bool bNewValue);
 
-	DllExport PlayerTypes getOwner() const { return m_eOwner; } // advc.inl: was "getOwnerINLINE"				// Exposed to Python
+	DllExport PlayerTypes getOwner() const { return m_eOwner; } // advc.inl: was "getOwner"				// Exposed to Python
 	DllExport TeamTypes getTeam() const;																		// Exposed to Python
 	// <advc>
 	bool isActiveOwned() const { return (GC.getInitCore().getActivePlayer() == getOwner()); }

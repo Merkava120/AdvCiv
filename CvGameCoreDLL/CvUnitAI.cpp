@@ -1699,9 +1699,12 @@ void CvUnitAI::AI_workerMove(/* advc.113b: */ bool bUpdateWorkersHave)
 	// XXX could be trouble...
 	if (getPlot().getOwner() != getOwner())
 	{
+		// merkava120 super forts merge begin
 		if (AI_retreatToCity())
-			return;
-		bCanRetreat = false;
+			//return;
+			bCanRetreat = true;
+		//bCanRetreat = false;
+		// merkava120 super forts merge end
 	}
 
 	if (!isHuman())
@@ -1824,6 +1827,7 @@ void CvUnitAI::AI_workerMove(/* advc.113b: */ bool bUpdateWorkersHave)
 		//bool bCanal = ((100 * getArea().getNumCities()) / std::max(1, GC.getGame().getNumCities()) < 85);
 		/*	K-Mod. The current AI for canals doesn't work anyway;
 			so lets skip it to save time. */
+		// merkava120 super forts note - leaving k-mod version here
 		bool const bCanal = false;
 		bool bAirbase = false;
 		bAirbase = (kOwner.AI_totalUnitAIs(UNITAI_PARADROP) ||
@@ -1836,6 +1840,24 @@ void CvUnitAI::AI_workerMove(/* advc.113b: */ bool bUpdateWorkersHave)
 		}
 		bBuildFort = true;
 	}
+	
+	// merkava120 super forts version
+	/*// Super Forts begin *canal* *choke*
+		CvPlayerAI& kPlayer = GET_PLAYER(getOwner());
+		bool bCanal = kPlayer.countNumCoastalCities() > 0; //((100 * area()->getNumCities()) / std::max(1, GC.getGame().getNumCities()) < 85);
+		bool bAirbase = false;
+		bAirbase = (kPlayer.AI_totalUnitAIs(UNITAI_PARADROP) || kPlayer.AI_totalUnitAIs(UNITAI_ATTACK_AIR) || kPlayer.AI_totalUnitAIs(UNITAI_MISSILE_AIR));
+		
+//		if (bCanal || bAirbase)
+//		{
+		if (AI_fortTerritory(bCanal, bAirbase))
+		{
+			return;
+		}
+//		}
+		bBuildFort = bCanal && bAirbase;
+	}
+	// Super Forts end*/
 
 	if (bCanRoute && isBarbarian())
 	{
@@ -1904,7 +1926,16 @@ void CvUnitAI::AI_workerMove(/* advc.113b: */ bool bUpdateWorkersHave)
 
 	if (AI_irrigateTerritory())
 		return;
-
+	// merkava120 super forts version (used k-mod)
+	// Super Forts begin *canal* *choke*
+	//if (!bBuildFort)
+	//{
+	//	if (AI_fortTerritory(true, true /*bCanal, bAirbase*/))
+	//	{
+	//		return;
+	//	}
+	//}
+	// Super Forts end*/
 	if (!bBuildFort)
 	{
 		//bool bCanal = ((100 * getArea().getNumCities()) / std::max(1, GC.getGame().getNumCities()) < 85);
@@ -2895,7 +2926,7 @@ void CvUnitAI::AI_attackCityMove()
 	bool const bAlert1 = kOwner.AI_isDoStrategy(AI_STRATEGY_ALERT1);
 	bool const bIgnoreFaster = (kOwner.AI_isDoStrategy(AI_STRATEGY_LAND_BLITZ) &&
 			!bAssault && getArea().getCitiesPerPlayer(getOwner()) > 0);
-	bool const bInCity = getPlot().isCity();
+	bool const bInCity = getPlot().isCityExternal(true); // merkava120 super forts merge; supposedly this func is deprecated
 
 	if (bInCity && /* cdtw.9: */ getPlot().getTeam() == getTeam())
 	{
@@ -2912,9 +2943,10 @@ void CvUnitAI::AI_attackCityMove()
 		/*if (bIgnoreFaster) {
 			// BBAI TODO: split out slow units ... will need to test to make sure this doesn't cause loops
 		}*/
-		if ((GC.getGame().getGameTurn() - getPlot().getPlotCity()->getGameTurnAcquired()) <= 1 &&
+		if ((plot()->getOwnershipDuration() <= 1) // merkava120 super forts merge
+		//if ((GC.getGame().getGameTurn() - getPlot().getPlotCity()->getGameTurnAcquired()) <= 1 &&
 			// cdtw.9: (comment from Dave_uk) only do this in our own cities though
-			getPlot().getOwner() == getOwner())
+			&& getPlot().getOwner() == getOwner())
 		{
 			CvSelectionGroupAI* pOldGroup = AI_getGroup();
 			pOldGroup->AI_separateNonAI(UNITAI_ATTACK_CITY);
@@ -4477,6 +4509,13 @@ void CvUnitAI::AI_cityDefenseMove()
 		return;
 	}
 
+	// Super Forts begin *AI_defense*
+	if (AI_guardFortMinDefender(true))
+	{
+		return;
+	}
+	// Super Forts end
+
 	if (AI_guardCity(true))
 	{
 		return;
@@ -4646,7 +4685,20 @@ void CvUnitAI::AI_cityDefenseExtraMove()
 	{
 		return;
 	}
+	// Super Forts begin *AI_defense*
+	if (AI_guardFortMinDefender(true))
+	{
+		return;
+	}
 
+	if ((AI_getBirthmark() % 4) == 0) // merkava120: this is kinda sus?
+	{
+		if (AI_guardFort(true))
+		{
+			return;
+		}
+	}
+	// Super Forts end
 	CvCity* pCity = getPlot().getPlotCity();
 
 	if (pCity != NULL && pCity->getOwner() == getOwner()) // XXX check for other team?
@@ -10707,6 +10759,14 @@ bool CvUnitAI::AI_guardYield()
 		if(pNearestInvis == NULL)
 			continue;
 		iValue -= ::plotDistance(pNearestInvis, &kLoopPlot);
+		// merkava120 super forts merge
+		if ((GET_PLAYER(getOwner()).AI_getPlotCanalValue(kLoopPlot) > 0) 
+			|| (GET_PLAYER(getOwner()).AI_getPlotChokeValue(&kLoopPlot) > 0)
+			|| (GET_PLAYER(getOwner()).AI_getPlotAirbaseValue(kLoopPlot) > 0))
+		{
+			iValue *= 2; // made this up merkava120
+		}
+		// merkava120 super forts end
 		if(iValue > iBestValue)
 		{
 			iBestValue = iValue;
@@ -10843,7 +10903,7 @@ bool CvUnitAI::AI_guardFort(bool bSearch)
 		!getPlot().isCity() && GET_TEAM(getTeam()).isCityDefense(getPlot()))
 	{
 		if (getPlot().plotCount(PUF_isCityAIType, -1, -1, getOwner()) <=
-			AI_getPlotDefendersNeeded(getPlot()))
+			AI_getPlotDefendersNeeded(getPlot()/*merkava120 super forts merge*/,1))
 		{
 			getGroup()->pushMission(isFortifyable() ? MISSION_FORTIFY : MISSION_SKIP,
 				-1, -1, NO_MOVEMENT_FLAGS, false, false, MISSIONAI_GUARD_BONUS, plot());
@@ -10871,7 +10931,7 @@ bool CvUnitAI::AI_guardFort(bool bSearch)
 		{
 			continue;
 		}
-		int iNeeded = AI_getPlotDefendersNeeded(kPlot);
+		int iNeeded = AI_getPlotDefendersNeeded(kPlot/*merkava120 super forts merge*/,1);
 		if (iNeeded <= 0 || kPlot.isVisibleEnemyUnit(this))
 			continue;
 		if (GET_PLAYER(getOwner()).AI_plotTargetMissionAIs(kPlot, MISSIONAI_GUARD_BONUS,
@@ -10914,7 +10974,96 @@ bool CvUnitAI::AI_guardFort(bool bSearch)
 	return false;
 }
 
+// Super Forts begin *AI_defense* - this is designed to ensure each fort has one defender (or improvements that require a fortified unit to upgrade)
+bool CvUnitAI::AI_guardFortMinDefender(bool bSearch)
+{
+	PROFILE_FUNC();
+	
+	if (plot()->getOwner() == getOwner())
+	{
+		ImprovementTypes eImprovement = plot()->getImprovementType();
+		if (eImprovement != NO_IMPROVEMENT)
+		{
+			if (GC.getImprovementInfo(eImprovement).isActsAsCity() || GC.getImprovementInfo(eImprovement).isUpgradeRequiresFortify())
+			{
+				if (plot()->plotCount(PUF_isCityAIType, -1, -1, getOwner()) <= 1)
+				{
+					getGroup()->pushMission(MISSION_SKIP, -1, -1, NO_MOVEMENT_FLAGS, false, false, MISSIONAI_GUARD_BONUS, plot());
+					return true;
+				}
+			}
+		}
+	}
+	
+	if (!bSearch)
+	{
+		return false;
+	}
 
+	int iBestValue = 0;
+	CvPlot* pBestPlot = NULL;
+	CvPlot* pBestGuardPlot = NULL;
+
+	for (int iI = 0; iI < GC.getMap().numPlots(); iI++)
+	{
+		CvPlot* pLoopPlot = GC.getMap().plotByIndex(iI);
+
+		if (AI_plotValid(pLoopPlot) && !atPlot(pLoopPlot))
+		{
+			if (pLoopPlot->getOwner() == getOwner())
+			{
+				ImprovementTypes eImprovement = pLoopPlot->getImprovementType();
+				if (eImprovement != NO_IMPROVEMENT)
+				{
+					if (GC.getImprovementInfo(eImprovement).isActsAsCity() || GC.getImprovementInfo(eImprovement).isUpgradeRequiresFortify())
+					{
+						if (!(pLoopPlot->isVisibleEnemyUnit(this)))
+						{
+							if (pLoopPlot->plotCount(PUF_isCityAIType, -1, -1, getOwner()) == 0)
+							{
+								if (GET_PLAYER(getOwner()).AI_plotTargetMissionAIs(*pLoopPlot, MISSIONAI_GUARD_BONUS, getGroup()) == 0)
+								{
+									int iPathTurns;
+									if (generatePath(*pLoopPlot, NO_MOVEMENT_FLAGS, true, &iPathTurns))
+									{
+										int iValue = 1000;
+
+										iValue /= (iPathTurns + 2);
+
+										if (iValue > iBestValue)
+										{
+											iBestValue = iValue;
+											pBestPlot = &getPathEndTurnPlot();
+											pBestGuardPlot = pLoopPlot;
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+
+	if ((pBestPlot != NULL) && (pBestGuardPlot != NULL))
+	{
+		if (atPlot(pBestGuardPlot))
+		{
+			getGroup()->pushMission(MISSION_SKIP, -1, -1, NO_MOVEMENT_FLAGS, false, false, MISSIONAI_GUARD_BONUS, pBestGuardPlot);
+			return true;
+		}
+		else
+		{
+			FAssert(!atPlot(pBestPlot));
+			getGroup()->pushMission(MISSION_MOVE_TO, pBestPlot->getX(), pBestPlot->getY(), NO_MOVEMENT_FLAGS, false, false, MISSIONAI_GUARD_BONUS, pBestGuardPlot);
+			return true;
+		}
+	}
+
+	return false;
+}
+// Super Forts end
 bool CvUnitAI::AI_guardCitySite()
 {
 	PROFILE_FUNC();
@@ -13798,6 +13947,7 @@ bool CvUnitAI::AI_pillageAroundCity(CvCity* pTargetCity, int iBonusValueThreshol
 	(previously revised by BBAI) */
 bool CvUnitAI::AI_bombardCity()
 {
+	// merkava120: this check left alone, then an if statement handles super forts (if) and k-mod for cities (else)
 	// check if we need to declare war before bombarding!
 	FOR_EACH_ADJ_PLOT(getPlot())
 	{
@@ -13813,45 +13963,78 @@ bool CvUnitAI::AI_bombardCity()
 
 	if (!canBombard(getPlot()))
 		return false;
-
+	// merkava120 super forts merge
 	CvCity* pBombardCity = bombardTarget(getPlot());
+	CvPlot* pTargetPlot = bombardImprovementTarget(plot());
+	bool bPlotNotCity = false;
+	if (pTargetPlot != NULL && pBombardCity == NULL)
+		bPlotNotCity = true;
 
-	FAssert(pBombardCity != NULL);
+	FAssert(pBombardCity != NULL || bPlotNotCity);
+	
+	if (bPlotNotCity)
+	{
+		// All of this is copied from Super Forts with minimal changes, I think it's not changed much from the original BTS code
+		CvPlot* pTargetPlot = bombardImprovementTarget(plot());
 
-	int const iAttackOdds = AI_getGroup()->AI_attackOdds(pBombardCity->plot(), true);
-	int iBase = GC.getDefineINT(CvGlobals::BBAI_SKIP_BOMBARD_BASE_STACK_RATIO);
-	int iMin = GC.getDefineINT(CvGlobals::BBAI_SKIP_BOMBARD_MIN_STACK_RATIO);
-	int const iBombardTurns = AI_getGroup()->AI_getBombardTurns(pBombardCity);
-	// <advc.004c>
-	if(iBombardTurns <= 0)
-		return false; // </advc.004c>
-	iBase = (iBase * (GC.getMAX_CITY_DEFENSE_DAMAGE() - pBombardCity->getDefenseDamage()) +
+		// do not bombard cities with no defenders
+		int iDefenderStrength = AI_getGroup()->AI_sumStrength(pTargetPlot, NO_DOMAIN, true);
+		if (iDefenderStrength == 0)
+		{
+			return false;
+		}
+
+		// do not bombard cities if we have overwelming odds
+		int iAttackOdds = AI_getGroup()->AI_attackOdds(pTargetPlot, /*bPotentialEnemy*/ true);
+		if (iAttackOdds > 95)
+		{
+			return false;
+		}
+		if (pTargetPlot->getDefenseDamage() < ((GC.getImprovementInfo(pTargetPlot->getImprovementType()).getDefenseModifier() * 3) / 4))
+		{
+			getGroup()->pushMission(MISSION_BOMBARD);
+			return true;
+		}
+	}
+	else
+	{
+
+		int const iAttackOdds = /*merkava120 super forts merge*/bPlotNotCity ? AI_getGroup()->AI_attackOdds(pBombardCity->plot(), true) : AI_getGroup()->AI_attackOdds(pTargetPlot, true);
+		int iBase = GC.getDefineINT(CvGlobals::BBAI_SKIP_BOMBARD_BASE_STACK_RATIO);
+		int iMin = GC.getDefineINT(CvGlobals::BBAI_SKIP_BOMBARD_MIN_STACK_RATIO);
+		int const iBombardTurns = AI_getGroup()->AI_getBombardTurns(pBombardCity);
+		// <advc.004c>
+		if (iBombardTurns <= 0)
+			return false; // </advc.004c>
+		iBase = (iBase * (GC.getMAX_CITY_DEFENSE_DAMAGE() - pBombardCity->getDefenseDamage()) +
 			iMin * pBombardCity->getDefenseDamage()) /
 			std::max(1, GC.getMAX_CITY_DEFENSE_DAMAGE());
-	int iThreshold = (iBase * (100 - iAttackOdds) +
-			(1 + iBombardTurns/2) * iMin * iAttackOdds) /
-			(100 + (iBombardTurns/2) * iAttackOdds);
-	int iComparison = AI_getGroup()->AI_compareStacks(pBombardCity->plot(), true);
-	if (iComparison > iThreshold)
-	{
-		if (gUnitLogLevel > 2) logBBAI("      Stack skipping bombard of %S with compare %d, starting odds %d, bombard turns %d, threshold %d", pBombardCity->getName().GetCString(), iComparison, iAttackOdds, iBombardTurns, iThreshold);
-		return false;
-	}
-	// <advc.004c>
-	CvUnit* pBombardUnit = AI_getGroup()->AI_bestUnitForMission(MISSION_BOMBARD);
-	if (pBombardUnit == NULL)
-	{
-		FErrorMsg("canBombard but no bombard unit found");
-		return false;
-	}
-	// (Not sure if other types of groups would manage to reunite)
-	if (AI_getUnitAIType() == UNITAI_ATTACK_CITY)
-		pBombardUnit->joinGroup(NULL);
-	pBombardUnit-> // </advc.004c>
+		int iThreshold = (iBase * (100 - iAttackOdds) +
+			(1 + iBombardTurns / 2) * iMin * iAttackOdds) /
+			(100 + (iBombardTurns / 2) * iAttackOdds);
+		int iComparison = AI_getGroup()->AI_compareStacks(pBombardCity->plot(), true);
+		if (iComparison > iThreshold)
+		{
+			if (gUnitLogLevel > 2) logBBAI("      Stack skipping bombard of %S with compare %d, starting odds %d, bombard turns %d, threshold %d", pBombardCity->getName().GetCString(), iComparison, iAttackOdds, iBombardTurns, iThreshold);
+			return false;
+		}
+		// <advc.004c>
+		CvUnit* pBombardUnit = AI_getGroup()->AI_bestUnitForMission(MISSION_BOMBARD);
+		if (pBombardUnit == NULL)
+		{
+			FErrorMsg("canBombard but no bombard unit found");
+			return false;
+		}
+		// (Not sure if other types of groups would manage to reunite)
+		if (AI_getUnitAIType() == UNITAI_ATTACK_CITY)
+			pBombardUnit->joinGroup(NULL);
+		pBombardUnit-> // </advc.004c>
 			getGroup()->pushMission(MISSION_BOMBARD,
-			/* <K-Mod> */ -1, -1, NO_MOVEMENT_FLAGS, false, false,
-			MISSIONAI_ASSAULT, pBombardCity->plot()); // </K-Mod>
-	return true;
+				/* <K-Mod> */ -1, -1, NO_MOVEMENT_FLAGS, false, false,
+				MISSIONAI_ASSAULT, pBombardCity->plot()); // </K-Mod>
+		return true;
+	}
+	return false; 
 }
 
 // This function has been been heavily edited for K-Mod.
@@ -21683,8 +21866,10 @@ bool CvUnitAI::AI_stackAttackCity(int iPowerThreshold)
 	{
 		CvPlot const& p = *pAdj;
 		//if (!AI_plotValid(p)) continue; // advc.opt: We're a land unit looking for an adjacent city
-		if (!p.isCity()) // K-Mod. We want to attack a city. We don't care about guarded forts!
-			//|| (pLoopPlot->isCity(true) && pLoopPlot->isVisibleEnemyUnit(this)))
+		// Super Forts begin *AI_offense* - modified if statement so forts are attacked too
+		if (pAdj->isCityExternal(true))
+		//if (pLoopPlot->isCity() || (pLoopPlot->isCity(true) && pLoopPlot->isVisibleEnemyUnit(this))) - Original Code
+		// Super Forts end
 		{
 			continue;
 		}

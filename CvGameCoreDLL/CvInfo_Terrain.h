@@ -424,7 +424,15 @@ public:
 	int getPillageGold() const;
 	ImprovementTypes getImprovementPillage() const { return m_eImprovementPillage; }
 	ImprovementTypes getImprovementUpgrade() const { return m_eImprovementUpgrade; }
-
+	// Super Forts begin *XML*
+	int getCulture() const;
+	int getCultureRange() const;
+	int getVisibilityChange() const;
+	int getSeeFrom() const;
+	int getUniqueRange() const;
+	bool isBombardable() const;
+	bool isUpgradeRequiresFortify() const;
+	// Super Forts end
 	bool isActsAsCity() const { return m_bActsAsCity; }
 	bool isHillsMakesValid() const { return m_bHillsMakesValid; }
 	bool isFreshWaterMakesValid() const { return m_bFreshWaterMakesValid; }
@@ -505,6 +513,15 @@ protected:
 	int m_iPillageGold;
 	ImprovementTypes m_eImprovementPillage;
 	ImprovementTypes m_eImprovementUpgrade;
+	// Super Forts begin *XML*
+	int m_iCulture;
+	int m_iCultureRange;
+	int m_iVisibilityChange;
+	int m_iSeeFrom;
+	int m_iUniqueRange;
+	bool m_bBombardable;
+	bool m_bUpgradeRequiresFortify;
+	// Super Forts end
 	int m_iWorldSoundscapeScriptId;
 
 	CvString m_szArtDefineTag;
