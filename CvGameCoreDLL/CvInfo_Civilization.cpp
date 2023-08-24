@@ -2,6 +2,7 @@
 
 #include "CvGameCoreDLL.h"
 #include "CvXMLLoadUtility.h"
+#include "CvGame.h" // merk.channels
 
 
 CvCivilizationInfo::CvCivilizationInfo() :
@@ -13,6 +14,9 @@ m_iNumLeaders(0),
 m_iSelectionSoundScriptId(0),
 m_iActionSoundScriptId(0),
 m_iDerivativeCiv(NO_CIVILIZATION),
+m_iChannels(0), // merk.channels
+m_iMinEra(-1), // merk.channels
+m_iMaxEra(-1), // merk.channels
 m_bPlayable(false),
 m_bAIPlayable(false),
 m_piCivilizationBuildings(NULL),
@@ -82,13 +86,47 @@ int CvCivilizationInfo::getActionSoundScriptId() const
 	return m_iActionSoundScriptId;
 }
 
-bool CvCivilizationInfo::isAIPlayable() const
+// merk.channels begin
+bool CvCivilizationInfo::hasChannel(int iChannel) const
 {
+	if (iChannel <= 0)
+		return true;
+	int iChannels = getChannels();
+	while (iChannels > 0)
+	{
+		int iTest = iChannels % GC.getDefineINT("CHANNEL_DEFINITION");
+		if (iTest == iChannel)
+			return true;
+		iChannels /= GC.getDefineINT("CHANNEL_DEFINITION");
+	}
+	return false;
+}
+// merk.channels end
+
+bool CvCivilizationInfo::isAIPlayable() const
+{   // era limited civs by tholish merk.channels
+	if (getMinEra() == -1 || getMaxEra() == -1)
+		return m_bAIPlayable;
+	else if (GC.getGame().getCurrentEra() == NO_ERA)
+	{
+		if (GC.getGame().getStartEra() < getMinEra())
+			return false;
+		if (GC.getGame().getStartEra() > getMaxEra())
+			return false;
+	}
+	// merk end
 	return m_bAIPlayable;
 }
 
 bool CvCivilizationInfo::isPlayable() const
-{
+{   // era limited civs by tholish merk.channels
+	if (getMinEra() == -1 || getMaxEra() == -1)
+		return m_bAIPlayable;
+	if (GC.getGame().getStartEra() < getMinEra())
+		return false;
+	if (GC.getGame().getStartEra() > getMaxEra())
+		return false;
+	// merk end
 	return m_bPlayable;
 }
 
@@ -301,6 +339,9 @@ bool CvCivilizationInfo::read(CvXMLLoadUtility* pXML)
 	}
 	pXML->GetChildXmlValByName(&m_bPlayable, "bPlayable");
 	pXML->GetChildXmlValByName(&m_bAIPlayable, "bAIPlayable");
+	pXML->GetChildXmlValByName(&m_iChannels, "iChannels", 0); // merk.channels
+	pXML->GetChildXmlValByName(&m_iChannels, "iMinEra", -1); // merk.channels
+	pXML->GetChildXmlValByName(&m_iChannels, "iMaxEra", -1); // merk.channels
 	if (gDLL->getXMLIFace()->SetToChildByTagName(pXML->GetXML(), "Cities"))
 	{
 		pXML->SetStringList(&m_paszCityNames, &m_iNumCityNames);

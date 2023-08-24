@@ -6427,6 +6427,10 @@ bool CvPlayer::canEverResearch(TechTypes eTech) const
 		return false;
 	if (GC.getPythonCaller()->cannotResearchOverride(getID(), eTech, false))
 		return false;
+	// merk.channels begin
+	if (!GC.getInfo(getCivilizationType()).hasChannel(GC.getInfo(eTech).getChannel()))
+		return false;
+	// merk.channels END
 	return true;
 }
 
@@ -6474,6 +6478,13 @@ bool CvPlayer::canResearch(TechTypes eTech, bool bTrade,
 	if (GET_TEAM(getTeam()).isHasTech(eTech))
 		return false;
 
+	// merk.channels begin
+	// for some reason this does not prevent a tech from being selected, so. ? 
+	// I moved it to canEverResearch
+	/*if (!GC.getInfo(getCivilizationType()).hasChannel(GC.getInfo(eTech).getChannel()))
+		return false;*/
+	// merk.channels END
+
 	bool bFoundPossible = false;
 	bool bFoundValid = false;
 	for (int i = 0; i < GC.getInfo(eTech).getNumOrTechPrereqs(); i++)
@@ -6506,6 +6517,8 @@ bool CvPlayer::canResearch(TechTypes eTech, bool bTrade,
 			return false;
 		}
 	}
+
+	
 
 	if (!canEverResearch(eTech))
 		return false;

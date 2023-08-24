@@ -30,6 +30,10 @@ public: // advc: All the const functions are exposed to Python
 	int getNumLeaders() const;
 	int getSelectionSoundScriptId() const;
 	int getActionSoundScriptId() const;
+	int getChannels() const { return m_iChannels; } // merk.channels
+	bool hasChannel(int iChannel) const; // merk.channels
+	int getMinEra() const { return m_iMinEra; } // merk.channels
+	int getMaxEra() const { return m_iMaxEra; } // merk.channels
 
 	DllExport bool isAIPlayable() const;
 	DllExport bool isPlayable() const;
@@ -80,6 +84,9 @@ protected:
 	int m_iSelectionSoundScriptId;
 	int m_iActionSoundScriptId;
 	int m_iDerivativeCiv;
+	int m_iChannels; // merk.channels
+	int m_iMinEra; // also these two
+	int m_iMaxEra;
 
 	bool m_bAIPlayable;
 	bool m_bPlayable;
