@@ -1401,5 +1401,11 @@
 		<DefineName>MINIMUM_DIVE_LEVEL</DefineName>
 		<iDefineIntVal>2</iDefineIntVal>
 	</Define>
+	
+	<!-- Civ/tech channels are bundled into 1 integer to save effort, this multiple of 10 defines how many digits are used per channel (10 = 1, 100 = 2, etc.)-->
+	<Define>
+		<DefineName>CHANNEL_DEFINITION</DefineName>
+		<iDefineIntVal>100</iDefineIntVal>
+	</Define>
 
 </Civ4Defines>
