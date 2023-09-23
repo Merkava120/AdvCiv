@@ -56,6 +56,7 @@ public: // advc: All the const functions are exposed to Python except those adde
 	int getFirstFreeTechs() const { return m_iFirstFreeTechs; }
 	int getAssetValue() const { return m_iAssetValue; }
 	int getPowerValue() const { return m_iPowerValue; }
+	int getChannel() const { return m_iChannel; } // merk.channels
 
 	int getGridX() const { return m_iGridX; }
 	int getGridY() const { return m_iGridY; }
@@ -138,6 +139,7 @@ protected:
 	int m_iFirstFreeTechs;
 	int m_iAssetValue;
 	int m_iPowerValue;
+	int m_iChannel; // merk.channels
 
 	int m_iGridX;
 	int m_iGridY;

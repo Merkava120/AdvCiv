@@ -165,6 +165,9 @@ protected:
 	bool AI_barbAmphibiousCapture(); // advc.306
 	int AI_getPlotDefendersNeeded(CvPlot const& kPlot, int iExtra /* advc: */ = 0);
 	bool AI_guardFort(bool bSearch = true);
+	// Super Forts begin *AI_defense*
+	bool AI_guardFortMinDefender(bool bSearch = true);
+	// Super Forts end
 	bool AI_guardCitySite();
 	bool AI_guardSpy(int iRandomPercent);
 	bool AI_destroySpy();

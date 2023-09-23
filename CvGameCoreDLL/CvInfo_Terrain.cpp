@@ -1319,6 +1319,15 @@ m_iHappiness(0),
 m_iPillageGold(0),
 m_eImprovementPillage(NO_IMPROVEMENT),
 m_eImprovementUpgrade(NO_IMPROVEMENT),
+// Super Forts begin *XML*
+m_iCulture(0),
+m_iCultureRange(0),
+m_iVisibilityChange(0),
+m_iSeeFrom(0),
+m_iUniqueRange(0),
+m_bBombardable(false),
+m_bUpgradeRequiresFortify(false),
+// Super Forts end
 m_bActsAsCity(false), // advc: was true
 m_bHillsMakesValid(false),
 m_bFreshWaterMakesValid(false),
@@ -1411,7 +1420,42 @@ CvImprovementInfo::~CvImprovementInfo()
 		SAFE_DELETE_ARRAY(m_ppiRouteYieldChanges);
 	}
 }
+// Super Forts begin *XML*
+int CvImprovementInfo::getCulture() const
+{
+	return m_iCulture;
+}
 
+int CvImprovementInfo::getCultureRange() const
+{
+	return m_iCultureRange;
+}
+
+int CvImprovementInfo::getVisibilityChange() const
+{
+	return m_iVisibilityChange;
+}
+
+int CvImprovementInfo::getSeeFrom() const
+{
+	return m_iSeeFrom;
+}
+
+int CvImprovementInfo::getUniqueRange() const
+{
+	return m_iUniqueRange;
+}
+
+bool CvImprovementInfo::isBombardable() const
+{
+	return m_bBombardable;
+}
+
+bool CvImprovementInfo::isUpgradeRequiresFortify() const
+{
+	return m_bUpgradeRequiresFortify;
+}
+// Super Forts end
 int CvImprovementInfo::getAdvancedStartCost() const
 {
 	return m_iAdvancedStartCost;
@@ -1631,6 +1675,15 @@ void CvImprovementInfo::read(FDataStreamBase* stream)
 	stream->Read(&m_iPillageGold);
 	stream->Read((int*)&m_eImprovementPillage);
 	stream->Read((int*)&m_eImprovementUpgrade);
+	// Super Forts begin *XML*
+	stream->Read(&m_iCulture);
+	stream->Read(&m_iCultureRange);
+	stream->Read(&m_iVisibilityChange);
+	stream->Read(&m_iSeeFrom);
+	stream->Read(&m_iUniqueRange);
+	stream->Read(&m_bBombardable);
+	stream->Read(&m_bUpgradeRequiresFortify);
+	// Super Forts end
 	stream->Read(&m_bActsAsCity);
 	stream->Read(&m_bHillsMakesValid);
 	stream->Read(&m_bFreshWaterMakesValid);
@@ -1718,6 +1771,15 @@ void CvImprovementInfo::write(FDataStreamBase* stream)
 	stream->Write(m_iPillageGold);
 	stream->Write(m_eImprovementPillage);
 	stream->Write(m_eImprovementUpgrade);
+	// Super Forts begin *XML*
+	stream->Write(m_iCulture);
+	stream->Write(m_iCultureRange);
+	stream->Write(m_iVisibilityChange);
+	stream->Write(m_iSeeFrom);
+	stream->Write(m_iUniqueRange);
+	stream->Write(m_bBombardable);
+	stream->Write(m_bUpgradeRequiresFortify);
+	// Super Forts end
 	stream->Write(m_bActsAsCity);
 	stream->Write(m_bHillsMakesValid);
 	stream->Write(m_bFreshWaterMakesValid);
@@ -1816,7 +1878,15 @@ bool CvImprovementInfo::read(CvXMLLoadUtility* pXML)
 	pXML->GetChildXmlValByName(&m_iHappiness, "iHappiness");
 	pXML->GetChildXmlValByName(&m_iPillageGold, "iPillageGold");
 	pXML->GetChildXmlValByName(&m_bOutsideBorders, "bOutsideBorders");
-
+	// Super Forts begin *XML*
+	pXML->GetChildXmlValByName(&m_iCulture, "iCulture", 0);
+	pXML->GetChildXmlValByName(&m_iCultureRange, "iCultureRange", 0);
+	pXML->GetChildXmlValByName(&m_iVisibilityChange, "iVisibilityChange", 0);
+	pXML->GetChildXmlValByName(&m_iSeeFrom, "iSeeFrom", 0);
+	pXML->GetChildXmlValByName(&m_iUniqueRange, "iUnique", 0);
+	pXML->GetChildXmlValByName(&m_bBombardable, "bBombardable", false);
+	pXML->GetChildXmlValByName(&m_bUpgradeRequiresFortify, "bUpgradeRequiresFortify", false);
+	// Super Forts end
 	pXML->SetVariableListTagPair(&m_pbTerrainMakesValid, "TerrainMakesValids", GC.getNumTerrainInfos());
 	pXML->SetVariableListTagPair(&m_pbFeatureMakesValid, "FeatureMakesValids", GC.getNumFeatureInfos());
 
