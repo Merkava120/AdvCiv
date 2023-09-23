@@ -105,12 +105,25 @@
 	<!-- merk.advinv -->
 	<ElementType name="bRevealInOpen" content="textOnly" dt:type="boolean"/>
 	<ElementType name="SeeInvisible" content="textOnly"/>
+	<!-- merk.ac -->
+	<ElementType name="bDefendWhenInvisible" content="textOnly" dt:type="boolean"/>
+	<ElementType name="InvisiblePromotion" content="textOnly"/>
+	<ElementType name="AlertPromotion" content="textOnly"/>
+	<ElementType name="iAlertType" content="textOnly" dt:type="int"/>
+	<ElementType name="iAlertChance" content="textOnly" dt:type="int"/>
+	<ElementType name="iAlertTurns" content="textOnly" dt:type="int"/>
+	<ElementType name="bAlertCanAttack" content="textOnly" dt:type="boolean"/>
 	<ElementType name="Advisor" content="textOnly"/>
 	<ElementType name="bAnimal" content="textOnly" dt:type="boolean"/>
 	<!-- merk.rasa merk.rasboth merk.rasniche -->
 	<ElementType name="iNiche" content="textOnly" dt:type="int"/>
 	<ElementType name="iSpawnChannel" content="textOnly" dt:type="int"/>
 	<ElementType name="iSpawnWeight" content="textOnly" dt:type="int"/>
+	<!-- merk.raspack -->
+	<ElementType name="iPackSize" content="textOnly" dt:type="int"/>
+	<ElementType name="SpawnWithUnit" content="textOnly"/>
+	<ElementType name="SpawnWithUnit2" content="textOnly"/>
+	<ElementType name="SpawnWithUnit3" content="textOnly"/>
 	<!-- merk.rasmore merk.rasem-->
 	<ElementType name="bRiverNative" content="textOnly" dt:type="boolean"/>
 	<ElementType name="bHillsNative" content="textOnly" dt:type="boolean"/>
@@ -609,6 +622,15 @@
 		<!-- merk.advinv -->
 		<element type="bRevealInOpen" minOccurs="0"/>
 		<element type="SeeInvisible"/>
+		<!-- merk.ac -->
+		<element type="InvisiblePromotion" minOccurs="0"/>
+		<element type="bDefendWhenInvisible" minOccurs="0"/>
+		<element type="AlertPromotion" minOccurs="0"/>
+		<element type="iAlertType" minOccurs="0"/>
+		<element type="iAlertChance" minOccurs="0"/>
+		<element type="iAlertTurns" minOccurs="0"/>
+		<element type="bAlertCanAttack" minOccurs="0"/>
+		<!-- merk.ac end -->
 		<element type="Description"/>
 		<element type="Civilopedia"/>
 		<element type="Strategy"/>
@@ -619,6 +641,11 @@
 		<element type="iNiche" minOccurs="0"/>
 		<element type="iSpawnChannel" minOccurs="0"/>
 		<element type="iSpawnWeight" minOccurs="0"/>
+		<!-- merk.raspack -->
+		<element type="iPackSize" minOccurs="0"/>
+		<element type="SpawnWithUnit" minOccurs="0"/>
+		<element type="SpawnWithUnit2" minOccurs="0"/>
+		<element type="SpawnWithUnit3" minOccurs="0"/>
 		<!-- merk.rasmore merk.rasem -->
 		<element type="bRiverNative" minOccurs="0"/>
 		<element type="bHillsNative" minOccurs="0"/>

@@ -96,6 +96,16 @@ m_eUnitCombatType(NO_UNITCOMBAT),
 m_eDomainType(NO_DOMAIN),
 m_eDefaultUnitAIType(NO_UNITAI),
 m_eInvisibleType(NO_INVISIBLE),
+m_bRevealInOpen(false), // merk.advinv
+// merk.ac
+m_bDefendWhenInvisible(false),
+m_eInvisiblePromotion(NO_PROMOTION),
+m_eAlertPromotion(NO_PROMOTION),
+m_iAlertType(0),
+m_iAlertChance(0),
+m_iAlertTurns(0),
+m_bAlertCanAttack(false),
+// merk.ac end
 m_eAdvisorType(NO_ADVISOR),
 m_eHolyCity(NO_RELIGION),
 m_eReligionType(NO_RELIGION),
@@ -119,15 +129,31 @@ m_bAnimal(false),
 m_iNiche(-1), // merk.rasboth
 m_iSpawnChannel(-1), // merk.rasa
 m_iSpawnWeight(0), // merk.rasa
-// merk.rasmore begin
+m_iPackSize(0), // merk.raspack
+// merk.raspack1 next three
+m_eSpawnWithUnit(NO_UNITCLASS),
+m_eSpawnWithUnit2(NO_UNITCLASS),
+m_eSpawnWithUnit3(NO_UNITCLASS),
+// merk.rasmore begin // merk.rasem
 m_bRiverNative(false),
 m_bHillsNative(false),
 m_bFlatlandsNative(false),
+m_bCoastalNative(false),
+m_bOpenNative(false),
+m_iFeatureNativeWeight(0),
 m_bCannotMoveRivers(false),
 m_bCannotLeaveRivers(false),
 m_iRiverRestrictDistance(0),
 m_bCannotMoveHills(false),
+m_iHillsRestrictDistance(0),
+m_iPeakRestrictDistance(0),
 m_bCannotMoveFlatlands(false),
+m_bCannotMoveCoastal(false),
+m_bCannotLeaveCoastal(false),
+m_iCoastalRestrictDistance(0),
+m_bCanSwim(false),
+m_bCannotMoveFeatures(false),
+m_bCannotMoveOpen(false),
 m_iMinSpawnTemp(0),
 m_iMaxSpawnTemp(0),
 m_iMinMoveTemp(0),
@@ -1335,21 +1361,48 @@ bool CvUnitInfo::read(CvXMLLoadUtility* pXML)
 				m_aeSeeInvisibleTypes.push_back(eInvisibleType);
 		}
 	}
+	
 	pXML->SetInfoIDFromChildXmlVal(m_eAdvisorType, "Advisor");
 
+	pXML->GetChildXmlValByName(&m_bRevealInOpen, "bRevealInOpen", false); // merk.advinv
+	// merk.ac
+	pXML->GetChildXmlValByName(&m_bDefendWhenInvisible, "bDefendWhenInvisible", false);
+	pXML->SetInfoIDFromChildXmlVal(m_eInvisiblePromotion, "InvisiblePromotion");
+	pXML->SetInfoIDFromChildXmlVal(m_eAlertPromotion, "AlertPromotion");
+	pXML->GetChildXmlValByName(&m_iAlertType, "iAlertType", 0);
+	pXML->GetChildXmlValByName(&m_iAlertChance, "iAlertChance", 0);
+	pXML->GetChildXmlValByName(&m_iAlertTurns, "iAlertTurns", 0);
+	pXML->GetChildXmlValByName(&m_bAlertCanAttack, "bAlertCanAttack", false);
+	// merk.ac end
 	pXML->GetChildXmlValByName(&m_bAnimal, "bAnimal");
 	pXML->GetChildXmlValByName(&m_iNiche, "iNiche", -1); // merk.rasboth
 	pXML->GetChildXmlValByName(&m_iSpawnChannel, "iSpawnChannel", -1); // merk.rasa
 	pXML->GetChildXmlValByName(&m_iSpawnWeight, "iSpawnWeight", 0); // merk.rasa
-	// merk.rasmore begin
+	pXML->GetChildXmlValByName(&m_iPackSize, "iPackSize", 0); // merk.raspack
+	// merk.raspack1
+	pXML->SetInfoIDFromChildXmlVal(m_eSpawnWithUnit, "SpawnWithUnit");
+	pXML->SetInfoIDFromChildXmlVal(m_eSpawnWithUnit2, "SpawnWithUnit2");
+	pXML->SetInfoIDFromChildXmlVal(m_eSpawnWithUnit3, "SpawnWithUnit3");
+	// merk.rasmore merk. rasem begin
 	pXML->GetChildXmlValByName(&m_bRiverNative, "bRiverNative", false);
 	pXML->GetChildXmlValByName(&m_bHillsNative, "bHillsNative", false);
 	pXML->GetChildXmlValByName(&m_bFlatlandsNative, "bFlatlandsNative", false);
+	pXML->GetChildXmlValByName(&m_bCoastalNative, "bCoastalNative", false);
+	pXML->GetChildXmlValByName(&m_bOpenNative, "bOpenNative", false);
+	pXML->GetChildXmlValByName(&m_iFeatureNativeWeight, "iFeatureNativeWeight", false);
 	pXML->GetChildXmlValByName(&m_bCannotMoveRivers, "bCannotMoveRivers", false);
 	pXML->GetChildXmlValByName(&m_bCannotLeaveRivers, "bCannotLeaveRivers", false);
 	pXML->GetChildXmlValByName(&m_iRiverRestrictDistance, "iRiverRestrictDistance", 0);
 	pXML->GetChildXmlValByName(&m_bCannotMoveHills, "bCannotMoveHills", false);
+	pXML->GetChildXmlValByName(&m_iHillsRestrictDistance, "iHillsRestrictDistance", false);
+	pXML->GetChildXmlValByName(&m_iPeakRestrictDistance, "iPeakRestrictDistance", false);
 	pXML->GetChildXmlValByName(&m_bCannotMoveFlatlands, "bCannotMoveFlatlands", false);
+	pXML->GetChildXmlValByName(&m_bCannotMoveCoastal, "bCannotMoveCoastal", false);
+	pXML->GetChildXmlValByName(&m_bCannotLeaveCoastal, "bCannotLeaveCoastal", false);
+	pXML->GetChildXmlValByName(&m_iCoastalRestrictDistance, "iCoastalRestrictDistance", false);
+	pXML->GetChildXmlValByName(&m_bCanSwim, "bCanSwim", false);
+	pXML->GetChildXmlValByName(&m_bCannotMoveFeatures, "bCanotMoveFeatures", false);
+	pXML->GetChildXmlValByName(&m_bCannotMoveOpen, "bCannotMoveOpen", false);
 	pXML->GetChildXmlValByName(&m_iMinSpawnTemp, "iMinSpawnTemp", 0);
 	pXML->GetChildXmlValByName(&m_iMaxSpawnTemp, "iMaxSpawnTemp", 0);
 	pXML->GetChildXmlValByName(&m_iMinMoveTemp, "iMinMoveTemp", 0);
@@ -1968,6 +2021,23 @@ m_iExperiencePercent(0),
 m_iKamikazePercent(0),
 m_bLeader(false),
 m_iBlitz(0), // advc.164
+// merk.promo1 begin
+m_eSeeInvisible(NO_INVISIBLE),
+m_eInvisible(NO_INVISIBLE),
+m_bDoubleMoveOpen(false),
+m_bDoubleMoveFlatlands(false),
+m_iOpenAttack(0),
+m_iOpenDefense(0),
+m_iFlatlandsAttack(0),
+m_iFlatlandsDefense(0),
+m_bUnitCombatAttack(false),
+m_bUnitCombatDefense(false),
+m_bCanMoveImpassable(false),
+// merk.dp begin
+m_iChanceGain(0),
+m_bGainMatchConditions(false),
+m_bNoDirect(false),
+// merkava120 end
 m_bAmphib(false),
 m_bRiver(false),
 m_bEnemyRoute(false),
@@ -2193,6 +2263,79 @@ int CvPromotionInfo::getBlitz() const
 {
 	return m_iBlitz;
 } // </advc.164>
+// merk.promo1 begin
+InvisibleTypes CvPromotionInfo::getSeeInvisible() const
+{
+	return m_eSeeInvisible;
+}
+
+InvisibleTypes CvPromotionInfo::getInvisible() const
+{
+	return m_eInvisible;
+}
+
+bool CvPromotionInfo::isDoubleMoveOpen() const
+{
+	return m_bDoubleMoveOpen;
+}
+
+bool CvPromotionInfo::isDoubleMoveFlatlands() const
+{
+	return m_bDoubleMoveFlatlands;
+}
+
+int CvPromotionInfo::getOpenAttack() const
+{
+	return m_iOpenAttack;
+}
+
+int CvPromotionInfo::getOpenDefense() const
+{
+	return m_iOpenDefense;
+}
+
+int CvPromotionInfo::getFlatlandsAttack() const
+{
+	return m_iFlatlandsAttack;
+}
+
+int CvPromotionInfo::getFlatlandsDefense() const
+{
+	return m_iFlatlandsDefense;
+}
+
+bool CvPromotionInfo::isUnitCombatAttack() const
+{
+	return m_bUnitCombatAttack;
+}
+
+bool CvPromotionInfo::isUnitCombatDefense() const
+{
+	return m_bUnitCombatDefense;
+}
+
+bool CvPromotionInfo::isCanMoveImpassable() const
+{
+	return m_bCanMoveImpassable;
+}
+
+// merk.dp begin
+
+int CvPromotionInfo::getChanceGain() const
+{
+	return m_iChanceGain;
+}
+
+bool CvPromotionInfo::isGainMatchConditions() const
+{
+	return m_bGainMatchConditions;
+}
+
+bool CvPromotionInfo::isNoDirect() const
+{
+	return m_bNoDirect;
+}
+// merkava120 end
 
 bool CvPromotionInfo::isAmphib() const
 {
@@ -2440,6 +2583,23 @@ bool CvPromotionInfo::read(CvXMLLoadUtility* pXML)
 	if (m_bLeader)
 		m_bGraphicalOnly = true;  // don't show in Civilopedia list of promotions
 	pXML->GetChildXmlValByName(&m_iBlitz, "iBlitz"); // advc.164
+	// merk.promo1 begin
+	pXML->SetInfoIDFromChildXmlVal(m_eSeeInvisible, "SeeInvisible");
+	pXML->SetInfoIDFromChildXmlVal(m_eInvisible, "Invisible");
+	pXML->GetChildXmlValByName(&m_bDoubleMoveOpen, "bDoubleMoveOpen", false);
+	pXML->GetChildXmlValByName(&m_bDoubleMoveFlatlands, "bDoubleMoveFlatlands", false);
+	pXML->GetChildXmlValByName(&m_iOpenAttack, "iOpenAttack", 0);
+	pXML->GetChildXmlValByName(&m_iOpenDefense, "iOpenDefense", 0);
+	pXML->GetChildXmlValByName(&m_iFlatlandsAttack, "iFlatlandsAttack", 0);
+	pXML->GetChildXmlValByName(&m_iFlatlandsDefense, "iFlatlandsDefense", 0);
+	pXML->GetChildXmlValByName(&m_bUnitCombatAttack, "bUnitCombatAttack", false);
+	pXML->GetChildXmlValByName(&m_bUnitCombatDefense, "bUnitCombatDefense", false);
+	pXML->GetChildXmlValByName(&m_bCanMoveImpassable, "bCanMoveImpassable", false);
+	// merk.dp begin
+	pXML->GetChildXmlValByName(&m_iChanceGain, "iChanceGain", 0);
+	pXML->GetChildXmlValByName(&m_bGainMatchConditions, "bGainMatchConditions", false);
+	pXML->GetChildXmlValByName(&m_bNoDirect, "bNoDirect", false);
+	// merkava120 end
 	pXML->GetChildXmlValByName(&m_bAmphib, "bAmphib");
 	pXML->GetChildXmlValByName(&m_bRiver, "bRiver");
 	pXML->GetChildXmlValByName(&m_bEnemyRoute, "bEnemyRoute");

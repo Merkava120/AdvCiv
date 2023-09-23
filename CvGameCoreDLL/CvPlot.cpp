@@ -1746,6 +1746,13 @@ void CvPlot::changeAdjacentSight(TeamTypes eTeam, int iRange, bool bIncrement,
 		for (int i = 0; i < pUnit->getNumSeeInvisibleTypes(); i++)
 			aeSeeInvisibleTypes.push_back(pUnit->getSeeInvisibleType(i));
 	}
+	// merk.promo1
+	//FOR_EACH_ENUM(Invisible)
+	//{
+	//	if (pUnit->isSeeInvisible(eLoopInvisible)) // this is the one affected by promotions
+	//		aeSeeInvisibleTypes.push_back(eLoopInvisible);
+	//}
+	// merk.promo1 end
 	if (aeSeeInvisibleTypes.empty())
 		aeSeeInvisibleTypes.push_back(NO_INVISIBLE);
 
@@ -3224,7 +3231,7 @@ int CvPlot::movementCost(CvUnit const& kUnit, CvPlot const& kFrom,
 	{
 		if ((!isFeature() ? kUnit.isTerrainDoubleMove(getTerrainType()) :
 			kUnit.isFeatureDoubleMove(getFeatureType())) ||
-			(isHills() && kUnit.isHillsDoubleMove()))
+			(isHills() && kUnit.isHillsDoubleMove()))/* || (kUnit.isDoubleMoveFlatlands() && isFlatlands()) || kUnit.isDoubleMoveOpen() && getFeatureType() == NO_FEATURE)*/ // merk.promo1
 		{
 			iRegularCost /= 2;
 		}
@@ -5019,7 +5026,6 @@ void CvPlot::setTerrainType(TerrainTypes eNewValue, bool bRecalculate, bool bReb
 {
 	if(getTerrainType() == eNewValue)
 		return;
-
 	bool bUpdateSight = (getTerrainType() != NO_TERRAIN && // advc
 			eNewValue != NO_TERRAIN &&
 			(GC.getInfo(getTerrainType()).getSeeFromLevel() !=

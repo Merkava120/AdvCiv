@@ -35,6 +35,8 @@
 	<!-- merk.msm -->
 	<ElementType name="BaseTerrain" content="textOnly"/>
 	<ElementType name="BaseFeature" content="textOnly"/>
+	<ElementType name="iUseBFWt" content="textOnly" dt:type="int"/>
+	<ElementType name="iAdjBFWt" content="textOnly" dt:type="int"/>
 	<ElementType name="iChanceInclude" content="textOnly" dt:type="int"/>
 	<ElementType name="iChanceMap" content="textOnly" dt:type="int"/>
 	<ElementType name="bReqHills" content="textOnly" dt:type="boolean"/>
@@ -87,6 +89,7 @@
 	</ElementType>
 	<ElementType name="iHillsAdjacentWeight" content="textOnly" dt:type="int"/>
 	<ElementType name="iCoastAdjacentWeight" content="textOnly" dt:type="int"/>
+	<ElementType name="PlaceTerrain" content="textOnly"/>
 	<!-- advc.012 -->
 	<ElementType name="iRivalDefense" content="textOnly" dt:type="int"/>
 	<ElementType name="Button" content="textOnly"/>
@@ -125,6 +128,8 @@
 		<!-- merk.msm -->
 		<element type="BaseTerrain" minOccurs="0"/> 
 		<element type="BaseFeature" minOccurs="0"/> 
+		<element type="iUseBFWt" minOccurs="0"/>
+		<element type="iAdjBFWt" minOccurs="0"/>
 		<element type="iChanceInclude" minOccurs="0"/> 
 		<element type="iChanceMap" minOccurs="0"/> 
 		<element type="bRequiresRiver" minOccurs="0"/> 
@@ -273,6 +278,8 @@
 		<element type="iWtCoastal" minOccurs="0"/> 
 		<element type="iWtCoast" minOccurs="0"/> 
 		<element type="iWtOcean" minOccurs="0"/> 
+		<element type="iMinLatitude" minOccurs="0"/> 
+		<element type="iMaxLatitude" minOccurs="0"/>
 		<element type="iMinAreaSize" minOccurs="0"/> 
 		<element type="iMaxAreaSize" minOccurs="0"/> 
 		<element type="iMinAreaProportion" minOccurs="0"/> 
@@ -287,6 +294,8 @@
 		<element type="FeatureAdjacentWeights" minOccurs="0"/> 
 		<element type="iHillsAdjacentWeight" minOccurs="0"/> 
 		<element type="iCoastAdjacentWeight" minOccurs="0"/>
+		<!-- merk.msmadd -->
+		<element type="PlaceTerrain" minOccurs="0"/>
 		<!-- merkava120 end -->
 		<element type="bNoCoast"/>
 		<element type="bNoRiver"/>

@@ -162,7 +162,10 @@ void CvMapGenerator::addGameElements()
 
 	addFeatures();
 	gDLL->logMemState("CvMapGen after add features");
-
+	// merk.msm right here
+	applyMappings();
+	m_aiPlacedChannels.clear(); // allows regenerating the map
+	// merk.msm end
 	addBonuses();
 	gDLL->logMemState("CvMapGen after add bonuses");
 
@@ -1003,7 +1006,558 @@ void CvMapGenerator::setPlotTypes(const int* paiPlotTypes)
 		}
 	}
 }
+// merk.msm begin
+void CvMapGenerator::applyMappings()
+{
+	if (GC.getDefineINT("ENABLE_MAPPING_SYSTEM") <= 0)
+		return;
+	// Decode settings
+	int iLoops = GC.getDefineINT("MAPPER_LOOPS");
+	std::vector< int > aiMapCode;
+	while (iLoops > 0)
+	{
+		int iNextLoop = iLoops % 10;
+		switch (iNextLoop)
+		{
+		case 1:
+			aiMapCode.push_back(1);
+			break;
+		case 2:
+			aiMapCode.push_back(2);
+			break;
+		case 3:
+			aiMapCode.push_back(3);
+			break;
+		case 4:
+			aiMapCode.push_back(1);
+			aiMapCode.push_back(2);
+			break;
+		case 5:
+			aiMapCode.push_back(1);
+			aiMapCode.push_back(3);
+			break;
+		case 6:
+			aiMapCode.push_back(2);
+			aiMapCode.push_back(3);
+			break;
+		case 7:
+			aiMapCode.push_back(1);
+			aiMapCode.push_back(2);
+			aiMapCode.push_back(3);
+			break;
+		}
+		iLoops /= 10;
+	}
+	// load up lists of the mappings. 
+	FOR_EACH_ENUM(Feature)
+	{
+		CvFeatureInfo& kMapping = GC.getFeatureInfo(eLoopFeature);
+		if (SyncRandSuccess100(kMapping.getChanceInclude()))
+			m_aiIncludeFeatures.push_back(eLoopFeature);
+	}
+	FOR_EACH_ENUM(Terrain)
+	{
+		CvTerrainInfo& kMapping = GC.getTerrainInfo(eLoopTerrain);
+		if (SyncRandSuccess100(kMapping.getChanceInclude()))
+			m_aiIncludeTerrains.push_back(eLoopTerrain);
+	}
+	FOR_EACH_ENUM(Improvement)
+	{
+		CvImprovementInfo& kMapping = GC.getImprovementInfo(eLoopImprovement);
+		if (SyncRandSuccess100(kMapping.getChanceInclude()))
+			m_aiIncludeImprovements.push_back(eLoopImprovement);
+	}
+	// handle here: goodyUniqueRange for improvements
+	FAssertMsg((int)aiMapCode.size() > 0, "Error loading map code.");
+	for (int run = 0; run < ((int)aiMapCode.size()); run++)
+	{
+		for (int tile = 0; tile < GC.getMap().numPlots(); tile++)
+		{
+			// skip peaks
+			if (GC.getMap().plotByIndex(tile)->isPeak())
+				continue;
+			if (aiMapCode[run] == 1)
+			{
+				applyTerrainMappings(tile);
+			}
+			if (aiMapCode[run] == 2)
+			{
+				applyFeatureMappings(tile);
+			}
+			if (aiMapCode[run] == 3)
+			{
+				applyImprovementMappings(tile);
+			}
+		}
+	}
+}
 
+void CvMapGenerator::applyFeatureMappings(int iTile)
+{
+	CvPlot& kPlot = GC.getMap().getPlotByIndex(iTile);
+	for (int i = 0; i < (int)(m_aiIncludeFeatures.size()); i++)
+	{
+		if (!isMappingValid(kPlot, m_aiIncludeFeatures[i]))
+			continue;
+		CvFeatureInfo& kMapping = GC.getFeatureInfo(m_aiIncludeFeatures[i]);
+		if (SyncRandSuccess1000(getMappingWeight(kPlot, m_aiIncludeFeatures[i])))
+		{
+			if (kMapping.getAreaChannel() > 0)
+			{
+				if (kPlot.area()->getBarbarianSpawnChannel() < 0)
+				{
+					int iNewMapping = kMapping.getAreaChannel();
+					handleUnmappedArea(iNewMapping, kPlot);
+				}
+				if (kPlot.area()->getBarbarianSpawnChannel() != kMapping.getAreaChannel())
+					continue;
+			}
+			// place that baby
+			kPlot.setFeatureType(m_aiIncludeFeatures[i]);
+			// merk.msmadd
+			if (kMapping.getPlaceTerrain() != NO_TERRAIN)
+				kPlot.setTerrainType(kMapping.getPlaceTerrain());
+			// Two more things to deal with:
+			if (kMapping.isPlaceInGroup())
+			{
+				for (SquareIter itPlot(kPlot, GC.getDefineINT("MAPPING_PLACEGROUP_SIZE")); itPlot.hasNext(); ++itPlot)
+				{
+					if (GC.getDefineINT("PLACEGROUP_WEIGHTED"))
+					{
+						if (!(SyncRandSuccess1000(getMappingWeight(GC.getMap().getPlotByIndex(itPlot->plotNum()), m_aiIncludeFeatures[i]))))
+							continue;
+					}
+					else if (GC.getDefineINT("PLACEGROUP_REGULAR"))
+					{
+						if (!isMappingValid(GC.getMap().getPlotByIndex(itPlot->plotNum()), m_aiIncludeFeatures[i]))
+							continue;
+						if (!(SyncRandSuccess1000(getMappingWeight(GC.getMap().getPlotByIndex(itPlot->plotNum()), m_aiIncludeFeatures[i]))))
+							continue;
+					}
+					else if (!isMappingValid(GC.getMap().getPlotByIndex(itPlot->plotNum()), m_aiIncludeFeatures[i]))
+						continue;
+					// otherwise place that baby
+					kPlot.setFeatureType(m_aiIncludeFeatures[i]);
+					// merk.msmadd
+					if (kMapping.getPlaceTerrain() != NO_TERRAIN)
+						kPlot.setTerrainType(kMapping.getPlaceTerrain());
+				}
+			}
+			if (kMapping.isPlaceOnce())
+			{
+				m_aiIncludeFeatures.erase(m_aiIncludeFeatures.begin() + i);
+				i--;
+			}
+		}
+	}
+}
+
+void CvMapGenerator::handleUnmappedArea(int iNewMapping, CvPlot& kPlot)
+{
+	bool bPlaced = false;
+	if (GC.getDefineINT("UNIQUE_SPAWN_CHANNELS"))
+	{
+		for (int a = 0; a < (int)(m_aiPlacedChannels.size()); a++)
+		{
+			if (m_aiPlacedChannels[a] == iNewMapping)
+			{
+				bPlaced = true;
+				break;
+			}
+		}
+	}
+	if (!bPlaced && SyncRandSuccess100(GC.getDefineINT("MAPPING_SET_CHANNEL_CHANCE")))
+	{
+		kPlot.area()->setBarbarianSpawnChannel(iNewMapping);
+		m_aiPlacedChannels.push_back(iNewMapping);
+	}
+}
+
+void CvMapGenerator::applyTerrainMappings(int iTile)
+{
+	CvPlot& kPlot = GC.getMap().getPlotByIndex(iTile);
+	for (int i = 0; i < (int)(m_aiIncludeTerrains.size()); i++)
+	{
+		if (!isMappingValid(kPlot, m_aiIncludeTerrains[i]))
+			continue;
+		CvTerrainInfo& kMapping = GC.getTerrainInfo(m_aiIncludeTerrains[i]);
+		int iWeight = getMappingWeight(kPlot, m_aiIncludeTerrains[i]);
+		if ((TerrainTypes)m_aiIncludeTerrains[i] == GC.getInfoTypeForString("TERRAIN_STEPPE") && iWeight > 0)
+			int fart = 0;
+		if (SyncRandSuccess1000(iWeight))
+		{
+			if (kMapping.getAreaChannel() > 0)
+			{
+				if (kPlot.area()->getBarbarianSpawnChannel() < 0)
+				{
+					int iNewMapping = kMapping.getAreaChannel();
+					handleUnmappedArea(iNewMapping, kPlot);
+				}
+				if (kPlot.area()->getBarbarianSpawnChannel() != kMapping.getAreaChannel())
+					continue;
+			}
+			// place that baby
+			kPlot.setTerrainType(m_aiIncludeTerrains[i]);
+			// Two more things to deal with:
+			if (kMapping.isPlaceInGroup())
+			{
+				for (SquareIter itPlot(kPlot, GC.getDefineINT("MAPPING_PLACEGROUP_SIZE")); itPlot.hasNext(); ++itPlot)
+				{
+					if (GC.getDefineINT("PLACEGROUP_WEIGHTED"))
+					{
+						if (!(SyncRandSuccess1000(getMappingWeight(GC.getMap().getPlotByIndex(itPlot->plotNum()), m_aiIncludeTerrains[i]))))
+							continue;
+					}
+					else if (GC.getDefineINT("PLACEGROUP_REGULAR") )
+					{
+						if (!isMappingValid(GC.getMap().getPlotByIndex(itPlot->plotNum()), m_aiIncludeTerrains[i]))
+							continue;
+						if (!(SyncRandSuccess1000(getMappingWeight(GC.getMap().getPlotByIndex(itPlot->plotNum()), m_aiIncludeTerrains[i]))))
+							continue;
+					}
+					else if (!isMappingValid(GC.getMap().getPlotByIndex(itPlot->plotNum()), m_aiIncludeTerrains[i]))
+						continue;
+					// otherwise place that baby
+					kPlot.setTerrainType(m_aiIncludeTerrains[i]);
+				}
+			}
+			if (kMapping.isPlaceOnce())
+			{
+				m_aiIncludeTerrains.erase(m_aiIncludeTerrains.begin() + i);
+				i--;
+			}
+		}
+	}
+}
+
+void CvMapGenerator::applyImprovementMappings(int iTile)
+{
+	CvPlot& kPlot = GC.getMap().getPlotByIndex(iTile);
+	for (int i = 0; i < (int)(m_aiIncludeImprovements.size()); i++)
+	{
+		if (!isMappingValid(kPlot, m_aiIncludeImprovements[i]))
+			continue;
+		CvImprovementInfo& kMapping = GC.getImprovementInfo(m_aiIncludeImprovements[i]);
+		if (SyncRandSuccess1000(getMappingWeight(kPlot, m_aiIncludeImprovements[i])))
+		{
+			if (kMapping.getAreaChannel() > 0)
+			{
+				if (kPlot.area()->getBarbarianSpawnChannel() < 0)
+				{
+					int iNewMapping = kMapping.getAreaChannel();
+					handleUnmappedArea(iNewMapping, kPlot);
+				}
+				if (kPlot.area()->getBarbarianSpawnChannel() != kMapping.getAreaChannel())
+					continue;
+			}
+			// place that baby
+			kPlot.setImprovementType(m_aiIncludeImprovements[i]);
+			// Two more things to deal with:
+			if (kMapping.isPlaceInGroup())
+			{
+				for (SquareIter itPlot(kPlot, GC.getDefineINT("MAPPING_PLACEGROUP_SIZE")); itPlot.hasNext(); ++itPlot)
+				{
+					if (GC.getDefineINT("PLACEGROUP_WEIGHTED"))
+					{
+						if (!(SyncRandSuccess1000(getMappingWeight(GC.getMap().getPlotByIndex(itPlot->plotNum()), m_aiIncludeImprovements[i]))))
+							continue;
+					}
+					else if (GC.getDefineINT("PLACEGROUP_REGULAR"))
+					{
+						if (!isMappingValid(GC.getMap().getPlotByIndex(itPlot->plotNum()), m_aiIncludeImprovements[i]))
+							continue;
+						if (!(SyncRandSuccess1000(getMappingWeight(GC.getMap().getPlotByIndex(itPlot->plotNum()), m_aiIncludeImprovements[i]))))
+							continue;
+					}
+					else if (!isMappingValid(GC.getMap().getPlotByIndex(itPlot->plotNum()), m_aiIncludeImprovements[i]))
+						continue;
+					// otherwise place that baby
+					kPlot.setImprovementType(m_aiIncludeImprovements[i]);
+				}
+			}
+			if (kMapping.isPlaceOnce())
+			{
+				m_aiIncludeImprovements.erase(m_aiIncludeImprovements.begin() + i);
+				i--;
+			}
+		}
+	}
+}
+
+bool CvMapGenerator::isMappingValid(CvPlot const& kPlot, FeatureTypes eFeatureMapping) const
+{
+	CvFeatureInfo& kMapping = GC.getFeatureInfo(eFeatureMapping);
+	if (kPlot.getTerrainType() != (TerrainTypes)kMapping.getBaseTerrain() && (TerrainTypes)kMapping.getBaseTerrain() != NO_TERRAIN)
+		return false;
+	if (kPlot.getFeatureType() != (FeatureTypes)kMapping.getBaseFeature() && (FeatureTypes)kMapping.getBaseFeature() != NO_FEATURE)
+		return false;
+	if (kMapping.isRequiresRiver() && !kPlot.isRiver())
+		return false;
+	if (kMapping.isRequiresFlatlands() && !kPlot.isFlatlands())
+		return false;
+	if (kMapping.isReqHills() && !kPlot.isHills())
+		return false;
+	if (kMapping.isReqCoastal() && !kPlot.isCoastalLand())
+		return false;
+	if (kMapping.isReqCoast() && (!kPlot.isWater() || !kPlot.isAdjacentToLand()))
+		return false;
+	if (kMapping.isReqOcean() && (kPlot.isAdjacentToLand()))
+		return false;
+	if (!(kMapping.getMinLatitude() == 0 && kMapping.getMaxLatitude() == 0))
+	{
+		if (kPlot.getLatitude() < kMapping.getMinLatitude() || kPlot.getLatitude() > kMapping.getMaxLatitude())
+			return false;
+	}
+	if (!(kMapping.getMinAreaSize() == 0 && kMapping.getMaxAreaSize() == 0))
+	{
+		if (kPlot.area()->getNumTiles() < kMapping.getMinAreaSize() || kPlot.area()->getNumTiles() > kMapping.getMaxAreaSize())
+			return false;
+	}
+	if (!(kMapping.getMinAreaProportion() == 0 && kMapping.getMaxAreaProportion() == 0))
+	{
+		int iAreaProportion = (kPlot.area()->getNumTiles() * 100) / GC.getMap().numPlots();
+		if (iAreaProportion < kMapping.getMinAreaProportion() || iAreaProportion > kMapping.getMaxAreaProportion())
+			return false;
+	}
+	if (kMapping.isSurroundedByBase() /* unique for features*/ || kMapping.isNoAdjacent())
+	{
+		FOR_EACH_ADJ_PLOT(kPlot)
+		{
+			if (pAdj->getTerrainType() != (TerrainTypes)kMapping.getBaseTerrain() && kMapping.isSurroundedByBase())
+				return false;
+			if (pAdj->getFeatureType() != (FeatureTypes)kMapping.getBaseFeature() && kMapping.isSurroundedByBase())
+				return false;
+			if (kMapping.isNoAdjacent() && pAdj->getFeatureType() == eFeatureMapping)
+				return false;
+		}
+	}
+	// unique for features
+	// I use "Coast" = water and "Coastal" = land, vanilla doesn't
+	if (kMapping.isNoCoast() && kPlot.isCoastalLand())
+		return false;
+	if (kMapping.isNoRiver() && kPlot.isRiver())
+		return false;
+	if (kMapping.isNoRiverSide() && kPlot.isRiverSide())
+		return false;
+	if (kMapping.isRequiresRiverSide() && !kPlot.isRiverSide())
+		return false;
+	//if (!kMapping.isTerrain((int)kPlot.getTerrainType()))
+	//	return false;
+	return true;
+}
+
+bool CvMapGenerator::isMappingValid(CvPlot const& kPlot, TerrainTypes eTerrainMapping) const
+{
+	CvTerrainInfo& kMapping = GC.getTerrainInfo(eTerrainMapping);
+	if (kPlot.getTerrainType() != (TerrainTypes)kMapping.getBaseTerrain() && (TerrainTypes)kMapping.getBaseTerrain() != NO_TERRAIN)
+		return false;
+	if (kPlot.getFeatureType() != (FeatureTypes)kMapping.getBaseFeature() && (FeatureTypes)kMapping.getBaseFeature() != NO_FEATURE/*merk.msmfix*/ && kMapping.getBaseFeatureWeight() == 0)
+		return false;
+	if (kMapping.isReqRiver() && !kPlot.isRiver())
+		return false;
+	if (kMapping.isReqFlatlands() && !kPlot.isFlatlands())
+		return false;
+	if (kMapping.isReqHills() && !kPlot.isHills())
+		return false;
+	if (kMapping.isReqCoastal() && !kPlot.isCoastalLand())
+		return false;
+	if (kMapping.isReqCoast() && (!kPlot.isWater() || !kPlot.isAdjacentToLand()))
+		return false;
+	if (kMapping.isReqOcean() && (kPlot.isAdjacentToLand()))
+		return false;
+	if (!(kMapping.getMinLatitude() == 0 && kMapping.getMaxLatitude() == 0))
+	{
+		if (kPlot.getLatitude() < kMapping.getMinLatitude() || kPlot.getLatitude() > kMapping.getMaxLatitude())
+			return false;
+	}
+	if (!(kMapping.getMinAreaSize() == 0 && kMapping.getMaxAreaSize() == 0))
+	{
+		if (kPlot.area()->getNumTiles() < kMapping.getMinAreaSize() || kPlot.area()->getNumTiles() > kMapping.getMaxAreaSize())
+			return false;
+	}
+	if (!(kMapping.getMinAreaProportion() == 0 && kMapping.getMaxAreaProportion() == 0))
+	{
+		int iAreaProportion = (kPlot.area()->getNumTiles() * 100) / GC.getMap().numPlots();
+		if (iAreaProportion < kMapping.getMinAreaProportion() || iAreaProportion > kMapping.getMaxAreaProportion())
+			return false;
+	}
+	if (kMapping.isSurroundedByBase())
+	{
+		FOR_EACH_ADJ_PLOT(kPlot)
+		{
+			if (pAdj->getTerrainType() != (TerrainTypes)kMapping.getBaseTerrain())
+				return false;
+			if (pAdj->getFeatureType() != (FeatureTypes)kMapping.getBaseFeature())
+				return false;
+		}
+	}
+	// unique for terrains
+	if (kMapping.isWater() && !kPlot.isWater())
+		return false;
+	return true;
+}
+
+bool CvMapGenerator::isMappingValid(CvPlot const& kPlot, ImprovementTypes eImprovementMapping) const
+{
+	CvImprovementInfo& kMapping = GC.getImprovementInfo(eImprovementMapping);
+	if (kPlot.getTerrainType() != (TerrainTypes)kMapping.getBaseTerrain() && (TerrainTypes)kMapping.getBaseTerrain() != NO_TERRAIN)
+		return false;
+	if (kPlot.getFeatureType() != (FeatureTypes)kMapping.getBaseFeature() && (FeatureTypes)kMapping.getBaseFeature() != NO_FEATURE)
+		return false;
+	if (kMapping.isRequiresRiverSide() && !kPlot.isRiverSide())
+		return false;
+	if (kMapping.isRequiresFlatlands() && !kPlot.isFlatlands())
+		return false;
+	if (kMapping.isHillsMakesValid() && !kPlot.isHills())
+		return false;
+	if (kMapping.isReqCoastal() && !kPlot.isCoastalLand())
+		return false;
+	if (kMapping.isReqCoast() && (!kPlot.isWater() || !kPlot.isAdjacentToLand()))
+		return false;
+	if (kMapping.isReqOcean() && (kPlot.isAdjacentToLand()))
+		return false;
+	if (!(kMapping.getMinLatitude() == 0 && kMapping.getMaxLatitude() == 0))
+	{
+		if (kPlot.getLatitude() < kMapping.getMinLatitude() || kPlot.getLatitude() > kMapping.getMaxLatitude())
+			return false;
+	}
+	if (!(kMapping.getMinAreaSize() == 0 && kMapping.getMaxAreaSize() == 0))
+	{
+		if (kPlot.area()->getNumTiles() < kMapping.getMinAreaSize() || kPlot.area()->getNumTiles() > kMapping.getMaxAreaSize())
+			return false;
+	}
+	if (!(kMapping.getMinAreaProportion() == 0 && kMapping.getMaxAreaProportion() == 0))
+	{
+		int iAreaProportion = (kPlot.area()->getNumTiles() * 100) / GC.getMap().numPlots();
+		if (iAreaProportion < kMapping.getMinAreaProportion() || iAreaProportion > kMapping.getMaxAreaProportion())
+			return false;
+	}
+	if (kMapping.isSurroundedByBase())
+	{
+		FOR_EACH_ADJ_PLOT(kPlot)
+		{
+			if (pAdj->getTerrainType() != (TerrainTypes)kMapping.getBaseTerrain())
+				return false;
+			if (pAdj->getFeatureType() != (FeatureTypes)kMapping.getBaseFeature())
+				return false;
+		}
+	}
+	// unique for improvements
+	if (kMapping.isFreshWaterMakesValid() && !kPlot.isFreshWater() && !kPlot.isAdjacentFreshWater())
+		return false;
+	// ignoring bonuses for now. In dynamica bonuses will mostly start unrevealed so avoiding placing improvements on them could actually reveal them
+	if (kMapping.isNoFreshWater() && kPlot.isFreshWater()) // unused in vanilla
+		return false;
+	if (kMapping.isRequiresFeature() && !kPlot.isFeature())
+		return false;
+	if (kMapping.isWater() && !kPlot.isWater())
+		return false;
+	// also allowing placing upgraded improvements. Maybe the Ones Who Came Before Us upgraded theirs haha. 
+	return true;
+}
+
+int CvMapGenerator::getMappingWeight(CvPlot const& kPlot, FeatureTypes eFeatureMapping) const
+{
+	
+	CvFeatureInfo& kMapping = GC.getFeatureInfo(eFeatureMapping);
+	int iWeight = kMapping.getChanceMap();
+	if (kPlot.isRiver())
+		iWeight += kMapping.getWtRiver();
+	if (kPlot.isFlatlands())
+		iWeight -= kMapping.getWtHills();
+	else if (kPlot.isHills())
+		iWeight += kMapping.getWtHills();
+	if (kPlot.isCoastalLand())
+		iWeight += kMapping.getWtCoastal();
+	else if (kPlot.isWater() && kPlot.isAdjacentToLand())
+		iWeight += kMapping.getWtCoast();
+	else if (!kPlot.isAdjacentToLand())
+		iWeight += kMapping.getWtOcean();
+	iWeight += kMapping.getTerrainWeight((int)kPlot.getTerrainType());
+	iWeight += kMapping.getFeatureWeight((int)kPlot.getFeatureType());
+	FOR_EACH_ADJ_PLOT(kPlot)
+	{
+		iWeight += kMapping.getTerrainAdjWeight((int)pAdj->getTerrainType());
+		iWeight += kMapping.getFeatureAdjWeight((int)pAdj->getFeatureType());
+		if (pAdj->isHills())
+			iWeight += kMapping.getHillsAdjWeight();
+		else if (pAdj->isWater() && pAdj->isAdjacentToLand())
+			iWeight += kMapping.getCoastAdjWeight();
+	}
+	return iWeight;
+}
+
+int CvMapGenerator::getMappingWeight(CvPlot const& kPlot, TerrainTypes eTerrainMapping) const
+{
+	CvTerrainInfo& kMapping = GC.getTerrainInfo(eTerrainMapping);
+	int blah = 0;
+	if (kMapping.getBaseTerrain() == GC.getInfoTypeForString("TERRAIN_GRASS"))
+		blah = kMapping.getBaseFeature();
+	if (kMapping.getBaseFeatureWeight() > 0 && kPlot.getTerrainType() == GC.getInfoTypeForString("TERRAIN_GRASS") && !kPlot.isFeature())
+		int fart = 0;
+	int iWeight = kMapping.getChanceMap();
+	if (kPlot.isRiver())
+		iWeight += kMapping.getWtRiver();
+	else if (kPlot.isHills())
+		iWeight += kMapping.getWtHills();
+	if (kPlot.isCoastalLand())
+		iWeight += kMapping.getWtCoastal();
+	else if (kPlot.isWater() && kPlot.isAdjacentToLand())
+		iWeight += kMapping.getWtCoast();
+	else if (!kPlot.isAdjacentToLand())
+		iWeight += kMapping.getWtOcean();
+	iWeight += kMapping.getTerrainWeight((int)kPlot.getTerrainType());
+	// merk.msmfix
+	if (kPlot.getFeatureType() == kMapping.getBaseFeature())
+		iWeight += kMapping.getBaseFeatureWeight(); // end
+	//iWeight += kMapping.getFeatureWeight(kPlot.getFeatureType());
+	FOR_EACH_ADJ_PLOT(kPlot)
+	{
+		iWeight += kMapping.getTerrainAdjWeight((int)pAdj->getTerrainType());
+		// merk.msmfix
+		if (pAdj->getFeatureType() == kMapping.getBaseFeature())
+			iWeight += kMapping.getBaseFeatureAdjWeight();
+		//iWeight += kMapping.getFeatureWeight(pAdj->getFeatureType());
+		if (iWeight > 5)
+			int fart = 0;
+		if (pAdj->isHills())
+			iWeight += kMapping.getHillsAdjWeight();
+		else if (pAdj->isWater() && pAdj->isAdjacentToLand())
+			iWeight += kMapping.getCoastAdjWeight();
+	}
+	return iWeight;
+}
+
+int CvMapGenerator::getMappingWeight(CvPlot const& kPlot, ImprovementTypes eImprovementMapping) const
+{
+	CvImprovementInfo& kMapping = GC.getImprovementInfo(eImprovementMapping);
+	int iWeight = kMapping.getChanceMap();
+	if (kPlot.isRiver())
+		iWeight += kMapping.getWtRiver();
+	if (kPlot.isFlatlands())
+		iWeight -= kMapping.getWtHills();
+	else if (kPlot.isHills())
+		iWeight += kMapping.getWtHills();
+	if (kPlot.isCoastalLand())
+		iWeight += kMapping.getWtCoastal();
+	else if (kPlot.isWater() && kPlot.isAdjacentToLand())
+		iWeight += kMapping.getWtCoast();
+	else if (!kPlot.isAdjacentToLand())
+		iWeight += kMapping.getWtOcean();
+	iWeight += kMapping.getTerrainWeight((int)kPlot.getTerrainType());
+	iWeight += kMapping.getFeatureWeight((int)kPlot.getFeatureType());
+	FOR_EACH_ADJ_PLOT(kPlot)
+	{
+		iWeight += kMapping.getTerrainAdjWeight((int)pAdj->getTerrainType());
+		iWeight += kMapping.getFeatureAdjWeight((int)pAdj->getFeatureType());
+		if (pAdj->isHills())
+			iWeight += kMapping.getHillsAdjWeight();
+		else if (pAdj->isWater() && pAdj->isAdjacentToLand())
+			iWeight += kMapping.getCoastAdjWeight();
+	}
+	return iWeight;
+}
+// merk.msm end
 
 int CvMapGenerator::getRiverValueAtPlot(CvPlot const& kPlot) const // advc: const x2
 {
@@ -1120,3 +1674,4 @@ int CvMapGenerator::calculateNumBonusesToAdd(BonusTypes eBonus)
 	int iBonusCount = (iMult * (iFromTiles + rFromPlayers.round())) / 100;
 	return std::max(1, iBonusCount);
 }
+
