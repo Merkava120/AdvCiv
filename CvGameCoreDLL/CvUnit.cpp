@@ -2650,7 +2650,7 @@ bool CvUnit::canMoveInto(CvPlot const& kPlot, bool bAttack, bool bDeclareWar,
 
 	if (atPlot(&kPlot))
 		return false;
-	if (kPlot.isImpassable() && !canMoveImpassable()/*merk.promo1*/ && !isCanMoveImpassablePromotion())
+	if (kPlot.isImpassable() && !canMoveImpassable()/*merk.promo1*//* && !isCanMoveImpassablePromotion()*/)
 		return false;
 	if (m_pUnitInfo->isNoRevealMap() && willRevealAnyPlotFrom(kPlot))
 		return false;
@@ -6852,20 +6852,21 @@ bool CvUnit::canGainPromotion(PromotionTypes ePromotion, CvPlot* pPlot, CvUnit* 
 			if (kPro.getDomainModifierPercent((int)eLoopDomain) > 0 && pOtherUnit->getDomainType() != eLoopDomain)
 				return false;
 		}
-		if (kPro.getOpenAttack() > 0 && pPlot->isFeature())
-			return false;
-		if (kPro.getOpenDefense() > 0 && pPlot->isFeature())
-			return false;
-		if (kPro.getFlatlandsAttack() > 0 && !pPlot->isFlatlands())
-			return false;
-		if (kPro.getFlatlandsDefense() > 0 && !pPlot->isFlatlands())
-			return false;
-		if (kPro.getSeeInvisible() != pOtherUnit->getInvisibleType() && !(pOtherUnit->isInvisiblePromoted(kPro.getSeeInvisible())))
-			return false;
-		// doesn't make much sense to gain a promotion granting invisibility after combat with someone who can see it:
-		for (int p = 0; p < pOtherUnit->getNumSeeInvisibleTypes(); p++)
-			if (pOtherUnit->getSeeInvisibleType((int)p) == kPro.getInvisible() || pOtherUnit->isSeeInvisible(kPro.getInvisible()))
-				return false;
+		// related to merk.promo1
+		//if (kPro.getOpenAttack() > 0 && pPlot->isFeature())
+		//	return false;
+		//if (kPro.getOpenDefense() > 0 && pPlot->isFeature())
+		//	return false;
+		//if (kPro.getFlatlandsAttack() > 0 && !pPlot->isFlatlands())
+		//	return false;
+		//if (kPro.getFlatlandsDefense() > 0 && !pPlot->isFlatlands())
+		//	return false;
+		//if (kPro.getSeeInvisible() != pOtherUnit->getInvisibleType() && !(pOtherUnit->isInvisiblePromoted(kPro.getSeeInvisible())))
+		//	return false;
+		//// doesn't make much sense to gain a promotion granting invisibility after combat with someone who can see it:
+		//for (int p = 0; p < pOtherUnit->getNumSeeInvisibleTypes(); p++)
+		//	if (pOtherUnit->getSeeInvisibleType((int)p) == kPro.getInvisible() || pOtherUnit->isSeeInvisible(kPro.getInvisible()))
+		//		return false;
 	}
 	return true;
 }
@@ -8000,8 +8001,8 @@ int CvUnit::maxCombatStr(CvPlot const* pPlot, CvUnit const* pAttacker,
 				pCombatDetails->iHillsDefenseModifier = iExtraModifier;
 		}
 		// merk.promo1
-		else
-			iModifier += getFlatlandsDefenseModifier();
+		/*else
+			iModifier += getFlatlandsDefenseModifier();*/
 		// merk.promo1 end
 		if (pPlot->isFeature())
 		{
@@ -8014,7 +8015,7 @@ int CvUnit::maxCombatStr(CvPlot const* pPlot, CvUnit const* pAttacker,
 		{
 			iExtraModifier = terrainDefenseModifier(pPlot->getTerrainType());
 			iModifier += iExtraModifier;
-			iModifier += getOpenDefenseModifier(); // merk.promo1
+			//iModifier += getOpenDefenseModifier(); // merk.promo1
 			if (pCombatDetails != NULL)
 				pCombatDetails->iTerrainDefenseModifier = iExtraModifier;
 		}
@@ -8058,8 +8059,8 @@ int CvUnit::maxCombatStr(CvPlot const* pPlot, CvUnit const* pAttacker,
 				pCombatDetails->iHillsAttackModifier = iExtraModifier;
 		}
 		// merk.promo1
-		else
-			iTempModifier += -pAttacker->getFlatlandsAttackModifier();
+		//else
+			//iTempModifier += -pAttacker->getFlatlandsAttackModifier();
 		// merk.promo1 end
 		if (pAttackedPlot->isFeature())
 		{
@@ -8074,7 +8075,7 @@ int CvUnit::maxCombatStr(CvPlot const* pPlot, CvUnit const* pAttacker,
 			// merk.promo1: copy paste error?
 			//iModifier += iExtraModifier;
 			iTempModifier += iExtraModifier;
-			iTempModifier += -pAttacker->getOpenAttackModifier(); // merk.promo1
+			//iTempModifier += -pAttacker->getOpenAttackModifier(); // merk.promo1
 			if (pCombatDetails != NULL)
 				pCombatDetails->iTerrainAttackModifier = iExtraModifier;
 		}
@@ -8099,7 +8100,7 @@ int CvUnit::maxCombatStr(CvPlot const* pPlot, CvUnit const* pAttacker,
 				iExtraModifier = unitCombatModifier(pAttacker->getUnitCombatType());
 				iTempModifier += iExtraModifier;
 				// merk.promo1
-				iTempModifier += getUnitCombatDefenseModifier(pAttacker->getUnitCombatType());
+				//iTempModifier += getUnitCombatDefenseModifier(pAttacker->getUnitCombatType());
 				// merk.promo1 end
 				if (pCombatDetails != NULL)
 					pCombatDetails->iCombatModifierA = iExtraModifier;
@@ -8109,7 +8110,7 @@ int CvUnit::maxCombatStr(CvPlot const* pPlot, CvUnit const* pAttacker,
 				iExtraModifier = -pAttacker->unitCombatModifier(getUnitCombatType());
 				iTempModifier += iExtraModifier;
 				// merk.promo1
-				iTempModifier += pAttacker->getUnitCombatAttackModifier(getUnitCombatType());
+				//iTempModifier += pAttacker->getUnitCombatAttackModifier(getUnitCombatType());
 				// merk.promo1 end
 				if (pCombatDetails != NULL)
 					pCombatDetails->iCombatModifierT = iExtraModifier;
@@ -8881,10 +8882,10 @@ bool CvUnit::immuneToFirstStrikes() const
 	return (m_pUnitInfo->isFirstStrikeImmune() || getImmuneToFirstStrikesCount() > 0);
 }
 // merk.promo1, this turned out to be unnecessary lol
-bool CvUnit::canMoveImpassable() const
-{
-	return false;
-}
+//bool CvUnit::canMoveImpassable() const
+//{
+//	return false;
+//}
 // merk.promo1 end
 
 bool CvUnit::isNeverInvisible() const
@@ -8903,43 +8904,46 @@ bool CvUnit::isInvisible(TeamTypes eTeam, bool bDebug, bool bCheckCargo) const
 		return true;
 	if (bCheckCargo && isCargo())
 		return true;
-	// merk.promo1
-	// two ways to do this:
-	int iRule = GC.getDefineINT("MULTIPLE_INVISIBLES_RULE");
-	if (iRule == 0)
-	{
-		// Favor invisibility: if the unit has any invisible type that is not currently spotted, it's invisible
-		FOR_EACH_ENUM(Invisible)
-		{
-			if ((getInvisibleType() == eLoopInvisible || isInvisiblePromoted(eLoopInvisible))
-				&& !(getUnitInfo().isInvisibleRevealInOpen() && !getPlot().isFeature())
-				&& !(getPlot().isInvisibleVisible(eTeam, eLoopInvisible)))
-				return true;
-		}
-		// If made it through the whole loop
-		return false;
-	}
-	else if (iRule == 1)
-	{
-		// Favor SeeInvisibles. If any of the invisible types of the unit are visible, it is visible. 
-		bool bHasAtLeastOne = false;
-		FOR_EACH_ENUM(Invisible)
-		{
-			if ((getInvisibleType() == eLoopInvisible || isInvisiblePromoted(eLoopInvisible)))
-			{
-				bHasAtLeastOne = true;
-				if (getUnitInfo().isInvisibleRevealInOpen() && !getPlot().isFeature())
-					return false; // spotted
-				if (getPlot().isInvisibleVisible(eTeam, eLoopInvisible))
-					return false; // spotted
-			}
-		}
-		// If made it through the whole loop
-		return bHasAtLeastOne;
-	}
-	else
-		return false; // provides unintentional way to disable invisibility entirely
-	// merk.promo1 end
+	if (getInvisibleType() == NO_INVISIBLE)
+		return !getPlot().isInvisibleVisible(eTeam, getInvisibleType());
+	return false;
+	//// merk.promo1
+	//// two ways to do this:
+	//int iRule = GC.getDefineINT("MULTIPLE_INVISIBLES_RULE");
+	//if (iRule == 0)
+	//{
+	//	// Favor invisibility: if the unit has any invisible type that is not currently spotted, it's invisible
+	//	FOR_EACH_ENUM(Invisible)
+	//	{
+	//		if ((getInvisibleType() == eLoopInvisible || isInvisiblePromoted(eLoopInvisible))
+	//			&& !(getUnitInfo().isInvisibleRevealInOpen() && !getPlot().isFeature())
+	//			&& !(getPlot().isInvisibleVisible(eTeam, eLoopInvisible)))
+	//			return true;
+	//	}
+	//	// If made it through the whole loop
+	//	return false;
+	//}
+	//else if (iRule == 1)
+	//{
+	//	// Favor SeeInvisibles. If any of the invisible types of the unit are visible, it is visible. 
+	//	bool bHasAtLeastOne = false;
+	//	FOR_EACH_ENUM(Invisible)
+	//	{
+	//		if ((getInvisibleType() == eLoopInvisible || isInvisiblePromoted(eLoopInvisible)))
+	//		{
+	//			bHasAtLeastOne = true;
+	//			if (getUnitInfo().isInvisibleRevealInOpen() && !getPlot().isFeature())
+	//				return false; // spotted
+	//			if (getPlot().isInvisibleVisible(eTeam, eLoopInvisible))
+	//				return false; // spotted
+	//		}
+	//	}
+	//	// If made it through the whole loop
+	//	return bHasAtLeastOne;
+	//}
+	//else
+	//	return false; // provides unintentional way to disable invisibility entirely
+	//// merk.promo1 end
 }
 
 
@@ -11220,7 +11224,7 @@ void CvUnit::setHasPromotion(PromotionTypes ePromotion, bool bNewValue)
 	changeKamikazePercent((GC.getInfo(ePromotion).getKamikazePercent()) * iChange);
 	changeCargoSpace(GC.getInfo(ePromotion).getCargoChange() * iChange);
 	// merk.promo1
-	if (GC.getInfo(ePromotion).getSeeInvisible() != NO_INVISIBLE)
+	/*if (GC.getInfo(ePromotion).getSeeInvisible() != NO_INVISIBLE)
 	{
 		FOR_EACH_ENUM(Invisible)
 		{
@@ -11251,7 +11255,7 @@ void CvUnit::setHasPromotion(PromotionTypes ePromotion, bool bNewValue)
 	changeOpenAttackModifier(GC.getInfo(ePromotion).getOpenAttack() * iChange);
 	changeOpenDefenseModifier(GC.getInfo(ePromotion).getOpenDefense() * iChange);
 	changeFlatlandsAttackModifier(GC.getInfo(ePromotion).getFlatlandsAttack() * iChange);
-	changeFlatlandsDefenseModifier(GC.getInfo(ePromotion).getFlatlandsDefense() * iChange);
+	changeFlatlandsDefenseModifier(GC.getInfo(ePromotion).getFlatlandsDefense() * iChange);*/
 	// merk.promo1 end
 	
 
@@ -11277,14 +11281,14 @@ void CvUnit::setHasPromotion(PromotionTypes ePromotion, bool bNewValue)
 
 	FOR_EACH_ENUM(UnitCombat)
 	{
-		// merk.promo1
-		if (GC.getInfo(ePromotion).isUnitCombatAttack())
-			changeUnitCombatAttackModifier(eLoopUnitCombat, GC.getInfo(ePromotion).getUnitCombatModifierPercent(eLoopUnitCombat) * iChange);
-		else if (GC.getInfo(ePromotion).isUnitCombatDefense())
-			changeUnitCombatDefenseModifier(eLoopUnitCombat, GC.getInfo(ePromotion).getUnitCombatModifierPercent(eLoopUnitCombat) * iChange);
-		else // merk.promo1 end
-			changeExtraUnitCombatModifier(eLoopUnitCombat,
-				GC.getInfo(ePromotion).getUnitCombatModifierPercent(eLoopUnitCombat) * iChange);
+		//// merk.promo1
+		//if (GC.getInfo(ePromotion).isUnitCombatAttack())
+		//	changeUnitCombatAttackModifier(eLoopUnitCombat, GC.getInfo(ePromotion).getUnitCombatModifierPercent(eLoopUnitCombat) * iChange);
+		//else if (GC.getInfo(ePromotion).isUnitCombatDefense())
+		//	changeUnitCombatDefenseModifier(eLoopUnitCombat, GC.getInfo(ePromotion).getUnitCombatModifierPercent(eLoopUnitCombat) * iChange);
+		//else // merk.promo1 end
+		changeExtraUnitCombatModifier(eLoopUnitCombat,
+			GC.getInfo(ePromotion).getUnitCombatModifierPercent(eLoopUnitCombat) * iChange);
 	}
 
 	FOR_EACH_ENUM(Domain)
@@ -13117,59 +13121,59 @@ int CvUnit::LFGgetDefensiveValueAdjustment() const
 }
 // merk.promo1 begin
 
-void CvUnit::changeDoubleMoveOpen(int iChange)
-{
-	m_iDoubleMoveOpenCount += iChange;
-}
-
-void CvUnit::changeDoubleMoveFlatlands(int iChange)
-{
-	m_iDoubleMoveFlatlandsCount += iChange;
-}
-
-void CvUnit::changeOpenAttackModifier(int iChange)
-{
-	m_iOpenAttackModifier += iChange;
-}
-
-void CvUnit::changeOpenDefenseModifier(int iChange)
-{
-	m_iOpenDefenseModifier += iChange;
-}
-
-void CvUnit::changeFlatlandsAttackModifier(int iChange)
-{
-	m_iFlatlandsAttackModifier += iChange;
-}
-
-void CvUnit::changeFlatlandsDefenseModifier(int iChange)
-{
-	m_iFlatlandsDefenseModifier += iChange;
-}
-
-void CvUnit::changeCanMoveImpassablePromotion(int iChange)
-{
-	m_iCanMoveImpassableCount += iChange;
-}
-
-void CvUnit::changeSeeInvisiblePromoted(InvisibleTypes eInvisible, int iChange)
-{
-	m_aeiSeeInvisibles.add(eInvisible, iChange);
-}
-
-void CvUnit::changeInvisiblePromoted(InvisibleTypes eInvisible, int iChange)
-{
-	m_aeiInvisibles.add(eInvisible, iChange);
-}
-
-void CvUnit::changeUnitCombatAttackModifier(UnitCombatTypes eUnitCombat, int iChange)
-{
-	m_aeiUnitCombatAttackMods.add(eUnitCombat, iChange);
-}
-
-void CvUnit::changeUnitCombatDefenseModifier(UnitCombatTypes eUnitCombat, int iChange)
-{
-	m_aeiUnitCombatDefenseMods.add(eUnitCombat, iChange);
-}
+//void CvUnit::changeDoubleMoveOpen(int iChange)
+//{
+//	m_iDoubleMoveOpenCount += iChange;
+//}
+//
+//void CvUnit::changeDoubleMoveFlatlands(int iChange)
+//{
+//	m_iDoubleMoveFlatlandsCount += iChange;
+//}
+//
+//void CvUnit::changeOpenAttackModifier(int iChange)
+//{
+//	m_iOpenAttackModifier += iChange;
+//}
+//
+//void CvUnit::changeOpenDefenseModifier(int iChange)
+//{
+//	m_iOpenDefenseModifier += iChange;
+//}
+//
+//void CvUnit::changeFlatlandsAttackModifier(int iChange)
+//{
+//	m_iFlatlandsAttackModifier += iChange;
+//}
+//
+//void CvUnit::changeFlatlandsDefenseModifier(int iChange)
+//{
+//	m_iFlatlandsDefenseModifier += iChange;
+//}
+//
+//void CvUnit::changeCanMoveImpassablePromotion(int iChange)
+//{
+//	m_iCanMoveImpassableCount += iChange;
+//}
+//
+//void CvUnit::changeSeeInvisiblePromoted(InvisibleTypes eInvisible, int iChange)
+//{
+//	m_aeiSeeInvisibles.add(eInvisible, iChange);
+//}
+//
+//void CvUnit::changeInvisiblePromoted(InvisibleTypes eInvisible, int iChange)
+//{
+//	m_aeiInvisibles.add(eInvisible, iChange);
+//}
+//
+//void CvUnit::changeUnitCombatAttackModifier(UnitCombatTypes eUnitCombat, int iChange)
+//{
+//	m_aeiUnitCombatAttackMods.add(eUnitCombat, iChange);
+//}
+//
+//void CvUnit::changeUnitCombatDefenseModifier(UnitCombatTypes eUnitCombat, int iChange)
+//{
+//	m_aeiUnitCombatDefenseMods.add(eUnitCombat, iChange);
+//}
 
 // merk.promo1 end
