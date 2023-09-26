@@ -89,7 +89,7 @@ int CvCivilizationInfo::getActionSoundScriptId() const
 // merk.channels begin
 bool CvCivilizationInfo::hasChannel(int iChannel) const
 {
-	if (iChannel <= 0)
+	if (iChannel < 0)
 		return true;
 	int iChannels = getChannels();
 	while (iChannels > 0)
