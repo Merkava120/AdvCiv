@@ -9802,21 +9802,24 @@ int CvUnit::getTotalRangeDefense() const
 {
 	int iDefense = getUnitInfo().getRangeDefense();
 	if (plot()->isHills())
-		iDefense += getUnitInfo().getHillsRangeDefense();
-	if (plot()->isFeature())
+		iDefense = getUnitInfo().getHillsRangeDefense();
+	else
 	{
-		// make sure feature is not harmful
-		if (GC.getFeatureInfo(plot()->getFeatureType()).getTurnDamage() <= 0)
-			iDefense += getUnitInfo().getFeatureRangeDefense();
+		if (plot()->isFeature())
+		{
+			// make sure feature is not harmful
+			if (GC.getFeatureInfo(plot()->getFeatureType()).getTurnDamage() <= 0)
+				iDefense += getUnitInfo().getFeatureRangeDefense();
+		}
+		if (plot()->isCity())
+			iDefense += getUnitInfo().getCityRangeDefense();
+		if (!m_bActuallyMoved)
+			iDefense += getUnitInfo().getMotionlessRangeDefense();
+		if (getFortifyTurns() >= GC.getDefineINT("MAX_FORTIFY_TURNS"))
+			iDefense += getUnitInfo().getFortifyRangeDefense();
+		if (getDamage() >= 0)
+			iDefense += getUnitInfo().getDamagedRangeDefense();
 	}
-	if (plot()->isCity())
-		iDefense += getUnitInfo().getCityRangeDefense();
-	if (!m_bActuallyMoved)
-		iDefense += getUnitInfo().getMotionlessRangeDefense();
-	if (getFortifyTurns() >= GC.getDefineINT("MAX_FORTIFY_TURNS"))
-		iDefense += getUnitInfo().getFortifyRangeDefense();
-	if (getDamage() >= 0)
-		iDefense += getUnitInfo().getDamagedRangeDefense();
 	return iDefense;
 }
 
@@ -9824,21 +9827,24 @@ int CvUnit::getTotalRangeBlock() const
 {
 	int iBlock = getUnitInfo().getRangeDamageBlock();
 	if (plot()->isHills())
-		iBlock += getUnitInfo().getHillsRangeBlock();
-	if (plot()->isFeature())
+		iBlock = getUnitInfo().getHillsRangeBlock();
+	else
 	{
-		// make sure feature is not harmful
-		if (GC.getFeatureInfo(plot()->getFeatureType()).getTurnDamage() <= 0)
-			iBlock += getUnitInfo().getFeatureRangeBlock();
+		if (plot()->isFeature())
+		{
+			// make sure feature is not harmful
+			if (GC.getFeatureInfo(plot()->getFeatureType()).getTurnDamage() <= 0)
+				iBlock += getUnitInfo().getFeatureRangeBlock();
+		}
+		if (plot()->isCity())
+			iBlock += getUnitInfo().getCityRangeBlock();
+		if (!m_bActuallyMoved)
+			iBlock += getUnitInfo().getMotionlessRangeBlock();
+		if (getFortifyTurns() >= GC.getDefineINT("MAX_FORTIFY_TURNS"))
+			iBlock += getUnitInfo().getFortifyRangeBlock();
+		if (getDamage() >= 0)
+			iBlock += getUnitInfo().getDamagedRangeBlock();
 	}
-	if (plot()->isCity())
-		iBlock += getUnitInfo().getCityRangeBlock();
-	if (!m_bActuallyMoved)
-		iBlock += getUnitInfo().getMotionlessRangeBlock();
-	if (getFortifyTurns() >= GC.getDefineINT("MAX_FORTIFY_TURNS"))
-		iBlock += getUnitInfo().getFortifyRangeBlock();
-	if (getDamage() >= 0)
-		iBlock += getUnitInfo().getDamagedRangeBlock();
 	return iBlock;
 }
 
@@ -11658,7 +11664,8 @@ bool CvUnit::canRangeStrikeAt(const CvPlot* pPlot, int iX, int iY) const
 		could be used instead of getFacingDirection, but a strike at range 2 should
 		arguably represent indirect fire. */
 	// merk.rcb: indirect fire now has a tag. merk.ftac: switched away from facing direction
-	if (!pPlot->canSeePlot(pTargetPlot, getTeam(), airRange(), GC.getMap().directionXY(*pPlot, *pTargetPlot)))
+	// battalica: switched back to facing direction. Other one throwing weird asserts and giving weird results
+	if (!pPlot->canSeePlot(pTargetPlot, getTeam(), airRange(), getFacingDirection(true)))
 		return getUnitInfo().isIndirectAttack();
 
 	return true;
