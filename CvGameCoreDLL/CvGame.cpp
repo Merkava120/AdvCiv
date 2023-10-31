@@ -7342,6 +7342,8 @@ void CvGame::createAnimals()
 					// can make it more likely to choose this animal if the feature native matches. 
 					if (kUnit.getFeatureNative(pPlot->getFeatureType()))
 						iValue += kUnit.getFeatureNativeWeight(); // merk.rasem replaced global define
+					else if (kUnit.isOpenNative() && pPlot->getFeatureType() == NO_FEATURE)
+						iValue += kUnit.getFeatureNativeWeight(); // merk.rasm allowing open terrain animals to have weights too
 					if (iValue > iBestValue)
 					{
 						eBestUnit = eLoopUnit;
@@ -7578,8 +7580,8 @@ int CvGame::getWaterTemp(const CvPlot& kPlot)
 	int iLatitude = kPlot.getLatitude();
 	int iTempRange = iEquatorTemp - iPoleTemp;
 	int iLatitudeRange = iPoleLatitude - iEquatorLatitude;
-	int iLatitudePercent = 100 * iLatitude / iLatitudeRange;
-	int iWaterTemp = (iLatitudePercent * iTempRange) / 100;
+	int iLatitudePercent = /*merk.rasm*/ 100 - (100 * iLatitude / iLatitudeRange);
+	int iWaterTemp = (iLatitudePercent * iTempRange) / 100 /*merk.rasm*/ + iPoleTemp;
 	// merk.rasm
 	if (kPlot.isFeature())
 		iWaterTemp += GC.getFeatureInfo(kPlot.getFeatureType()).getTempAdd(); // merk.rasm end
