@@ -92,7 +92,7 @@ public:
 	DllExport CvInterface& getInterface();
 	DllExport CvInterface* getInterfacePtr();
 
-	CvMap& getMap() const { return *m_map; } // advc.inl: was "getMapINLINE"
+	CvMap& getMap() const { return *m_map; } // advc.inl: was "getMap"
 	// advc.003u: return type was CvGameAI&
 	CvGame& getGame() const // advc.inl: was "getGameINLINE
 	{	/*	Can't be helped; this function has to be inlined,

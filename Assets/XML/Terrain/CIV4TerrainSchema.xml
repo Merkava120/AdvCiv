@@ -545,6 +545,13 @@
 	<ElementType name="iDefenseModifier" content="textOnly" dt:type="int"/>
 	<ElementType name="iPillageGold" content="textOnly" dt:type="int"/>
 	<ElementType name="bOutsideBorders" content="textOnly" dt:type="boolean"/>
+	<!-- merkava120 super forts merge -->
+	<ElementType name="iCulture" content="textOnly" dt:type="int"/>
+	<ElementType name="iCultureRange" content="textOnly" dt:type="int"/>
+	<ElementType name="iVisibilityChange" content="textOnly" dt:type="int"/>
+	<ElementType name="bBombardable" content="textOnly" dt:type="boolean"/>
+	<ElementType name="bUpgradeRequiresFortify" content="textOnly" dt:type="boolean"/>
+	<!-- super forts end -->
 	<ElementType name="iAdvancedStartCost" content="textOnly" dt:type="int"/>
 	<ElementType name="iAdvancedStartRemoveCost" content="textOnly" dt:type="int"/>
 	<ElementType name="iAdvancedStartCostIncrease" content="textOnly" dt:type="int"/>
@@ -605,6 +612,15 @@
 		<element type="iHappiness"/>
 		<element type="iPillageGold"/>
 		<element type="bOutsideBorders"/>
+		<!-- merkava120 super forts begin -->
+		<element type="iCulture" minOccurs="0"/>
+		<element type="iCultureRange" minOccurs="0"/>
+		<element type="iVisibilityChange" minOccurs="0"/>
+		<element type="iSeeFrom" minOccurs="0"/>
+		<element type="iUnique" minOccurs="0"/>
+		<element type="bBombardable" minOccurs="0"/>
+		<element type="bUpgradeRequiresFortify" minOccurs="0"/>
+		<!-- merkava120 super forts end -->
 		<element type="TerrainMakesValids"/>
 		<element type="FeatureMakesValids"/>
 		<!-- merk.msm -->

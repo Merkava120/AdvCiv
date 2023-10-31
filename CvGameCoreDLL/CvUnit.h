@@ -176,7 +176,10 @@ public:
 
 	bool canAirStrike(CvPlot const& kPlot) const; // (advc.004c: was protected)
 
-	CvCity* bombardTarget(CvPlot const& kFrom) const;														// Exposed to Python
+	CvCity* bombardTarget(CvPlot const& kFrom) const;
+	// Super Forts begin *bombard*
+	CvPlot* bombardImprovementTarget(const CvPlot* pPlot) const;
+	// Super Forts end														// Exposed to Python
 	bool canBombard(CvPlot const& kFrom) const;																// Exposed to Python
 	int damageToBombardTarget(CvPlot const& kFrom) const; // advc
 	bool bombard();
@@ -558,7 +561,11 @@ public:
 	{
 		return m_pUnitInfo->isIgnoreBuildingDefense();
 	}
-	bool canMoveImpassable() const;		// merk.promo1														// Exposed to Python
+	bool canMoveImpassable() const
+	{
+		return m_pUnitInfo->canMoveImpassable();
+	}
+	//bool canMoveImpassable() const;		// merk.promo1														// Exposed to Python
 	bool canMoveAllTerrain() const																			// Exposed to Python
 	{
 		return m_pUnitInfo->isCanMoveAllTerrain();
@@ -659,8 +666,8 @@ public:
 	DllExport int getHotKeyNumber();																													// Exposed to Python
 	void setHotKeyNumber(int iNewValue);																											// Exposed to Python
 	
-	DllExport int getX() const { return m_iX; } // advc.inl: was "getX_INLINE"								// Exposed to Python
-	DllExport int getY() const { return m_iY; } // advc.inl: was "getY_INLINE"								// Exposed to Python
+	DllExport int getX() const { return m_iX; } // advc.inl: was "getX"								// Exposed to Python
+	DllExport int getY() const { return m_iY; } // advc.inl: was "getY"								// Exposed to Python
 	void setXY(int iX, int iY, bool bGroup = false, bool bUpdate = true, bool bShow = false,				// Exposed to Python
 			bool bCheckPlotVisible = false);
 
@@ -858,7 +865,7 @@ public:
 	void changeKamikazePercent(int iChange);
 
 	// merk.promo1
-	bool isSeeInvisible(InvisibleTypes eInvisible) const { return m_aeiSeeInvisibles.get(eInvisible) > 0; }
+	/*bool isSeeInvisible(InvisibleTypes eInvisible) const { return m_aeiSeeInvisibles.get(eInvisible) > 0; }
 	bool isInvisiblePromoted(InvisibleTypes eInvisible) const { return m_aeiInvisibles.get(eInvisible) > 0; }
 	bool isDoubleMoveOpen() const { return m_iDoubleMoveOpenCount > 0; }
 	bool isDoubleMoveFlatlands() const { return m_iDoubleMoveFlatlandsCount > 0; }
@@ -879,7 +886,7 @@ public:
 	int getUnitCombatAttackModifier(UnitCombatTypes eUnitCombat) const { return m_aeiUnitCombatAttackMods.get(eUnitCombat); }
 	int getUnitCombatDefenseModifier(UnitCombatTypes eUnitCombat) const { return m_aeiUnitCombatDefenseMods.get(eUnitCombat); }
 	void changeUnitCombatAttackModifier(UnitCombatTypes eUnitCombat, int iChange);
-	void changeUnitCombatDefenseModifier(UnitCombatTypes eUnitCombat, int iChange);
+	void changeUnitCombatDefenseModifier(UnitCombatTypes eUnitCombat, int iChange);*/
 
 	// merk.promo1 end
 	
@@ -928,7 +935,7 @@ public:
 	void setBlockading(bool bNewValue);
 	void collectBlockadeGold();
 
-	DllExport PlayerTypes getOwner() const // advc.inl: was "getOwnerINLINE"								// Exposed to Python
+	DllExport PlayerTypes getOwner() const // advc.inl: was "getOwner"								// Exposed to Python
 	{
 		return m_eOwner;
 	}
@@ -1230,7 +1237,7 @@ protected:
 	DirectionTypes m_eFacingDirection;
 	int m_iImmobileTimer;
 	// merk.promo1
-	ListEnumMap<InvisibleTypes, int> m_aeiSeeInvisibles;
+	/*ListEnumMap<InvisibleTypes, int> m_aeiSeeInvisibles;
 	ListEnumMap<InvisibleTypes, int> m_aeiInvisibles;
 	int m_iDoubleMoveOpenCount;
 	int m_iDoubleMoveFlatlandsCount;
@@ -1240,7 +1247,7 @@ protected:
 	int m_iFlatlandsDefenseModifier;
 	int m_iCanMoveImpassableCount;
 	ListEnumMap<UnitCombatTypes, int> m_aeiUnitCombatAttackMods;
-	ListEnumMap<UnitCombatTypes, int> m_aeiUnitCombatDefenseMods;
+	ListEnumMap<UnitCombatTypes, int> m_aeiUnitCombatDefenseMods;*/
 	// merk.promo1 end
 	int m_iAlertState; // merk.ac
 	int m_iAlertFlagRaised; // merk.ac

@@ -29,6 +29,7 @@
 			<iFirstFreeTechs>0</iFirstFreeTechs>
 			<iAsset>8</iAsset>
 			<iPower>0</iPower>
+			<iChannel>1</iChannel>
 			<bRepeat>0</bRepeat>
 			<bTrade>1</bTrade>
 			<bDisable>0</bDisable>

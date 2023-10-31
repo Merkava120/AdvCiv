@@ -2650,7 +2650,7 @@ bool CvUnit::canMoveInto(CvPlot const& kPlot, bool bAttack, bool bDeclareWar,
 
 	if (atPlot(&kPlot))
 		return false;
-	if (kPlot.isImpassable() && !canMoveImpassable()/*merk.promo1*/ && !isCanMoveImpassablePromotion())
+	if (kPlot.isImpassable() && !canMoveImpassable()/*merk.promo1*//* && !isCanMoveImpassablePromotion()*/)
 		return false;
 	if (m_pUnitInfo->isNoRevealMap() && willRevealAnyPlotFrom(kPlot))
 		return false;
@@ -4180,6 +4180,21 @@ bool CvUnit::canAirliftAt(const CvPlot* pPlot, int iX, int iY) const
 		return false;
 
 	CvPlot const& kTargetPlot = GC.getMap().getPlot(iX, iY);
+	// Super Forts begin *airlift*
+	if (kTargetPlot.getTeam() != NO_TEAM)
+	{
+		if (kTargetPlot.getTeam() == getTeam() || GET_TEAM(kTargetPlot.getTeam()).isVassal(getTeam()))
+		{
+			if (kTargetPlot.getImprovementType() != NO_IMPROVEMENT)
+			{
+				if (GC.getImprovementInfo(kTargetPlot.getImprovementType()).isActsAsCity())
+				{
+					return true;
+				}
+			}
+		}
+	}
+	// Super Forts end
 
 	// canMoveInto use to be here
 
@@ -4211,7 +4226,20 @@ bool CvUnit::airlift(int iX, int iY)
 	FAssert(pTargetCity != NULL);
 	FAssert(pCity != pTargetCity);
 
+	// Super Forts begin *airlift* - added if statement to allow airlifts to plots that aren't cities
+	if (pTargetPlot->isCity())
+	{
+		pTargetCity = pTargetPlot->getPlotCity();
+		FAssert(pTargetCity != NULL);
+		FAssert(pCity != pTargetCity);
+
+		if (pTargetCity->getMaxAirlift() == 0)
+		{
+			pTargetCity->setAirliftTargeted(true);
+		}
+	}
 	pCity->changeCurrAirlift(1);
+	// Super Forts end
 	if (pTargetCity->getMaxAirlift() == 0)
 		pTargetCity->setAirliftTargeted(true);
 
@@ -4957,6 +4985,40 @@ CvCity* CvUnit::bombardTarget(CvPlot const& kFrom) const
 	return pBestCity;
 }
 
+// Super Forts begin *bombard*
+CvPlot* CvUnit::bombardImprovementTarget(const CvPlot* pPlot) const
+{
+	int iBestValue = MAX_INT;
+	CvPlot* pBestPlot = NULL;
+
+	for (int iI = 0; iI < NUM_DIRECTION_TYPES; iI++)
+	{
+		CvPlot* pLoopPlot = plotDirection(pPlot->getX(), pPlot->getY(), ((DirectionTypes)iI));
+
+		if (pLoopPlot != NULL)
+		{
+			if (pLoopPlot->isBombardable(this))
+			{
+				int iValue = pLoopPlot->getDefenseDamage();
+
+				// always prefer cities we are at war with
+				if (isEnemy(pLoopPlot->getTeam(), *pPlot))
+				{
+					iValue *= 128;
+				}
+
+				if (iValue < iBestValue)
+				{
+					iBestValue = iValue;
+					pBestPlot = pLoopPlot;
+				}
+			}
+		}
+	}
+
+	return pBestPlot;
+}
+// Super Forts end
 
 bool CvUnit::canBombard(CvPlot const& kFrom) const
 {
@@ -4969,7 +5031,10 @@ bool CvUnit::canBombard(CvPlot const& kFrom) const
 	if (isCargo())
 		return false;
 
-	if (bombardTarget(kFrom) == NULL)
+	// Super Forts begin *bombard*
+	if (bombardTarget(kFrom) == NULL && bombardImprovementTarget(&kFrom) == NULL)
+	//if (bombardTarget(pPlot) == NULL) - Original Code
+	// Super Forts end
 		return false;
 
 	return true;
@@ -5009,6 +5074,29 @@ bool CvUnit::bombard()
 		return false;
 
 	CvCity* pBombardCity = bombardTarget(getPlot());
+	// Super Forts begin *bombard*
+	//FAssertMsg(pBombardCity != NULL, "BombardCity is not assigned a valid value"); - Removed for Super Forts
+
+	CvPlot* pTargetPlot;
+	//CvPlot* pTargetPlot = pBombardCity->plot(); - Original Code
+	if(pBombardCity != NULL)
+	{
+		pTargetPlot = pBombardCity->plot();
+	}
+	else
+	{
+		pTargetPlot = bombardImprovementTarget(plot());
+		// merkava120 super forts: putting fort bombardment from super forts here
+		pTargetPlot->changeDefenseDamage(bombardRate());
+		CvWString szBuffer = gDLL->getText("TXT_KEY_MISC_DEFENSES_IN_CITY_REDUCED_TO", GC.getImprovementInfo(pTargetPlot->getImprovementType()).getText(),
+				(GC.getImprovementInfo(pTargetPlot->getImprovementType()).getDefenseModifier() - pTargetPlot->getDefenseDamage()), GET_PLAYER(getOwner()).getNameKey());
+			gDLL->getInterfaceIFace()->addMessage(pTargetPlot->getOwner(), false, GC.getEVENT_MESSAGE_TIME(), szBuffer, "AS2D_BOMBARDED", MESSAGE_TYPE_INFO, getButton(), (ColorTypes)GC.getInfoTypeForString("COLOR_RED"), pTargetPlot->getX(), pTargetPlot->getY(), true, true);
+
+		szBuffer = gDLL->getText("TXT_KEY_MISC_YOU_REDUCE_CITY_DEFENSES", getNameKey(), GC.getImprovementInfo(pTargetPlot->getImprovementType()).getText(),
+				(GC.getImprovementInfo(pTargetPlot->getImprovementType()).getDefenseModifier() - pTargetPlot->getDefenseDamage()));
+			gDLL->getInterfaceIFace()->addMessage(getOwner(), true, GC.getEVENT_MESSAGE_TIME(), szBuffer, "AS2D_BOMBARD", MESSAGE_TYPE_INFO, getButton(), (ColorTypes)GC.getInfoTypeForString("COLOR_GREEN"), pTargetPlot->getX(), pTargetPlot->getY());
+	}
+	// Super Forts end
 	if (!isEnemy(pBombardCity->getTeam())) // (advc: simplified)
 	{
 		//getGroup()->groupDeclareWar(pTargetPlot, true); // Disabled by K-Mod
@@ -5018,6 +5106,7 @@ bool CvUnit::bombard()
 	bool bFirstBombardment = !pBombardCity->isBombarded(); // advc.004g
 	// advc: Moved into subroutine
 	pBombardCity->changeDefenseModifier(-std::max(0, damageToBombardTarget(getPlot())));
+	
 	setMadeAttack(true);
 	changeMoves(GC.getMOVE_DENOMINATOR());
 
@@ -5041,12 +5130,19 @@ bool CvUnit::bombard()
 
 	if (getPlot().isActiveVisible(false))
 	{
-		CvUnit *pDefender = pBombardCity->getPlot().getBestDefender(NO_PLAYER, getOwner(), this, true);
+		
+		// Super Forts begin *bombard*
+		CvUnit *pDefender = pTargetPlot->getBestDefender(NO_PLAYER, getOwner(), this, true);
+		//CvUnit *pDefender = pBombardCity->plot()->getBestDefender(NO_PLAYER, getOwner(), this, true); - Original Code
+		// Super Forts end
 		// Bombard entity mission
 		CvMissionDefinition kDefiniton;
 		kDefiniton.setMissionTime(GC.getInfo(MISSION_BOMBARD).getTime() * gDLL->getSecsPerTurn());
 		kDefiniton.setMissionType(MISSION_BOMBARD);
-		kDefiniton.setPlot(pBombardCity->plot());
+		// Super Forts begin *bombard*
+		kDefiniton.setPlot(pTargetPlot);
+		//kDefiniton.setPlot(pBombardCity->plot()); - Original Code
+		// Super Forts end
 		kDefiniton.setUnit(BATTLE_UNIT_ATTACKER, this);
 		kDefiniton.setUnit(BATTLE_UNIT_DEFENDER, pDefender);
 		gDLL->getEntityIFace()->AddMission(&kDefiniton);
@@ -6662,6 +6758,18 @@ bool CvUnit::build(BuildTypes eBuild)
 	finishMoves(); // needs to be at bottom because movesLeft() can affect workRate()...
 	if (bFinished)
 	{
+		// Super Forts begin *culture*
+		if (GC.getBuildInfo(eBuild).getImprovement() != NO_IMPROVEMENT)
+		{
+			if(GC.getImprovementInfo((ImprovementTypes)GC.getBuildInfo(eBuild).getImprovement()).isActsAsCity())
+			{
+				if(plot()->getOwner() == NO_PLAYER)
+				{
+					plot()->setOwner(getOwner(),true,true);
+				}
+			}
+		}
+		// Super Forts end
 		if (GC.getInfo(eBuild).isKill())
 			kill(true);
 	}
@@ -6852,20 +6960,21 @@ bool CvUnit::canGainPromotion(PromotionTypes ePromotion, CvPlot* pPlot, CvUnit* 
 			if (kPro.getDomainModifierPercent((int)eLoopDomain) > 0 && pOtherUnit->getDomainType() != eLoopDomain)
 				return false;
 		}
-		if (kPro.getOpenAttack() > 0 && pPlot->isFeature())
-			return false;
-		if (kPro.getOpenDefense() > 0 && pPlot->isFeature())
-			return false;
-		if (kPro.getFlatlandsAttack() > 0 && !pPlot->isFlatlands())
-			return false;
-		if (kPro.getFlatlandsDefense() > 0 && !pPlot->isFlatlands())
-			return false;
-		if (kPro.getSeeInvisible() != pOtherUnit->getInvisibleType() && !(pOtherUnit->isInvisiblePromoted(kPro.getSeeInvisible())))
-			return false;
-		// doesn't make much sense to gain a promotion granting invisibility after combat with someone who can see it:
-		for (int p = 0; p < pOtherUnit->getNumSeeInvisibleTypes(); p++)
-			if (pOtherUnit->getSeeInvisibleType((int)p) == kPro.getInvisible() || pOtherUnit->isSeeInvisible(kPro.getInvisible()))
-				return false;
+		// related to merk.promo1
+		//if (kPro.getOpenAttack() > 0 && pPlot->isFeature())
+		//	return false;
+		//if (kPro.getOpenDefense() > 0 && pPlot->isFeature())
+		//	return false;
+		//if (kPro.getFlatlandsAttack() > 0 && !pPlot->isFlatlands())
+		//	return false;
+		//if (kPro.getFlatlandsDefense() > 0 && !pPlot->isFlatlands())
+		//	return false;
+		//if (kPro.getSeeInvisible() != pOtherUnit->getInvisibleType() && !(pOtherUnit->isInvisiblePromoted(kPro.getSeeInvisible())))
+		//	return false;
+		//// doesn't make much sense to gain a promotion granting invisibility after combat with someone who can see it:
+		//for (int p = 0; p < pOtherUnit->getNumSeeInvisibleTypes(); p++)
+		//	if (pOtherUnit->getSeeInvisibleType((int)p) == kPro.getInvisible() || pOtherUnit->isSeeInvisible(kPro.getInvisible()))
+		//		return false;
 	}
 	return true;
 }
@@ -7565,7 +7674,16 @@ bool CvUnit::isHuman() const
 
 int CvUnit::visibilityRange() const
 {
-	return (GC.getDefineINT(CvGlobals::UNIT_VISIBILITY_RANGE) + getExtraVisibilityRange());
+	// Super Forts begin *vision*
+	int iImprovementVisibilityChange = 0;
+	if(plot()->getImprovementType() != NO_IMPROVEMENT)
+	{
+		iImprovementVisibilityChange = GC.getImprovementInfo(plot()->getImprovementType()).getVisibilityChange();
+	}
+	return (GC.getDefineINT("UNIT_VISIBILITY_RANGE") + getExtraVisibilityRange() + iImprovementVisibilityChange);
+	// Super Forts end
+	/* Original
+	return (GC.getDefineINT("UNIT_VISIBILITY_RANGE") + getExtraVisibilityRange()); */
 }
 
 
@@ -8000,8 +8118,8 @@ int CvUnit::maxCombatStr(CvPlot const* pPlot, CvUnit const* pAttacker,
 				pCombatDetails->iHillsDefenseModifier = iExtraModifier;
 		}
 		// merk.promo1
-		else
-			iModifier += getFlatlandsDefenseModifier();
+		/*else
+			iModifier += getFlatlandsDefenseModifier();*/
 		// merk.promo1 end
 		if (pPlot->isFeature())
 		{
@@ -8014,7 +8132,7 @@ int CvUnit::maxCombatStr(CvPlot const* pPlot, CvUnit const* pAttacker,
 		{
 			iExtraModifier = terrainDefenseModifier(pPlot->getTerrainType());
 			iModifier += iExtraModifier;
-			iModifier += getOpenDefenseModifier(); // merk.promo1
+			//iModifier += getOpenDefenseModifier(); // merk.promo1
 			if (pCombatDetails != NULL)
 				pCombatDetails->iTerrainDefenseModifier = iExtraModifier;
 		}
@@ -8058,8 +8176,8 @@ int CvUnit::maxCombatStr(CvPlot const* pPlot, CvUnit const* pAttacker,
 				pCombatDetails->iHillsAttackModifier = iExtraModifier;
 		}
 		// merk.promo1
-		else
-			iTempModifier += -pAttacker->getFlatlandsAttackModifier();
+		//else
+			//iTempModifier += -pAttacker->getFlatlandsAttackModifier();
 		// merk.promo1 end
 		if (pAttackedPlot->isFeature())
 		{
@@ -8074,7 +8192,7 @@ int CvUnit::maxCombatStr(CvPlot const* pPlot, CvUnit const* pAttacker,
 			// merk.promo1: copy paste error?
 			//iModifier += iExtraModifier;
 			iTempModifier += iExtraModifier;
-			iTempModifier += -pAttacker->getOpenAttackModifier(); // merk.promo1
+			//iTempModifier += -pAttacker->getOpenAttackModifier(); // merk.promo1
 			if (pCombatDetails != NULL)
 				pCombatDetails->iTerrainAttackModifier = iExtraModifier;
 		}
@@ -8099,7 +8217,7 @@ int CvUnit::maxCombatStr(CvPlot const* pPlot, CvUnit const* pAttacker,
 				iExtraModifier = unitCombatModifier(pAttacker->getUnitCombatType());
 				iTempModifier += iExtraModifier;
 				// merk.promo1
-				iTempModifier += getUnitCombatDefenseModifier(pAttacker->getUnitCombatType());
+				//iTempModifier += getUnitCombatDefenseModifier(pAttacker->getUnitCombatType());
 				// merk.promo1 end
 				if (pCombatDetails != NULL)
 					pCombatDetails->iCombatModifierA = iExtraModifier;
@@ -8109,7 +8227,7 @@ int CvUnit::maxCombatStr(CvPlot const* pPlot, CvUnit const* pAttacker,
 				iExtraModifier = -pAttacker->unitCombatModifier(getUnitCombatType());
 				iTempModifier += iExtraModifier;
 				// merk.promo1
-				iTempModifier += pAttacker->getUnitCombatAttackModifier(getUnitCombatType());
+				//iTempModifier += pAttacker->getUnitCombatAttackModifier(getUnitCombatType());
 				// merk.promo1 end
 				if (pCombatDetails != NULL)
 					pCombatDetails->iCombatModifierT = iExtraModifier;
@@ -8881,10 +8999,10 @@ bool CvUnit::immuneToFirstStrikes() const
 	return (m_pUnitInfo->isFirstStrikeImmune() || getImmuneToFirstStrikesCount() > 0);
 }
 // merk.promo1, this turned out to be unnecessary lol
-bool CvUnit::canMoveImpassable() const
-{
-	return false;
-}
+//bool CvUnit::canMoveImpassable() const
+//{
+//	return false;
+//}
 // merk.promo1 end
 
 bool CvUnit::isNeverInvisible() const
@@ -8903,43 +9021,46 @@ bool CvUnit::isInvisible(TeamTypes eTeam, bool bDebug, bool bCheckCargo) const
 		return true;
 	if (bCheckCargo && isCargo())
 		return true;
-	// merk.promo1
-	// two ways to do this:
-	int iRule = GC.getDefineINT("MULTIPLE_INVISIBLES_RULE");
-	if (iRule == 0)
-	{
-		// Favor invisibility: if the unit has any invisible type that is not currently spotted, it's invisible
-		FOR_EACH_ENUM(Invisible)
-		{
-			if ((getInvisibleType() == eLoopInvisible || isInvisiblePromoted(eLoopInvisible))
-				&& !(getUnitInfo().isInvisibleRevealInOpen() && !getPlot().isFeature())
-				&& !(getPlot().isInvisibleVisible(eTeam, eLoopInvisible)))
-				return true;
-		}
-		// If made it through the whole loop
-		return false;
-	}
-	else if (iRule == 1)
-	{
-		// Favor SeeInvisibles. If any of the invisible types of the unit are visible, it is visible. 
-		bool bHasAtLeastOne = false;
-		FOR_EACH_ENUM(Invisible)
-		{
-			if ((getInvisibleType() == eLoopInvisible || isInvisiblePromoted(eLoopInvisible)))
-			{
-				bHasAtLeastOne = true;
-				if (getUnitInfo().isInvisibleRevealInOpen() && !getPlot().isFeature())
-					return false; // spotted
-				if (getPlot().isInvisibleVisible(eTeam, eLoopInvisible))
-					return false; // spotted
-			}
-		}
-		// If made it through the whole loop
-		return bHasAtLeastOne;
-	}
-	else
-		return false; // provides unintentional way to disable invisibility entirely
-	// merk.promo1 end
+	if (getInvisibleType() == NO_INVISIBLE)
+		return !getPlot().isInvisibleVisible(eTeam, getInvisibleType());
+	return false;
+	//// merk.promo1
+	//// two ways to do this:
+	//int iRule = GC.getDefineINT("MULTIPLE_INVISIBLES_RULE");
+	//if (iRule == 0)
+	//{
+	//	// Favor invisibility: if the unit has any invisible type that is not currently spotted, it's invisible
+	//	FOR_EACH_ENUM(Invisible)
+	//	{
+	//		if ((getInvisibleType() == eLoopInvisible || isInvisiblePromoted(eLoopInvisible))
+	//			&& !(getUnitInfo().isInvisibleRevealInOpen() && !getPlot().isFeature())
+	//			&& !(getPlot().isInvisibleVisible(eTeam, eLoopInvisible)))
+	//			return true;
+	//	}
+	//	// If made it through the whole loop
+	//	return false;
+	//}
+	//else if (iRule == 1)
+	//{
+	//	// Favor SeeInvisibles. If any of the invisible types of the unit are visible, it is visible. 
+	//	bool bHasAtLeastOne = false;
+	//	FOR_EACH_ENUM(Invisible)
+	//	{
+	//		if ((getInvisibleType() == eLoopInvisible || isInvisiblePromoted(eLoopInvisible)))
+	//		{
+	//			bHasAtLeastOne = true;
+	//			if (getUnitInfo().isInvisibleRevealInOpen() && !getPlot().isFeature())
+	//				return false; // spotted
+	//			if (getPlot().isInvisibleVisible(eTeam, eLoopInvisible))
+	//				return false; // spotted
+	//		}
+	//	}
+	//	// If made it through the whole loop
+	//	return bHasAtLeastOne;
+	//}
+	//else
+	//	return false; // provides unintentional way to disable invisibility entirely
+	//// merk.promo1 end
 }
 
 
@@ -9566,6 +9687,30 @@ void CvUnit::setXY(int iX, int iY, bool bGroup, bool bUpdate, bool bShow, bool b
 				}
 			}
 		}
+
+		// Super Forts begin *culture* *text*
+		ImprovementTypes eImprovement = pNewPlot->getImprovementType();
+		if(eImprovement != NO_IMPROVEMENT)
+		{
+			if(GC.getImprovementInfo(eImprovement).isActsAsCity() && !isNoCityCapture())
+			{
+				if(pNewPlot->getOwner() != NO_PLAYER)
+				{
+					if(isEnemy(pNewPlot->getTeam()) && !canCoexistWithEnemyUnit(pNewPlot->getTeam()) && canFight())
+					{
+						CvWString szBuffer = gDLL->getText("TXT_KEY_MISC_CITY_CAPTURED_BY", GC.getImprovementInfo(eImprovement).getText(), GET_PLAYER(getOwner()).getCivilizationDescriptionKey());
+						gDLL->getInterfaceIFace()->addMessage(pNewPlot->getOwner(), false, GC.getEVENT_MESSAGE_TIME(), szBuffer, "AS2D_CITYCAPTURED", MESSAGE_TYPE_MAJOR_EVENT, GC.getImprovementInfo(eImprovement).getButton(), (ColorTypes)GC.getInfoTypeForString("COLOR_RED"), pNewPlot->getX(), pNewPlot->getY(), true, true);
+						pNewPlot->setOwner(getOwner(),true,true);
+					}
+				}
+				else
+				{
+					pNewPlot->setOwner(getOwner(),true,true);
+				}
+			}
+		}
+		// Super Forts end
+
 		//update facing direction
 		if (pOldPlot != NULL)
 		{
@@ -11220,7 +11365,7 @@ void CvUnit::setHasPromotion(PromotionTypes ePromotion, bool bNewValue)
 	changeKamikazePercent((GC.getInfo(ePromotion).getKamikazePercent()) * iChange);
 	changeCargoSpace(GC.getInfo(ePromotion).getCargoChange() * iChange);
 	// merk.promo1
-	if (GC.getInfo(ePromotion).getSeeInvisible() != NO_INVISIBLE)
+	/*if (GC.getInfo(ePromotion).getSeeInvisible() != NO_INVISIBLE)
 	{
 		FOR_EACH_ENUM(Invisible)
 		{
@@ -11251,7 +11396,7 @@ void CvUnit::setHasPromotion(PromotionTypes ePromotion, bool bNewValue)
 	changeOpenAttackModifier(GC.getInfo(ePromotion).getOpenAttack() * iChange);
 	changeOpenDefenseModifier(GC.getInfo(ePromotion).getOpenDefense() * iChange);
 	changeFlatlandsAttackModifier(GC.getInfo(ePromotion).getFlatlandsAttack() * iChange);
-	changeFlatlandsDefenseModifier(GC.getInfo(ePromotion).getFlatlandsDefense() * iChange);
+	changeFlatlandsDefenseModifier(GC.getInfo(ePromotion).getFlatlandsDefense() * iChange);*/
 	// merk.promo1 end
 	
 
@@ -11277,14 +11422,14 @@ void CvUnit::setHasPromotion(PromotionTypes ePromotion, bool bNewValue)
 
 	FOR_EACH_ENUM(UnitCombat)
 	{
-		// merk.promo1
-		if (GC.getInfo(ePromotion).isUnitCombatAttack())
-			changeUnitCombatAttackModifier(eLoopUnitCombat, GC.getInfo(ePromotion).getUnitCombatModifierPercent(eLoopUnitCombat) * iChange);
-		else if (GC.getInfo(ePromotion).isUnitCombatDefense())
-			changeUnitCombatDefenseModifier(eLoopUnitCombat, GC.getInfo(ePromotion).getUnitCombatModifierPercent(eLoopUnitCombat) * iChange);
-		else // merk.promo1 end
-			changeExtraUnitCombatModifier(eLoopUnitCombat,
-				GC.getInfo(ePromotion).getUnitCombatModifierPercent(eLoopUnitCombat) * iChange);
+		//// merk.promo1
+		//if (GC.getInfo(ePromotion).isUnitCombatAttack())
+		//	changeUnitCombatAttackModifier(eLoopUnitCombat, GC.getInfo(ePromotion).getUnitCombatModifierPercent(eLoopUnitCombat) * iChange);
+		//else if (GC.getInfo(ePromotion).isUnitCombatDefense())
+		//	changeUnitCombatDefenseModifier(eLoopUnitCombat, GC.getInfo(ePromotion).getUnitCombatModifierPercent(eLoopUnitCombat) * iChange);
+		//else // merk.promo1 end
+		changeExtraUnitCombatModifier(eLoopUnitCombat,
+			GC.getInfo(ePromotion).getUnitCombatModifierPercent(eLoopUnitCombat) * iChange);
 	}
 
 	FOR_EACH_ENUM(Domain)
@@ -13117,59 +13262,59 @@ int CvUnit::LFGgetDefensiveValueAdjustment() const
 }
 // merk.promo1 begin
 
-void CvUnit::changeDoubleMoveOpen(int iChange)
-{
-	m_iDoubleMoveOpenCount += iChange;
-}
-
-void CvUnit::changeDoubleMoveFlatlands(int iChange)
-{
-	m_iDoubleMoveFlatlandsCount += iChange;
-}
-
-void CvUnit::changeOpenAttackModifier(int iChange)
-{
-	m_iOpenAttackModifier += iChange;
-}
-
-void CvUnit::changeOpenDefenseModifier(int iChange)
-{
-	m_iOpenDefenseModifier += iChange;
-}
-
-void CvUnit::changeFlatlandsAttackModifier(int iChange)
-{
-	m_iFlatlandsAttackModifier += iChange;
-}
-
-void CvUnit::changeFlatlandsDefenseModifier(int iChange)
-{
-	m_iFlatlandsDefenseModifier += iChange;
-}
-
-void CvUnit::changeCanMoveImpassablePromotion(int iChange)
-{
-	m_iCanMoveImpassableCount += iChange;
-}
-
-void CvUnit::changeSeeInvisiblePromoted(InvisibleTypes eInvisible, int iChange)
-{
-	m_aeiSeeInvisibles.add(eInvisible, iChange);
-}
-
-void CvUnit::changeInvisiblePromoted(InvisibleTypes eInvisible, int iChange)
-{
-	m_aeiInvisibles.add(eInvisible, iChange);
-}
-
-void CvUnit::changeUnitCombatAttackModifier(UnitCombatTypes eUnitCombat, int iChange)
-{
-	m_aeiUnitCombatAttackMods.add(eUnitCombat, iChange);
-}
-
-void CvUnit::changeUnitCombatDefenseModifier(UnitCombatTypes eUnitCombat, int iChange)
-{
-	m_aeiUnitCombatDefenseMods.add(eUnitCombat, iChange);
-}
+//void CvUnit::changeDoubleMoveOpen(int iChange)
+//{
+//	m_iDoubleMoveOpenCount += iChange;
+//}
+//
+//void CvUnit::changeDoubleMoveFlatlands(int iChange)
+//{
+//	m_iDoubleMoveFlatlandsCount += iChange;
+//}
+//
+//void CvUnit::changeOpenAttackModifier(int iChange)
+//{
+//	m_iOpenAttackModifier += iChange;
+//}
+//
+//void CvUnit::changeOpenDefenseModifier(int iChange)
+//{
+//	m_iOpenDefenseModifier += iChange;
+//}
+//
+//void CvUnit::changeFlatlandsAttackModifier(int iChange)
+//{
+//	m_iFlatlandsAttackModifier += iChange;
+//}
+//
+//void CvUnit::changeFlatlandsDefenseModifier(int iChange)
+//{
+//	m_iFlatlandsDefenseModifier += iChange;
+//}
+//
+//void CvUnit::changeCanMoveImpassablePromotion(int iChange)
+//{
+//	m_iCanMoveImpassableCount += iChange;
+//}
+//
+//void CvUnit::changeSeeInvisiblePromoted(InvisibleTypes eInvisible, int iChange)
+//{
+//	m_aeiSeeInvisibles.add(eInvisible, iChange);
+//}
+//
+//void CvUnit::changeInvisiblePromoted(InvisibleTypes eInvisible, int iChange)
+//{
+//	m_aeiInvisibles.add(eInvisible, iChange);
+//}
+//
+//void CvUnit::changeUnitCombatAttackModifier(UnitCombatTypes eUnitCombat, int iChange)
+//{
+//	m_aeiUnitCombatAttackMods.add(eUnitCombat, iChange);
+//}
+//
+//void CvUnit::changeUnitCombatDefenseModifier(UnitCombatTypes eUnitCombat, int iChange)
+//{
+//	m_aeiUnitCombatDefenseMods.add(eUnitCombat, iChange);
+//}
 
 // merk.promo1 end

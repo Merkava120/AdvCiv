@@ -26427,6 +26427,15 @@ void CvPlayerAI::AI_convertUnitAITypesForCrush()
 						bValid = false;
 				}
 			}
+			// Super Forts begin *AI_defense* - don't convert units guarding a fort
+			else if (pLoopUnit->plot()->isCityExternal(true))
+			{
+				if (pLoopUnit->plot()->getNumDefenders(pLoopUnit->getOwner()) == 1)
+				{
+					bValid = false;
+				}
+			}
+			// Super Forts end
 		}
 
 		if (bValid)
@@ -26854,6 +26863,9 @@ int CvPlayerAI::AI_getTotalFloatingDefendersNeeded(CvArea const& kArea, // advc:
 		rDefenders += scaled::min(rDefenders * fixp(0.25),
 				iCultureDefendersNeeded * fixp(0.3));
 	} // </advc.099c>
+	// Super Forts begin *AI_defense* - Build a few extra floating defenders for occupying forts
+	rDefenders += kArea.getNumCities() / 2;
+	// Super Forts end
 	return rDefenders.round();
 }
 
@@ -28794,10 +28806,11 @@ int CvPlayerAI::AI_getPlotAirbaseValue(CvPlot const& kPlot) const // advc: param
 	int iMinFriendlyCityDistance = MAX_INT;
 	/*CvPlot const* pMinOtherCityPlot = NULL;
 	CvPlot const* pMinFriendlyCityPlot = NULL;*/ // advc: unused
-
+	
 	int iOtherCityCount = 0;
 	for (SquareIter it(kPlot, 4, false); it.hasNext(); ++it)
 	{
+
 		CvPlot const& p = *it;
 		// advc: Was isCity(true) in the if branch, isCity(false) in the else branch.
 		if (!GET_TEAM(getTeam()).isRevealedAirBase(p))
@@ -28805,14 +28818,19 @@ int CvPlayerAI::AI_getPlotAirbaseValue(CvPlot const& kPlot) const // advc: param
 		if (p.getTeam() == getTeam())
 		{
 			int iDist = it.currPlotDist();
-			if (iDist == 1)
-				return 0;
-			if (iDist < iMinFriendlyCityDistance)
+			// merkava120 super forts merge begin
+			if (1 == iDist)
 			{
-				iMinFriendlyCityDistance = iDist;
-				//pMinFriendlyCityPlot = &p;
+				return 0;
 			}
 		}
+//						if (iDistance < iMinFriendlyCityDistance)
+//						{
+//							iMinFriendlyCityDistance = iDistance;
+//							iMinFriendlyCityPlot = pLoopPlot;
+//						}
+// merkava120 super forts merge end
+
 		else
 		{
 			int iDist = it.currPlotDist();
@@ -28840,12 +28858,32 @@ int CvPlayerAI::AI_getPlotAirbaseValue(CvPlot const& kPlot) const // advc: param
 		if (plotDistance(pNearestCity->getX(), pNearestCity->getY(), pMinOtherCityPlot->getX(), pMinOtherCityPlot->getY()) < iRange)
 			return 0;
 	}*/
+		
+	// Super Forts begin *canal* *choke*
+	/*if(iOtherCityCount == 1)
+	{
+		if (iMinOtherCityPlot != NULL)
+		{
+			CvCity* pNearestCity = GC.getMap().findCity(iMinOtherCityPlot->getX(), iMinOtherCityPlot->getY(), NO_PLAYER, getTeam(), false);
+			if (NULL != pNearestCity)
+			{
+				if (plotDistance(pNearestCity->getX(), pNearestCity->getY(), iMinOtherCityPlot->getX(), iMinOtherCityPlot->getY()) < iMinOtherCityDistance)
+				{
+					return 0;
+				}
+			}
+		}
+	}*/
 	int iDefenseModifier = kPlot.defenseModifier(getTeam(), false);
 	/*if (iDefenseModifier <= 0)
 		return 0;*/
 	int iValue = iOtherCityCount * 50;
-	iValue *= 100 + (2 * (iDefenseModifier + (kPlot.isHills() ? 25 : 0)));
-	iValue /= 100;
+	iValue += iDefenseModifier;
+/*	Original Code	
+	iValue *= 100 + (2 * (iDefenseModifier + (pPlot->isHills() ? 25 : 0)));
+	iValue /= 100; 
+*/	
+	// Super Forts end
 	return iValue;
 }
 
@@ -28853,6 +28891,7 @@ int CvPlayerAI::AI_getPlotAirbaseValue(CvPlot const& kPlot) const // advc: param
 int CvPlayerAI::AI_getPlotCanalValue(CvPlot const& kPlot) const // advc: param was CvPlot*
 {
 	PROFILE_FUNC();
+	// merkava120 super forts merge note: has own code here but I think k-mod covers it well enough
 
 	if (kPlot.isOwned())
 	{
@@ -28865,13 +28904,13 @@ int CvPlayerAI::AI_getPlotCanalValue(CvPlot const& kPlot) const // advc: param w
 			if (pWorkingCity != NULL)
 			{
 				/*if (pWorkingCity->AI_getBestBuild(pWorkingCity->getCityPlotIndex(kPlot)) != NO_BUILD)
-					return 0;
-				if (pPlot->getImprovementType() != NO_IMPROVEMENT) {
-					CvImprovementInfo &kImprovementInfo = GC.getInfo(pPlot->getImprovementType());
-					if (!kImprovementInfo.isActsAsCity())
+						return 0;
+					if (pPlot->getImprovementType() != NO_IMPROVEMENT) {
+						CvImprovementInfo &kImprovementInfo = GC.getInfo(pPlot->getImprovementType());
+						if (!kImprovementInfo.isActsAsCity())
 						return 0;
 				}*/ // BtS
-				// K-Mod
+				
 				ImprovementTypes eBestImprovement = kPlot.getImprovementType();
 				BuildTypes eBestBuild = pWorkingCity->AI_getBestBuild(
 						pWorkingCity->getCityPlotIndex(kPlot));
@@ -28905,6 +28944,70 @@ int CvPlayerAI::AI_getPlotCanalValue(CvPlot const& kPlot) const // advc: param w
 	// K-Mod bugfix (was min)
 	return 10 * std::max(0, pSecondWaterArea->getNumTiles() - 2);
 }
+// Super Forts begin *choke*
+int CvPlayerAI::AI_getPlotChokeValue(CvPlot* pPlot) const
+{
+	PROFILE_FUNC();
+	
+	FAssert(pPlot != NULL);
+
+	int iChokeValue = pPlot->getChokeValue();
+
+	if (iChokeValue > 0)
+	{
+		if (pPlot->isOwned())
+		{
+			if (pPlot->getTeam() != getTeam())
+			{
+				return 0;
+			}
+			if (pPlot->isCityRadius())
+			{
+				//CvCity* pWorkingCity = pPlot->getWorkingCity();
+				CvCityAI* pWorkingCity = pPlot->AI_getWorkingCity(); // merk
+				if (pWorkingCity != NULL)
+				{
+					// Left in this part from the original code. Might be needed to avoid workers from getting stuck in a loop?
+					if (pWorkingCity->AI_getBestBuild(pWorkingCity->getCityPlotIndex(*pPlot)) != NO_BUILD)
+					{
+						return 0;
+					}
+					if (pPlot->getImprovementType() != NO_IMPROVEMENT)
+					{
+						CvImprovementInfo &kImprovementInfo = GC.getImprovementInfo(pPlot->getImprovementType());
+						if (!kImprovementInfo.isActsAsCity())
+						{
+							return 0;
+						}
+					}
+					// Decrease value when within radius of a city
+					iChokeValue -= 5;
+				}
+			}
+		}
+	
+		for (int iI = 0; iI < NUM_DIRECTION_TYPES; iI++)
+		{
+			CvPlot* pLoopPlot = plotDirection(pPlot->getX(), pPlot->getY(), (DirectionTypes)iI);
+			if (pLoopPlot != NULL)
+			{
+				if (pLoopPlot->isCityExternal(true) && (pLoopPlot->getChokeValue() > 0))
+				{
+					// Decrease value when adjacent to a city or fort with a choke value
+					iChokeValue -= 10;
+				}
+			}
+		}
+
+		iChokeValue *= 10;
+		// Favor plots with higher defense
+		int iDefenseModifier = pPlot->defenseModifier(getTeam(), false);
+		iChokeValue += iDefenseModifier;
+	}
+
+	return std::max(0,iChokeValue);
+}
+// Super Forts end
 
 /*	This returns approximately to the sum
 	of the percentage values of each city

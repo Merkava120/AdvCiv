@@ -530,7 +530,10 @@ public: // advc: made several functions const
 	void getShelves(CvArea const& kArea, std::vector<Shelf*>& kShelves) const;
 	// </advc.300>
 	void resetPathDistance();																		// Exposed to Python
-	int calculatePathDistance(CvPlot const* pSource, CvPlot const* pDest) const;					// Exposed to Python
+	// Super Forts begin *canal* *choke*
+	int calculatePathDistance(CvPlot const* pSource, CvPlot const* pDest, CvPlot *pInvalidPlot = NULL) const;	// Exposed to Python
+	void calculateCanalAndChokePoints();	// Exposed to Python
+	// Super Forts end
 	void updateIrrigated(CvPlot& kPlot); // advc.pf
 
 	// BETTER_BTS_AI_MOD, Efficiency (plot danger cache), 08/21/09, jdog5000: START

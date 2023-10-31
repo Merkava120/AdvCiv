@@ -466,6 +466,9 @@
 	</ElementType>
 	<ElementType name="bPlayable" content="textOnly" dt:type="boolean"/>
 	<ElementType name="bAIPlayable" content="textOnly" dt:type="boolean"/>
+	<ElementType name="iChannels" content="textOnly" dt:type="int"/>
+	<ElementType name="iMinEra" content="textOnly" dt:type="int"/>
+	<ElementType name="iMaxEra" content="textOnly" dt:type="int"/>
 	<ElementType name="LeaderName" content="textOnly"/>
 	<ElementType name="bLeaderAvailability" content="textOnly" dt:type="boolean"/>
 	<ElementType name="Leader" content="eltOnly">
@@ -490,6 +493,10 @@
 		<element type="UnitArtStyleType" minOccurs="0" maxOccurs="1"/>
 		<element type="bPlayable"/>
 		<element type="bAIPlayable"/>
+		<!-- merk.channels -->
+		<element type="iChannels" minOccurs="0"/>
+		<element type="iMinEra" minOccurs="0"/>
+		<element type="iMaxEra" minOccurs="0"/>
 		<element type="Cities"/>
 		<element type="Buildings"/>
 		<element type="Units"/>

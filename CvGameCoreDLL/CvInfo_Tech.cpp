@@ -22,6 +22,7 @@ m_iHappiness(0),
 m_iFirstFreeTechs(0),
 m_iAssetValue(0),
 m_iPowerValue(0),
+m_iChannel(0), // merk.channels
 m_iGridX(0),
 m_iGridY(0),
 m_bRepeat(false),
@@ -311,6 +312,7 @@ bool CvTechInfo::read(CvXMLLoadUtility* pXML)
 	pXML->GetChildXmlValByName(&m_iFirstFreeTechs, "iFirstFreeTechs");
 	pXML->GetChildXmlValByName(&m_iAssetValue, "iAsset");
 	pXML->GetChildXmlValByName(&m_iPowerValue, "iPower");
+	pXML->GetChildXmlValByName(&m_iChannel, "iChannel", 0); // merk.channels
 	pXML->GetChildXmlValByName(&m_bRepeat, "bRepeat");
 	pXML->GetChildXmlValByName(&m_bTrade, "bTrade");
 	pXML->GetChildXmlValByName(&m_bDisable, "bDisable");
