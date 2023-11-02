@@ -964,6 +964,49 @@ public:
 	DllExport void handleMiddleMouse(bool bCtrl, bool bAlt, bool bShift);
 	DllExport void handleDiplomacySetAIComment(DiploCommentTypes eComment) const;
 
+	// merk.fac1: faction setup and tracker
+	struct Faction {
+		CvString name;
+		std::vector< std::pair< int, BuildingTypes > > ownedBuildings; // city ID, building
+		std::vector< std::pair< int, int > > ownedImprovements; // tile coords
+		std::vector< CivicTypes > beliefs;
+		std::vector< CivilizationTypes > nationalities;
+		std::vector< ReligionTypes > religions;
+		int aggression;
+		int cohesion;
+		int extraWealth; // used to store pay for services
+		// focus variables
+		bool bfBelief;
+		bool bfReligion;
+		bool bfNationality;
+		bool bfWealth;
+		bool bfProduction;
+		bool bfPopularity;
+		bool bfPower; // i.e. political
+		bool bfRelPower; // religious power
+		bool bfDiplomacy; 
+		// first int is faction in list, second int is relationship rank
+		std::vector< int > factionRelations;
+		PlayerTypes ePlayer; // usually NULL
+	};
+	std::vector< Faction > aFactions;
+	
+	// Utility functions
+	void initFaction(); // just starts a blank one
+	void killFaction(int iFaction);
+	void resetFactions();
+	void mergeFactions(int iFirstFaction, int iSecondFaction);
+	int isMatchBeliefs(int iFaction, PlayerTypes ePlayer, bool focus = false, int matches = 1) const;
+	bool isMatchReligion(int iFaction, PlayerTypes ePlayer, bool focus = false) const;
+	bool isMatchNationality(int iFaction, PlayerTypes ePlayer, bool focus = false) const;
+	bool isAggressive(int iFaction) const;
+	int isRelationship(int iFirstFaction, int iSecondFaction, int iThreshold, bool includeGreater = false, bool includeLower = false) const;
+
+	// religion governor tracker (religious beliefs of them = beliefs of religion)
+	ListEnumMap< ReligionTypes, int > aReligionLeaders;
+
+	// merk.fac1 end
+
 	scaled goodyHutEffectFactor(bool bSpeedAdjust = true) const; // advc.314
 	// <advc.004m>
 	GlobeLayerTypes getCurrentLayer() const;

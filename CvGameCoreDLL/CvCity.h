@@ -331,6 +331,17 @@ public:
 	DllExport int getX() const { return m_iX; } // advc.inl: was "getX"									// Exposed to Python	
 	DllExport int getY() const { return m_iY; } // advc.inl: was "getY"									// Exposed to Python
 
+	// merk.fac1: factions in the city
+	int iGoverningFaction;
+	std::vector< std::pair< int, int > > aiFactionPopularities;
+	std::vector< std::pair < CivicTypes, int > > aiBeliefPopularities;
+
+	bool isFactionPresent(int iFaction);
+	bool isBeliefPresent(CivicTypes eBelief);
+
+	// merk.fac1 end
+
+
 	bool at(int iX, int iY) const  { return (getX() == iX && getY() == iY); }									// Exposed to Python
 	bool at(CvPlot const* pPlot) const // advc: const CvPlot*													// Exposed to Python as atPlot
 	{

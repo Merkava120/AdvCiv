@@ -11002,3 +11002,115 @@ std::set<int>& CvGame::getActivePlayerCycledGroups()
 {
 	return m_aiActivePlayerCycledGroups; // Was public; now protected.
 }
+// merk.fac1 start
+void CvGame::initFaction()
+{
+	Faction newFaction;
+	newFaction.aggression = 0;
+	newFaction.cohesion = GC.getDefineINT("FACTION_DEFAULT_COHESION");
+	// doesn't get name or any of the lists
+	newFaction.bfBelief = false;
+	newFaction.bfDiplomacy = false;
+	newFaction.bfNationality = false;
+	newFaction.bfPopularity = false;
+	newFaction.bfPower = false;
+	newFaction.bfProduction = false;
+	newFaction.bfReligion = false;
+	newFaction.bfRelPower = false;
+	newFaction.bfWealth = false;
+	newFaction.extraWealth = 0;
+	newFaction.ePlayer = NO_PLAYER;
+	for (int i = 0; i < (int)aFactions.size(); i++)
+	{
+		newFaction.factionRelations.push_back(0);
+		aFactions[i].factionRelations.push_back(0);
+	}
+	// one more (us) to keep numbers consistent
+	newFaction.factionRelations.push_back(0);
+	aFactions.push_back(newFaction);
+}
+
+void CvGame::killFaction(int iFaction)
+{
+	// may add more to this later, adjustments to popularity and stuff 
+	aFactions.erase(aFactions.begin() + iFaction);
+}
+
+void CvGame::resetFactions()
+{
+	// this is a nuke, use only when absolutely necessary
+	aFactions.clear();
+}
+
+void CvGame::mergeFactions(int iFirstFaction, int iSecondFaction)
+{
+	// will flesh this out later
+	int fart = 0;
+	return;
+}
+
+int CvGame::isMatchBeliefs(int iFaction, PlayerTypes ePlayer, bool focus, int matches) const
+{
+	FAssertBounds(0, (int)aFactions.size(), iFaction);
+	int foundmatches = 0;
+	std::vector< CivicTypes > playerBeliefs;
+	FOR_EACH_ENUM(Civic)
+	{
+		if (GET_PLAYER(ePlayer).getCivics(GC.getCivicInfo(eLoopCivic).getCivicOptionType()) == eLoopCivic)
+		{
+			// found player civic, now check faction beliefs
+			for (int i = 0; i < (int)aFactions[iFaction].beliefs.size(); i++)
+			{
+				if (aFactions[iFaction].beliefs[i] == eLoopCivic)
+				{
+					// faction also has that belief, break
+					foundmatches++; 
+					break;
+				}
+			}
+		}
+	}
+	return (foundmatches >= matches);
+}
+
+bool CvGame::isMatchReligion(int iFaction, PlayerTypes ePlayer, bool focus) const
+{
+	FAssertBounds(0, (int)aFactions.size(), iFaction);
+	for (int i = 0; i < (int)aFactions[iFaction].religions.size(); i++)
+	{
+		if (GET_PLAYER(ePlayer).getStateReligion() == aFactions[iFaction].religions[i])
+			return true;
+	}
+	return false;
+}
+
+bool CvGame::isMatchNationality(int iFaction, PlayerTypes ePlayer, bool focus) const
+{
+	FAssertBounds(0, (int)aFactions.size(), iFaction);
+	for (int i = 0; i < (int)aFactions[iFaction].nationalities.size(); i++)
+	{
+		if (aFactions[iFaction].nationalities[i] == GET_PLAYER(ePlayer).getCivilizationType())
+			return true;
+	}
+	return false;
+}
+
+bool CvGame::isAggressive(int iFaction) const
+{
+	FAssertBounds(0, (int)aFactions.size(), iFaction);
+	return (aFactions[iFaction].aggression >= GC.getDefineINT("AGGRESSIVE_THRESHOLD"));
+}
+
+int CvGame::isRelationship(int iFirstFaction, int iSecondFaction, int iThreshold, bool includeGreater, bool includeLower) const
+{
+	FAssertBounds(0, (int)aFactions.size(), iFirstFaction);
+	FAssertBounds(0, (int)aFactions.size(), iSecondFaction);
+	if (includeGreater && (aFactions[iFirstFaction].factionRelations[iSecondFaction] >= iThreshold))
+		return true;
+	if (includeLower && aFactions[iFirstFaction].factionRelations[iSecondFaction] <= iThreshold)
+		return true;
+	return false;
+}
+
+
+// merk.fac1 end

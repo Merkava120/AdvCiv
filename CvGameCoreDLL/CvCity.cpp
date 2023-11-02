@@ -4280,7 +4280,29 @@ void CvCity::setID(int iID)
 {
 	m_iID = iID;
 }
+// merk.fac1
+bool CvCity::isFactionPresent(int iFaction)
+{
+	for (int i = 0; i < (int)aiFactionPopularities.size(); i++)
+	{
+		if (aiFactionPopularities[i].first == iFaction)
+			return true; 
+	}
+	return false;
+}
 
+
+bool CvCity::isBeliefPresent(CivicTypes eBelief)
+{
+	for (int i = 0; i < (int)aiBeliefPopularities.size(); i++)
+	{
+		if (aiBeliefPopularities[i].first == eBelief)
+			return true;
+	}
+	return false;
+}
+
+// merk.fac1 end
 // advc.opt: Update cached CvPlot, CvArea pointer and plot index.
 void CvCity::updatePlot()
 {

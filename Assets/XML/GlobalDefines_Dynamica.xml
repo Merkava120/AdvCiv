@@ -101,4 +101,17 @@
 		<iDefineIntVal>3</iDefineIntVal>
 	</Define>
 	
+	
+	
+	<!-- FACTIONS -->
+	<Define>
+		<DefineName>FACTION_DEFAULT_COHESION</DefineName>
+		<iDefineIntVal>10</iDefineIntVal>
+	</Define>
+	<!-- number of points in 'aggression' for a faction to be considered 'aggressive' (mostly for classifying them) -->
+	<Define>
+		<DefineName>AGGRESSIVE_THRESHOLD</DefineName>
+		<iDefineIntVal>10</iDefineIntVal>
+	</Define>
+	
 </Civ4Defines>
