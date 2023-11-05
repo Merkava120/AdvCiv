@@ -1310,7 +1310,7 @@
 				<iYieldChange>0</iYieldChange>
 				<iYieldChange>1</iYieldChange>
 			</YieldChanges>
-			<bActsAsCity>0</bActsAsCity>
+			<bActsAsCity>1</bActsAsCity>
 			<bHillsMakesValid>0</bHillsMakesValid>
 			<bFreshWaterMakesValid>1</bFreshWaterMakesValid>
 			<bRiverSideMakesValid>0</bRiverSideMakesValid>
@@ -1368,7 +1368,7 @@
 				<iYieldChange>0</iYieldChange>
 				<iYieldChange>2</iYieldChange>
 			</YieldChanges>
-			<bActsAsCity>0</bActsAsCity>
+			<bActsAsCity>1</bActsAsCity>
 			<bHillsMakesValid>0</bHillsMakesValid>
 			<!-- K-Mod: was 0 -->
 			<bFreshWaterMakesValid>1</bFreshWaterMakesValid>
@@ -1428,7 +1428,7 @@
 				<iYieldChange>0</iYieldChange>
 				<iYieldChange>3</iYieldChange>
 			</YieldChanges>
-			<bActsAsCity>0</bActsAsCity>
+			<bActsAsCity>1</bActsAsCity>
 			<bHillsMakesValid>0</bHillsMakesValid>
 			<!-- K-Mod: was 0 -->
 			<bFreshWaterMakesValid>1</bFreshWaterMakesValid>
@@ -1497,7 +1497,7 @@
 				<iYieldChange>0</iYieldChange>
 				<iYieldChange>4</iYieldChange>
 			</YieldChanges>
-			<bActsAsCity>0</bActsAsCity>
+			<bActsAsCity>1</bActsAsCity>
 			<bHillsMakesValid>0</bHillsMakesValid>
 			<!-- K-Mod: was 0 -->
 			<bFreshWaterMakesValid>1</bFreshWaterMakesValid>

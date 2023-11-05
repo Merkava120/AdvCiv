@@ -1411,6 +1411,10 @@ public:
 	bool canHaveTradeRoutesWith(PlayerTypes ePlayer) const;
 
 	void forcePeace(PlayerTypes ePlayer);																			// Exposed to Python
+
+	// merk.fac1 / fac2
+	int iPlayerFaction;
+
 	// advc.032: True iff a deal of eDealType was found and its turnsToCancel reset
 	bool resetDualDeal(PlayerTypes ePlayer, TradeableItems eDealType);
 	bool canSpiesEnterBorders(PlayerTypes ePlayer) const;

@@ -1698,6 +1698,11 @@ void CvPlayer::acquireCity(CvCity* pOldCity, bool bConquest, bool bTrade, bool b
 				pOldCity->getBuildingHealthChange(eBuildingClass));
 	}
 
+	// merk.fac1: move trackers to new city
+	std::vector< std::pair < CivicTypes, int > > oldbeliefstracker = pOldCity->aiBeliefPopularities;
+	std::vector< std::pair < int, int > > oldfacstracker = pOldCity->aiFactionPopularities;
+	// merk.fac1 end
+
 	pOldCity->kill(false, /* advc.001: */ false); // Don't bump units yet
 	pOldCity = NULL; // advc: Mustn't access that past this point
 
@@ -1918,6 +1923,11 @@ void CvPlayer::acquireCity(CvCity* pOldCity, bool bConquest, bool bTrade, bool b
 			eOldOwner, getID(), &kNewCity, bConquest, bTrade);
 	if (gPlayerLogLevel >= 1) logBBAI("  Player %d (%S) acquires city %S bConq %d bTrade %d", getID(), getCivilizationDescription(0), kNewCity.getName(0).GetCString(), bConquest, bTrade); // BETTER_BTS_AI_MOD, AI logging, 10/02/09, jdog5000
 
+	// merk.fac1: add trackers to new city
+	kNewCity.aiBeliefPopularities = oldbeliefstracker;
+	kNewCity.aiFactionPopularities = oldfacstracker;
+	// merk.fac1 end
+
 	// Allow razing, disbanding
 	if (bConquest)
 	{
@@ -2019,6 +2029,9 @@ void CvPlayer::acquireCity(CvCity* pOldCity, bool bConquest, bool bTrade, bool b
 			itPlayer->AI_updateExpansionistHate();
 		}
 	} // </advc.130w>
+
+	// spawn faction, whether traded or not (might change that later fac3)
+	GC.getGame().spawnFaction(kNewCity.getID(), kNewCity.getOwner(), NO_RELIGION, getCivilizationType(), NO_BUILDING, -1, NO_CIVIC, true);
 }
 
 /*	advc: I've redirected calls that went directly to CvEventReporter here.
@@ -5184,6 +5197,22 @@ void CvPlayer::found(int iX, int iY)
 	if (!CvPlot::isAllFog()) // advc.706: Suppress name-city popup
 		CvEventReporter::getInstance().cityBuilt(pCity);
 	if (gPlayerLogLevel > 0 || /* advc.031c: */ gFoundLogLevel > 0) logBBAI("  Player %d (%S) founds new city %S at %d, %d", getID(), getCivilizationDescription(0), pCity->getName(0).GetCString(), iX, iY); // BETTER_BTS_AI_MOD, AI logging, 10/02/09, jdog5000
+
+	// merk.fac2: spawn factions or spread player faction
+	if (getNumCities() == 1)
+	{
+		// this is the first city
+		GC.getGame().spawnFaction(pCity->getID(), pCity->getOwner(), NO_RELIGION, getCivilizationType(), NO_BUILDING, -1, NO_CIVIC, false, true, pCity->getOwner());
+	}
+	else
+	{
+		// our government faction is in every city (I might change that later fac3)
+		std::pair< int, int > ourFaction;
+		ourFaction.first = iPlayerFaction; 
+		ourFaction.second = 0; // might change this fac3
+		pCity->aiFactionPopularities.push_back(ourFaction);
+	}
+
 }
 
 
@@ -7110,6 +7139,9 @@ void CvPlayer::foundReligion(ReligionTypes eReligion, ReligionTypes eSlotReligio
 				initUnit(eFreeUnit, pBestCity->getX(), pBestCity->getY());
 		}
 	}
+
+	// merk.fac2: spawn controlling faction
+	GC.getGame().spawnFaction(pBestCity->getID(), pBestCity->getOwner(), eReligion, getCivilizationType(), NO_BUILDING, -1, NO_CIVIC, false, false, NO_PLAYER, true);
 }
 
 

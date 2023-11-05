@@ -6780,10 +6780,7 @@ bool CvUnit::build(BuildTypes eBuild)
 
 bool CvUnit::canPromote(PromotionTypes ePromotion, int iLeaderUnitId) const
 {
-	// merk.dp
-	if (GC.getInfo(ePromotion).isNoDirect())
-		return false;
-	// merk.dp end
+	
 	if (iLeaderUnitId /* advc (was >=0): */ != FFreeList::INVALID_INDEX)
 	{
 		if (iLeaderUnitId == getID())
@@ -6805,6 +6802,11 @@ bool CvUnit::canPromote(PromotionTypes ePromotion, int iLeaderUnitId) const
 		return false;
 	if (!canAcquirePromotion(ePromotion))
 		return false;
+
+	// merk.dp
+	if (GC.getInfo(ePromotion).isNoDirect())
+		return false;
+	// merk.dp end
 
 	if (GC.getInfo(ePromotion).isLeader())
 	{

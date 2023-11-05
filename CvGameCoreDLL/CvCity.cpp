@@ -9124,6 +9124,10 @@ void CvCity::setNumRealBuildingTimed(BuildingTypes eBuilding, int iNewValue, boo
 			}
 		}
 	}
+
+	// merk.fac2: spawn faction
+	GC.getGame().spawnFaction(getID(), getOwner(), NO_RELIGION, getCivilizationType(), eBuilding);
+	// merk.fac3: allow current factions to own it first, don't trigger on govt buildings, etc. 
 }
 
 
@@ -9209,6 +9213,9 @@ void CvCity::setHasReligion(ReligionTypes eReligion, bool bNewValue, bool bAnnou
 								getX(), getY(), bArrows, bArrows);
 					}
 				}
+				// merk.fac2: spawn religious faction on spreading - merk.fac3: make less likely if already have some there / spread other religious factions / etc. 
+				if (SyncRandSuccess100(GC.getDefineINT("RELIGION_SPREAD_FACTION_CHANCE")))
+					GC.getGame().spawnFaction(getID(), getOwner(), eReligion); // no nationality (yet) because it's a new religion spreading
 			}
 			if (isHuman() && kOwner.getHasReligionCount(eReligion) == 1)
 			{

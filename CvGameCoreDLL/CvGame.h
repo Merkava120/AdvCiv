@@ -1005,6 +1005,9 @@ public:
 	// religion governor tracker (religious beliefs of them = beliefs of religion)
 	ListEnumMap< ReligionTypes, int > aReligionLeaders;
 
+	// merk.fac2 spawning faction
+	void spawnFaction(int iCity, PlayerTypes eCityOwner, ReligionTypes fromReligion = NO_RELIGION, CivilizationTypes fromNationality = NO_CIVILIZATION, BuildingTypes fromBuilding = NO_BUILDING, int fromImprovement = -1 /*plot id*/, CivicTypes fromBelief = NO_CIVIC, bool bCityCaptured = false, bool bGovernment = false, PlayerTypes isPlayer = NO_PLAYER, bool newReligion = false);
+
 	// merk.fac1 end
 
 	scaled goodyHutEffectFactor(bool bSpeedAdjust = true) const; // advc.314

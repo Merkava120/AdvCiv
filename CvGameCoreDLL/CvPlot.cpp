@@ -5325,6 +5325,11 @@ void CvPlot::setImprovementType(ImprovementTypes eNewValue,
 	{
 		CvEventReporter::getInstance().improvementBuilt(
 				getImprovementType(), getX(), getY());
+		// merk.fac2: spawn faction from new 'act as city' improvements - merk.fac3: give to owned faction
+		if (isOwned() && GC.getInfo(eNewValue).isActsAsCity() && eOldImprovement == NO_IMPROVEMENT)
+			GC.getGame().spawnFaction(getPlotCity()->getID(), getOwner(), NO_RELIGION, getPlotCity()->getCivilizationType(), NO_BUILDING, plotNum());
+		else if (GC.getInfo(eNewValue).isActsAsCity() && eOldImprovement == NO_IMPROVEMENT)
+			GC.getGame().spawnFaction(-1, NO_PLAYER, NO_RELIGION, NO_CIVILIZATION, NO_BUILDING, plotNum());
 	}
 	else
 	{

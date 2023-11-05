@@ -5648,6 +5648,28 @@ void CvTeam::processTech(TechTypes eTech, int iChange,
 	}
 	for (MemberIter it(getID()); it.hasNext(); ++it)
 		it->updateCorporation();
+
+	// merk.fac2 - if tech discovers belief (i.e. civic) then spawn new faction for belief. 
+	if (!isBarbarian())
+	{
+		FOR_EACH_ENUM(Civic)
+		{
+			if (eTech == GC.getCivicInfo(eLoopCivic).getTechPrereq())
+			{
+				// merk.fac3: make sure civic is actually a belief 
+				// For now, random member of team and always their capital. Might change later (fac3?) / spawn just belief and not faction / etc. 
+				PlayerTypes eMember = getRandomMemberAlive(false);
+				// merk.fac3: can add religion / etc. to faction spawned from beliefs 
+				GC.getGame().spawnFaction(GET_PLAYER(eMember).getCapitalCity()->getID(), eMember, NO_RELIGION, GET_PLAYER(eMember).getCivilizationType(), NO_BUILDING, -1, eLoopCivic);
+				// add belief to city
+				std::pair< CivicTypes, int > newbelief;
+				newbelief.first = eLoopCivic;
+				newbelief.second = 0; // might change later
+				GET_PLAYER(eMember).getCapitalCity()->aiBeliefPopularities.push_back(newbelief);
+				// don't break because tech might spawn multiple beliefs!
+			}
+		}
+	}
 }
 
 // advc.500c:

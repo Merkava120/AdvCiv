@@ -113,5 +113,83 @@
 		<DefineName>AGGRESSIVE_THRESHOLD</DefineName>
 		<iDefineIntVal>10</iDefineIntVal>
 	</Define>
+	<!-- factions can spawn when a city is captured; if so, they will be this aggressive -->
+	<Define>
+		<DefineName>CITY_CAPTURE_AGGRESSION</DefineName>
+		<iDefineIntVal>10</iDefineIntVal>
+	</Define>
+	<!-- if the relevant flavor of a building a faction spawns with is greater than this, the faction will get the relevant focus (wealth or production) -->
+	<Define>
+		<DefineName>FLAVOR_FOCUS_THRESHOLD</DefineName>
+		<iDefineIntVal>5</iDefineIntVal>
+	</Define>
+	<!-- same but for improvements and their yields -->
+	<Define>
+		<DefineName>YIELD_FOCUS_THRESHOLD</DefineName>
+		<iDefineIntVal>3</iDefineIntVal>
+	</Define>
 	
+	<!-- chances to adopt different focuses on spawn: -->
+	
+	<!-- this one requires having religious focus already, or spawning with a religion that was just barely founded -->
+	<Define>
+		<DefineName>RELIGION_CONTROL_FOCUS_CHANCE</DefineName>
+		<iDefineIntVal>20</iDefineIntVal>
+	</Define>
+	
+	<!-- since most factions spawn with nationalities this is the chance of actually focusing on that -->
+	<Define>
+		<DefineName>NATIONALITY_FOCUS_CHANCE</DefineName>
+		<iDefineIntVal>10</iDefineIntVal>
+	</Define>
+	
+	<Define>
+		<DefineName>POWER_FOCUS_CHANCE</DefineName>
+		<iDefineIntVal>5</iDefineIntVal>
+	</Define>
+	<Define>
+		<DefineName>POPULARITY_FOCUS_CHANCE</DefineName>
+		<iDefineIntVal>5</iDefineIntVal>
+	</Define>
+	<Define>
+		<DefineName>DIPLOMACY_FOCUS_CHANCE</DefineName>
+		<iDefineIntVal>5</iDefineIntVal>
+	</Define>
+	<Define>
+		<DefineName>WEALTH_FOCUS_CHANCE</DefineName>
+		<iDefineIntVal>5</iDefineIntVal>
+	</Define>
+	<Define>
+		<DefineName>PRODUCTION_FOCUS_CHANCE</DefineName>
+		<iDefineIntVal>5</iDefineIntVal>
+	</Define>
+	<!-- each of the above gets a boost of this percentage when there is not yet a focus set (but if the focus becomes set the bonus is not applied to further rolls) -->
+	<Define>
+		<DefineName>NO_FOCUS_BOOST</DefineName>
+		<iDefineIntVal>10</iDefineIntVal>
+	</Define>
+	
+	<!-- Chance to spawn faction from religion newly spreading -->
+	<Define>
+		<DefineName>RELIGION_SPREAD_FACTION_CHANCE</DefineName>
+		<iDefineIntVal>10</iDefineIntVal>
+	</Define>
+	
+	
+	<!-- spawning and growing improvements chances -->
+	<!-- note everything is out of 1000 for this section -->
+	<!-- first one is just how many turns must pass before starting spawning -->
+	<Define>
+		<DefineName>SPAWN_IMP_MIN_TURNS</DefineName>
+		<iDefineIntVal>3</iDefineIntVal>
+	</Define>
+	<Define>
+		<DefineName>SPAWN_IMP_CHANCE_PER_FOOD</DefineName>
+		<iDefineIntVal>50</iDefineIntVal>
+	</Define>
+	<Define>
+		<DefineName>SPAWN_IMP_ADD_ROUTE</DefineName>
+		<iDefineIntVal>100</iDefineIntVal>
+	</Define>
+	<!-- will add more later -->
 </Civ4Defines>

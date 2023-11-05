@@ -6173,6 +6173,46 @@ void CvGame::doTurn()
 		}
 	}
 
+	// merk.fac2 spawning and growing improvements
+	for (int x = 0; x < GC.getMap().numPlots(); x++)
+	{
+		if (getGameTurn() <= getStartTurn() + GC.getDefineINT("SPAWN_IMP_MIN_TURNS"))
+			continue;
+		if (SyncRandSuccess1000(GC.getDefineINT("SPAWN_IMP_CHANCE_PER_FOOD") * GC.getMap().getPlotByIndex(x).getYield(YIELD_FOOD) + GC.getDefineINT("SPAWN_IMP_ADD_ROUTE") * GC.getMap().getPlotByIndex(x).isRoute()))
+		{
+			// success, either spawn or grow
+			if (GC.getMap().getPlotByIndex(x).getImprovementType() == NO_IMPROVEMENT)
+			{
+				FOR_EACH_ENUM(Improvement)
+				{
+					// make sure plot can take improvement
+					if (!GC.getMap().getPlotByIndex(x).canHaveImprovement(eLoopImprovement))
+						continue;
+
+					// to keep from having weird improvements like lumbermills showing up, make sure improvement has ActsAsCity
+					if (!GC.getImprovementInfo(eLoopImprovement).isActsAsCity())
+						continue;
+
+					if (GC.getImprovementInfo(eLoopImprovement).getYieldChange(YIELD_COMMERCE) == 1 && GC.getImprovementInfo(eLoopImprovement).getYieldChange(YIELD_FOOD) == 0)
+					{
+						// found it
+						GC.getMap().getPlotByIndex(x).setImprovementType(eLoopImprovement);
+						break;
+					}
+				}
+			}
+			else
+			{
+				ImprovementTypes eImprovement = GC.getMap().getPlotByIndex(x).getImprovementType();
+				ImprovementTypes eNewImprovement = GC.getImprovementInfo(eImprovement).getImprovementUpgrade();
+				if (eNewImprovement != NO_IMPROVEMENT)
+					GC.getMap().getPlotByIndex(x).setImprovementType(eNewImprovement);
+				// if it doesn't have an upgrade don't do anything. 
+			}
+		}
+
+	}
+
 	testVictory();
 
 	gDLL->getEngineIFace()->SetDirty(GlobePartialTexture_DIRTY_BIT, true);
@@ -10861,6 +10901,191 @@ void CvGame::processBuilding(BuildingTypes eBuilding, int iChange)
 	}
 }
 
+// merk.fac2
+void CvGame::spawnFaction(int iCity, PlayerTypes eCityOwner, ReligionTypes fromReligion, CivilizationTypes fromNationality, BuildingTypes fromBuilding, int fromImprovement, CivicTypes fromBelief, bool bCityCaptured, bool bGovernment, PlayerTypes isPlayer, bool newReligion)
+{
+	Faction newFaction;	
+	// all focuses initially false:
+	newFaction.bfBelief = false;
+	newFaction.bfDiplomacy = false;
+	newFaction.bfNationality = false;
+	newFaction.bfPopularity = false;
+	newFaction.bfPower = false;
+	newFaction.bfProduction = false;
+	newFaction.bfReligion = false;
+	newFaction.bfRelPower = false;
+	newFaction.bfWealth = false;
+	bool focusSet = false;
+
+	// add focuses and attributes
+	std::vector< ReligionTypes > addrel;
+	if (fromReligion != NO_RELIGION)
+	{
+		addrel.push_back(fromReligion);
+		newFaction.bfReligion = true;
+		focusSet = true;
+		if (SyncRandSuccess100(GC.getDefineINT("RELIGION_CONTROl_FOCUS_CHANCE")) || newReligion)
+			newFaction.bfRelPower = true;
+
+	}
+	newFaction.religions = addrel;
+
+	std::vector< CivilizationTypes > addnat;
+	if (fromNationality != NO_CIVILIZATION)
+	{
+		addnat.push_back(fromNationality);
+		if (SyncRandSuccess100(GC.getDefineINT("NATIONALITY_FOCUS_CHANCE")))
+		{
+			newFaction.bfNationality = true;
+			focusSet = true;
+		}
+	}
+	newFaction.nationalities = addnat;
+
+	std::vector< std::pair< int, BuildingTypes > > addbld;
+	std::pair< int, BuildingTypes > addbld2;
+	if (fromBuilding != NO_BUILDING && iCity >= 0)
+	{
+		addbld2.first = iCity;
+		addbld2.second = fromBuilding;
+		addbld.push_back(addbld2);
+		// if it's a wealth flavor building or production flavor building add focuses
+		if (GC.getInfo(fromBuilding).getFlavorValue(FLAVOR_GOLD) >= GC.getDefineINT("FLAVOR_FOCUS_THRESHOLD"))
+		{
+			newFaction.bfWealth = true;
+			focusSet = true;
+		}
+		if (GC.getInfo(fromBuilding).getFlavorValue(FLAVOR_PRODUCTION) >= GC.getDefineINT("FLAVOR_FOCUS_THRESHOLD"))
+		{
+			newFaction.bfProduction = true;
+			focusSet = true;
+		}
+	}
+	newFaction.ownedBuildings = addbld;
+
+	std::vector< std::pair< int, int> > addimp;
+	std::pair< int, int > addimp2;
+	if (fromImprovement >= 0)
+	{
+		addimp2.first = GC.getMap().getPlotByIndex(fromImprovement).getX();
+		addimp2.second = GC.getMap().getPlotByIndex(fromImprovement).getY();
+		addimp.push_back(addimp2);
+		if (GC.getImprovementInfo(GC.getMap().getPlotByIndex(fromImprovement).getImprovementType()).getYieldChange(2) >= GC.getDefineINT("YIELD_FOCUS_THRESHOLD"))
+		{
+			newFaction.bfWealth = true;
+			focusSet = true;
+		}
+		if (GC.getImprovementInfo(GC.getMap().getPlotByIndex(fromImprovement).getImprovementType()).getYieldChange(1) >= GC.getDefineINT("YIELD_FOCUS_THRESHOLD"))
+		{
+			newFaction.bfProduction = true;
+			focusSet = true;
+		}
+	}
+	newFaction.ownedImprovements = addimp;
+
+	std::vector< CivicTypes > addbel;
+	if (fromBelief != NO_CIVIC)
+	{
+		addbel.push_back(fromBelief);
+		newFaction.bfBelief = true;
+		focusSet = true;
+
+		// merk.fac3: allow beliefs to affect initial focuses in more ways
+	}
+	newFaction.beliefs = addbel;
+
+	if (bCityCaptured)
+	{
+		// this spawn condition is basically a resistance movement so they're aggressive and political right off the bat
+		newFaction.aggression = GC.getDefineINT("CITY_CAPTURE_AGGRESSION");
+		newFaction.bfPower = true;
+		focusSet = true;
+	}
+	else
+		newFaction.aggression = 0; // merk.fac3: aggression can be nonzero depending on spawning stuff
+
+	newFaction.cohesion = GC.getDefineINT("FACTION_DEFAULT_COHESION");
+
+	// now have chance of adopting power, popularity, diplomacy, wealth, or production focus
+	// to do this fairly, order is randomized too - 0 1 2 3 4 follows above comment
+	std::vector< int > focuses;
+	for (int i = 0; i < 5; i++)
+		focuses.push_back(i);
+	while ((int)focuses.size() > 0)
+	{
+		int iFocus = SyncRandNum((int)focuses.size());
+		switch (focuses[iFocus])
+		{
+		case 0: 
+			if (SyncRandSuccess100(GC.getDefineINT("POWER_FOCUS_CHANCE") + (GC.getDefineINT("NO_FOCUS_BOOST") * (1 - focusSet))))
+			{
+				newFaction.bfPower = true;
+				focusSet = true;
+			}
+			break;
+		case 1:
+			if (SyncRandSuccess100(GC.getDefineINT("POPULARITY_FOCUS_CHANCE") + (GC.getDefineINT("NO_FOCUS_BOOST") * (1 - focusSet))))
+			{
+				newFaction.bfPopularity = true;
+				focusSet = true;
+			}
+			break;
+		case 2:
+			if (SyncRandSuccess100(GC.getDefineINT("DIPLOMACY_FOCUS_CHANCE") + (GC.getDefineINT("NO_FOCUS_BOOST") * (1 - focusSet))))
+			{
+				newFaction.bfDiplomacy = true;
+				focusSet = true;
+			}
+			break;
+		case 3:
+			if (SyncRandSuccess100(GC.getDefineINT("WEALTH_FOCUS_CHANCE") + (GC.getDefineINT("NO_FOCUS_BOOST") * (1 - focusSet))))
+			{
+				newFaction.bfWealth = true;
+				focusSet = true;
+			}
+			break;
+		case 4:
+			if (SyncRandSuccess100(GC.getDefineINT("PRODUCTION_FOCUS_CHANCE") + (GC.getDefineINT("NO_FOCUS_BOOST") * (1 - focusSet))))
+			{
+				newFaction.bfProduction = true;
+				focusSet = true;
+			}
+			break;
+		}
+		focuses.erase(focuses.begin() + iFocus);
+	}
+
+	// add faction to list and update all the relationships
+	aFactions.push_back(newFaction);
+	for (int i = 0; i < (int)aFactions.size(); i++)
+	{
+		// merk.fac3: relations non-default
+		newFaction.factionRelations.push_back(0);
+		aFactions[i].factionRelations.push_back(0);
+	}
+	newFaction.factionRelations.pop_back(); // there will be one extra in new faction's list
+
+	// add faction to city if city is not null, and set initial popularity
+	if (iCity >= 0)
+	{
+		std::pair < int, int > newPop; 
+		newPop.first = (int)aFactions.size() - 1; // last index in list
+		newPop.second = 0; 
+		GET_PLAYER(eCityOwner).getCity(iCity)->aiFactionPopularities.push_back(newPop);
+		// merk.fac3: popularities non-default
+	}
+	// give it a name - merk.fac3. For now:
+	newFaction.name = "Faction Thing";
+	// handle govt if applicable
+	if (isPlayer != NO_PLAYER)
+	{
+		GET_PLAYER(isPlayer).iPlayerFaction = (int)aFactions.size() - 1;
+		newFaction.ePlayer = isPlayer;
+	}
+	// display a message to players that should be able to see it - merk.fac3
+}
+// merk.fac2 end
+
 // advc.314: Between 0 and GOODY_BUFF_PEAK_MULTIPLIER, depending on game turn.
 scaled CvGame::goodyHutEffectFactor(
 	/*	Use true when a goody hut effect is supposed to increase with
@@ -11110,6 +11335,11 @@ int CvGame::isRelationship(int iFirstFaction, int iSecondFaction, int iThreshold
 	if (includeLower && aFactions[iFirstFaction].factionRelations[iSecondFaction] <= iThreshold)
 		return true;
 	return false;
+}
+
+int CvGame::getBuildingOwner(int iCity, BuildingTypes eBuilding)
+{
+	return 0;
 }
 
 
