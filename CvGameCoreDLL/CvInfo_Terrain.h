@@ -92,6 +92,7 @@ public: // All the const functions are exposed to Python except for those relate
 	bool readPass2(CvXMLLoadUtility* pXML); // merk.msm
 	bool readPass3(); // merk.msm
 
+
 protected:
 	int m_iMovementCost;
 	int m_iSeeFromLevel;
@@ -677,6 +678,11 @@ public:
 	int getFeatureAdjWeight(int iFeature) const;
 	// merk.msm end
 
+	// merk.fac3.1
+	std::vector < CvString > factionAdjectives;
+	std::vector < CvString > factionNouns;
+	// merk.fac3 end
+
 	/*	advc.003w: Moved from CvGameCoreUtils; still exposed to Python through CyGameCoreUtils.
 		Renamed from "finalImprovementUpgrade".
 		Can't turn it into a non-static function b/c a CvImprovementInfo object
@@ -691,6 +697,8 @@ public:
 	#endif
 	bool read(CvXMLLoadUtility* pXML);
 	bool readPass2(CvXMLLoadUtility* pXML);
+
+	
 
 protected:
 	int m_iAdvancedStartCost;

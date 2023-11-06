@@ -599,6 +599,48 @@ bool CvBuildingInfo::read(CvXMLLoadUtility* pXML)
 	pXML->SetInfoIDFromChildXmlVal(m_eAdvisorType, "Advisor");
 	pXML->GetChildXmlValByName(m_szArtDefineTag, "ArtDefineTag");
 	pXML->GetChildXmlValByName(m_szMovieDefineTag, "MovieDefineTag");
+
+	// merk.fac3 begin
+	if (gDLL->getXMLIFace()->SetToChildByTagName(pXML->GetXML(), "FactionAdjectives"))
+	{
+		bool bSuccess = true;
+		while (bSuccess)
+		{
+			CvString szTextVal;
+			pXML->GetChildXmlValByName(szTextVal, "FactionAdjective", "");
+			if (szTextVal.GetLength() > 0)
+			{
+				factionAdjectives.push_back(szTextVal.GetCString());
+				if (!gDLL->getXMLIFace()->NextSibling(pXML->GetXML()))
+					bSuccess = false;
+			}
+			else
+				bSuccess = false;
+			gDLL->getXMLIFace()->NextSibling(pXML->GetXML());
+		}
+		gDLL->getXMLIFace()->SetToParent(pXML->GetXML());
+	}
+	if (gDLL->getXMLIFace()->SetToChildByTagName(pXML->GetXML(), "FactionNouns"))
+	{
+		bool bSuccess = true;
+		while (bSuccess)
+		{
+			CvString szTextVal;
+			pXML->GetChildXmlValByName(szTextVal, "FactionNoun", "");
+			if (szTextVal.GetLength() > 0)
+			{
+				factionNouns.push_back(szTextVal.GetCString());
+				if (!gDLL->getXMLIFace()->NextSibling(pXML->GetXML()))
+					bSuccess = false;
+			}
+			else
+				bSuccess = false;
+			gDLL->getXMLIFace()->NextSibling(pXML->GetXML());
+		}
+		gDLL->getXMLIFace()->SetToParent(pXML->GetXML());
+	}
+	// merk.fac3 end
+
 	pXML->SetInfoIDFromChildXmlVal(m_eHolyCity, "HolyCity");
 	pXML->SetInfoIDFromChildXmlVal(m_eReligionType, "ReligionType");
 	pXML->SetInfoIDFromChildXmlVal(m_eStateReligion, "StateReligion");

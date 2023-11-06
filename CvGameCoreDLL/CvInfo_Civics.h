@@ -105,6 +105,11 @@ public: // The const functions are exposed to Python except those added by AdvCi
 	#endif
 	bool read(CvXMLLoadUtility* pXML);
 
+	// merk.fac3.1
+	std::vector < CvString > factionAdjectives;
+	std::vector < CvString > factionNouns;
+	// merk.fac3 end
+
 protected:
 	CivicOptionTypes m_eCivicOptionType;
 	int m_iAnarchyLength;

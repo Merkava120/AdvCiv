@@ -220,6 +220,16 @@
 	<ElementType name="MovieFile" content="textOnly"/>
 	<ElementType name="MovieSound" content="textOnly"/>
 	<ElementType name="Sound" content="textOnly"/>
+	<!-- merk.fac3.1 -->
+	<ElementType name="FactionAdjective" content="textOnly"/>
+	<ElementType name="FactionNoun" content="textOnly"/>
+	<ElementType name="FactionAdjectives" content="eltOnly">
+		<element type="FactionAdjective" minOccurs="0" maxOccurs="*"/>
+	</ElementType>
+	<ElementType name="FactionNouns" content="eltOnly">
+		<element type="FactionNoun" minOccurs="0" maxOccurs="*"/>
+	</ElementType>
+	<!-- merk.fac3 end-->
 	<ElementType name="ReligionInfo" content="eltOnly">
 		<element type="Type"/>
 		<element type="Description"/>
@@ -229,6 +239,10 @@
 		<element type="FreeUnitClass"/>
 		<element type="iFreeUnits"/>
 		<element type="iSpreadFactor"/>
+		<!-- merk.fac3.1 -->
+		<element type="FactionAdjectives" minOccurs="0"/>
+		<element type="FactionNouns" minOccurs="0"/>
+		<!-- merkava120 end -->
 		<element type="GlobalReligionCommerces"/>
 		<element type="HolyCityCommerces"/>
 		<element type="StateReligionCommerces"/>
@@ -925,6 +939,10 @@
 		<element type="FeatureHappinessChanges"/>
 		<element type="ImprovementYieldChanges"/>
 		<element type="WeLoveTheKing"/>
+		<!-- merk.fac3.1 -->
+		<element type="FactionAdjectives" minOccurs="0"/>
+		<element type="FactionNouns" minOccurs="0"/>
+		<!-- merkava120 end -->
 	</ElementType>
 	<ElementType name="CivicInfos" content="eltOnly">
 		<element type="CivicInfo" maxOccurs="*"/>

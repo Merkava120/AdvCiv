@@ -307,6 +307,7 @@ class CvFactionScreen:
 			
 			for c in xrange(gc.getNumCivicInfos()):	
 				iBeliefPop = CyGame().getBeliefPopularity(iID, eOwner, c)
+				iTotalBeliefPop += iBeliefPop
 				if (iBeliefPop > 0 and iBeliefPop > iPopThreshold):
 					lTopBeliefs.append(c)
 					lTopBeliefPops.append(iBeliefPop)
@@ -325,13 +326,9 @@ class CvFactionScreen:
 						lTopBeliefs.remove(iMinWhich)
 						lTopBeliefPops.remove(iMinBelief)
 						iPopThreshold = iSecondLowest # now lowest
-			
-			# should now have top beliefs in list 
-			for c in xrange(len(lTopBeliefPops)):
-				iTotalBeliefPop += lTopBeliefPops[c]
-			
+				
 			if iTotalBeliefPop == 0: # this shouldn't happen after the first belief gains popularity but just in case
-				iTotalBeliefPop = 1
+				iTotalBeliefPop = 1 # avoid div / zero
 			
 			
 			
@@ -392,6 +389,7 @@ class CvFactionScreen:
 			
 			for f in xrange(len(lFactions)):	
 				iFactionPop = CyGame().getFactionCityPopularity(iID, eOwner, f)
+				iTotalFacPop += iFactionPop
 				if (iFactionPop > 0 and iFactionPop > iPopThreshold):
 					lTopFactions.append(f)
 					lTopFactionPops.append(iFactionPop)
@@ -410,25 +408,22 @@ class CvFactionScreen:
 						lTopFactions.remove(iMinWhich)
 						lTopFactionPops.remove(iMinFaction)
 						iPopThreshold = iSecondLowest # now lowest
-			
-			# should now have top beliefs in list 
-			for f in xrange(len(lTopFactionPops)):
-				iTotalFactionPop += lTopFactionPops[f]
-			
-			if iTotalFactionPop == 0: # this shouldn't happen after the first faction gains popularity but just in case
-				iTotalFactionPop = 1
+						
+			if iTotalFacPop == 0: # this shouldn't happen after the first faction gains popularity but just in case
+				iTotalFacPop = 1 # avoid div / zero
 				
 			
-			szFactionPopString = ""
+	
+			szFactionPopString = ""			
 			if (len(lTopFactions) == 0):
-				szFactionPopString = "No Beliefs"
+				szFactionPopString = "No Factions"
 			else:
 				for f in xrange(len(lTopFactions)):
 					if (f == 0):
 						continue
 					szFactionPopString.append(gc.getCivicInfo(lTopFactions[f].getDescription()))
 					szFactionPopString.append(" (")
-					szFactionPopString.append(str(lTopFactionPops[f] / iTotalFactionPop))
+					szFactionPopString.append(str(lTopFactionPops[f] / iTotalFacPop))
 					szFactionPopString.append("%)")	
 					if (f < len(lTopFactions) - 1):
 						szFactionPopString.append(" , ")
@@ -441,22 +436,22 @@ class CvFactionScreen:
 		screen.enableSelect("DomesticTable", True)
 		screen.enableSort("DomesticTable")
 
-		iWidth = (self.nTableWidth - 180 - 174)/(5)
+		iWidth = (self.nTableWidth - 180 - 174)/(6)
 		screen.setTableColumnHeader("DomesticTable", 0, "", 24)
-		screen.setTableColumnHeader("DomesticTable", 1, CyTranslator().getText("TXT_KEY_DOMESTIC_ADVISOR_NAME", ()), 150)
+		screen.setTableColumnHeader("DomesticTable", 1, CyTranslator().getText("TXT_KEY_DOMESTIC_ADVISOR_NAME", ()), 250)
 		screen.setTableColumnHeader("DomesticTable", 2, u"%c" % CyGame().getSymbolID(FontSymbols.HAPPY_CHAR), iWidth)
 		screen.setTableColumnHeader("DomesticTable", 3, u"%c" % gc.getYieldInfo(YieldTypes.YIELD_PRODUCTION).getChar(), iWidth)
 		screen.setTableColumnHeader("DomesticTable", 4, u"%c" % gc.getCommerceInfo(CommerceTypes.COMMERCE_GOLD).getChar(), iWidth)
-		screen.setTableColumnHeader("DomesticTable", 5, CyTranslator().getText("Type", ()), 150)		
+		screen.setTableColumnHeader("DomesticTable", 5, CyTranslator().getText("Type", ()), 350)		
 		
 
 		for i in xrange(len(lFactions)):
 			iRow = screen.appendTableRow("DomesticTable")
 			#screen.setTableText("DomesticTable", 0, iRow, "", gc.getCivilizationInfo(iCivilization).getButton(), WidgetTypes.WIDGET_ZOOM_CITY, iPlayer, pCity.getID(), CvUtil.FONT_CENTER_JUSTIFY)
 			screen.setTableText("DomesticTable", 1, iRow, CyGame().getFactionName(lFactions[i]), "", WidgetTypes.WIDGET_GENERAL, -1, -1, CvUtil.FONT_LEFT_JUSTIFY)
-			screen.setTableInt("DomesticTable", 2, iRow, self.addColor(CyGame().getFactionPopularity(lFactions[i]), 1), "", WidgetTypes.WIDGET_GENERAL, -1, -1, CvUtil.FONT_RIGHT_JUSTIFY)
-			screen.setTableInt("DomesticTable", 3, iRow, self.addColor(CyGame().getFactionProduction(lFactions[i]), 1), "", WidgetTypes.WIDGET_GENERAL, -1, -1, CvUtil.FONT_RIGHT_JUSTIFY)
-			screen.setTableInt("DomesticTable", 4, iRow, self.addColor(CyGame().getFactionWealth(lFactions[i]), 1), "", WidgetTypes.WIDGET_GENERAL, -1, -1, CvUtil.FONT_RIGHT_JUSTIFY)
+			screen.setTableInt("DomesticTable", 2, iRow, self.addColor(CyGame().getFactionPopularity(lFactions[i]), 1), "", WidgetTypes.WIDGET_GENERAL, -1, -1, CvUtil.FONT_LEFT_JUSTIFY)
+			screen.setTableInt("DomesticTable", 3, iRow, self.addColor(CyGame().getFactionProduction(lFactions[i]), 1), "", WidgetTypes.WIDGET_GENERAL, -1, -1, CvUtil.FONT_LEFT_JUSTIFY)
+			screen.setTableInt("DomesticTable", 4, iRow, self.addColor(CyGame().getFactionWealth(lFactions[i]), 1), "", WidgetTypes.WIDGET_GENERAL, -1, -1, CvUtil.FONT_LEFT_JUSTIFY)
 			screen.setTableText("DomesticTable", 5, iRow, CyGame().getFactionName(lFactions[i]), "", WidgetTypes.WIDGET_GENERAL, -1, -1, CvUtil.FONT_LEFT_JUSTIFY)
 			
 

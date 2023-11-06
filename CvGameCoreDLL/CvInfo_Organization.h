@@ -73,6 +73,11 @@ public: // All the const functions are exposed to Python
 
 	static bool isReligionTech(TechTypes eTech); // advc.003w: Moved from CvGameCoreUtils
 
+	// merk.fac3.1
+	std::vector < CvString > factionAdjectives;
+	std::vector < CvString > factionNouns;
+	// merk.fac3 end
+
 protected:
 	wchar m_cHolyCityChar; // advc: was int
 	int m_iNumFreeUnits;

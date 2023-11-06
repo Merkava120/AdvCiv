@@ -326,6 +326,8 @@ bool CvCivilizationInfo::read(CvXMLLoadUtility* pXML)
 
 	pXML->GetChildXmlValByName(m_szArtDefineTag, "ArtDefineTag");
 
+	
+
 	pXML->SetGlobalTypeFromChildXmlVal((int&)m_eArtStyleType, "ArtStyleType");
 	{
 		CvString szTextVal;
@@ -347,6 +349,44 @@ bool CvCivilizationInfo::read(CvXMLLoadUtility* pXML)
 		pXML->SetStringList(&m_paszCityNames, &m_iNumCityNames);
 		gDLL->getXMLIFace()->SetToParent(pXML->GetXML());
 	}
+	// merk.fac3 begin
+	if (gDLL->getXMLIFace()->SetToChildByTagName(pXML->GetXML(), "FactionAdjectives"))
+	{
+		int iNum = gDLL->getXMLIFace()->GetNumChildren(pXML->GetXML());
+		gDLL->getXMLIFace()->SetToChild(pXML->GetXML());
+		for (int i = 0; i < iNum; i++)
+		{
+			CvString szTextVal;
+			pXML->GetXmlVal(szTextVal, "");
+			if (szTextVal.GetLength() > 0)
+			{
+				factionAdjectives.push_back(szTextVal.GetCString());
+			}
+			if (!gDLL->getXMLIFace()->NextSibling(pXML->GetXML()))
+				break;
+		}
+		gDLL->getXMLIFace()->SetToParent(pXML->GetXML());
+		gDLL->getXMLIFace()->SetToParent(pXML->GetXML());
+	}
+	if (gDLL->getXMLIFace()->SetToChildByTagName(pXML->GetXML(), "FactionNouns"))
+	{
+		int iNum = gDLL->getXMLIFace()->GetNumChildren(pXML->GetXML());
+		gDLL->getXMLIFace()->SetToChild(pXML->GetXML());
+		for (int i = 0; i < iNum; i++)
+		{
+			CvString szTextVal;
+			pXML->GetXmlVal(szTextVal, "");
+			if (szTextVal.GetLength() > 0)
+			{
+				factionNouns.push_back(szTextVal.GetCString());
+			}
+			if (!gDLL->getXMLIFace()->NextSibling(pXML->GetXML()))
+				break;
+		}
+		gDLL->getXMLIFace()->SetToParent(pXML->GetXML());
+		gDLL->getXMLIFace()->SetToParent(pXML->GetXML());
+	}
+	// merk.fac3 end
 	// advc.003: Reduce code duplication
 	for (int i = 0; i < 2; i++)
 	{

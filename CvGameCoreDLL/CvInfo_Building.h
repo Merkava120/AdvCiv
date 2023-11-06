@@ -70,6 +70,8 @@ public: // All the const functions are exposed to Python
 	bool read(CvXMLLoadUtility* pXML);
 	bool readPass3();
 
+	
+
 protected:
 	int m_iMaxGlobalInstances;
 	int m_iMaxTeamInstances;
@@ -343,6 +345,11 @@ public:
 	static void setAreaTradeRoutesEnabled(bool b);
 	static void setAreaBorderObstacleEnabled(bool b);
 	// </advc.310>
+
+	// merk.fac3.1
+	std::vector < CvString > factionAdjectives;
+	std::vector < CvString > factionNouns;
+	// merk.fac3 end
 
 protected:
 	BuildingClassTypes m_eBuildingClassType;

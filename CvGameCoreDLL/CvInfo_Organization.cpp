@@ -161,6 +161,47 @@ bool CvReligionInfo::read(CvXMLLoadUtility* pXML)
 
 	pXML->GetChildXmlValByName(&m_iNumFreeUnits, "iFreeUnits");
 
+	// merk.fac3 begin
+	if (gDLL->getXMLIFace()->SetToChildByTagName(pXML->GetXML(), "FactionAdjectives"))
+	{
+		bool bSuccess = true;
+		while (bSuccess)
+		{
+			CvString szTextVal;
+			pXML->GetChildXmlValByName(szTextVal, "FactionAdjective", "");
+			if (szTextVal.GetLength() > 0)
+			{
+				factionAdjectives.push_back(szTextVal.GetCString());
+				if (!gDLL->getXMLIFace()->NextSibling(pXML->GetXML()))
+					bSuccess = false;
+			}
+			else
+				bSuccess = false;
+			gDLL->getXMLIFace()->NextSibling(pXML->GetXML());
+		}
+		gDLL->getXMLIFace()->SetToParent(pXML->GetXML());
+	}
+	if (gDLL->getXMLIFace()->SetToChildByTagName(pXML->GetXML(), "FactionNouns"))
+	{
+		bool bSuccess = true;
+		while (bSuccess)
+		{
+			CvString szTextVal;
+			pXML->GetChildXmlValByName(szTextVal, "FactionNoun", "");
+			if (szTextVal.GetLength() > 0)
+			{
+				factionNouns.push_back(szTextVal.GetCString());
+				if (!gDLL->getXMLIFace()->NextSibling(pXML->GetXML()))
+					bSuccess = false;
+			}
+			else
+				bSuccess = false;
+			gDLL->getXMLIFace()->NextSibling(pXML->GetXML());
+		}
+		gDLL->getXMLIFace()->SetToParent(pXML->GetXML());
+	}
+	// merk.fac3 end
+
 	if (gDLL->getXMLIFace()->SetToChildByTagName(pXML->GetXML(),
 		"GlobalReligionCommerces"))
 	{

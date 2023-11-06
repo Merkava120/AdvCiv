@@ -15,6 +15,16 @@
 	<ElementType name="DefaultBuilding" content="textOnly"/>
 	<ElementType name="VictoryType" content="textOnly"/>
 	<ElementType name="iThreshold" content="textOnly" dt:type="int"/>
+	<!-- merk.fac3.1 -->
+	<ElementType name="FactionAdjective" content="textOnly"/>
+	<ElementType name="FactionNoun" content="textOnly"/>
+	<ElementType name="FactionAdjectives" content="eltOnly">
+		<element type="FactionAdjective" minOccurs="0" maxOccurs="*"/>
+	</ElementType>
+	<ElementType name="FactionNouns" content="eltOnly">
+		<element type="FactionNoun" minOccurs="0" maxOccurs="*"/>
+	</ElementType>
+	<!-- merk.fac3 end-->
 	<ElementType name="VictoryThreshold" content="eltOnly">
 		<element type="VictoryType"/>
 		<element type="iThreshold"/>
@@ -397,6 +407,10 @@
 		<element type="Advisor"/>
 		<element type="ArtDefineTag"/>
 		<element type="MovieDefineTag"/>
+		<!-- merk.fac3.1 -->
+		<element type="FactionAdjectives" minOccurs="0"/>
+		<element type="FactionNouns" minOccurs="0"/>
+		<!-- merkava120 end -->
 		<element type="HolyCity"/>
 		<element type="ReligionType"/>
 		<element type="StateReligion"/>

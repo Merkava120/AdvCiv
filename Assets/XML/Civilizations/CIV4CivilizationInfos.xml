@@ -88,6 +88,14 @@
 				<City>TXT_KEY_CITY_NAME_COLUMBUS</City>
 				<City>TXT_KEY_CITY_NAME_LE_BAM</City>
 			</Cities>
+			<FactionAdjectives>
+				<FactionAdjective>Seriously Cool</FactionAdjective>
+				<FactionAdjective>Rockin</FactionAdjective>
+			</FactionAdjectives>
+			<FactionNouns>
+				<FactionNoun>Bangers</FactionNoun>
+				<FactionNoun>Busters</FactionNoun>
+			</FactionNouns>
 			<Buildings>
 				<Building>
 					<BuildingClassType>BUILDINGCLASS_SUPERMARKET</BuildingClassType>

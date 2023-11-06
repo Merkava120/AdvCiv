@@ -11073,8 +11073,61 @@ void CvGame::spawnFaction(int iCity, PlayerTypes eCityOwner, ReligionTypes fromR
 		GET_PLAYER(eCityOwner).getCity(iCity)->aiFactionPopularities.push_back(newPop);
 		// merk.fac3: popularities non-default
 	}
-	// give it a name - merk.fac3. For now:
-	newFaction.name = "Faction Thing";
+	// merk.fac3.1: naming
+	std::vector< CvString > adjectives;
+	std::vector< CvString > nouns;
+	if (fromBelief != NO_CIVIC)
+	{
+		for (int i = 0; i < (int)GC.getCivicInfo(fromBelief).factionAdjectives.size(); i++)
+			adjectives.push_back(GC.getCivicInfo(fromBelief).factionAdjectives[i]);
+		for (int i = 0; i < (int)GC.getCivicInfo(fromBelief).factionNouns.size(); i++)
+			nouns.push_back(GC.getCivicInfo(fromBelief).factionNouns[i]);
+	}
+	if (fromBuilding != NO_BUILDING)
+	{
+		for (int i = 0; i < (int)GC.getBuildingInfo(fromBuilding).factionAdjectives.size(); i++)
+			adjectives.push_back(GC.getBuildingInfo(fromBuilding).factionAdjectives[i]);
+		for (int i = 0; i < (int)GC.getBuildingInfo(fromBuilding).factionNouns.size(); i++)
+			nouns.push_back(GC.getBuildingInfo(fromBuilding).factionNouns[i]);
+	}
+	if (fromReligion != NO_RELIGION)
+	{
+		for (int i = 0; i < (int)GC.getReligionInfo(fromReligion).factionAdjectives.size(); i++)
+			adjectives.push_back(GC.getReligionInfo(fromReligion).factionAdjectives[i]);
+		for (int i = 0; i < (int)GC.getReligionInfo(fromReligion).factionNouns.size(); i++)
+			nouns.push_back(GC.getReligionInfo(fromReligion).factionNouns[i]);
+	}
+	if (fromNationality != NO_CIVILIZATION)
+	{
+		for (int i = 0; i < (int)GC.getCivilizationInfo(fromNationality).factionAdjectives.size(); i++)
+			adjectives.push_back(GC.getCivilizationInfo(fromNationality).factionAdjectives[i]);
+		for (int i = 0; i < (int)GC.getCivilizationInfo(fromNationality).factionNouns.size(); i++)
+			nouns.push_back(GC.getCivilizationInfo(fromNationality).factionNouns[i]);
+	}
+	if (fromImprovement > -1)
+	{
+		if (GC.getMap().getPlotByIndex(fromImprovement).isImproved())
+		{
+			CvImprovementInfo& kImprovement = GC.getImprovementInfo(GC.getMap().getPlotByIndex(fromImprovement).getImprovementType());
+			for (int i = 0; i < (int)kImprovement.factionAdjectives.size(); i++)
+				adjectives.push_back(kImprovement.factionAdjectives[i]);
+			for (int i = 0; i < (int)kImprovement.factionNouns.size(); i++)
+				nouns.push_back(kImprovement.factionNouns[i]);
+		}
+	}
+	// merk.fac3 option later - make sure the name is unique
+
+	if ((int)nouns.size() <= 0 || (int)adjectives.size() <= 0)
+		newFaction.name = "Unnamed Faction"; // this means you have a problem in your xml
+	else
+	{
+		int inoun = SyncRandNum((int)nouns.size());
+		int iadj = SyncRandNum((int)adjectives.size());
+		CvString newname = adjectives[iadj];
+		newname.append(" ");
+		newname.append(nouns[inoun]);
+		newFaction.name = newname.GetCString();
+	}
 	// handle govt if applicable
 	if (isPlayer != NO_PLAYER)
 	{

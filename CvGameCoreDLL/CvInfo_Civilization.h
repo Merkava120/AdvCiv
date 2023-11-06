@@ -75,6 +75,11 @@ public: // advc: All the const functions are exposed to Python
 	void write(FDataStreamBase* stream);
 	#endif
 
+	// merk.fac3.1
+	std::vector < CvString > factionAdjectives;
+	std::vector < CvString > factionNouns;
+	// merk.fac3 end
+
 protected:
 	int m_iDefaultPlayerColor;
 	ArtStyleTypes m_eArtStyleType;
