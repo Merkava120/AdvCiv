@@ -21,6 +21,7 @@ import CvTechSplashScreen
 import CvTopCivs
 import CvInfoScreen
 import CvFactionScreen # merk.facinterface
+import CvFactionScreen2 # merk.facinterface
 
 import CvIntroMovieScreen
 import CvVictoryMovieScreen
@@ -247,12 +248,10 @@ def showInfoScreen(argsList):
 		infoScreen.showScreen(-1, iTabID, iEndGame)
 
 # merk.facinterface
-factionScreen = CvFactionScreen.CvFactionScreen(FACTION_SCREEN)
-def showFactionScreen(argsList):
+factionScreen = CvFactionScreen.CvFactionScreen()
+def showFactionScreen(argsList): 
 	if (-1 != CyGame().getActivePlayer()):
-		iTabID = argsList[0]
-		factionScreen.showScreen(-1, iTabID)
-		# merk.facinterface end
+		factionScreen.interfaceScreen()
 
 debugInfoScreen = CvDebugInfoScreen.CvDebugInfoScreen()
 def showDebugInfoScreen():

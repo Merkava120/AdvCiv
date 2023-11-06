@@ -3466,6 +3466,19 @@ void CvGameTextMgr::setPlotHelp(CvWStringBuffer& szString, CvPlot const& kPlot)
 
 	if (ePlotImprovement != NO_IMPROVEMENT)
 	{
+		// merk.facinterface start
+		int iImprovementOwner = GC.getGame().getImprovementOwner(kPlot.getX(), kPlot.getY());
+		if (iImprovementOwner >= 0)
+		{
+			szString.append(NEWLINE);
+			CvWString szAnotherBuffer;
+			std::string controllerName = GC.getGame().getFactionName(iImprovementOwner);
+			std::wstring blah(controllerName.begin(), controllerName.end());
+			szAnotherBuffer.append(blah);
+			szString.append(gDLL->getText("TXT_KEY_CITY_CONTROLLER", szAnotherBuffer.GetCString()));
+			szString.append(NEWLINE);
+		}
+		// merk.facinterface end
 		szString.append(NEWLINE);
 		// <advc.005c>
 		bool bNamedRuin = false;
@@ -11460,6 +11473,21 @@ void CvGameTextMgr::setBuildingHelpActual(CvWStringBuffer &szBuffer,
 			szBuffer.append(szTempBuffer);
 		}
 		// K-Mod end
+	}
+	// merk.facinterface
+	if (pCity != NULL && bInBuildingList)
+	{
+		int iOwner = GC.getGame().getBuildingOwner(pCity->getID(), pCity->getOwner(), eBuilding);
+		if (iOwner >= 0)
+		{
+			szBuffer.append(NEWLINE);
+			CvWString szAnotherBuffer;
+			std::string controllerName = GC.getGame().getFactionName(iOwner);
+			std::wstring blah(controllerName.begin(), controllerName.end());
+			szAnotherBuffer.append(blah);
+			szBuffer.append(gDLL->getText("TXT_KEY_CITY_CONTROLLER", szAnotherBuffer.GetCString()));
+			szBuffer.append(NEWLINE);
+		}
 	}
 	{
 		bool bFirst = true;
