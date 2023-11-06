@@ -11055,8 +11055,7 @@ void CvGame::spawnFaction(int iCity, PlayerTypes eCityOwner, ReligionTypes fromR
 		focuses.erase(focuses.begin() + iFocus);
 	}
 
-	// add faction to list and update all the relationships
-	aFactions.push_back(newFaction);
+	// add faction to all the relationships
 	for (int i = 0; i < (int)aFactions.size(); i++)
 	{
 		// merk.fac3: relations non-default
@@ -11083,6 +11082,8 @@ void CvGame::spawnFaction(int iCity, PlayerTypes eCityOwner, ReligionTypes fromR
 		newFaction.ePlayer = isPlayer;
 	}
 	// display a message to players that should be able to see it - merk.fac3
+	// add faction to list (do last or editing it inside the list is more complicated)
+	aFactions.push_back(newFaction);
 }
 // merk.fac2 end
 
@@ -11337,10 +11338,147 @@ int CvGame::isRelationship(int iFirstFaction, int iSecondFaction, int iThreshold
 	return false;
 }
 
-int CvGame::getBuildingOwner(int iCity, BuildingTypes eBuilding)
+int CvGame::getBuildingOwner(int iCity, PlayerTypes eCityOwner, BuildingTypes eBuilding)
 {
+	CvCity const* pCity = GET_PLAYER(eCityOwner).getCity(iCity);
+	if (pCity->getNumRealBuilding(GC.getBuildingInfo(eBuilding).getBuildingClassType()) <= 0)
+		return -1; 
+	for (int i = 0; i < (int)aFactions.size(); i++)
+	{
+		if ((int)aFactions[i].ownedBuildings.size() > 0)
+		{
+			for (int j = 0; j < (int)aFactions[i].ownedBuildings.size(); j++)
+			{
+				if (aFactions[i].ownedBuildings[j].first != iCity)
+					continue;
+				if (aFactions[i].ownedBuildings[j].second == eBuilding)
+					return i; 
+			}
+		}
+	}
+	return -1;
+}
+
+int CvGame::getImprovementOwner(int iX, int iY)
+{
+	if (!GC.getMap().plot(iX, iY)->isImproved())
+		return -1;
+	for (int i = 0; i < (int)aFactions.size(); i++)
+	{
+		if ((int)aFactions[i].ownedImprovements.size() > 0)
+		{
+			for (int j = 0; j < (int)aFactions[i].ownedImprovements.size(); j++)
+			{
+				if (aFactions[i].ownedImprovements[j].first == iX && aFactions[i].ownedImprovements[j].second == iY)
+					return i;
+			}
+		}
+	}
+	return -1;
+}
+
+int CvGame::getFactionCityPopularity(int iCity, PlayerTypes eCityOwner, int iFaction)
+{
+	CvCity const* pCity = GET_PLAYER(eCityOwner).getCity(iCity);
+	if ((int)(pCity->aiFactionPopularities.size()) > 0)
+	{
+		for (int i = 0; i < (int)(pCity->aiFactionPopularities.size()); i++)
+		{
+			if (pCity->aiFactionPopularities[i].first == iFaction)
+				return pCity->aiFactionPopularities[i].second;
+		}
+	}
+	return 0; 
+}
+
+int CvGame::getBeliefPopularity(int iCity, PlayerTypes eCityOwner, CivicTypes eBelief)
+{
+	CvCity const* pCity = GET_PLAYER(eCityOwner).getCity(iCity);
+	if ((int)(pCity->aiBeliefPopularities.size()) > 0)
+	{
+		for (int i = 0; i < (int)(pCity->aiBeliefPopularities.size()); i++)
+		{
+			if (pCity->aiBeliefPopularities[i].first == eBelief)
+				return pCity->aiBeliefPopularities[i].second;
+		}
+	}
 	return 0;
 }
 
+int CvGame::getFactionWealth(int iFaction)
+{
+	FAssertBounds(0, (int)aFactions.size(), iFaction);
+	int iWealth = 0; 
+	if ((int)aFactions[iFaction].ownedBuildings.size() > 0)
+	{
+		for (int i = 0; i < (int)aFactions[iFaction].ownedBuildings.size(); i++)
+		{
+			CvBuildingInfo& kBuilding = GC.getBuildingInfo(aFactions[iFaction].ownedBuildings[i].second);
+			for (int j = 0; j < NUM_COMMERCE_TYPES; j++)
+			{
+				iWealth += kBuilding.getCommerceChange((CommerceTypes)j);
+			}
+			iWealth += kBuilding.getYieldChange(YIELD_COMMERCE);
+			// merk.fac3 add other things like commerce / yield modifiers, bonus yield modifiers, etc. 
+		}
+	}
+	if ((int)aFactions[iFaction].ownedImprovements.size() > 0)
+	{
+		for (int i = 0; i < (int)aFactions[iFaction].ownedImprovements.size(); i++)
+		{
+			CvPlot const* pPlot = GC.getMap().plot(aFactions[iFaction].ownedImprovements[i].first, aFactions[iFaction].ownedImprovements[i].second);
+			FAssert(pPlot->isImproved());
+			iWealth += pPlot->getYield(YIELD_COMMERCE);
+		}
+	}
+	return iWealth;
+}
 
-// merk.fac1 end
+int CvGame::getFactionProduction(int iFaction)
+{
+	FAssertBounds(0, (int)aFactions.size(), iFaction);
+	int iWealth = 0;
+	if ((int)aFactions[iFaction].ownedBuildings.size() > 0)
+	{
+		for (int i = 0; i < (int)aFactions[iFaction].ownedBuildings.size(); i++)
+		{
+			CvBuildingInfo& kBuilding = GC.getBuildingInfo(aFactions[iFaction].ownedBuildings[i].second);
+			iWealth += kBuilding.getYieldChange(YIELD_PRODUCTION);
+			// merk.fac3 add other things like yield modifiers, bonus yield modifiers, etc. 
+		}
+	}
+	if ((int)aFactions[iFaction].ownedImprovements.size() > 0)
+	{
+		for (int i = 0; i < (int)aFactions[iFaction].ownedImprovements.size(); i++)
+		{
+			CvPlot const* pPlot = GC.getMap().plot(aFactions[iFaction].ownedImprovements[i].first, aFactions[iFaction].ownedImprovements[i].second);
+			FAssert(pPlot->isImproved());
+			iWealth += pPlot->getYield(YIELD_PRODUCTION);
+		}
+	}
+	return iWealth;
+}
+
+// simply add up and return the total popularity
+int CvGame::getFactionPopularity(int iFaction)
+{
+	int iPop = 0;
+	// there's probably a faster way to do this but I'm tired
+	for (int i = 0; i < GC.getMap().numPlots(); i++)
+	{
+		if (!GC.getMap().getPlotByIndex(i).isCity())
+			continue;
+		CvCity const* pCity = GC.getMap().getPlotByIndex(i).getPlotCity();
+		iPop += getFactionCityPopularity(pCity->getID(), pCity->getOwner(), iFaction);
+	}
+	return iPop;
+}
+
+int CvGame::getCityController(int iCity, PlayerTypes eCityOwner)
+{
+	CvCity const* pCity = GET_PLAYER(eCityOwner).getCity(iCity);
+	return (pCity->iGoverningFaction);
+}
+
+
+// merk.fac end

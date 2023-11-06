@@ -306,6 +306,17 @@ void CyGamePythonInterface()
 		.def("reportCurrentLayer", &CyGame::reportCurrentLayer, "void(int /*GlobeLayerTypes*/)")
 		.def("isCivLeaderSetupKnown", &CyGame::isCivLeaderSetupKnown, "bool ()") // advc.190c
 		.def("isScenario", &CyGame::isScenario, "bool ()") // advc.052
+		// merk.facinterface begin
+		.def("getFactionName", &CyGame::getFactionName, "string (int)")
+		.def("getBuildingOwner", &CyGame::getBuildingOwner, "int (int, int, int)")
+		.def("getImprovementOwner", &CyGame::getImprovementOwner, "int (int, int)")
+		.def("getFactionCityPopularity", &CyGame::getFactionCityPopularity, "int (int, int, int)")
+		.def("getBeliefPopularity", &CyGame::getBeliefPopularity, "int (int, int, int)")
+		.def("getFactionWealth", &CyGame::getFactionWealth, "int (int)")
+		.def("getFactionProduction", &CyGame::getFactionProduction, "int (int)")
+		.def("getFactionPopularity", &CyGame::getFactionPopularity, "int (int)")
+		.def("getCityController", &CyGame::getCityController, "int (int, int)")
+		.def("getNumFactions", &CyGame::getNumFactions, "int ()") // merk end
 		;
 
 	python::class_<CyDeal>("CyDeal")

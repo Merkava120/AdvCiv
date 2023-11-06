@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!--
+	Unit Naming Translations
+
+	Copyright (c) 2010 The BUG Mod.
+  -->
+<Civ4GameText xmlns="http://www.firaxis.com">
+	
+	<!-- Domain Descriptions -->
+	
+	<TEXT>
+		<Tag>TXT_KEY_CITY_CONTROLLER</Tag>
+		<English>Controller: %s1</English>
+		<French>Terrestre</French>
+		<German>Land</German>
+		<Italian>Terrestre</Italian>
+		<Spanish>Terrestre</Spanish>
+	</TEXT>
+	
+
+</Civ4GameText>

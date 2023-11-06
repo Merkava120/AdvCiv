@@ -5212,6 +5212,8 @@ void CvPlayer::found(int iX, int iY)
 		ourFaction.second = 0; // might change this fac3
 		pCity->aiFactionPopularities.push_back(ourFaction);
 	}
+	// either way, set initial faction controller to us (for now)
+	pCity->iGoverningFaction = iPlayerFaction;
 
 }
 

@@ -143,6 +143,13 @@ void CvPythonCaller::showInfoScreen(int iTab, bool bEndGame) const
 	argsList.add(bEndGame);
 	call("showInfoScreen", argsList, PYScreensModule);
 }
+// merk.facinterface
+void CvPythonCaller::showFactionScreen(int iTab) const
+{
+	CyArgsList argsList;
+	argsList.add(iTab);
+	call("showFactionScreen", argsList, PYScreensModule);
+}
 
 void CvPythonCaller::showHallOfFameScreen(bool bAllowReplay) const
 {

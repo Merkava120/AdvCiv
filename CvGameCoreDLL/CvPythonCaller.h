@@ -27,6 +27,7 @@ public:
 	void callScreenFunction(char const* szFunctionName) const;
 	void showForeignAdvisorScreen(int iTab = -1) const;
 	void showInfoScreen(int iTab = 0, bool bEndGame = false) const;
+	void showFactionScreen(int iTab = 0) const; // merk.facinterface
 	void showHallOfFameScreen(bool bAllowReplay) const;
 	CvPlot* WBGetHighlightPlot() const;
 	void onOKClicked(CvPopupInfo const& kInfo, int iButtonClicked) const;

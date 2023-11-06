@@ -1058,6 +1058,7 @@ ENUM_START(Control, CONTROL)
 	CONTROL_DIPLOMACY,
 	CONTROL_SELECT_HEALTHY,
 	CONTROL_ESPIONAGE_SCREEN,
+	CONTROL_FACTION_SCREEN, // merk.facinterface
 	CONTROL_FREE_COLONY,
 	CONTROL_UNSELECT_ALL, // advc.154
 	// Any additions need to be reflected in XML\Units\Civ4ControlInfos.xml

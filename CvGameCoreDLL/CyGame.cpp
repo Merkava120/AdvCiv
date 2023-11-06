@@ -1241,3 +1241,55 @@ bool CyGame::isScenario()
 {
 	return m_kGame.isScenario();
 }
+// merk.facinterface begin
+std::string CyGame::getFactionName(int iFaction)
+{
+	return m_kGame.getFactionName(iFaction);
+}
+
+int CyGame::getBuildingOwner(int iCity, int eCityOwner, int eBuilding)
+{
+	return m_kGame.getBuildingOwner(iCity, (PlayerTypes)eCityOwner, (BuildingTypes)eBuilding);
+}
+
+int CyGame::getImprovementOwner(int iX, int iY)
+{
+	return m_kGame.getImprovementOwner(iX, iY);
+}
+
+int CyGame::getFactionCityPopularity(int iCity, int eCityOwner, int iFaction)
+{
+	return m_kGame.getFactionCityPopularity(iCity, (PlayerTypes)eCityOwner, iFaction);
+}
+
+int CyGame::getBeliefPopularity(int iCity, int eCityOwner, int eBelief)
+{
+	return m_kGame.getBeliefPopularity(iCity, (PlayerTypes)eCityOwner, (CivicTypes)eBelief);
+}
+
+int CyGame::getFactionWealth(int iFaction)
+{
+	return m_kGame.getFactionWealth(iFaction);
+}
+
+int CyGame::getFactionProduction(int iFaction)
+{
+	return m_kGame.getFactionProduction(iFaction);
+}
+
+int CyGame::getFactionPopularity(int iFaction)
+{
+	return m_kGame.getFactionPopularity(iFaction);
+}
+
+int CyGame::getNumFactions()
+{
+	return (int)m_kGame.aFactions.size();
+}
+
+int CyGame::getCityController(int iCity, int eCityOwner)
+{
+	return m_kGame.getCityController(iCity, (PlayerTypes)eCityOwner);
+}
+
+// merk.facinterface end

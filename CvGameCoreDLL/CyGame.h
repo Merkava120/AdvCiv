@@ -310,6 +310,19 @@ public:
 	bool isCivLeaderSetupKnown(); // advc.190c
 	bool isScenario(); // advc.052
 
+	// merk.facinterface
+	std::string getFactionName(int iFaction);
+	int getBuildingOwner(int iCity, int eCityOwner, int eBuilding);
+	int getImprovementOwner(int iX, int iY);
+	int getFactionCityPopularity(int iCity, int eCityOwner, int iFaction);
+	int getBeliefPopularity(int iCity, int eCityOwner, int eBelief); 
+	int getFactionWealth(int iFaction);
+	int getFactionProduction(int iFaction);
+	int getFactionPopularity(int iFaction);
+	int getNumFactions(); // only python
+	int getCityController(int iCity, int eCityOwner);
+	// merk.facinterface end
+
 protected:
 	CvGame& m_kGame; // advc: was pointer
 };

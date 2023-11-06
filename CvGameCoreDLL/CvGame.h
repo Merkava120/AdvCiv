@@ -1002,6 +1002,18 @@ public:
 	bool isAggressive(int iFaction) const;
 	int isRelationship(int iFirstFaction, int iSecondFaction, int iThreshold, bool includeGreater = false, bool includeLower = false) const;
 
+	// merk.facinterface functions to expose to python (also useful otherwise)
+	std::string getFactionName(int iFaction) const { return aFactions[iFaction].name; }
+	int getBuildingOwner(int iCity, PlayerTypes eCityOwner, BuildingTypes eBuilding);
+	int getImprovementOwner(int iX, int iY);
+	int getFactionCityPopularity(int iCity, PlayerTypes eCityOwner, int iFaction);
+	int getBeliefPopularity(int iCity, PlayerTypes eCityOwner, CivicTypes eBelief);
+	int getFactionWealth(int iFaction);
+	int getFactionProduction(int iFaction);
+	int getFactionPopularity(int iFaction);
+	int getCityController(int iCity, PlayerTypes eCityOwner);
+
+
 	// religion governor tracker (religious beliefs of them = beliefs of religion)
 	ListEnumMap< ReligionTypes, int > aReligionLeaders;
 

@@ -1279,6 +1279,7 @@ bool CvGame::canDoControl(ControlTypes eControl) const
 	case CONTROL_INFO:
 	case CONTROL_DETAILS:
 	case CONTROL_SAVE_NORMAL:
+	case CONTROL_FACTION_SCREEN: // merk.facinterface
 		return true;
 
 	case CONTROL_ESPIONAGE_SCREEN:
@@ -1690,6 +1691,10 @@ void CvGame::doControl(ControlTypes eControl)
 
 	case CONTROL_INFO:
 		GC.getPythonCaller()->showInfoScreen(0, getGameState() != GAMESTATE_ON);
+		break;
+
+	case CONTROL_FACTION_SCREEN:
+		GC.getPythonCaller()->showFactionScreen();
 		break;
 
 	case CONTROL_GLOBE_VIEW:

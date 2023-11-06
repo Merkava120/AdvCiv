@@ -20,6 +20,7 @@ import CvDawnOfMan
 import CvTechSplashScreen
 import CvTopCivs
 import CvInfoScreen
+import CvFactionScreen # merk.facinterface
 
 import CvIntroMovieScreen
 import CvVictoryMovieScreen
@@ -244,6 +245,14 @@ def showInfoScreen(argsList):
 		iTabID = argsList[0]
 		iEndGame = argsList[1]
 		infoScreen.showScreen(-1, iTabID, iEndGame)
+
+# merk.facinterface
+factionScreen = CvFactionScreen.CvFactionScreen(FACTION_SCREEN)
+def showFactionScreen(argsList):
+	if (-1 != CyGame().getActivePlayer()):
+		iTabID = argsList[0]
+		factionScreen.showScreen(-1, iTabID)
+		# merk.facinterface end
 
 debugInfoScreen = CvDebugInfoScreen.CvDebugInfoScreen()
 def showDebugInfoScreen():
@@ -1179,6 +1188,7 @@ HandleInputMap = {  MAIN_INTERFACE : mainInterface,
 					HALL_OF_FAME : hallOfFameScreen,
 					VICTORY_MOVIE_SCREEN : victoryMovie,
 					ESPIONAGE_ADVISOR : espionageAdvisor,
+                                        FACTION_SCREEN : factionScreen, # merk.facinterface
 					DAN_QUAYLE_SCREEN : danQuayleScreen,
 					WORLDBUILDER_SCREEN : worldBuilderScreen,
 					WORLDBUILDER_DIPLOMACY_SCREEN : worldBuilderDiplomacyScreen,

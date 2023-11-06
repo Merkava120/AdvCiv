@@ -1008,7 +1008,7 @@ class CvMainInterface:
 	def setAdvisorButtonRects(self):
 		iSize = BTNSZ(28)
 		advisorNames = [ "Domestic", "Finance", "Civics", "Foreign", "Military", "Tech",
-				"Religious", "Corporation", "Victory", "Info" ]
+				"Religious", "Corporation", "Victory", "Info", "Faction" ] # merk.facinterface
 		if GameUtil.isEspionage():
 			advisorNames.append("Espionage")
 		iButtons = len(advisorNames)
@@ -1585,6 +1585,12 @@ class CvMainInterface:
 				WidgetTypes.WIDGET_ACTION,
 				gc.getControlInfo(ControlTypes.CONTROL_INFO).getActionInfoIndex())
 		screen.hide("InfoAdvisorButton")
+		# merk.facinterface
+		self.setStyledButton("FactionAdvisorButton", "Button_HUDAdvisorRecord_Style",
+			                     WidgetTypes.WIDGET_ACTION,
+			                gc.getControlInfo(ControlTypes.CONTROL_FACTION_SCREEN).getActionInfoIndex())
+		screen.hide("FactionAdvisorButton")		
+		# merk.facinterface end
 # BUG - 3.17 No Espionage - start
 		if GameUtil.isEspionage():
 			self.setStyledButton("EspionageAdvisorButton", "Button_HUDAdvisorEspionage_Style",
@@ -2609,6 +2615,7 @@ class CvMainInterface:
 			screen.hide("MilitaryAdvisorButton")
 			screen.hide("VictoryAdvisorButton")
 			screen.hide("InfoAdvisorButton")
+			screen.hide("FactionAdvisorButton") # merk.facinterface
 # BUG - City Arrows - start
 			screen.hide("MainCityScrollMinus")
 			screen.hide("MainCityScrollPlus")
@@ -2640,6 +2647,7 @@ class CvMainInterface:
 			screen.hide("MilitaryAdvisorButton")
 			screen.hide("VictoryAdvisorButton")
 			screen.hide("InfoAdvisorButton")
+			screen.hide("FactionAdvisorButton") # merk.facinterface
 # BUG - City Arrows - start
 			screen.hide("MainCityScrollMinus")
 			screen.hide("MainCityScrollPlus")
@@ -2672,6 +2680,7 @@ class CvMainInterface:
 			screen.show("MilitaryAdvisorButton")
 			screen.show("VictoryAdvisorButton")
 			screen.show("InfoAdvisorButton")
+			screen.show("FactionAdvisorButton") # merk.facinterface
 # BUG - City Arrows - start
 			screen.hide("MainCityScrollMinus")
 			screen.hide("MainCityScrollPlus")
@@ -2696,6 +2705,7 @@ class CvMainInterface:
 			screen.moveToFront("MilitaryAdvisorButton")
 			screen.moveToFront("VictoryAdvisorButton")
 			screen.moveToFront("InfoAdvisorButton")
+			screen.moveToFront("FactionAdvisorButton") # merk.facinterface
 #			screen.moveToFront("BUGOptionsScreenWidget") # BUG - BUG Option Button
 		elif (CyInterface().getShowInterface() == InterfaceVisibility.INTERFACE_ADVANCED_START):
 			screen.hide("LowerLeftCornerPanel")
@@ -2719,6 +2729,7 @@ class CvMainInterface:
 			screen.hide("MilitaryAdvisorButton")
 			screen.hide("VictoryAdvisorButton")
 			screen.hide("InfoAdvisorButton")
+			screen.hide("FactionAdvisorButton") # merk.facinterface
 # BUG - City Arrows - start
 			screen.hide("MainCityScrollMinus")
 			screen.hide("MainCityScrollPlus")
@@ -2747,6 +2758,7 @@ class CvMainInterface:
 			screen.show("MilitaryAdvisorButton")
 			screen.show("VictoryAdvisorButton")
 			screen.show("InfoAdvisorButton")
+			screen.show("FactionAdvisorButton") # merk.facinterface
 # BUG - City Arrows - start
 			screen.hide("MainCityScrollMinus")
 			screen.hide("MainCityScrollPlus")
@@ -2771,6 +2783,7 @@ class CvMainInterface:
 			screen.moveToFront("MilitaryAdvisorButton")
 			screen.moveToFront("VictoryAdvisorButton")
 			screen.moveToFront("InfoAdvisorButton")
+			screen.moveToFront("FactionAdvisorButton") # merk.facinterface
 #			screen.moveToFront("BUGOptionsScreenWidget") # BUG - BUG Option Button
 		else:
 			screen.show("LowerLeftCornerPanel")
@@ -2795,6 +2808,7 @@ class CvMainInterface:
 			screen.show("MilitaryAdvisorButton")
 			screen.show("VictoryAdvisorButton")
 			screen.show("InfoAdvisorButton")
+			screen.show("FactionAdvisorButton") # merk.facinterface
 # BUG - City Arrows - start
 			if (MainOpt.isShowCityCycleArrows()):
 				screen.show("MainCityScrollMinus")
@@ -2827,6 +2841,7 @@ class CvMainInterface:
 			screen.moveToFront("MilitaryAdvisorButton")
 			screen.moveToFront("VictoryAdvisorButton")
 			screen.moveToFront("InfoAdvisorButton")
+			screen.moveToFront("FactionAdvisorButton") # merk.facinterface
 #			screen.moveToFront("BUGOptionsScreenWidget") # BUG - BUG Option Button
 		screen.updateMinimapVisibility()
 		return 0
@@ -5770,6 +5785,18 @@ class CvMainInterface:
 					CvUtil.FONT_CENTER_JUSTIFY, FontTypes.GAME_FONT, -1.3)
 			screen.setHitTest("CultureText", HitTestTypes.HITTEST_NOHIT)
 			screen.show("CultureText")
+
+# merk.facinterface - show city controller 
+                #if (CyGame().getCityController(pHeadSelectedCity.getID(), pHeadSelectedCity.getOwner()) > 0):
+			#gSetPoint("CityController", PointLayout(0, gRect("Top").yBottom() - VSPACE(86)))
+			#szBuffer = localText.getText("fartafartafartafart",
+						#(gc.getCommerceInfo(CommerceTypes.COMMERCE_CULTURE).getChar(),
+						#gc.getCultureLevelInfo(pHeadSelectedCity.getCultureLevel()).getTextKey(),
+						#3))
+                        #self.setLabel("CityController", "Background", szBuffer, CvUtil.FONT_CENTER_JUSTIFY, FontTypes.GAME_FONT, 1.0)
+			#screen.show("CityController")
+		
+		
 		if (pHeadSelectedCity.getGreatPeopleProgress() > 0 or
 				pHeadSelectedCity.getGreatPeopleRate() > 0):
 # BUG - Great Person Turns - start

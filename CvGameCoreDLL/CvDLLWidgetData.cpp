@@ -1756,6 +1756,14 @@ void CvDLLWidgetData::parseCityNameHelp(CvWidgetDataStruct &widgetDataStruct, Cv
 		szBuffer.append(gDLL->getText("TXT_KEY_CITY_FOUNDED", szTempBuffer.GetCString()));
 
 		szBuffer.append(NEWLINE);
+		// merk.facint
+		CvWString szAnotherBuffer;
+		std::string controllerName = GC.getGame().getFactionName(pHeadSelectedCity->iGoverningFaction);
+		std::wstring blah(controllerName.begin(), controllerName.end());
+		szAnotherBuffer.append(blah);
+		szBuffer.append(gDLL->getText("TXT_KEY_CITY_CONTROLLER", szAnotherBuffer.GetCString()));
+		szBuffer.append(NEWLINE);
+		// merk.facint end
 		szBuffer.append(gDLL->getText("TXT_KEY_CHANGE_NAME"));
 	}
 }
