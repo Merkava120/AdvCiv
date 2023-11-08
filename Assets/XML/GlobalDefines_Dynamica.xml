@@ -192,4 +192,82 @@
 		<iDefineIntVal>100</iDefineIntVal>
 	</Define>
 	<!-- will add more later -->
+	
+	<!-- faction strategy values -->
+	<Define>
+		<DefineName>FAC_STRATVAL_PER_POP</DefineName>
+		<iDefineIntVal>2</iDefineIntVal>
+	</Define>
+	
+	
+	
+	
+	<!-- faction wealth costs for raising popularity -->
+	<Define>
+		<DefineName>POP_VIA_BLDG_COST</DefineName>
+		<iDefineIntVal>15</iDefineIntVal>
+	</Define>
+	<Define>
+		<DefineName>POP_NO_BLDG_COST</DefineName>
+		<iDefineIntVal>50</iDefineIntVal>
+	</Define>
+	
+	<!-- if abs(aggression * relationship rank) is greater than this, can't use their buildings to increase popularity (only considers < 0 relationship) -->
+	<Define>
+		<DefineName>POPULARITY_RELATION_THRESHOLD</DefineName>
+		<iDefineIntVal>8</iDefineIntVal>
+	</Define>
+	<!-- fee charged by other faction per popularity point for using their bldg to increase popularity. divided by 1 + positive relationship rank -->
+	<Define>
+		<DefineName>FACTION_POP_FEE</DefineName>
+		<iDefineIntVal>48</iDefineIntVal>
+	</Define>
+	<!-- cost for spreading popularity decreases by this much per pop already there ... -->
+	<Define>
+		<DefineName>POP_COST_DEC_PER_POP</DefineName>
+		<iDefineIntVal>1</iDefineIntVal>
+	</Define>
+	<!-- ... until this limit -->
+	<Define>
+		<DefineName>POP_NO_MORE_DECREASE</DefineName>
+		<iDefineIntVal>10</iDefineIntVal>
+	</Define>
+	<!-- pop effect is multiplied by this much for beliefs - they are easier to influence -->
+	<Define>
+		<DefineName>POP_BELIEF_MULT</DefineName>
+		<iDefineIntVal>2</iDefineIntVal>
+	</Define>
+	
+	<!-- similarly, costs for spreading a thing (religion, belief, nationality, or faction itself) to another city -->
+	<Define>
+		<DefineName>SPREAD_COST_BASE</DefineName>
+		<iDefineIntVal>25</iDefineIntVal>
+	</Define>
+	<Define>
+		<DefineName>SPREAD_FEE</DefineName>
+		<iDefineIntVal>25</iDefineIntVal>
+	</Define>
+	<Define>
+		<DefineName>SPREAD_COST_NO_HUB</DefineName>
+		<iDefineIntVal>100</iDefineIntVal>
+	</Define>
+	<Define>
+		<DefineName>SPREAD_COST_PER_DISTANCE</DefineName>
+		<iDefineIntVal>2</iDefineIntVal>
+	</Define>
+	<!-- spread fee is divided by rank + this for positive ranks-->
+	<Define>
+		<DefineName>SPREAD_FEE_RANK_REDUCE</DefineName>
+		<iDefineIntVal>1</iDefineIntVal>
+	</Define>
+	<!-- extra charged if aggressive -->
+	<Define>
+		<DefineName>SPREAD_FEE_PER_AGGRESSION</DefineName>
+		<iDefineIntVal>3</iDefineIntVal>
+	</Define>
+	<Define>
+		<DefineName>SPREAD_RELATION_THRESHOLD</DefineName>
+		<iDefineIntVal>6</iDefineIntVal>
+	</Define>
+	
 </Civ4Defines>

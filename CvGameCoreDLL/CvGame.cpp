@@ -11062,7 +11062,7 @@ void CvGame::spawnFaction(int iCity, PlayerTypes eCityOwner, ReligionTypes fromR
 		newFaction.factionRelations.push_back(0);
 		aFactions[i].factionRelations.push_back(0);
 	}
-	newFaction.factionRelations.pop_back(); // there will be one extra in new faction's list
+	newFaction.factionRelations.push_back(-47); // us (aFactions does not include us yet)
 
 	// add faction to city if city is not null, and set initial popularity
 	if (iCity >= 0)
@@ -11072,6 +11072,13 @@ void CvGame::spawnFaction(int iCity, PlayerTypes eCityOwner, ReligionTypes fromR
 		newPop.second = 0; 
 		GET_PLAYER(eCityOwner).getCity(iCity)->aiFactionPopularities.push_back(newPop);
 		// merk.fac3: popularities non-default
+
+		// merk.facm: adding cities tracker to simplify... well everything involving cities
+		std::pair < PlayerTypes, int > city;
+		city.first = eCityOwner;
+		city.second = iCity;
+		newFaction.inCities.push_back(city);
+
 	}
 	// merk.fac3.1: naming
 	std::vector< CvString > adjectives;
@@ -11391,6 +11398,51 @@ int CvGame::isRelationship(int iFirstFaction, int iSecondFaction, int iThreshold
 	return false;
 }
 
+int CvGame::isFacMatchBeliefs(int iFirstFaction, int iSecondFaction, int matches) const
+{
+	int iMatches = 0;
+	for (int i = 0; i < (int)aFactions[iFirstFaction].beliefs.size(); i++)
+	{
+		for (int j = 0; j < (int)aFactions[iSecondFaction].beliefs.size(); j++)
+		{
+			if (aFactions[iSecondFaction].beliefs[j] == aFactions[iFirstFaction].beliefs[i])
+			{
+				if (iMatches >= matches || matches <= 1)
+					return true;
+				else
+					iMatches++;
+			}
+		}
+	}
+	return false;
+}
+
+bool CvGame::isFacMatchReligion(int iFirstFaction, int iSecondFaction) const
+{
+	for (int i = 0; i < (int)aFactions[iFirstFaction].religions.size(); i++)
+	{
+		for (int j = 0; j < (int)aFactions[iSecondFaction].religions.size(); j++)
+		{
+			if (aFactions[iFirstFaction].religions[i] == aFactions[iSecondFaction].religions[j])
+				return true;
+		}
+	}
+	return false;
+}
+
+bool CvGame::isFacMatchNationality(int iFirstFaction, int iSecondFaction) const
+{
+	for (int i = 0; i < (int)aFactions[iFirstFaction].nationalities.size(); i++)
+	{
+		for (int j = 0; j < (int)aFactions[iSecondFaction].nationalities.size(); j++)
+		{
+			if (aFactions[iFirstFaction].nationalities[i] == aFactions[iSecondFaction].nationalities[j])
+				return true;
+		}
+	}
+	return false;
+}
+
 int CvGame::getBuildingOwner(int iCity, PlayerTypes eCityOwner, BuildingTypes eBuilding)
 {
 	CvCity const* pCity = GET_PLAYER(eCityOwner).getCity(iCity);
@@ -11455,7 +11507,7 @@ int CvGame::getBeliefPopularity(int iCity, PlayerTypes eCityOwner, CivicTypes eB
 				return pCity->aiBeliefPopularities[i].second;
 		}
 	}
-	return 0;
+	return -1;
 }
 
 int CvGame::getFactionWealth(int iFaction)
@@ -11531,6 +11583,361 @@ int CvGame::getCityController(int iCity, PlayerTypes eCityOwner)
 {
 	CvCity const* pCity = GET_PLAYER(eCityOwner).getCity(iCity);
 	return (pCity->iGoverningFaction);
+}
+
+// merk.facm
+void CvGame::doTurnFaction()
+{
+	// Start by choosing random order for factions
+	// DON'T sort the factions list lol
+	std::vector< int > factionPool;
+	for (int i = 0; i < (int)aFactions.size(); i++)
+		factionPool.push_back(i);
+	std::vector< int > factionOrder;
+	for (int i = 0; i < (int)aFactions.size(); i++)
+	{
+		int iIndex = SyncRandNum((int)factionPool.size());
+		factionOrder.push_back(factionPool[iIndex]);
+		factionPool.erase(factionPool.begin() + iIndex);
+	}
+	FAssertMsg((int)factionOrder.size() == (int)aFactions.size(), "Different number of sorted factions than exist");
+	// now the loop. 
+	for (int i = 0; i < (int)factionOrder.size(); i++)
+	{
+		int f = factionOrder[i];
+		int iWealth = getFactionWealth(f);
+		// merk.fac3 - add wealth from taxes for government factions
+		// merk.fac3 - add wealth when really popular
+		int iProduction = getFactionProduction(f);
+
+		// THREAT ASSESSMENT
+		int iThreatLevel = 0;
+		int iThreatFaction = -1;
+
+		// look at all the factions we know and how popular they + their beliefs are + etc. Find biggest / most powerful / most popular and it's the threat. 
+		// First, aggressive factions weight size as more important than popularity. Non-aggressive factions rate aggression highly. 
+		int iSizeWeight = isAggressive(f) ? 2 : 1;
+		int iAggroWeight = isAggressive(f) ? 10 : 20;
+
+		// (later factions we "know" will depend on having met them, for now it's literally everyone)
+		for (int ff = 0; ff < (int)aFactions[f].factionRelations.size(); ff++)
+		{
+			// if relationship is unknown skip
+			if (aFactions[f].factionRelations[ff] <= -10)
+				continue;
+			int iTheirThreat = 0;
+			// add power to threat
+			iTheirThreat += (iSizeWeight * getFactionProduction(ff) * aFactions[f].bfProduction ? 2 : 1);
+			// add aggression to threat
+			iTheirThreat += (iAggroWeight * aFactions[ff].aggression);
+			// add wealth to threat
+			iTheirThreat += (iSizeWeight * getFactionWealth(ff) * aFactions[f].bfWealth ? 2 : 1);
+			// add popularity to threat
+			iTheirThreat += (getFactionPopularity(ff) * aFactions[f].bfPopularity ? 2 : 1);
+			
+			// now threats to focuses:
+			// merk.fac3 - add puritanism: hatred toward those who don't have EXACTLY the same stuff
+			int iThreatMult = 1;
+			if (aFactions[f].bfBelief && !isFacMatchBeliefs(f, ff) && (int)aFactions[ff].beliefs.size() > 0)
+				iThreatMult += 1;
+			if (aFactions[f].bfReligion && !isFacMatchReligion(f, ff) && (int)aFactions[ff].religions.size() > 0)
+				iThreatMult += 1;
+			if (aFactions[f].bfNationality && !isFacMatchNationality(f, ff) && (int)aFactions[ff].nationalities.size() > 0)
+				iThreatMult += 1;
+			// merk.fac3: bfPower means that enemy factions controlling things are big threat, same for bfRelPower
+			// merk.fac3: bfDiplomacy means... something.
+
+			// factions don't know each other's focuses so the enemy focus doesn't matter. 
+			
+			// relationship multiplier
+			iThreatMult -= aFactions[f].factionRelations[ff]; // if positive, this decreases threat, if negative, it increases it. 
+			if (iThreatMult < 1)
+				iThreatMult = 1; // even friends can still be a threat. 
+
+			iTheirThreat *= iThreatMult;
+			if (iTheirThreat > iThreatLevel)
+			{
+				iThreatLevel = iTheirThreat;
+				iThreatFaction = ff;
+			}
+		}
+
+		// Now we have chosen a threatening faction as our "enemy". 
+		// That means the following strategies consider only doing stuff for ourselves or stuff against that threat, not all possible things we can do. 
+		bool bThreat = (iThreatFaction >= 0);
+		// CHOOSE STRATEGY
+		int iStrategy = -1;
+		int iStrategyValue = 0;
+		int iTargetCity = -1;
+		PlayerTypes eTargetCityOwner = NO_PLAYER;
+		CivicTypes eTargetBelief = NO_CIVIC;
+
+		// Strategy 0 or 1 or 2 or 3: Influence popularity for us or threat or our belief or a threatening belief
+		// Ok need to look at all available popularity-influencing methods. That means any city in which we are tracked. 
+		// Since we're looping through cities anyway, look at spreads too:
+		// a belief (4), religion (5), nationality (6) or ourselves (7) via trade routes. 
+		for (int i = 0; i < (int)aFactions[f].inCities.size(); i++)
+		{
+			CvCity const* pCity = GET_PLAYER(aFactions[f].inCities[i].first).getCity(aFactions[f].inCities[i].second);
+			// Look through buildings in the city
+			// I think the quickest way is still just building enums?
+			int iAlreadyPopularity = getFactionCityPopularity(pCity->getID(), pCity->getOwner(), f);
+			int iEnemyPopularity = bThreat ? getFactionCityPopularity(pCity->getID(), pCity->getOwner(), iThreatFaction) : 0;
+			// first, what if we don't use a building
+			int iPopBaseStratVal = getPopularityEffect(iWealth, aFactions[f].aggression, 0, -47, iAlreadyPopularity);
+			if (iPopBaseStratVal > iStrategyValue)
+			{
+				iStrategy = 0;
+				iStrategyValue = iPopBaseStratVal;
+				iTargetCity = pCity->getID();
+				eTargetCityOwner = pCity->getOwner();
+			}
+			int iEnemyPopBaseStratVal = getPopularityEffect(iWealth, aFactions[f].aggression, 0, -47, iEnemyPopularity);
+			if (iEnemyPopBaseStratVal > iStrategyValue)
+			{
+				iStrategy = 1;
+				iStrategyValue = iEnemyPopBaseStratVal;
+				iTargetCity = pCity->getID();
+				eTargetCityOwner = pCity->getOwner();
+			}
+			// Now compare that to influencing beliefs
+			if ((int)aFactions[f].beliefs.size() > 0)
+			{
+				for (int b = 0; b < (int)aFactions[f].beliefs.size(); b++)
+				{
+					int iBeliefStratVal = GC.getDefineINT("POP_BELIEF_MULT") * getPopularityEffect(iWealth, aFactions[f].aggression, 0, -47, getBeliefPopularity(pCity->getID(), pCity->getOwner(), aFactions[f].beliefs[b])) * aFactions[f].bfBelief ? 2 : 1;
+					if (iBeliefStratVal > iStrategyValue)
+					{
+						iStrategy = 2;
+						iStrategyValue = iBeliefStratVal;
+						iTargetCity = pCity->getID();
+						eTargetCityOwner = pCity->getOwner();
+						eTargetBelief = aFactions[f].beliefs[b];
+					}
+				}
+			}
+			// and enemy beliefs
+			if (bThreat)
+			{
+				if ((int)aFactions[iThreatFaction].beliefs.size() > 0)
+				{
+					for (int b = 0; b < (int)aFactions[iThreatFaction].beliefs.size(); b++)
+					{
+						int iBeliefStratVal = GC.getDefineINT("POP_BELIEF_MULT") * getPopularityEffect(iWealth, aFactions[f].aggression, 0, -47, getBeliefPopularity(pCity->getID(), pCity->getOwner(), aFactions[iThreatFaction].beliefs[b])) * aFactions[f].bfBelief ? 2 : 1;
+						if (iBeliefStratVal > iStrategyValue)
+						{
+							iStrategy = 3;
+							iStrategyValue = iBeliefStratVal;
+							iTargetCity = pCity->getID();
+							eTargetCityOwner = pCity->getOwner();
+							eTargetBelief = aFactions[iThreatFaction].beliefs[b];
+						}
+					}
+				}
+			}
+			// Now a quick pause to figure out valid spread targets
+			// Requirements: we are in city A, city A has trade route to city B, city B does not have thing we want to spread
+			// cities we can spread to at all:
+			std::vector < std::pair< int, PlayerTypes > > validSpreadCities;
+			for (int t = 0; t < pCity->getTradeRoutes(); t++)
+			{
+				bool bValid = false;
+				CvCity const* pOtherCity = pCity->getTradeCity(t);
+				if ((int)aFactions[f].religions.size() > 0)
+				{
+					for (int r = 0; r < (int)aFactions[f].religions.size(); r++)
+					{
+						if (pOtherCity->isHasReligion(aFactions[f].religions[r]))
+							continue;
+						else
+						{
+							bValid = true;
+							break;
+						}
+					}
+				}
+				if (!bValid && (int)aFactions[f].beliefs.size() > 0)
+				{
+					for (int b = 0; b < (int)aFactions[f].beliefs.size(); b++)
+					{
+						if (getBeliefPopularity(pOtherCity->getID(), pOtherCity->getOwner(), aFactions[f].beliefs[b]) >= 0)
+							continue;
+						else
+						{
+							bValid = true;
+							break;
+						}
+					}
+				}
+				if (!bValid && (int)aFactions[f].nationalities.size() > 0)
+				{
+					for (int n = 0; n < (int)aFactions[f].nationalities.size(); n++)
+					{
+						bool bFoundNat = false;
+						for (int p = 0; p < m_iCivPlayersEverAlive; p++)
+						{
+							if (GET_PLAYER((PlayerTypes)p).getCivilizationType() == aFactions[f].nationalities[n])
+							{
+								if (pOtherCity->getCultureLevel((PlayerTypes)p) > 0)
+								{
+									bFoundNat = true;
+									break;
+								}
+							}
+						}
+						if (!bFoundNat)
+							bValid = true;
+					}
+				}
+				if (!bValid)
+				{
+					if (getFactionCityPopularity(pOtherCity->getID(), pOtherCity->getOwner(), f) < 0)
+						bValid = true;
+				}
+				if (bValid)
+				{
+					std::pair< int, PlayerTypes > that;
+					that.first = pOtherCity->getID();
+					that.second = pOtherCity->getOwner();
+					validSpreadCities.push_back(that);
+				}
+			}
+
+
+
+			// Can we do better if we use a building? 
+			FOR_EACH_ENUM(Building)
+			{
+				if (pCity->getNumRealBuilding(GC.getBuildingInfo(eLoopBuilding).getBuildingClassType()) > 0)
+				{
+					if (GC.getBuildingInfo(eLoopBuilding).getHappiness() > 0)
+					{
+						int rank = aFactions[f].factionRelations[(getBuildingOwner(pCity->getID(), pCity->getOwner(), eLoopBuilding))];
+						int iEffect = getPopularityEffect(iWealth, aFactions[f].aggression, GC.getBuildingInfo(eLoopBuilding).getHappiness(), rank, iAlreadyPopularity);
+						int iEffectEnemy = bThreat ? getPopularityEffect(iWealth, aFactions[f].aggression, GC.getBuildingInfo(eLoopBuilding).getHappiness(), rank, iEnemyPopularity) : 0;
+						int iPopStratVal = iEffect * GC.getDefineINT("FAC_STRATVAL_PER_POP") * aFactions[f].bfPopularity ? 3 : 1;
+						int iPopAggStratVal = iEffect * GC.getDefineINT("FAC_STRATVAL_PER_POP") * isAggressive(f) ? 3 : 1 * aFactions[f].bfPopularity ? 3 : 1;
+						if (iPopStratVal > iStrategyValue)
+						{
+							iStrategy = 0;
+							iStrategyValue = iPopStratVal;
+							iTargetCity = pCity->getID();
+							eTargetCityOwner = pCity->getOwner();
+						}
+						if (iPopAggStratVal > iStrategyValue)
+						{
+							iStrategy = 1; 
+							iStrategyValue = iPopAggStratVal;
+							iTargetCity = pCity->getID();
+							eTargetCityOwner = pCity->getOwner();
+						}
+						// what about beliefs? 
+						if ((int)aFactions[f].beliefs.size() > 0)
+						{
+							for (int b = 0; b < (int)aFactions[f].beliefs.size(); b++)
+							{
+								int iBeliefStratVal = GC.getDefineINT("POP_BELIEF_MULT") * getPopularityEffect(iWealth, aFactions[f].aggression, GC.getBuildingInfo(eLoopBuilding).getHappiness(), rank, getBeliefPopularity(pCity->getID(), pCity->getOwner(), aFactions[f].beliefs[b])) * aFactions[f].bfBelief ? 2 : 1;
+								if (iBeliefStratVal > iStrategyValue)
+								{
+									iStrategy = 2;
+									iStrategyValue = iBeliefStratVal;
+									iTargetCity = pCity->getID();
+									eTargetCityOwner = pCity->getOwner();
+									eTargetBelief = aFactions[f].beliefs[b];
+								}
+							}
+						}
+						if (bThreat)
+						{
+							if ((int)aFactions[iThreatFaction].beliefs.size() > 0)
+							{
+								for (int b = 0; b < (int)aFactions[iThreatFaction].beliefs.size(); b++)
+								{
+									int iBeliefStratVal = GC.getDefineINT("POP_BELIEF_MULT") * getPopularityEffect(iWealth, aFactions[f].aggression, GC.getBuildingInfo(eLoopBuilding).getHappiness(), rank, getBeliefPopularity(pCity->getID(), pCity->getOwner(), aFactions[iThreatFaction].beliefs[b])) * aFactions[f].bfBelief ? 2 : 1;
+									if (iBeliefStratVal > iStrategyValue)
+									{
+										iStrategy = 3;
+										iStrategyValue = iBeliefStratVal;
+										iTargetCity = pCity->getID();
+										eTargetCityOwner = pCity->getOwner();
+										eTargetBelief = aFactions[iThreatFaction].beliefs[b];
+									}
+								}
+							}
+						}
+					}
+				}
+				// Okay, that's popularity boosters, but what about trade route hubs?
+				if (GC.getBuildingInfo(eLoopBuilding).getTradeRoutes() > 0 || GC.getBuildingInfo(eLoopBuilding).getCoastalTradeRoutes() > 0 || GC.getBuildingInfo(eLoopBuilding).getAreaTradeRoutes() > 0)
+				{
+					
+				}
+			}
+		}
+		// And that should take care of popularity strategies. 
+
+		
+		
+		
+		// Attack enemies
+		// Strengthen relationships with other factions
+		// Acquire more buildings / improvements
+		// Attempt takeover of city / religion / nation
+		// Cause boycotts or strikes against the player or city controller
+		// Merge with another faction
+		// Found a new religion 
+
+
+
+
+
+	}
+
+}
+
+int CvGame::getPopularityEffect(int iSpend, int iAggression, int iSpreaderWeight, int iRelationshipRank, int iAlready) const
+{
+	if (abs(iRelationshipRank * iAggression) >= GC.getDefineINT("POPULARITY_RELATION_THRESHOLD") && (iRelationshipRank != -47)) // -47 means it's us i.e. we own the spreader thing
+		return -1;
+	int iCostPer = 0;
+	if (iSpreaderWeight <= 0)
+	{
+		// doin this the old fashioned way then: door to door. 
+		iCostPer = GC.getDefineINT("POP_NO_BLDG_COST");
+	}
+	else
+		iCostPer = GC.getDefineINT("POP_VIA_BLDG_COST");
+	int iFeePer = 0;
+	if (iRelationshipRank != -47) // not us
+	{
+		iFeePer += (GC.getDefineINT("FACTION_POP_FEE") / (1 + (iRelationshipRank >= 0 ? iRelationshipRank : 0)));
+	}
+	if (iAlready > 0 && iAlready < GC.getDefineINT("POP_NO_MORE_DECREASE"))
+		iCostPer -= (iAlready * GC.getDefineINT("POP_COST_DEC_PER_POP"));
+	return ((iSpend / (iCostPer + iFeePer)) * iSpreaderWeight);
+
+
+}
+
+bool CvGame::canSpreadThing(int iSpend, int iAggression, int iDistance, int iSpreaderWeight, int iRelationshipRank, bool bWeOwn) const
+{
+	int iTotalCost = GC.getDefineINT("SPREAD_COST_BASE");
+	if (!bWeOwn)
+	{
+		if (abs(iRelationshipRank * iAggression) >= GC.getDefineINT("SPREAD_RELATION_THRESHOLD") && (iRelationshipRank != -47)) // -47 means it's us i.e. we own the spreader thing
+			return false; // straight up no can't spread this way
+		iTotalCost += (GC.getDefineINT("SPREAD_FEE") / (GC.getDefineINT("SPREAD_FEE_RANK_REDUCE") + iRelationshipRank > 0 ? iRelationshipRank : 0));
+		iTotalCost += iAggression * GC.getDefineINT("SPREAD_FEE_PER_AGGRESSION");
+	}
+	if (iSpreaderWeight > 0)
+		iTotalCost /= iSpreaderWeight;
+	else
+		iTotalCost += GC.getDefineINT("SPREAD_COST_NO_HUB");
+	iTotalCost += GC.getDefineINT("SPREAD_COST_PER_DISTANCE") * iDistance;
+	if (iSpend < iTotalCost)
+		return false;
+	else
+		return true;
 }
 
 

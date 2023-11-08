@@ -988,6 +988,7 @@ public:
 		// first int is faction in list, second int is relationship rank
 		std::vector< int > factionRelations;
 		PlayerTypes ePlayer; // usually NULL
+		std::vector< std::pair< PlayerTypes, int > > inCities; // added with merk.facm, just makes things easier
 	};
 	std::vector< Faction > aFactions;
 	
@@ -1001,6 +1002,9 @@ public:
 	bool isMatchNationality(int iFaction, PlayerTypes ePlayer, bool focus = false) const;
 	bool isAggressive(int iFaction) const;
 	int isRelationship(int iFirstFaction, int iSecondFaction, int iThreshold, bool includeGreater = false, bool includeLower = false) const;
+	int isFacMatchBeliefs(int iFirstFaction, int iSecondFaction, int matches = 1) const;
+	bool isFacMatchReligion(int iFirstFaction, int iSecondFaction) const;
+	bool isFacMatchNationality(int iFirstFaction, int iSecondFaction) const;
 
 	// merk.facinterface functions to expose to python (also useful otherwise)
 	std::string getFactionName(int iFaction) const { return aFactions[iFaction].name; }
@@ -1013,6 +1017,10 @@ public:
 	int getFactionPopularity(int iFaction);
 	int getCityController(int iCity, PlayerTypes eCityOwner);
 
+	// merk.facm - the main mechanics
+	void doTurnFaction();
+	int getPopularityEffect(int iSpend, int iAggression, int iSpreaderWeight, int iRelationshipRank, int iAlready) const;
+	bool canSpreadThing(int iSpend, int iAggression, int iDistance, int iSpreaderWeight, int iRelationshipRank, bool bWeOwn) const;
 
 	// religion governor tracker (religious beliefs of them = beliefs of religion)
 	ListEnumMap< ReligionTypes, int > aReligionLeaders;
