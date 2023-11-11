@@ -10946,7 +10946,7 @@ void CvGame::spawnFaction(int iCity, PlayerTypes eCityOwner, ReligionTypes fromR
 	std::pair< int, BuildingTypes > addbld2;
 	if (fromBuilding != NO_BUILDING && iCity >= 0)
 	{
-		addbld2.first = iCity;
+		addbld2.first = GET_PLAYER(eCityOwner).getCity(iCity)->plot()->plotNum(); // merk.facm changed from ID
 		addbld2.second = fromBuilding;
 		addbld.push_back(addbld2);
 		// if it's a wealth flavor building or production flavor building add focuses
@@ -11454,7 +11454,7 @@ int CvGame::getBuildingOwner(int iCity, PlayerTypes eCityOwner, BuildingTypes eB
 		{
 			for (int j = 0; j < (int)aFactions[i].ownedBuildings.size(); j++)
 			{
-				if (aFactions[i].ownedBuildings[j].first != iCity)
+				if (aFactions[i].ownedBuildings[j].first != pCity->plot()->plotNum()) // merk.facm - changed from ID
 					continue;
 				if (aFactions[i].ownedBuildings[j].second == eBuilding)
 					return i; 
@@ -11588,311 +11588,546 @@ int CvGame::getCityController(int iCity, PlayerTypes eCityOwner)
 // merk.facm
 void CvGame::doTurnFaction()
 {
-	// Start by choosing random order for factions
-	// DON'T sort the factions list lol
-	std::vector< int > factionPool;
-	for (int i = 0; i < (int)aFactions.size(); i++)
-		factionPool.push_back(i);
-	std::vector< int > factionOrder;
-	for (int i = 0; i < (int)aFactions.size(); i++)
+	// Better method than version below: Orders. 
+	struct Order {
+		int iOriginFaction; // faction that originates the order (so we can randomize the order)
+		int iCityTile; // city the order is given in. (Will devote all the faction's resources of the city to one thing.)
+		int iTargetFaction;
+		BuildingTypes eTargetBuilding;
+		int iTargetTile;
+		int iPayFaction; // amount paid to another faction - goes to faction extra wealth which they can use for later orders
+		int iPaidFaction; // the faction getting the money
+	};
+	std::vector< std::vector< Order > > FactionOrders; // factions each have a list of orders arranged in order of cities. These are later added to a list of just orders so the order of the orders can be randomized. 
+	// ORDER TYPES
+	// 0 - attack target. Can be in another city if iTargetTile points to a city. 
+	// 1 - boycott controller / owner of city. 
+
+
+
+	// Next we loop through each faction and determine their overall strategy. Factions that have allies can choose to involve those allies in their overall strategy. 
+
+
+
+	// DETERMINING ORDERS: just loop through all the cities. 
+	for (int i = 0; i < GC.getMap().numPlots(); i++)
 	{
-		int iIndex = SyncRandNum((int)factionPool.size());
-		factionOrder.push_back(factionPool[iIndex]);
-		factionPool.erase(factionPool.begin() + iIndex);
-	}
-	FAssertMsg((int)factionOrder.size() == (int)aFactions.size(), "Different number of sorted factions than exist");
-	// now the loop. 
-	for (int i = 0; i < (int)factionOrder.size(); i++)
-	{
-		int f = factionOrder[i];
-		int iWealth = getFactionWealth(f);
-		// merk.fac3 - add wealth from taxes for government factions
-		// merk.fac3 - add wealth when really popular
-		int iProduction = getFactionProduction(f);
-
-		// THREAT ASSESSMENT
-		int iThreatLevel = 0;
-		int iThreatFaction = -1;
-
-		// look at all the factions we know and how popular they + their beliefs are + etc. Find biggest / most powerful / most popular and it's the threat. 
-		// First, aggressive factions weight size as more important than popularity. Non-aggressive factions rate aggression highly. 
-		int iSizeWeight = isAggressive(f) ? 2 : 1;
-		int iAggroWeight = isAggressive(f) ? 10 : 20;
-
-		// (later factions we "know" will depend on having met them, for now it's literally everyone)
-		for (int ff = 0; ff < (int)aFactions[f].factionRelations.size(); ff++)
+		CvPlot const* pPlot = GC.getMap().plotByIndex(i);
+		if (pPlot->isCity())
 		{
-			// if relationship is unknown skip
-			if (aFactions[f].factionRelations[ff] <= -10)
-				continue;
-			int iTheirThreat = 0;
-			// add power to threat
-			iTheirThreat += (iSizeWeight * getFactionProduction(ff) * aFactions[f].bfProduction ? 2 : 1);
-			// add aggression to threat
-			iTheirThreat += (iAggroWeight * aFactions[ff].aggression);
-			// add wealth to threat
-			iTheirThreat += (iSizeWeight * getFactionWealth(ff) * aFactions[f].bfWealth ? 2 : 1);
-			// add popularity to threat
-			iTheirThreat += (getFactionPopularity(ff) * aFactions[f].bfPopularity ? 2 : 1);
-			
-			// now threats to focuses:
-			// merk.fac3 - add puritanism: hatred toward those who don't have EXACTLY the same stuff
-			int iThreatMult = 1;
-			if (aFactions[f].bfBelief && !isFacMatchBeliefs(f, ff) && (int)aFactions[ff].beliefs.size() > 0)
-				iThreatMult += 1;
-			if (aFactions[f].bfReligion && !isFacMatchReligion(f, ff) && (int)aFactions[ff].religions.size() > 0)
-				iThreatMult += 1;
-			if (aFactions[f].bfNationality && !isFacMatchNationality(f, ff) && (int)aFactions[ff].nationalities.size() > 0)
-				iThreatMult += 1;
-			// merk.fac3: bfPower means that enemy factions controlling things are big threat, same for bfRelPower
-			// merk.fac3: bfDiplomacy means... something.
-
-			// factions don't know each other's focuses so the enemy focus doesn't matter. 
-			
-			// relationship multiplier
-			iThreatMult -= aFactions[f].factionRelations[ff]; // if positive, this decreases threat, if negative, it increases it. 
-			if (iThreatMult < 1)
-				iThreatMult = 1; // even friends can still be a threat. 
-
-			iTheirThreat *= iThreatMult;
-			if (iTheirThreat > iThreatLevel)
+			CvCity const* pCity = pPlot->getPlotCity();
+			for (int f = 0; f < (int)pCity->aiFactionPopularities.size(); f++)
 			{
-				iThreatLevel = iTheirThreat;
-				iThreatFaction = ff;
-			}
-		}
-
-		// Now we have chosen a threatening faction as our "enemy". 
-		// That means the following strategies consider only doing stuff for ourselves or stuff against that threat, not all possible things we can do. 
-		bool bThreat = (iThreatFaction >= 0);
-		// CHOOSE STRATEGY
-		int iStrategy = -1;
-		int iStrategyValue = 0;
-		int iTargetCity = -1;
-		PlayerTypes eTargetCityOwner = NO_PLAYER;
-		CivicTypes eTargetBelief = NO_CIVIC;
-
-		// Strategy 0 or 1 or 2 or 3: Influence popularity for us or threat or our belief or a threatening belief
-		// Ok need to look at all available popularity-influencing methods. That means any city in which we are tracked. 
-		// Since we're looping through cities anyway, look at spreads too:
-		// a belief (4), religion (5), nationality (6) or ourselves (7) via trade routes. 
-		for (int i = 0; i < (int)aFactions[f].inCities.size(); i++)
-		{
-			CvCity const* pCity = GET_PLAYER(aFactions[f].inCities[i].first).getCity(aFactions[f].inCities[i].second);
-			// Look through buildings in the city
-			// I think the quickest way is still just building enums?
-			int iAlreadyPopularity = getFactionCityPopularity(pCity->getID(), pCity->getOwner(), f);
-			int iEnemyPopularity = bThreat ? getFactionCityPopularity(pCity->getID(), pCity->getOwner(), iThreatFaction) : 0;
-			// first, what if we don't use a building
-			int iPopBaseStratVal = getPopularityEffect(iWealth, aFactions[f].aggression, 0, -47, iAlreadyPopularity);
-			if (iPopBaseStratVal > iStrategyValue)
-			{
-				iStrategy = 0;
-				iStrategyValue = iPopBaseStratVal;
-				iTargetCity = pCity->getID();
-				eTargetCityOwner = pCity->getOwner();
-			}
-			int iEnemyPopBaseStratVal = getPopularityEffect(iWealth, aFactions[f].aggression, 0, -47, iEnemyPopularity);
-			if (iEnemyPopBaseStratVal > iStrategyValue)
-			{
-				iStrategy = 1;
-				iStrategyValue = iEnemyPopBaseStratVal;
-				iTargetCity = pCity->getID();
-				eTargetCityOwner = pCity->getOwner();
-			}
-			// Now compare that to influencing beliefs
-			if ((int)aFactions[f].beliefs.size() > 0)
-			{
-				for (int b = 0; b < (int)aFactions[f].beliefs.size(); b++)
+				int fac = pCity->aiFactionPopularities[f].first;
+				if ((int)FactionOrders[fac].size() <= 0)
 				{
-					int iBeliefStratVal = GC.getDefineINT("POP_BELIEF_MULT") * getPopularityEffect(iWealth, aFactions[f].aggression, 0, -47, getBeliefPopularity(pCity->getID(), pCity->getOwner(), aFactions[f].beliefs[b])) * aFactions[f].bfBelief ? 2 : 1;
-					if (iBeliefStratVal > iStrategyValue)
-					{
-						iStrategy = 2;
-						iStrategyValue = iBeliefStratVal;
-						iTargetCity = pCity->getID();
-						eTargetCityOwner = pCity->getOwner();
-						eTargetBelief = aFactions[f].beliefs[b];
-					}
+					std::vector < int > cityorders;
+					FactionOrders[fac].push_back(cityorders);
 				}
-			}
-			// and enemy beliefs
-			if (bThreat)
-			{
-				if ((int)aFactions[iThreatFaction].beliefs.size() > 0)
-				{
-					for (int b = 0; b < (int)aFactions[iThreatFaction].beliefs.size(); b++)
-					{
-						int iBeliefStratVal = GC.getDefineINT("POP_BELIEF_MULT") * getPopularityEffect(iWealth, aFactions[f].aggression, 0, -47, getBeliefPopularity(pCity->getID(), pCity->getOwner(), aFactions[iThreatFaction].beliefs[b])) * aFactions[f].bfBelief ? 2 : 1;
-						if (iBeliefStratVal > iStrategyValue)
-						{
-							iStrategy = 3;
-							iStrategyValue = iBeliefStratVal;
-							iTargetCity = pCity->getID();
-							eTargetCityOwner = pCity->getOwner();
-							eTargetBelief = aFactions[iThreatFaction].beliefs[b];
-						}
-					}
-				}
-			}
-			// Now a quick pause to figure out valid spread targets
-			// Requirements: we are in city A, city A has trade route to city B, city B does not have thing we want to spread
-			// cities we can spread to at all:
-			std::vector < std::pair< int, PlayerTypes > > validSpreadCities;
-			for (int t = 0; t < pCity->getTradeRoutes(); t++)
-			{
-				bool bValid = false;
-				CvCity const* pOtherCity = pCity->getTradeCity(t);
-				if ((int)aFactions[f].religions.size() > 0)
-				{
-					for (int r = 0; r < (int)aFactions[f].religions.size(); r++)
-					{
-						if (pOtherCity->isHasReligion(aFactions[f].religions[r]))
-							continue;
-						else
-						{
-							bValid = true;
-							break;
-						}
-					}
-				}
-				if (!bValid && (int)aFactions[f].beliefs.size() > 0)
-				{
-					for (int b = 0; b < (int)aFactions[f].beliefs.size(); b++)
-					{
-						if (getBeliefPopularity(pOtherCity->getID(), pOtherCity->getOwner(), aFactions[f].beliefs[b]) >= 0)
-							continue;
-						else
-						{
-							bValid = true;
-							break;
-						}
-					}
-				}
-				if (!bValid && (int)aFactions[f].nationalities.size() > 0)
-				{
-					for (int n = 0; n < (int)aFactions[f].nationalities.size(); n++)
-					{
-						bool bFoundNat = false;
-						for (int p = 0; p < m_iCivPlayersEverAlive; p++)
-						{
-							if (GET_PLAYER((PlayerTypes)p).getCivilizationType() == aFactions[f].nationalities[n])
-							{
-								if (pOtherCity->getCultureLevel((PlayerTypes)p) > 0)
-								{
-									bFoundNat = true;
-									break;
-								}
-							}
-						}
-						if (!bFoundNat)
-							bValid = true;
-					}
-				}
-				if (!bValid)
-				{
-					if (getFactionCityPopularity(pOtherCity->getID(), pOtherCity->getOwner(), f) < 0)
-						bValid = true;
-				}
-				if (bValid)
-				{
-					std::pair< int, PlayerTypes > that;
-					that.first = pOtherCity->getID();
-					that.second = pOtherCity->getOwner();
-					validSpreadCities.push_back(that);
-				}
-			}
-
-
-
-			// Can we do better if we use a building? 
-			FOR_EACH_ENUM(Building)
-			{
-				if (pCity->getNumRealBuilding(GC.getBuildingInfo(eLoopBuilding).getBuildingClassType()) > 0)
-				{
-					if (GC.getBuildingInfo(eLoopBuilding).getHappiness() > 0)
-					{
-						int rank = aFactions[f].factionRelations[(getBuildingOwner(pCity->getID(), pCity->getOwner(), eLoopBuilding))];
-						int iEffect = getPopularityEffect(iWealth, aFactions[f].aggression, GC.getBuildingInfo(eLoopBuilding).getHappiness(), rank, iAlreadyPopularity);
-						int iEffectEnemy = bThreat ? getPopularityEffect(iWealth, aFactions[f].aggression, GC.getBuildingInfo(eLoopBuilding).getHappiness(), rank, iEnemyPopularity) : 0;
-						int iPopStratVal = iEffect * GC.getDefineINT("FAC_STRATVAL_PER_POP") * aFactions[f].bfPopularity ? 3 : 1;
-						int iPopAggStratVal = iEffect * GC.getDefineINT("FAC_STRATVAL_PER_POP") * isAggressive(f) ? 3 : 1 * aFactions[f].bfPopularity ? 3 : 1;
-						if (iPopStratVal > iStrategyValue)
-						{
-							iStrategy = 0;
-							iStrategyValue = iPopStratVal;
-							iTargetCity = pCity->getID();
-							eTargetCityOwner = pCity->getOwner();
-						}
-						if (iPopAggStratVal > iStrategyValue)
-						{
-							iStrategy = 1; 
-							iStrategyValue = iPopAggStratVal;
-							iTargetCity = pCity->getID();
-							eTargetCityOwner = pCity->getOwner();
-						}
-						// what about beliefs? 
-						if ((int)aFactions[f].beliefs.size() > 0)
-						{
-							for (int b = 0; b < (int)aFactions[f].beliefs.size(); b++)
-							{
-								int iBeliefStratVal = GC.getDefineINT("POP_BELIEF_MULT") * getPopularityEffect(iWealth, aFactions[f].aggression, GC.getBuildingInfo(eLoopBuilding).getHappiness(), rank, getBeliefPopularity(pCity->getID(), pCity->getOwner(), aFactions[f].beliefs[b])) * aFactions[f].bfBelief ? 2 : 1;
-								if (iBeliefStratVal > iStrategyValue)
-								{
-									iStrategy = 2;
-									iStrategyValue = iBeliefStratVal;
-									iTargetCity = pCity->getID();
-									eTargetCityOwner = pCity->getOwner();
-									eTargetBelief = aFactions[f].beliefs[b];
-								}
-							}
-						}
-						if (bThreat)
-						{
-							if ((int)aFactions[iThreatFaction].beliefs.size() > 0)
-							{
-								for (int b = 0; b < (int)aFactions[iThreatFaction].beliefs.size(); b++)
-								{
-									int iBeliefStratVal = GC.getDefineINT("POP_BELIEF_MULT") * getPopularityEffect(iWealth, aFactions[f].aggression, GC.getBuildingInfo(eLoopBuilding).getHappiness(), rank, getBeliefPopularity(pCity->getID(), pCity->getOwner(), aFactions[iThreatFaction].beliefs[b])) * aFactions[f].bfBelief ? 2 : 1;
-									if (iBeliefStratVal > iStrategyValue)
-									{
-										iStrategy = 3;
-										iStrategyValue = iBeliefStratVal;
-										iTargetCity = pCity->getID();
-										eTargetCityOwner = pCity->getOwner();
-										eTargetBelief = aFactions[iThreatFaction].beliefs[b];
-									}
-								}
-							}
-						}
-					}
-				}
-				// Okay, that's popularity boosters, but what about trade route hubs?
-				if (GC.getBuildingInfo(eLoopBuilding).getTradeRoutes() > 0 || GC.getBuildingInfo(eLoopBuilding).getCoastalTradeRoutes() > 0 || GC.getBuildingInfo(eLoopBuilding).getAreaTradeRoutes() > 0)
+				bool bCanAttack = (getAttackPowerSingle(fac, pCity->iGoverningFaction, pCity, true) > (2 * getAttackPowerSingle(pCity->iGoverningFaction, fac, pCity, true)));
+				if (aFactions[fac].bfPower && bCanAttack)
 				{
 					
 				}
 			}
 		}
-		// And that should take care of popularity strategies. 
-
-		
-		
-		
-		// Attack enemies
-		// Strengthen relationships with other factions
-		// Acquire more buildings / improvements
-		// Attempt takeover of city / religion / nation
-		// Cause boycotts or strikes against the player or city controller
-		// Merge with another faction
-		// Found a new religion 
-
-
-
-
-
+		else if (pPlot->isImproved())
+		{
+			if (GC.getImprovementInfo(pPlot->getImprovementType()).isActsAsCity())
+			{
+				// This is probably owned by a faction. 
+			}
+		}
 	}
 
+
+
+
+	// Start by choosing random order for factions
+	// DON'T sort the factions list lol
+	//std::vector< int > factionPool;
+	//for (int i = 0; i < (int)aFactions.size(); i++)
+	//	factionPool.push_back(i);
+	//std::vector< int > factionOrder;
+	//for (int i = 0; i < (int)aFactions.size(); i++)
+	//{
+	//	int iIndex = SyncRandNum((int)factionPool.size());
+	//	factionOrder.push_back(factionPool[iIndex]);
+	//	factionPool.erase(factionPool.begin() + iIndex);
+	//}
+	//FAssertMsg((int)factionOrder.size() == (int)aFactions.size(), "Different number of sorted factions than exist");
+	//// now the loop. 
+	//for (int i = 0; i < (int)factionOrder.size(); i++)
+	//{
+	//	int f = factionOrder[i];
+
+	//	// STEP 1: DETERMINE PRIORITY
+	//	// Factions spawn with focuses depending on what spawned them. 
+	//	// As factions combine they combine focuses, which can make a muddled mess of focuses. 
+	//	// But some override others:
+	//	int iPriority = -1; 
+	//	if (aFactions[f].bfPower)
+	//		iPriority = 0;
+	//	else if (aFactions[f].bfRelPower)
+	//		iPriority = 1;
+	//	else if (aFactions[f].bfBelief || aFactions[f].bfNationality || aFactions[f].bfReligion)
+	//		iPriority = 2;
+	//	else // the others are more 'strategies' than focuses
+	//		iPriority = 3;
+	//	// if it doesn't have one of those strategy focuses, it will care only about its focus, not how it is achieved. 
+
+
+	//	// Now let's determine the specific strategy based on those, our aggression, and the current situation. 
+	//	// Strategy codes - 
+	//	// 0 is rebel against the chosen focus player (i.e. flip all our cities to found a new civ).
+	//	// 1 is that but include flipping allies at the same time
+	//	// 2 is focus on making diplomatic connections with other city leaders so we can flip the civ later
+	//	// 3 is attack to control a specific city. 
+	//	// 4 is increase attack value in a specific city, goal is gain control, use focuses to determine how. 
+	//	// 5 is found a new religion and make ourselves the controller. 
+	//	// 6 is spreading within target player. 
+	//	// 
+	//	// influence popularity of us (non-agg) or enemies (agg), (0)
+	//	// spread stuff or ourselves, (1)
+	//	// attack other factions (including possibly the player / religion controller), (2)
+	//	// - full scale civil war: 21. just attack city controllers: 22. civil war but with allies: 23. 
+	//	// make a peaceful bid for power (merk.fac3), (3)
+	//	// cause boycotts / etc. against the player, (4)
+	//	// buy buildings and improvements, (5)
+	//	// - military stuff 51,
+	//	// strengthen relationships with other factions. (6)
+	//	// found religion (7)
+	//	int iStrategy = -1;
+	//	int iTargetCode1 = -1;
+	//	int iTargetCode2 = -1;
+
+	//	// focus player: player where we have the most (total) popularity across their cities.
+	//	PlayerTypes focusPlayer = getFacMostPopPlayer(f);
+
+	//	if (iPriority == 0)
+	//	{
+	//		// Faction wants political power. 
+	//		// Currently this requires military confrontation against controllers of cities, eventually against nations. 
+	//		// So aggression doesn't even matter, this is always an attack. 
+	//		// later (fac3) there will be other ways to gain power. 
+	//		// Do we have a target country?
+	//		if (focusPlayer != NO_PLAYER)
+	//		{
+	//			// How much of that country could we split off in a mass rebellion?
+	//			int iControlled = 0;
+	//			for (int c = 0; c < GET_PLAYER(focusPlayer).getNumCities(); c++)
+	//			{
+	//				int iController = GET_PLAYER(focusPlayer).getCity(c)->iGoverningFaction;
+	//				if (iController == f)
+	//					iControlled += 1;
+	//				// Count it if we're diplomatic
+	//				else if (aFactions[f].bfDiplomacy && isRelationship(f, iController, 3, true))
+	//					iControlled += 1;
+	//			}
+	//			if (iControlled * 100 / GET_PLAYER(focusPlayer).getNumCities() >= GC.getDefineINT("NUM_CITIES_TO_REBEL"))
+	//			{
+	//				// merk.fac3: assess what each city will be like when we revolt and back out if we're not very popular. 
+	//				// for now: strategy is revolt! But might include allies. 
+	//				if (aFactions[f].bfDiplomacy)
+	//					iStrategy = 1;
+	//				else
+	//					iStrategy = 0;
+	//				// note that allies can still join revolts or join us during a revolt we just don't focus on it unless we're diplomatic
+	//			}
+	//			else
+	//			{
+	//				// We / allies don't control enough cities. So, are we going to try to get more cities through
+	//				if (aFactions[f].bfDiplomacy)
+	//					iStrategy = 2;
+	//				// or not
+	//				else
+	//				{
+	//					// How to get ourselves cities: (fac3: consider other ways besides attacking)
+	//					// For now, we assume we are attacking and try to prepare
+	//					// Loop through cities of the target civ (again, yes, but didn't know we're attacking up above)
+	//					int iMostAttackableCity = -1;
+	//					int iHighestValue = 0;
+	//					for (int c = 0; c < GET_PLAYER(focusPlayer).getNumCities(); c++)
+	//					{
+	//						CvCity const* pCity = GET_PLAYER(focusPlayer).getCity(c);
+	//						// in each city, compare us to city controller. 
+	//						int iController = pCity->iGoverningFaction;
+	//						if (iController == f)
+	//							continue; // don't attack our own lol
+	//						// Attacks work by using popularity to get people to attack and arming them with production
+	//						// Popularity only counts for the city but production involves everything we can get there fast enough
+	//						// which means over trade routes (if they're open) from cities we have production.
+	//						// All of this is bundled in a function:
+	//						int iAttackValue = getAttackPower(f, pCity, iController, aFactions[f].bfDiplomacy);
+	//						int iTheirAttackValue = /*same function, no difference*/ getAttackPower(iController, pCity, f, aFactions[iController].bfDiplomacy);
+	//						// Twice the attack value guarantees a win. Less and we track how big the difference is. 
+	//						if (iAttackValue > (2 * iTheirAttackValue))
+	//						{
+	//							iMostAttackableCity = c;
+	//							iHighestValue = -100;
+	//							break;
+	//						}
+	//						else if (iAttackValue - iTheirAttackValue > iHighestValue)
+	//						{
+	//							iHighestValue = iAttackValue - iTheirAttackValue;
+	//							iMostAttackableCity = c;
+	//						}
+	//					}
+	//					// Now we've determined the most attackable city. 
+	//					if (iHighestValue < 0)
+	//					{
+	//						// This means we attack right now. 
+	//						iStrategy = 3;
+	//						iTargetCode1 = iMostAttackableCity;
+	//					}
+	//					else
+	//					{
+	//						// We want to increase attack value first. 
+	//						iStrategy = 4; 
+	//						iTargetCode1 = iMostAttackableCity;
+	//					}
+	//				}
+	//			}
+	//		}			
+	//	}
+	//	else if (iPriority == 1)
+	//	{
+	//		// This means we want to take over a religion. 
+	//		// first check if we have done this already. If so, set focus to religious instead and unset this focus. 
+	//		bool bNope = false;
+	//		FOR_EACH_ENUM(Religion)
+	//		{
+	//			if (aReligionLeaders.get(eLoopReligion) == f)
+	//			{
+	//				aFactions[f].bfRelPower = false;
+	//				aFactions[f].bfReligion = true;
+	//				bNope = true;
+	//				iPriority = 2;
+	//			}
+	//		}
+	//		// Then check and make sure we only have one religion. Otherwise kind of weird. 
+	//		if (!bNope)
+	//		{
+	//			if ((int)aFactions[f].religions.size() == 1)
+	//			{
+	//				// Now the strategy: how to take over a religion?
+	//				// Attacking the religious controller as the only option seems pretty weird.
+	//				// So instead our strategy is just split off a new religion and take control of that. 
+	//				iStrategy = 5;
+	//			}
+	//			// later (fac3): consider split if there are multiple religions
+	//		}
+	//	}
+	//	else if (iPriority == 2)
+	//	{
+	//		// This means our goal is to see our nationality, religion, or belief system, or combination of those, become dominant.
+	//		bool bb = aFactions[f].bfBelief;
+	//		bool nn = aFactions[f].bfNationality;
+	//		bool rr = aFactions[f].bfReligion;
+	//		bool noUnmatchPlayers = aFactions[f].ePlayer != NO_PLAYER; // if they're a player they focus on other factions, not a target player
+	//		// check real quick, does current target player match this faction?
+	//		if (isPlayerMatchFaction(f, focusPlayer) && !noUnmatchPlayers)
+	//		{
+	//			PlayerTypes oldPlayer = focusPlayer;
+	//			focusPlayer = getFacMostPopPlayer(f, true); // find a new one that doesn't match
+	//			if (focusPlayer == NO_PLAYER)
+	//			{
+	//				// didn't find one, so we're going to focus on rooting out heathens
+	//				noUnmatchPlayers = true;
+	//				focusPlayer = oldPlayer; // reset back to first target
+	//			}
+	//		}
+	//		if (focusPlayer != NO_PLAYER)
+	//		{
+	//			if (noUnmatchPlayers)
+	//			{
+	//				// Either we ARE the player or we couldn't find one that doesn't share our bel / rel / nat,
+	//				// So we target heathens in that civ. 
+	//			}
+	//			else
+	//			{
+	//				// This means our priority is to get the player to adopt our nat / rel / bel
+	//				// There are basically three ways to do this:
+	//				// First, via popularity: spread to cities, increase pop, this will cause unhappies if player doesn't match popular stuff. 
+	//				// Second, via boycotting: take over important things, refuse to allow player to use them. Currently only human players will actually be able to respond to this. 
+	//				// Third, via direct assault: take control of cities and revolt. Since bfPower focus was already considered, this is not currently our strategy, but we could switch to this later. 
+
+	//				int iPopStratPoints = 0;
+	//				int iBoycottStratPoints = 0;
+	//				// aggressive prefers boycotting:
+	//				iBoycottStratPoints += (aFactions[f].aggression / 2); 
+	//				// basic strategy differences:
+	//				iPopStratPoints += (3* aFactions[f].bfPopularity);
+	//				iBoycottStratPoints += (3 * (aFactions[f].bfWealth || aFactions[f].bfProduction));
+	//				// diplomacy would REALLY rather not make player pissed
+	//				iPopStratPoints += (3 * aFactions[f].bfDiplomacy); 
+	//				// relationship rank effects
+	//				int iPlayerFac = GET_PLAYER(focusPlayer).iPlayerFaction;
+	//				int iRank = aFactions[f].factionRelations[iPlayerFac];
+	//				if (iRank > 0)
+	//					iPopStratPoints += iRank; // prefer not to piss off friends (can be overruled by aggression)
+	//				else if (iRank < 0)
+	//					iBoycottStratPoints += iRank; // prefer to piss off enemies
+
+	//				// lastly if we have big advantages compared to the player we should use those strategies. 
+	//				// for now just compare total sizes even though 
+	//				
+
+
+
+	//				CvCity const* pTargetCity = GET_PLAYER(focusPlayer).getCity(c);
+	//				bool bHasBeliefs = true;
+	//				CivicTypes iHighestPopBelief = NO_CIVIC;
+	//				int iHighestBeliefPop = 0;
+	//				if (bb)
+	//				{
+	//					for (int b = 0; b < (int)pTargetCity->aiBeliefPopularities.size(); b++)
+	//					{
+	//						int pop = pTargetCity->aiBeliefPopularities[b].second;
+	//						if (pop > iHighestBeliefPop)
+	//						{
+	//							iHighestBeliefPop = pop;
+	//							iHighestPopBelief = pTargetCity->aiBeliefPopularities[b].first;
+	//						}
+	//					}
+	//					for (int b = 0; b < (int)aFactions[f].beliefs.size(); b++)
+	//					{
+	//						int pop = getBeliefPopularity(pTargetCity->getID(), focusPlayer, aFactions[f].beliefs[b]);
+	//						if (pop >= 0)
+	//						{
+	//							if (pop < iLowestPop)
+	//							{
+	//								iLowestPop = pop;
+	//								iLowestPopCity = c;
+	//								eTargetBelief = aFactions[f].beliefs[b];
+	//							}
+	//						}
+	//						else
+	//						{
+	//							bHasBeliefs = false;
+	//						}
+	//						if (iHighestPopBelief == aFactions[f].beliefs[b])
+	//							iNumHighest++;
+	//					}
+	//				}
+	//				bool bHasReligions = true;
+	//				if (rr && !bAggressive)
+	//				{
+	//					for (int r = 0; r < (int)aFactions[f].religions.size(); r++)
+	//					{
+	//						if (pTargetCity->isHasReligion(aFactions[f].religions[r]))
+	//							continue; // will check popularity of faction itself later
+	//						else
+	//						{
+	//							bHasReligions = false;
+	//							break;
+	//						}
+	//					}
+	//				}
+	//				bool bHasNationalities = true;
+	//				if (nn && !bAggressive)
+	//				{
+	//					for (int n = 0; n < (int)aFactions[f].nationalities.size(); n++)
+	//					{
+	//						// slightly different because nationality != player but culture = player = nationality so
+	//						for (int pl = 0; pl < GC.getMaxCivPlayers(); pl++)
+	//						{
+	//							if (!GET_PLAYER((PlayerTypes)pl).isEverAlive())
+	//								continue;
+	//							if (GET_PLAYER((PlayerTypes)pl).getCivilizationType() != aFactions[f].nationalities[n])
+	//								continue;
+	//							if (pTargetCity->getCulture((PlayerTypes)pl) > 0)
+	//								continue;
+	//							else
+	//							{
+	//								bHasNationalities = false;
+	//								break;
+	//							}
+	//						}
+	//					}
+	//				}
+	//				if ((!bHasBeliefs || !bHasReligions || !bHasNationalities) && !bAggressive)
+	//				{
+	//					// spreading is the strategy. 
+	//					iStrategy = 6;
+	//					// no 'target' other than focusPlayer, we'll just spread as many times as we can
+	//					break;
+	//				}
+	//				else if (bHasBeliefs || bHasReligions || bHasNationalities)
+	//					iNumExist++;
+	//				int iFacPop = getFactionCityPopularity(pTargetCity->getID(), focusPlayer, f);
+	//				if (iFacPop < iLowestPop)
+	//				{
+	//					iLowestPop = iFacPop;
+	//					iLowestPopCity = c;
+	//				}
+	//			}
+	//			}
+
+
+
+
+	//			
+
+
+	//			// Now loop through the cities of that target and get some info. 
+	//			bool bAggressive = isAggressive(f);
+	//			int iLowestPop = 100000;
+	//			int iLowestPopCity = -1;
+	//			CivicTypes eTargetBelief = NO_CIVIC;
+	//			int iNumExist = 0;
+	//			int iNumHighest = 0;
+	//			for (int c = 0; c < GET_PLAYER(focusPlayer).getNumCities(); c++)
+	//			{
+	//			if (iStrategy != 6)
+	//			{
+	//				// This means never triggered spread strategy. 
+	//				// If not aggressive, the only other thing we care about is popularity, so:
+	//				if (!bAggressive && iLowestPopCity != -1)
+	//				{
+	//					iStrategy = 7;
+	//					iTargetCode1 = iLowestPopCity;
+	//					iTargetCode2 = eTargetBelief; // might be NO_CIVIC
+	//				}
+	//				else if (bAggressive)
+	//				
+	//					// We are aggressive, so we don't care about spreading. Entire goal: get player to match us. 
+	//					// 
+	//					bool isPlayer = (GET_PLAYER(focusPlayer).iPlayerFaction == f);
+	//					if (iNumHighest > (GET_PLAYER(focusPlayer).getNumCities() / 2) && !isPlayer)
+	//					{
+	//						// definitely, absolutely make demands of the player. This can lead to actual rebellion. 
+	//						iStrategy = 8; 
+	//						// not really any targets to pick. 
+	//					}
+	//					else
+	//					{
+	//						// We're not dominating a majority of the player's cities. 
+	//						// What about our own?
+	//						if (iNumHighest < iNumExist)
+	//						{
+	//							// We are a minority in most places
+	//							if (iNumHighest == 0)
+	//							{
+	//								// In all places, actually
+	//								// In this case, we only boycott if we're nuts:
+	//								if (aFactions[f].aggression > (2 * GC.getDefineINT("AGGRESSIVE_THRESHOLD")))
+	//									iStrategy = 9; 
+	//								// 
+	//							}
+	//							else
+	//							{
+	//								// not all places but some
+	//							}
+	//						}
+	//					}
+	//				}
+	//			}
+	//		}
+	//		// If we are in every city and the most popular in every city, the only reason this would be a target is if the player isn't following our wishes, which means we need to boycott to pressure them, boost our popularity to indirectly pressure them through unhappiness, or rebel and form our own civ if we control enough stuff. 
+	//	}
+	//	else
+	//	{
+	//		// We are neither a power-hungry nor a zealotous faction. So we just care about getting big in different ways. 
+	//		// Four options: wealth, production, diplomacy, popularity
+	//		// Loop through cities we're in, if we're in any
+	//		{
+	//			// Goal here is to find the best thing we could do that we actually want to do. 
+	//			// So only look at things that fit our focuses. 
+	//			// For wealth, consider all the buildings in the city and the wealth they provide, and divide by how difficult it would be to acquire them. 
+	//			// For production, similar. 
+	//			// For popularity, look at our popularity or others' in the city (dep on aggression) and determine how difficult it would be to raise that. If already high, determine how difficult it would be to spread to another city. 
+	//		}
+	//		// Non-city things to consider:
+	//		// For wealth / production, look at other factions and see if we could make a merge
+	//		// For diplomacy, roam through other factions and see if we could raise relationship rank
+	//		// If we don't have any cities, look at our improvements outside cities and check improvements near them for factions considering all the same stuff. 
+	//	}
+
+	//	// Now actually do the thing depending on our strategy code and target codes. 
+
+	//}
+
+}
+
+PlayerTypes CvGame::getFacMostPopPlayer(int f, bool bExcludeMatches)
+{
+	std::vector< PlayerTypes > countries;
+	std::vector< int > pops;
+	for (int c = 0; c < (int)aFactions[f].inCities.size(); c++)
+	{
+		CvCity const* pCity = GET_PLAYER(aFactions[f].inCities[c].first).getCity(aFactions[f].inCities[c].second);
+		int iIndex = -1;
+		for (int p = 0; p < (int)countries.size(); p++)
+		{
+			if (pCity->getOwner() == countries[p])
+			{
+				iIndex = p;
+				break;
+			}
+		}
+		if (iIndex < 0)
+		{
+			// check matches
+			if (bExcludeMatches)
+			{
+				if (isPlayerMatchFaction(f, pCity->getOwner()))
+					continue;
+			}
+			countries.push_back(pCity->getOwner());
+			pops.push_back(getFactionCityPopularity(pCity->getID(), pCity->getOwner(), f));
+		}
+		else
+			pops[iIndex] += getFactionCityPopularity(pCity->getID(), pCity->getOwner(), f);
+	}
+	// Highest:
+	int iMaxPop = 0;
+	int iWhich = -1;
+	for (int p = 0; p < (int)pops.size(); p++)
+	{
+		if (pops[p] > iMaxPop)
+		{
+			iMaxPop = pops[p];
+			iWhich = p;
+		}
+	}
+	if ((int)countries.size() > 0 && iWhich > 0)
+		return countries[iWhich];
+	else
+		return NO_PLAYER;
+}
+
+bool CvGame::isPlayerMatchFaction(int f, PlayerTypes ePlayer)
+{
+	bool bMb = false;
+	bool bMn = false;
+	bool bMr = false;
+	if (aFactions[f].bfBelief)
+	{
+		if (isMatchBeliefs(f, ePlayer, true, (int)aFactions[f].beliefs.size()))
+			bMb = true;
+	}
+	else
+		bMb = true;
+	if (aFactions[f].bfNationality)
+	{
+		if (isMatchNationality(f, ePlayer, true))
+			bMn = true;
+	}
+	else
+		bMn = true;
+	if (aFactions[f].bfReligion)
+	{
+		if (isMatchReligion(f, ePlayer, true))
+			bMr = true;
+	}
+	else
+		bMr = true;
+	if (bMr && bMn && bMb && (aFactions[f].bfBelief || aFactions[f].bfNationality || aFactions[f].bfReligion))
+	{
+		return true;
+	}
+	return false;
 }
 
 int CvGame::getPopularityEffect(int iSpend, int iAggression, int iSpreaderWeight, int iRelationshipRank, int iAlready) const
@@ -11938,6 +12173,196 @@ bool CvGame::canSpreadThing(int iSpend, int iAggression, int iDistance, int iSpr
 		return false;
 	else
 		return true;
+}
+
+int CvGame::getAttackPower(int iAttackingFaction, CvCity const* pCity, int iDefendingFaction, bool bConsiderAllies)
+{
+	int iAttackPower = 0;
+	// First: how much population can we bring to bear?
+	int iArmedPopulation = (getFactionCityPopularity(pCity->getID(), pCity->getOwner(), iAttackingFaction) * 100) / GC.getDefineINT("POP_TO_ATTACK_PERCENT");
+	// Second: how much production can we arm them with? 
+	// This means production from buildings and improvements we own. 
+	int iProduction = 0;
+	int iMilitaryBonus = 0;
+	for (int b = 0; b < (int)aFactions[iAttackingFaction].ownedBuildings.size(); b++)
+	{
+		int iCityLocation = aFactions[iAttackingFaction].ownedBuildings[b].first;
+		BuildingTypes eBuilding = aFactions[iAttackingFaction].ownedBuildings[b].second;
+		int iProductionB = GC.getBuildingInfo(eBuilding).getYieldChange(YIELD_PRODUCTION); // might involve more later fac3
+		// check for military bonuses here too
+		int iMilitaryB = GC.getBuildingInfo(eBuilding).getFreeExperience(); // might involve more later fac3
+		// is it in the target city?
+		if (iCityLocation == pCity->plot()->plotNum())
+		{
+			iProduction += iProductionB;
+			iMilitaryBonus += iMilitaryB;
+			continue;
+		}
+		else
+		{
+			bool bFoundRoute = false;
+			CvCity const* pOtherCity = GC.getMap().plotByIndex(iCityLocation)->getPlotCity();
+			for (int t = 0; t < pCity->getTradeRoutes(); t++)
+			{
+				if (pCity->getTradeCity(t) == pOtherCity)
+				{
+					// Ok, they're connected, but is the route blocked? 
+					if (isTradeOpenToFac(iAttackingFaction, pCity, pOtherCity))
+					{
+						bFoundRoute = true;
+						break;
+					}
+					
+					
+				}
+			}
+			if (bFoundRoute)
+			{
+				iProduction += iProductionB;
+				iMilitaryBonus += iMilitaryB;
+				continue;
+			}
+			else if (plotDistance(pCity->plot(), pOtherCity->plot()) <= GC.getDefineINT("MAX_MOVE_PRODUCTION_NO_TRADEROUTE_DIST")) // might make this depend on era / tech fac3
+			{
+				iProduction += iProductionB;
+				iMilitaryBonus += iMilitaryB;
+				continue;
+			}
+		}
+	}
+	// Our improvements: (basically the same thing again)
+	for (int i = 0; i < (int)aFactions[iAttackingFaction].ownedImprovements.size(); i++)
+	{
+		int iX = aFactions[iAttackingFaction].ownedImprovements[i].first;
+		int iY = aFactions[iAttackingFaction].ownedImprovements[i].second;
+		CvPlot const* pPlot = GC.getMap().plot(iX, iY);
+		int iProductionI = GC.getImprovementInfo(pPlot->getImprovementType()).getYieldChange(YIELD_PRODUCTION); // might involve more later fac3
+		// is it in the target city?
+		if (pPlot->defaultWorkingCity() == pCity) // always uses default, that way won't get messed up by custom working tiles
+		{
+			iProduction += iProductionI;
+			continue;
+		}
+		else
+		{
+			bool bFoundRoute = false;
+			CvCity const* pOtherCity = pPlot->defaultWorkingCity();
+			for (int t = 0; t < pCity->getTradeRoutes(); t++)
+			{
+				if (pCity->getTradeCity(t) == pOtherCity)
+				{
+					// Ok, they're connected, but is the route blocked? 
+					if (isTradeOpenToFac(iAttackingFaction, pCity, pOtherCity))
+					{
+						bFoundRoute = true;
+						break;
+					}
+				}
+			}
+			if (bFoundRoute)
+			{
+				iProduction += iProductionI;
+				continue;
+			}
+			else if (plotDistance(pCity->plot(), pOtherCity->plot()) <= GC.getDefineINT("MAX_MOVE_PRODUCTION_NO_TRADEROUTE_DIST")) // might make this depend on era / tech fac3
+			{
+				iProduction += iProductionI;
+				continue;
+			}
+		}
+	}
+	// Third: can we give them military bonuses? (figured above)
+	// Fourth: can we get allies to help? (if so, call this method again but DON'T consider their allies)
+	if (bConsiderAllies)
+	{
+		for (int f = 0; f < (int)aFactions.size(); f++)
+		{
+			if (isRelationship(iAttackingFaction, f, 3, true) && f != iDefendingFaction) // cannot use allies to attack themselves lol
+			{
+				iAttackPower += getAttackPower(f, pCity, iDefendingFaction, false);
+			}
+		}
+	}
+	// Now add it up and return. 
+	int iPopMult = (1 + iMilitaryBonus + (iProduction / 30)); // add global defines later merk.fac3
+	iAttackPower += (iArmedPopulation * iPopMult);
+	return iAttackPower;
+}
+
+// Simpler version of the above, limits the faction to only the city they're currently in
+int CvGame::getAttackPowerSingle(int iAttackingFaction, int iDefendingFaction, CvCity const* pCity, bool bConsiderAllies)
+{
+	int iAttackPower = 0;
+	// First: how much population can we bring to bear?
+	int iArmedPopulation = (getFactionCityPopularity(pCity->getID(), pCity->getOwner(), iAttackingFaction) * 100) / GC.getDefineINT("POP_TO_ATTACK_PERCENT");
+	int iProduction = 0;
+	int iMilitaryBonus = 0;
+	for (int b = 0; b < (int)aFactions[iAttackingFaction].ownedBuildings.size(); b++)
+	{
+		int iCityLocation = aFactions[iAttackingFaction].ownedBuildings[b].first;
+		// is it in the target city?
+		if (iCityLocation == pCity->plot()->plotNum())
+		{
+			BuildingTypes eBuilding = aFactions[iAttackingFaction].ownedBuildings[b].second;
+			iProduction += GC.getBuildingInfo(eBuilding).getYieldChange(YIELD_PRODUCTION);
+			iMilitaryBonus += GC.getBuildingInfo(eBuilding).getFreeExperience();
+		}
+	}
+	// Our improvements: (basically the same thing again)
+	for (int i = 0; i < (int)aFactions[iAttackingFaction].ownedImprovements.size(); i++)
+	{
+		int iX = aFactions[iAttackingFaction].ownedImprovements[i].first;
+		int iY = aFactions[iAttackingFaction].ownedImprovements[i].second;
+		CvPlot const* pPlot = GC.getMap().plot(iX, iY);
+		// is it in the target city?
+		if (pPlot->defaultWorkingCity() == pCity) // always uses default, that way won't get messed up by custom working tiles
+		{
+			iProduction += GC.getImprovementInfo(pPlot->getImprovementType()).getYieldChange(YIELD_PRODUCTION);
+		}
+	}
+	// Fourth: can we get allies to help? (if so, call this method again but DON'T consider their allies)
+	if (bConsiderAllies)
+	{
+		for (int f = 0; f < (int)pCity->aiFactionPopularities.size(); f++)
+		{
+			int iThem = pCity->aiFactionPopularities[f].first;
+			if (isRelationship(iAttackingFaction, iThem, GC.getDefineINT("FACTION_FRIENDS_THRESHOLD"), true) && iThem != iDefendingFaction) // cannot use allies to attack themselves lol
+			{
+				iAttackPower += getAttackPowerSingle(iThem, iDefendingFaction, pCity, false);
+			}
+		}
+	}
+	// Now add it up and return. 
+	int iPopMult = (1 + iMilitaryBonus + (iProduction / 30)); // add global defines later merk.fac3
+	iAttackPower += (iArmedPopulation * iPopMult);
+	return iAttackPower;
+}
+
+bool CvGame::isTradeOpenToFac(int iFac, CvCity const* pCity1, CvCity const* pCity2)
+{
+	// Check buildings in both cities, see if we or an ally control any of those buildings. 
+	FOR_EACH_ENUM(Building)
+	{
+		if (pCity1->getNumRealBuilding(GC.getBuildingInfo(eLoopBuilding).getBuildingClassType()) > 0)
+		{
+			if (GC.getBuildingInfo(eLoopBuilding).getTradeRoutes() > 0 || (GC.getBuildingInfo(eLoopBuilding).getCoastalTradeRoutes() > 0 && pCity2->plot()->isCoastalLand()))
+			{
+				int iOwner = getBuildingOwner(pCity1->getID(), pCity1->getOwner(), eLoopBuilding);
+				if (iFac == iOwner || isRelationship(iFac, iOwner, 3, true))
+					return true;
+			}
+		}
+		if (pCity2->getNumRealBuilding(GC.getBuildingInfo(eLoopBuilding).getBuildingClassType()) > 0)
+		{
+			if (GC.getBuildingInfo(eLoopBuilding).getTradeRoutes() > 0 || (GC.getBuildingInfo(eLoopBuilding).getCoastalTradeRoutes() > 0 && pCity1->plot()->isCoastalLand()))
+			{
+				int iOwner = getBuildingOwner(pCity2->getID(), pCity2->getOwner(), eLoopBuilding);
+				if (iFac == iOwner || isRelationship(iFac, iOwner, 3, true))
+					return true;
+			}
+		}
+	}
+	return false;
 }
 
 

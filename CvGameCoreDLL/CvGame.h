@@ -1019,8 +1019,13 @@ public:
 
 	// merk.facm - the main mechanics
 	void doTurnFaction();
+	PlayerTypes getFacMostPopPlayer(int f, bool bExcludeMatches = false);
+	bool isPlayerMatchFaction(int f, PlayerTypes ePlayer);
 	int getPopularityEffect(int iSpend, int iAggression, int iSpreaderWeight, int iRelationshipRank, int iAlready) const;
 	bool canSpreadThing(int iSpend, int iAggression, int iDistance, int iSpreaderWeight, int iRelationshipRank, bool bWeOwn) const;
+	int getAttackPower(int iAttackingFaction, CvCity const* pCity, int iDefendingFaction, bool bConsiderAllies = false);
+	int getAttackPowerSingle(int iAttackingFaction, int iDefendingFaction, CvCity const* pCity, bool bConsiderAllies = false); // simpler version
+	bool isTradeOpenToFac(int iFac, CvCity const* pCity1, CvCity const* pCity2);
 
 	// religion governor tracker (religious beliefs of them = beliefs of religion)
 	ListEnumMap< ReligionTypes, int > aReligionLeaders;
