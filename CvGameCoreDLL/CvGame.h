@@ -964,33 +964,110 @@ public:
 	DllExport void handleMiddleMouse(bool bCtrl, bool bAlt, bool bShift);
 	DllExport void handleDiplomacySetAIComment(DiploCommentTypes eComment) const;
 
-	// merk.fac1: faction setup and tracker
+	// merk.rfac
+
+	// this allows factions who already took their turn to interact with the faction currently taking a turn
+	struct FactionPing {
+		int iType; // 0 = regular request, 1 = attack, 2 = opportunity to respond to an attack that is happening
+		int iTargetType; // -1 is nothing 0 = city 1 = building 2 = unit 3 = power 4 = influence 5 = action against 3rd party
+		std::vector< int > aiTargetIDInfo; // any ints necessary to specify target (amount, city ID, faction ID, whatever)
+		int iOfferType; // same as target type
+		std::vector< int > aiOfferIDInfo; 
+	};
+
 	struct Faction {
 		CvString name;
-		std::vector< std::pair< int, BuildingTypes > > ownedBuildings; // city ID, building
-		std::vector< std::pair< int, int > > ownedImprovements; // tile coords
-		std::vector< CivicTypes > beliefs;
-		std::vector< CivilizationTypes > nationalities;
-		std::vector< ReligionTypes > religions;
-		int aggression;
-		int cohesion;
-		int extraWealth; // used to store pay for services
-		// focus variables
-		bool bfBelief;
-		bool bfReligion;
-		bool bfNationality;
-		bool bfWealth;
-		bool bfProduction;
-		bool bfPopularity;
-		bool bfPower; // i.e. political
-		bool bfRelPower; // religious power
-		bool bfDiplomacy; 
-		// first int is faction in list, second int is relationship rank
-		std::vector< int > factionRelations;
-		PlayerTypes ePlayer; // usually NULL
-		std::vector< std::pair< PlayerTypes, int > > inCities; // added with merk.facm, just makes things easier
+		int iFacType;
+		/* faction types:
+		0 - independent
+		1 - civic based
+		2 - nationality based
+		3 - religion based
+		4 - religion civic based
+		5 - labor based
+		6 - immigrant 
+		7 - military
+		8 - city government 
+		9 - national government */
+
+		// Faction identities: only one of each
+		ReligionTypes eFacReligion;
+		CivilizationTypes eFacNationality;
+
+		// "belief" civics - only one for each civic option
+		ArrayEnumMap< CivicOptionTypes, CivicTypes > aeFacBeliefs;
+
+		std::vector< std::pair< int, BuildingTypes > > aaFacBuildings; // city ID, building
+		std::vector< std::pair< int, int > > aaFacTiles; // tile coords
+
+		std::vector< std::vector< int > > aaFacCities;
+		// vector holds city vectors, each city vector holds these vars:
+		/* 
+		slot 0 - PlayerType
+		slot 1 - city id
+		slot 2 - popularity 
+		slot 3 - govt influence
+		slot 4 - military influence
+		slot 5 - labor influence
+		slot 6, 7, 8 controller status of those
+		*/
+
+		// holds the power the faction collected this turn
+		int iCurrentPower;
+
+		// factions have a capital so we can make sure they are not spread out too far
+		int iFactionCapitalX;
+		int iFactionCapitalY; 
+
+		ArrayEnumMap< PlayerTypes, int > aeiNationalInfluences;
+		ArrayEnumMap< PlayerTypes, bool >
+			aebNationalController;
+		ArrayEnumMap< ReligionTypes, int > aeiReligionInfluences;
+		ArrayEnumMap< ReligionTypes, bool > aebReligionController;
+
+		// relationships: simple int for each other faction
+		std::vector< int > aiFactionRelations;
+		
+		// more official version that doesn't mean much unless this faction controls something
+		std::vector< int > aiFactionApprovals;
+
+		// current 'target' faction we are trying to get rid of / decrease threat status of:
+		int iCurrentTarget = -1;
+
+		std::vector< std::vector < int > > aaPings; // holds 'pings' from others who took their turn before us. First int = who. Second int = type (request, attack, or notify of attack we can respond to). Third and fourth int give info about target, fifth int is amount if applicable, sixth and seventh int give 
 	};
 	std::vector< Faction > aFactions;
+
+	// Getters
+	CvString getFactionName(int iFaction) const;
+	int getFactionType(int iFaction) const;
+	ReligionTypes getFactionReligion(int iFaction) const;
+	CivilizationTypes getFactionNationality(int iFaction) const;
+	int getFactionBelief(int iFaction, CivicTypes eCivic) const; // returns -1 if oppose, 1 if hold that belief, and 0 if neither
+	int getFactionPower(int iFaction) const;
+	int getFactionCurrentPower(int iFaction) const;
+	//int getFactionCityPower(int iFaction, PlayerTypes eCityOwner, int iCityID) const;
+	int getFactionCityPopularity(int iFaction, PlayerTypes eCityOwner, int iCityID) const;
+	int getFactionCityInfluence(int iFaction, PlayerTypes eCityOwner, int iCityID, int iInfluenceType = 0) const; // 0 govt, 1 military, 2 labor
+	bool isFactionCityController(int iFaction, PlayerTypes eCityOwner, int iCityID, int iControlType = 0) const; // same
+	int getFactionCapitalDistance(int iFaction, PlayerTypes eCityOwner, int iCityID) const; // returns dist from faction capital
+	int getFactionNationalInfluence(int iFaction, PlayerTypes eNation) const;
+	bool isFactionNationalController(int iFaction, PlayerTypes eNation) const;
+	int getFactionReligionInfluence(int iFaction, ReligionTypes eReligion) const;
+	bool isFactionReligionController(int iFaction, ReligionTypes eReligion) const;
+	int getFactionRelations(int iFaction, int iOtherFaction) const;
+	bool isFactionAlly(int iFaction, int iOtherFaction) const;
+	bool isFactionEnemy(int iFaction, int iOtherFaction) const;
+	int getFactionThreat(int iFaction, int iOtherFaction, PlayerTypes eNation = NO_PLAYER, int iCityID = -1) const; // measures threat level of that faction
+	bool isFactionApproved(int iApprover, int iTarget, bool bDis = false) const;
+	int getFactionCurrentTarget(int iFaction) const;
+
+	// AI functions
+	int getBiggestThreat(int iFaction, PlayerTypes eNation = NO_PLAYER, int iCityID = -1) const; // finds biggest threat to us in given scope
+	bool isImminentThreat(int iFaction, int iThreatFaction, PlayerTypes eNation = NO_PLAYER, int iCityID = -1) const; // if we are in danger of being destroyed in a particular scope we need to do something about it
+	std::vector< int > sortFactionTurns(); // put the factions in a vector in turn order (controllers first, then influence order, roughly)
+
+
 	
 	// Utility functions
 	void initFaction(); // just starts a blank one
