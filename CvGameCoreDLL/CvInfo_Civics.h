@@ -64,6 +64,10 @@ public: // The const functions are exposed to Python except those added by AdvCi
 	bool isMilitaryFoodProduction() const { return m_bMilitaryFoodProduction; }
 	//bool isNoUnhealthyPopulation() const; // K-Mod, 27/dec/10:
 	int getUnhealthyPopulationModifier() const { return m_iUnhealthyPopulationModifier; }	// Exposed to Python
+	// merk.rfac
+	int getFactionType() const { return m_iFactionType; }
+	int getFactionInfluence() const { return m_iFactionInfluence; }
+	// merk.rfac end
 	bool isBuildingOnlyHealthy() const { return m_bBuildingOnlyHealthy; }
 	bool isNoForeignTrade() const { return m_bNoForeignTrade; }
 	bool isNoCorporations() const { return m_bNoCorporations; }
@@ -153,6 +157,10 @@ protected:
 
 	//bool m_bNoUnhealthyPopulation;
 	int m_iUnhealthyPopulationModifier; // K-Mod
+	// merk.rfac
+	int m_iFactionType;
+	int m_iFactionInfluence;
+	// merk.rfac end
 	bool m_bMilitaryFoodProduction;
 	bool m_bBuildingOnlyHealthy;
 	bool m_bNoForeignTrade;

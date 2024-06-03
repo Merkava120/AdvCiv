@@ -240,6 +240,14 @@ public:
 	{
 		return m_iUnhealthyPopulationModifier;
 	}
+	// merk.rfac
+	int getFactionType() const { return m_iFactionType; }
+	int getFactionInfluence() const { return m_iFactionInfluence; }
+	bool isSpawnFaction() const { return m_bSpawnFaction; }
+	int getLinkDistance() const { return m_iLinkDistance; }
+	int getLinkChannel() const { return m_iLinkChannel; }
+	bool isUsesLabor() const { return m_bUsesLabor; }
+	// merk.rfac end
 	bool isBuildingOnlyHealthy() const { return m_bBuildingOnlyHealthy; }
 	bool isNeverCapture() const { return m_bNeverCapture; }
 	bool isNukeImmune() const { return m_bNukeImmune; }
@@ -439,6 +447,14 @@ protected:
 	int m_iAllCityDefenseModifier;
 	int m_iEspionageDefenseModifier;
 	int m_iUnhealthyPopulationModifier; // K-Mod: was m_bNoUnhealthyPopulation
+	// merk.rfac
+	int m_iFactionType;
+	int m_iFactionInfluence;
+	bool m_bSpawnFaction;
+	int m_iLinkDistance;
+	int m_iLinkChannel;
+	bool m_bUsesLabor;
+	// merk.rfac end
 	MissionTypes m_eMissionType;
 	VoteSourceTypes m_eVoteSourceType;
 

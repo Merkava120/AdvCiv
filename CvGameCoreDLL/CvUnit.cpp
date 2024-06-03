@@ -110,6 +110,9 @@ CvUnit::CvUnit() // advc.003u: Body cut from the deleted reset function
 	m_iBaseCombat = 0;
 	m_iCargoCapacity = 0;
 	m_iLastReconTurn = -1; // advc.029
+	// merk.rfac
+	m_iFactionOwner = -1;
+	// merk.rfac end
 }
 
 // advc.003u: Param eUnitAI moved to CvUnitAI::init
@@ -314,6 +317,20 @@ void CvUnit::finalizeInit() // advc.003u: Body cut from init
 	// merk.ftac begin
 	setCurrentLevel(getUnitInfo().getLevel());
 	setCurrentStrike(getUnitInfo().getStrike());
+	// merk.rfac begin
+	m_iFactionOwner = -1;
+	if (getUnitInfo().getPrereqBuilding() != NO_BUILDING && plot()->isCity())
+	{
+		for (int a = 0; a < (int)GC.getGame().aFactions.size(); a++)
+		{
+			if (GC.getGame().isOwnBuilding(a, GC.getGame().isInCity(a, plot()->getPlotCity()->getID(), getOwner()), getUnitInfo().getPrereqBuilding()))
+			{
+				// later: add limitations via xml so certain units always belong to the player and so on
+				m_iFactionOwner = a;
+				break;
+			}
+		}
+	}
 	// merkava end
 
 	if (isActiveOwned())

@@ -110,6 +110,14 @@ m_bMapCentering(false),
 m_bNoUnhappiness(false),
 //m_bNoUnhealthyPopulation(false),
 m_iUnhealthyPopulationModifier(0), // K-Mod
+//merk.rfac
+m_iFactionType(-1),
+m_iFactionInfluence(0),
+m_bSpawnFaction(false),
+m_iLinkDistance(0),
+m_iLinkChannel(-1),
+m_bUsesLabor(false),
+// merk.rfac end
 m_bBuildingOnlyHealthy(false),
 m_bNeverCapture(false),
 m_bNukeImmune(false),
@@ -742,6 +750,14 @@ bool CvBuildingInfo::read(CvXMLLoadUtility* pXML)
 	pXML->GetChildXmlValByName(&m_bNoUnhappiness, "bNoUnhappiness");
 	//pXML->GetChildXmlValByName(&m_bNoUnhealthyPopulation, "bNoUnhealthyPopulation");
 	pXML->GetChildXmlValByName(&m_iUnhealthyPopulationModifier, "iUnhealthyPopulationModifier"); // K-Mod
+	// merk.rfac
+	pXML->GetChildXmlValByName(&m_iFactionType, "iFactionType", -1);
+	pXML->GetChildXmlValByName(&m_iFactionInfluence, "iFactionInfluence", 0);
+	pXML->GetChildXmlValByName(&m_bSpawnFaction, "bSpawnFaction", false);
+	pXML->GetChildXmlValByName(&m_iLinkDistance, "iLinkDistance", 0);
+	pXML->GetChildXmlValByName(&m_iLinkChannel, "iLinkChannel", -1);
+	pXML->GetChildXmlValByName(&m_bUsesLabor, "bUsesLabor", false);
+	// merk.rfac end
 	pXML->GetChildXmlValByName(&m_bBuildingOnlyHealthy, "bBuildingOnlyHealthy");
 	pXML->GetChildXmlValByName(&m_bNeverCapture, "bNeverCapture");
 	pXML->GetChildXmlValByName(&m_bNukeImmune, "bNukeImmune");

@@ -1698,11 +1698,6 @@ void CvPlayer::acquireCity(CvCity* pOldCity, bool bConquest, bool bTrade, bool b
 				pOldCity->getBuildingHealthChange(eBuildingClass));
 	}
 
-	// merk.fac1: move trackers to new city
-	std::vector< std::pair < CivicTypes, int > > oldbeliefstracker = pOldCity->aiBeliefPopularities;
-	std::vector< std::pair < int, int > > oldfacstracker = pOldCity->aiFactionPopularities;
-	// merk.fac1 end
-
 	pOldCity->kill(false, /* advc.001: */ false); // Don't bump units yet
 	pOldCity = NULL; // advc: Mustn't access that past this point
 
@@ -1754,6 +1749,20 @@ void CvPlayer::acquireCity(CvCity* pOldCity, bool bConquest, bool bTrade, bool b
 			// advc.ctr: Moved (way) up
 			(bTrade && !bRecapture) ? iOccupationTimer : 0);
 	CvCityAI& kNewCity = pNewCity->AI(); // advc.003u
+
+	// merk.rfac update factions to new city
+	for (int fac = 0; fac < (int)GC.getGame().aFactions.size(); fac++)
+	{
+		int iDx = GC.getGame().isInCity(fac, iOldCityId, eOldOwner);
+		if (iDx >= 0)
+		{
+			GC.getGame().doFactionStrike(fac, iOldCityId, eOldOwner, true); // end strikes
+			GC.getGame().aFactions[fac].aaFacCities[iDx][0] = kNewCity.getOwner();
+			GC.getGame().aFactions[fac].aaFacCities[iDx][1] = kNewCity.getID();
+			// leaving 'emergency' and etc. alone, faction can figure it out next time it thinks about that
+		}
+	}
+	// merk.rfac end
 
 	kNewCity.setPreviousOwner(eOldOwner);
 	kNewCity.setOriginalOwner(eOriginalOwner);
@@ -2030,8 +2039,6 @@ void CvPlayer::acquireCity(CvCity* pOldCity, bool bConquest, bool bTrade, bool b
 		}
 	} // </advc.130w>
 
-	// spawn faction, whether traded or not (might change that later fac3)
-	GC.getGame().spawnFaction(kNewCity.getID(), kNewCity.getOwner(), NO_RELIGION, getCivilizationType(), NO_BUILDING, -1, NO_CIVIC, true);
 }
 
 /*	advc: I've redirected calls that went directly to CvEventReporter here.

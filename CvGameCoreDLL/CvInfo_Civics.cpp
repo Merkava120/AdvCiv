@@ -49,6 +49,10 @@ m_iExpInBorderModifier(0),
 m_bMilitaryFoodProduction(false),
 //m_bNoUnhealthyPopulation(false),
 m_iUnhealthyPopulationModifier(0), // K-Mod
+// merk.rfac
+m_iFactionType(-1),
+m_iFactionInfluence(0),
+// merk.rfac end
 m_bBuildingOnlyHealthy(false),
 m_bNoForeignTrade(false),
 m_bNoCorporations(false),
@@ -427,6 +431,10 @@ bool CvCivicInfo::read(CvXMLLoadUtility* pXML)
 	//pXML->GetChildXmlValByName(&m_bNoUnhealthyPopulation, "bNoUnhealthyPopulation");
 	// K-Mod (advc - optional):
 	pXML->GetChildXmlValByName(&m_iUnhealthyPopulationModifier, "iUnhealthyPopulationModifier", 0);
+	// merk.rfac
+	pXML->GetChildXmlValByName(&m_iFactionType, "iFactionType", -1);
+	pXML->GetChildXmlValByName(&m_iFactionInfluence, "iFactionInfluence", 0);
+	// merk.rfac end
 	pXML->GetChildXmlValByName(&m_bBuildingOnlyHealthy, "bBuildingOnlyHealthy");
 	pXML->GetChildXmlValByName(&m_iLargestCityHappiness, "iLargestCityHappiness");
 	pXML->GetChildXmlValByName(&m_iWarWearinessModifier, "iWarWearinessModifier");

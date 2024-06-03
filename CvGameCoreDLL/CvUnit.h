@@ -1158,6 +1158,10 @@ public:
 		the others - the EXE doesn't call them. */ // </advc.003u>
 	virtual UnitAITypes AI_getUnitAIType() const = 0;
 
+	// merk.rfac
+	int m_iFactionOwner = -1;
+	// merk.rfac end
+
 protected:
 	// <advc.003u>
 	CvUnit();
