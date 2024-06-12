@@ -9021,9 +9021,19 @@ bool CvUnit::isInvisible(TeamTypes eTeam, bool bDebug, bool bCheckCargo) const
 		return true;
 	if (bCheckCargo && isCargo())
 		return true;
+	// merk.fau - I think I swapped these somehow
+	//if (getInvisibleType() == NO_INVISIBLE)
+		//return !getPlot().isInvisibleVisible(eTeam, getInvisibleType());
+	//return false;
+	
 	if (getInvisibleType() == NO_INVISIBLE)
-		return !getPlot().isInvisibleVisible(eTeam, getInvisibleType());
-	return false;
+		return false;
+	return !getPlot().isInvisibleVisible(eTeam, getInvisibleType());
+	
+	
+	
+	
+	
 	//// merk.promo1
 	//// two ways to do this:
 	//int iRule = GC.getDefineINT("MULTIPLE_INVISIBLES_RULE");
