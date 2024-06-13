@@ -765,7 +765,7 @@ void CvUnit::doTurn()
 		TechTypes ePlotTech = getPlotTech();
 		if (ePlotTech != NO_TECH)
 		{
-			int iBeakers = GC.getDefineINT("BEAKERS_FROM_PLOT") + SyncRandNum(2 * GC.getDefineINT("BEAKERS_FROM_PLOT_RAND")) - GC.getDefineINT("BEAKERS_FROM_PLOT_RAND");
+			int iBeakers = std::max(1,GC.getDefineINT("BEAKERS_FROM_PLOT") + SyncRandNum((2 * GC.getDefineINT("BEAKERS_FROM_PLOT_RAND"))) - GC.getDefineINT("BEAKERS_FROM_PLOT_RAND"));
 			GET_TEAM(getTeam()).changeResearchProgress(ePlotTech, iBeakers, getOwner());
 		}
 	}
@@ -1469,7 +1469,7 @@ void CvUnit::resolveCombat(CvUnit* pDefender, CvPlot* pPlot, bool bVisible)
 		TechTypes eDefenderTech = pDefender->getDynamicTech(getOwner()); // tech for attacker from defender
 		TechTypes eDefenderUpgradeTech = pDefender->getUpgradeTech(); // tech for defender from self
 		TechTypes eAttackerTech = getDynamicTech(pDefender->getOwner()); // tech for defender from attacker
-		TechTypes eAttackerUpgradeTech = getDynamicTech(pDefender->getOwner()); // tech for attacker from self
+		TechTypes eAttackerUpgradeTech = getUpgradeTech(); // tech for attacker from self
 		if (eDefenderTech != NO_TECH) // if found a defender tech, give the attacker some beakers
 		{
 			int iBeakers = GC.getDefineINT("BEAKERS_FROM_COMBAT") + SyncRandNum(2 * GC.getDefineINT("BEAKERS_FROM_COMBAT_RAND")) - GC.getDefineINT("BEAKERS_FROM_COMBAT_RAND");
@@ -7478,6 +7478,11 @@ TechTypes CvUnit::getUpgradeTech() const
 				continue;
 			// then, check the unit's primary prereq tech
 			TechTypes ePrereqTech = GC.getUnitInfo((int)eUpgradeUnit).getPrereqAndTech();
+			// for debugging
+			CvWString szdebug;
+			szdebug.append(GC.getTechInfo(ePrereqTech).getDescription());
+			bool ishas = GET_TEAM(GET_PLAYER(getOwner()).getTeam()).isHasTech(ePrereqTech);
+			bool isable = GET_PLAYER(getOwner()).isTechResearchable(ePrereqTech, false);
 			if (!GET_TEAM(GET_PLAYER(getOwner()).getTeam()).isHasTech(ePrereqTech) && GET_PLAYER(getOwner()).isTechResearchable(ePrereqTech, false))
 				return ePrereqTech;
 			// if nothing yet, search through other prereq techs
@@ -7556,6 +7561,18 @@ TechTypes CvUnit::getPlotTech() const
 					return eRevealTech;
 		}
 	}
+	ImprovementTypes eImprovement = plot()->getImprovementType();
+	if (eImprovement != NO_IMPROVEMENT)
+	{
+		FOR_EACH_ENUM(Build)
+		{
+			if (GC.getBuildInfo(eLoopBuild).getImprovement() != eImprovement)
+				continue;
+			TechTypes eBuildTech = GC.getBuildInfo(eLoopBuild).getTechPrereq();
+			if (!GET_TEAM(getTeam()).isHasTech(eBuildTech) && GET_PLAYER(getOwner()).isTechResearchable(eBuildTech, false))
+				return eBuildTech;
+		}
+	}
 	// If got to here that means bonuses aren't giving us techs so let's look at the terrain and features
 	// Could easily split this into other functions and do them separately but I like having them combined for now
 	// Features first:
@@ -7606,18 +7623,7 @@ TechTypes CvUnit::getPlotTech() const
 	
 	
 	// One more: if there is an improvement on the tile we can learn techs for its builds. 
-	ImprovementTypes eImprovement = plot()->getImprovementType();
-	if (eImprovement != NO_IMPROVEMENT)
-	{
-		FOR_EACH_ENUM(Build)
-		{
-			if (GC.getBuildInfo(eLoopBuild).getImprovement() != eImprovement)
-				continue;
-			TechTypes eBuildTech = GC.getBuildInfo(eLoopBuild).getTechPrereq();
-			if (!GET_TEAM(getTeam()).isHasTech(eBuildTech) && GET_PLAYER(getOwner()).isTechResearchable(eBuildTech, false))
-				return eBuildTech;
-		}
-	}
+	// merk.fau - I moved that up before features and terrains because it makes more sense
 
 	return NO_TECH;
 }
