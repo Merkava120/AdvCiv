@@ -7531,6 +7531,8 @@ TechTypes CvUnit::getUpgradeTech() const
 		{
 			// awesome. Now to test the prereqs, translate it to the civ unit;  
 			UnitTypes eUpgradeUnit = GC.getCivilizationInfo(GET_PLAYER(getOwner()).getCivilizationType()).getCivilizationUnits((int)eLoopUnitClass);
+			if (eUpgradeUnit == NO_UNIT)
+				continue; // cpn.nupgr2 somehow a NO_UNIT got past here and caused problems
 			// test if we can upgrade to it already (if so, skip onward)
 			// cpn.nupgr note - this will always be false for nomads
 			if (canUpgrade(eUpgradeUnit))

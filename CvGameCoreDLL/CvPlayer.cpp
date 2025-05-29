@@ -4946,8 +4946,9 @@ void CvPlayer::receiveGoody(CvPlot* pPlot, GoodyTypes eGoody, CvUnit* pUnit,
 				if (pNewUnit == NULL)
 					continue;
 				else FAssert(pNewUnit != NULL);
-				szBuffer = gDLL->getText("TXT_KEY_GOODY_FREE_UNIT",
-						GC.getInfo(eLoopUnit).getDescription());
+				//szBuffer = gDLL->getText("TXT_KEY_GOODY_FREE_UNIT",
+						//GC.getInfo(eLoopUnit).getDescription());
+				szBuffer = gDLL->getText(kGoody.getDescription(), GC.getInfo(eLoopUnit).getDescription()); // cpn.gath
 				addGoodyMsg(szBuffer, *pPlot, kGoody.getSound());
 				szBuffer.clear();
 				if (pNewUnit->canAcquirePromotionAny())
