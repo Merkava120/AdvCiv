@@ -4671,8 +4671,9 @@ bool CvPlayer::canReceiveGoody(CvPlot* pPlot, GoodyTypes eGoody, CvUnit* pUnit) 
 			return false;
 	}
 	// <advc.314>
-	if (bVeryEarlyGame && kGoody.getMinBarbarians() > 1)
-		return false;
+	// cpn.gath2 - need to be able to get units early
+	//if (bVeryEarlyGame && kGoody.getMinBarbarians() > 1)
+		//return false;
 	/*  Moved up and added the era clause; a single free unit in the Medieval
 		era isn't going to be a problem. */
 	bool bEarlyMP = (GC.getGame().isGameMultiPlayer() &&
@@ -4705,7 +4706,7 @@ bool CvPlayer::canReceiveGoody(CvPlot* pPlot, GoodyTypes eGoody, CvUnit* pUnit) 
 			return false;
 	} // <advc.314> Free unit and no UnitClassType given
 	else if (!kGoody.isBad() && kGoody.getMinBarbarians() > 0 &&
-		(bEarlyMP || bVeryEarlyGame))
+		(bEarlyMP /* cpn.gath2 || bVeryEarlyGame*/))
 	{
 		return false;
 	} // </advc.314>
@@ -4718,8 +4719,9 @@ bool CvPlayer::canReceiveGoody(CvPlot* pPlot, GoodyTypes eGoody, CvUnit* pUnit) 
 		if (GC.getGame().isOption(GAMEOPTION_NO_BARBARIANS))
 			return false;
 
-		if (getNumCities() == 0)
-			return false;
+		// cpn.gath2 - need to have chance of barbarians in nomadic era
+		/*if (getNumCities() == 0)
+			return false;*/
 
 		//if (getNumCities() == 1) // advc.314
 		{
@@ -4737,16 +4739,17 @@ bool CvPlayer::canReceiveGoody(CvPlot* pPlot, GoodyTypes eGoody, CvUnit* pUnit) 
 			}
 		}
 	} // <advc.315d> No Scout from a Scout if already 2 Scouts
-	if (pUnit != NULL && pUnit->isNoBadGoodies() && AI().AI_getNumAIUnits(UNITAI_EXPLORE) >= 2)
-	{
-		UnitClassTypes eUnitClass = (UnitClassTypes)kGoody.getUnitClassType();
-		if (eUnitClass != NO_UNITCLASS)
-		{
-			UnitTypes eUnit = getCivilization().getUnit(eUnitClass);
-			if (eUnit != NO_UNIT && GC.getInfo(eUnit).isNoBadGoodies())
-				return false;
-		}
-	} // </advc.315d>
+	// cpn.gath2 - removed, need more scouts
+	//if (pUnit != NULL && pUnit->isNoBadGoodies() && AI().AI_getNumAIUnits(UNITAI_EXPLORE) >= 2)
+	//{
+	//	UnitClassTypes eUnitClass = (UnitClassTypes)kGoody.getUnitClassType();
+	//	if (eUnitClass != NO_UNITCLASS)
+	//	{
+	//		UnitTypes eUnit = getCivilization().getUnit(eUnitClass);
+	//		if (eUnit != NO_UNIT && GC.getInfo(eUnit).isNoBadGoodies())
+	//			return false;
+	//	}
+	//} // </advc.315d>
 	// <advc.315e> No map reveal at the edges of a non-wrapping map
 	if (kGoody.getMapProb() > 0)
 	{
