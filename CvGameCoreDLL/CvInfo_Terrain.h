@@ -601,6 +601,12 @@ public:
 	int getHillsAdjWeight() const { return m_iHillsAdjacentWeight; }
 	int getCoastAdjWeight() const { return m_iCoastAdjacentWeight; }
 	// merk.msm end
+	
+	// cpn.gath
+	int getSpawnChancePerYield(int iYieldType) const;
+	EraTypes getSpawnMinAreaEra() const { return m_eSpawnMinAreaEra; }
+	EraTypes getSpawnMaxAreaEra() const { return m_eSpawnMaxAreaEra; }
+	// cpn.gath end
 
 	// Super Forts begin *XML*
 	int getCulture() const;
@@ -736,6 +742,11 @@ protected:
 	int m_iHillsAdjacentWeight;
 	int m_iCoastAdjacentWeight;
 	// merk.msm end
+	// cpn.gath
+	int* m_piSpawnChancePerYields;
+	EraTypes m_eSpawnMinAreaEra;
+	EraTypes m_eSpawnMaxAreaEra;
+	// cpn.gath end
 
 	CvString m_szArtDefineTag;
 

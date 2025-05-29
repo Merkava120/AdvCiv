@@ -202,6 +202,7 @@ bool CvTerrainInfo::read(CvXMLLoadUtility* pXML)
 	pXML->GetChildXmlValByName(&m_iHillsAdjacentWeight, "iHillsAdjacentWeight", 0);
 	pXML->GetChildXmlValByName(&m_iCoastAdjacentWeight, "iCoastAdjacentWeight", 0);
 	// merk.msm end
+	
 
 	pXML->SetVariableListTagPairForAudioScripts(&m_pi3DAudioScriptFootstepIndex, "FootstepSounds", GC.getNumFootstepAudioTypes());
 	{
@@ -1380,6 +1381,11 @@ m_piAdjFeatureWeights(NULL),
 m_iCoastAdjacentWeight(0),
 m_iHillsAdjacentWeight(0),
 // merk.msm end
+// cpn.gath 
+m_piSpawnChancePerYields(NULL),
+m_eSpawnMinAreaEra(NO_ERA),
+m_eSpawnMaxAreaEra(NO_ERA),
+// cpn.gath end
 m_ppiTechYieldChanges(NULL),
 m_ppiRouteYieldChanges(NULL),
 m_paImprovementBonus(NULL)
@@ -1420,6 +1426,13 @@ CvImprovementInfo::~CvImprovementInfo()
 		SAFE_DELETE_ARRAY(m_ppiRouteYieldChanges);
 	}
 }
+// cpn.gath
+int CvImprovementInfo::getSpawnChancePerYield(int iYieldType) const
+{
+	FAssertBounds(0, NUM_YIELD_TYPES, iYieldType);
+	return m_piSpawnChancePerYields ? m_piSpawnChancePerYields[iYieldType] : 0; // advc.003t 
+}
+// cpn.gath end
 // Super Forts begin *XML*
 int CvImprovementInfo::getCulture() const
 {
@@ -1931,6 +1944,24 @@ bool CvImprovementInfo::read(CvXMLLoadUtility* pXML)
 	pXML->GetChildXmlValByName(&m_iHillsAdjacentWeight, "iHillsAdjacentWeight", 0);
 	pXML->GetChildXmlValByName(&m_iCoastAdjacentWeight, "iCoastAdjacentWeight", 0);
 	// merk.msm end
+	// cpn.gath
+	if (gDLL->getXMLIFace()->SetToChildByTagName(pXML->GetXML(),
+		"iSpawnChancePerYields"))
+	{
+		pXML->SetYieldArray(&m_piSpawnChancePerYields);
+	}
+	else pXML->InitList(&m_piSpawnChancePerYields, NUM_YIELD_TYPES);
+	pXML->GetChildXmlValByName(someText, "SpawnMinAreaEra", "NO_ERA");
+	if (someText == "NO_ERA")
+		m_eSpawnMinAreaEra = (EraTypes)NO_ERA;
+	else
+		m_eSpawnMinAreaEra = (EraTypes)(GC.getInfoTypeForString(someText));
+	pXML->GetChildXmlValByName(someText, "SpawnMaxAreaEra", "NO_ERA");
+	if (someText == "NO_ERA")
+		m_eSpawnMaxAreaEra = (EraTypes)NO_ERA;
+	else
+		m_eSpawnMaxAreaEra = (EraTypes)(GC.getInfoTypeForString(someText));
+	// cpn.gath end
 
 	if (gDLL->getXMLIFace()->SetToChildByTagName(pXML->GetXML(),"BonusTypeStructs"))
 	{

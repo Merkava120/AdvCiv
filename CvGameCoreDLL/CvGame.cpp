@@ -6086,6 +6086,125 @@ void CvGame::doTurn()
 	doHolyCity();
 	doHeadquarters();
 
+	// Captain Lost tile loop (cpn)
+	// Primary loop runs through tiles and fills a map up with stuff, 
+	// Then secondary loop runs through the map and finalizes stuff (as necessary)
+	// Here's the map - vector of vectors of ints, so push back how ever many you need per tile
+	std::vector<std::vector<int> > tileMap;
+	
+	// Other lists
+
+	// this one is for improvement spawning (cpn.gath)
+	std::vector<std::pair<int, std::pair<int, int> > > areaEras; // vector of pairs of Area ID + (min era, max era)
+
+
+	// Now loop through the tiles
+	for (int i = 0; i < GC.getMap().numPlots(); i++)
+	{
+		CvPlot& kPlot = GC.getMap().getPlotByIndex(i);
+		// push back a vector to the temp map for each tile
+		std::vector<int> tileMapPart;
+		tileMap.push_back(tileMapPart);
+
+		// Fill up area eras list
+		int iArea = kPlot.getArea().getID();
+		int iFoundIndex = -1;
+		for (int a = 0; a < (int)areaEras.size(); a++)
+		{
+			if (iArea == (int)areaEras[a].first)
+			{
+				iFoundIndex = a;
+				break;
+			}
+		}
+		if (iFoundIndex < 0)
+		{
+			std::pair<int, int> noEras;
+			noEras.first = (int)NO_ERA;
+			noEras.second = (int)NO_ERA;
+			std::pair<int, std::pair< int, int> > thisArea;
+			thisArea.first = iArea;
+			thisArea.second = noEras;
+			areaEras.push_back(thisArea);
+			iFoundIndex = (int)areaEras.size() - 1;
+		}
+		tileMap[i].push_back(iFoundIndex); // The first spot in the tile map is the index of the area in the area map 
+		
+		if (kPlot.isOwned())
+		{
+			// Check and update era of area
+			EraTypes eThisEra = GET_PLAYER(kPlot.getOwner()).getCurrentEra();
+			if (eThisEra != NO_ERA)
+			{
+				EraTypes eCompareMinEra = (EraTypes)areaEras[iFoundIndex].second.first;
+				EraTypes eCompareMaxEra = (EraTypes)areaEras[iFoundIndex].second.second;
+				if (eCompareMinEra == NO_ERA || eCompareMinEra > eThisEra)
+					areaEras[iFoundIndex].second.first = eThisEra;
+				if (eCompareMaxEra == NO_ERA || eCompareMaxEra < eThisEra)
+					areaEras[iFoundIndex].second.second = eThisEra;
+			}
+		}
+		else if (kPlot.getNumUnits() > 0)
+		{
+			// Could loop through units and get eras of each and blah blah. 
+			// But that could mess with landing explorers on other continents, where borders should dominate - 
+			// So, unit just means that the era is at LEAST ancient. 
+			if ((EraTypes)areaEras[iFoundIndex].second.first == (EraTypes)NO_ERA)
+				areaEras[iFoundIndex].second.first = 0;
+			if ((EraTypes)areaEras[iFoundIndex].second.second == (EraTypes)NO_ERA)
+				areaEras[iFoundIndex].second.second = 0;
+		}
+		if (!kPlot.isImproved())
+		{
+			// Improvement spawning check
+			FOR_EACH_ENUM(Improvement)
+			{
+				if (GC.getInfo(eLoopImprovement).getSpawnMaxAreaEra() == NO_ERA && GC.getInfo(eLoopImprovement).getSpawnMinAreaEra() == NO_ERA)
+					continue;
+				if (!kPlot.canHaveImprovement(eLoopImprovement))
+					tileMap[i].push_back(0); // push a spawn chance of 0 rather than whatever the improvement might have
+				else
+					tileMap[i].push_back(GC.getInfo(eLoopImprovement).getSpawnChancePerYield((int)YIELD_COMMERCE) * kPlot.getYield(YIELD_COMMERCE) +
+					GC.getInfo(eLoopImprovement).getSpawnChancePerYield((int)YIELD_FOOD) * kPlot.getYield(YIELD_FOOD) +
+					GC.getInfo(eLoopImprovement).getSpawnChancePerYield((int)YIELD_PRODUCTION) * kPlot.getYield(YIELD_PRODUCTION));
+			}
+		}
+		else
+			tileMap[i].push_back(-1); // signal that there is already an improvement here
+
+	}
+
+	// Second loop through tile map
+	for (int i = 0; i < (int)tileMap.size(); i++)
+	{
+		int iArea = tileMap[i][0]; // the first slot in each tile map list is the area in the area list
+		if ((int)tileMap[i].size() > 1 && tileMap[i][1] == -1) // this means no improvement spawning at all on this tile
+			continue;
+		int j = 1; // if we made it past there, this will be the first index of the improvements to try to spawn
+		FOR_EACH_ENUM(Improvement) // the next N slots are improvements, if there are any slots at all above 1
+		{
+			if (GC.getInfo(eLoopImprovement).getSpawnMaxAreaEra() == NO_ERA && GC.getInfo(eLoopImprovement).getSpawnMinAreaEra() == NO_ERA)
+				continue;
+			// the spawn chance of this tile is saved in the list at spot j
+			int iSpawnChance = tileMap[i][j];
+			// but we need to make sure the era fits
+			if (areaEras[iArea].second.first > (int)GC.getInfo(eLoopImprovement).getSpawnMaxAreaEra()) // if the earliest era civ on this continent is past this improvement's max
+				iSpawnChance = 0;
+			if (areaEras[iArea].second.second < (int)GC.getInfo(eLoopImprovement).getSpawnMinAreaEra()) // or if the latest era civ on this continent has not reached this improvement's min
+				iSpawnChance = 0;
+			// Test if the improvement spawns
+			if (SyncRandSuccess1000(iSpawnChance))
+			{
+				// This means spawn the improvement. For now I'm just going to stop this whole thing at the first one that spawns. 
+				GC.getMap().getPlotByIndex(i).setImprovementType(eLoopImprovement);
+				break; // stop going through improvements
+			}
+			// If did NOT spawn we'll get to here, which means move on to the next spawn chance in the tile's list
+			j++;
+		}
+	}
+	// cpn tile loop end
+
 	gDLL->getInterfaceIFace()->setEndTurnMessage(false);
 	gDLL->getInterfaceIFace()->setHasMovedUnit(false);
 

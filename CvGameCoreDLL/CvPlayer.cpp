@@ -4645,7 +4645,7 @@ bool CvPlayer::canReceiveGoody(CvPlot* pPlot, GoodyTypes eGoody, CvUnit* pUnit) 
 			if(isGoodyTech(eLoopTech,
 				kGoody.getGold() + kGoody.getGoldRand1() + kGoody.getGoldRand2()))
 			{	// </advc.314>
-				if (canResearch(eLoopTech, false, true)) // advc
+				if (isTechResearchable(eLoopTech, false)/*canResearch(eLoopTech, false, true)*/) // advc // cpn.gath goody huts need to give out disabled techs
 				{
 					bTechFound = true;
 					break;
@@ -20254,7 +20254,9 @@ bool CvPlayer::isGoodyTech(TechTypes eTech, int iProgress) const
 			}
 		}
 	}
-	return canResearch(eTech, false, true);
+	// cpn.gath - goody huts need to be able to give out techs that are disabled for use in the dynamic techs system 
+	return isTechResearchable(eTech, false);
+	//return canResearch(eTech, false, true);
 }
 
 
