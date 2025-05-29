@@ -2031,6 +2031,7 @@ void CvPlayer::keepCity(CvCity& kCity)
 	CvEventReporter::getInstance().cityAcquiredAndKept(getID(), &kCity);
 	if (isHuman())
 		kCity.chooseProduction();
+	setNomad(false); // cpn.nupgr
 }
 
 // advc.ctr:
@@ -2893,6 +2894,13 @@ void CvPlayer::doTurn()
 	doGold();
 	doResearch();
 	doEspionagePoints();
+
+	// cpn.nupgr
+	if (getNumCities() <= 0)
+		setNomad(true);
+	else
+		setNomad(false);
+	// cpn end
 
 	FOR_EACH_CITY_VAR(pLoopCity, *this)
 		pLoopCity->doTurn();
@@ -5109,6 +5117,10 @@ void CvPlayer::found(int iX, int iY)
 			}
 		}
 	}
+	// cpn.nupgr
+	else
+		setNomad(false);
+	// cpn end
 
 	CvCivilization const& kCiv = getCivilization(); // advc.003w
 	for (int i = 0; i < kCiv.getNumBuildings(); i++)
@@ -10512,6 +10524,13 @@ void CvPlayer::setResearchingTech(TechTypes eTech, bool bNewValue)
 		}
 	}
 }
+
+// cpn.nupgr
+void CvPlayer::setNomad(bool newVal)
+{
+	m_bNomad = newVal;
+}
+// cpn end
 
 
 void CvPlayer::setLoyalMember(VoteSourceTypes eVoteSource, bool bNewValue)

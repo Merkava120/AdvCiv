@@ -301,6 +301,7 @@ public:
 	CvCity* getUpgradeCity(UnitTypes eUnit, bool bSearch = false, int* iSearchValue = NULL) const;
 	//void upgrade(UnitTypes eUnit);
 	CvUnit* upgrade(UnitTypes eUnit); // K-Mod
+	CvUnit* forceUpgrade(UnitTypes eUnit); // cpn.nupgr
 
 	HandicapTypes getHandicapType() const;																	// Exposed to Python
 	CivilizationTypes getCivilizationType() const;															// Exposed to Python
@@ -308,7 +309,10 @@ public:
 	TechTypes getDynamicTech(PlayerTypes eResearchPlayer) const;
 	TechTypes getUpgradeTech() const;
 	TechTypes getPlotTech() const;
-	// merk end
+	// cpn.nupgr
+	UnitTypes getForceUpgradeUnit(TechTypes eSpecificTech) const;
+	// cpn end
+
 	const wchar* getVisualCivAdjective(TeamTypes eForTeam) const;
 	SpecialUnitTypes getSpecialUnitType() const																// Exposed to Python
 	{

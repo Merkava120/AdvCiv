@@ -1491,6 +1491,29 @@ void CvUnit::resolveCombat(CvUnit* pDefender, CvPlot* pPlot, bool bVisible)
 			int iBeakers = GC.getDefineINT("BEAKERS_FOR_UPGRADE") + SyncRandNum(2 * GC.getDefineINT("BEAKERS_FOR_UPGRADE_RAND")) - GC.getDefineINT("BEAKERS_FOR_UPGRADE_RAND");
 			GET_TEAM(pDefender->getTeam()).changeResearchProgress(eDefenderUpgradeTech, iBeakers, pDefender->getOwner());
 		}
+		// cpn.nupgr: the attacker / defender may have unlocked the upgrade tech. If so, force upgrade them IF the player is nomad. 
+		// attacker first
+		if (GET_PLAYER(getOwner()).isNomad() && !isDead())
+		{
+			if (getUpgradeTech() != eAttackerUpgradeTech && eAttackerUpgradeTech != NO_TECH)
+			{
+				// This means there was an upgrade tech, and it got unlocked. So
+				UnitTypes eUpgradeUnit = getForceUpgradeUnit(eAttackerUpgradeTech);
+				if (eUpgradeUnit != NO_UNIT)
+					forceUpgrade(eUpgradeUnit);
+			}
+		}
+		if (GET_PLAYER(pDefender->getOwner()).isNomad() && !pDefender->isDead())
+		{
+			if (pDefender->getUpgradeTech() != eDefenderUpgradeTech && eDefenderUpgradeTech != NO_TECH)
+			{
+				// This means there was an upgrade tech, and it got unlocked. So
+				UnitTypes eUpgradeUnit = pDefender->getForceUpgradeUnit(eDefenderUpgradeTech);
+				if (eUpgradeUnit != NO_UNIT)
+					pDefender->forceUpgrade(eUpgradeUnit);
+			}
+		}
+		// cpn end 
 	}
 	// merk.dt end
 
@@ -7427,6 +7450,41 @@ CvUnit* CvUnit::upgrade(UnitTypes eUnit) // K-Mod: this now returns the new unit
 	return pUpgradeUnit; // K-Mod
 }
 
+// cpn.nupgr - upgrade without requiring cities / borders / resources / etc. 
+CvUnit* CvUnit::forceUpgrade(UnitTypes eUnit)
+{
+	CvPlayerAI& kOwner = GET_PLAYER(getOwner());
+	CvUnit* pUpgradeUnit = kOwner.initUnit(eUnit, getX(), getY(), AI_getUnitAIType());
+	FAssert(pUpgradeUnit != NULL);
+
+	pUpgradeUnit->convert(this);
+	/*	<advc.057> Crude; don't want to spend too much effort on this for now
+		b/c it's only relevant for mod-mods. */
+	if (!isHuman() && getGroup()->getNumUnits() > 1 &&
+		AI_getUnitAIType() != UNITAI_ASSAULT_SEA &&
+		(kOwner.AI_isAnyImpassable(eUnit) ||
+			kOwner.AI_isAnyImpassable(getGroup()->getHeadUnit()->getUnitType())))
+	{
+		pUpgradeUnit->joinGroup(NULL);
+	}
+	else // </advc.057>
+	{
+		// K-Mod, swapped order with convert. (otherwise units on boats would be ungrouped.)
+		pUpgradeUnit->joinGroup(getGroup());
+	}
+	pUpgradeUnit->finishMoves();
+	// advc.080: Moved into subroutine
+	pUpgradeUnit->changeExperience(pUpgradeUnit->upgradeXPChange(eUnit));
+	if (gUnitLogLevel > 2)
+	{
+		CvWString szString;
+		getUnitAIString(szString, AI_getUnitAIType());
+		logBBAI("    %S spends %d to upgrade %S to %S, unit AI %S", kOwner.getCivilizationDescription(0), upgradePrice(eUnit), getName(0).GetCString(), pUpgradeUnit->getName(0).GetCString(), szString.GetCString());
+	}
+
+	return pUpgradeUnit; // K-Mod
+}
+// cpn.nupgr end
 
 HandicapTypes CvUnit::getHandicapType() const
 {
@@ -7474,13 +7532,14 @@ TechTypes CvUnit::getUpgradeTech() const
 			// awesome. Now to test the prereqs, translate it to the civ unit;  
 			UnitTypes eUpgradeUnit = GC.getCivilizationInfo(GET_PLAYER(getOwner()).getCivilizationType()).getCivilizationUnits((int)eLoopUnitClass);
 			// test if we can upgrade to it already (if so, skip onward)
+			// cpn.nupgr note - this will always be false for nomads
 			if (canUpgrade(eUpgradeUnit))
 				continue;
 			// then, check the unit's primary prereq tech
 			TechTypes ePrereqTech = GC.getUnitInfo((int)eUpgradeUnit).getPrereqAndTech();
 			// for debugging
-			CvWString szdebug;
-			szdebug.append(GC.getTechInfo(ePrereqTech).getDescription());
+			//CvWString szdebug;
+			//szdebug.append(GC.getTechInfo(ePrereqTech).getDescription());
 			bool ishas = GET_TEAM(GET_PLAYER(getOwner()).getTeam()).isHasTech(ePrereqTech);
 			bool isable = GET_PLAYER(getOwner()).isTechResearchable(ePrereqTech, false);
 			if (!GET_TEAM(GET_PLAYER(getOwner()).getTeam()).isHasTech(ePrereqTech) && GET_PLAYER(getOwner()).isTechResearchable(ePrereqTech, false))
@@ -7628,6 +7687,62 @@ TechTypes CvUnit::getPlotTech() const
 	return NO_TECH;
 }
 // merk.dt end
+// cpn.nupgr
+UnitTypes CvUnit::getForceUpgradeUnit(TechTypes eSpecificTech) const
+{
+	std::vector< UnitTypes > eligibleUnits;
+	FOR_EACH_ENUM(UnitClass)
+	{
+		// first, test if it's an upgrade
+		if (getUnitInfo().getUpgradeUnitClass((int)eLoopUnitClass))
+		{
+			// awesome. Now to test the prereqs, translate it to the civ unit;  
+			UnitTypes eUpgradeUnit = GC.getCivilizationInfo(GET_PLAYER(getOwner()).getCivilizationType()).getCivilizationUnits((int)eLoopUnitClass);
+			bool bFoundSpecTech = false;
+			// check the unit's primary prereq tech
+			TechTypes ePrereqTech = GC.getUnitInfo((int)eUpgradeUnit).getPrereqAndTech();
+			bFoundSpecTech = (ePrereqTech == eSpecificTech);
+			bool ishas = GET_TEAM(GET_PLAYER(getOwner()).getTeam()).isHasTech(ePrereqTech);
+			bool isable = GET_PLAYER(getOwner()).isTechResearchable(ePrereqTech, false);
+			if (!GET_TEAM(GET_PLAYER(getOwner()).getTeam()).isHasTech(ePrereqTech) && GET_PLAYER(getOwner()).isTechResearchable(ePrereqTech, false))
+				continue; // can't do that one 
+			// search through other prereq techs
+			bool bCantDo = false;
+			for (int k = 0; k < GC.getUnitInfo((int)eUpgradeUnit).getNumPrereqAndTechs(); k++)
+			{
+				ePrereqTech = GC.getUnitInfo((int)eUpgradeUnit).getPrereqAndTechs(k);
+				if (ePrereqTech == eSpecificTech)
+					bFoundSpecTech = true;
+				if (GET_TEAM(GET_PLAYER(getOwner()).getTeam()).isHasTech(ePrereqTech))
+					continue;
+				else if (!GET_PLAYER(getOwner()).isTechResearchable(ePrereqTech, false))
+					continue;
+				else
+				{
+					bCantDo = true;
+				}
+			}
+			if (bCantDo)
+				continue; // found a tech we don't have so move on
+			// if we got here that means we have all the techs for the upgrade unitclass, which means it passes
+			// but only if it matches the specific tech we were looking for
+			if (bFoundSpecTech)
+				eligibleUnits.push_back(eUpgradeUnit);
+		}
+	}
+	if ((int)eligibleUnits.size() <= 0)
+		return NO_UNIT;
+	else if ((int)eligibleUnits.size() == 1)
+		return eligibleUnits[0];
+	else
+	{
+		// this means there are multiple units we can upgrade to, that we have all the techs for, who have a tech we just unlocked
+		// so, pick a random one (there's probably intentionally multiple units)
+		int iUnit = SyncRandNum((int)eligibleUnits.size());
+		return eligibleUnits[iUnit];
+	}
+}
+// cpn end
 
 
 const wchar* CvUnit::getVisualCivAdjective(TeamTypes eForTeam) const

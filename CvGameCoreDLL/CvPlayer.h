@@ -1150,6 +1150,11 @@ public:
 	}
 	void setResearchingTech(TechTypes eTech, bool bNewValue);
 
+	// cpn.nupgr
+	bool isNomad() const { return m_bNomad; } 
+	void setNomad(bool newVal);
+	// cpn end
+
 	CivicTypes getCivics(CivicOptionTypes eCivicOption) const { return m_aeCivics.get(eCivicOption); }				// Exposed to Python
 	void getCivics(CivicMap& kResult) const; // advc.enum
 	int getSingleCivicUpkeep(CivicTypes eCivic, bool bIgnoreAnarchy = false,										// Exposed to Python
@@ -1593,6 +1598,8 @@ protected:  // <advc.210>
 	bool m_bSavingReplay; // advc.106i
 	bool m_bScoreboardExpanded; // advc.085
 	bool m_bRandomWBStart; // advc.027
+
+	bool m_bNomad; // cpn.nupgr
 
 	LeaderHeadTypes m_ePersonalityType; // advc (tbd.): Move to CvPlayerAI
 	EraTypes m_eCurrentEra;
