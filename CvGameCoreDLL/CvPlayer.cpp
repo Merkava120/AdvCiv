@@ -4618,9 +4618,10 @@ bool CvPlayer::canReceiveGoody(CvPlot* pPlot, GoodyTypes eGoody, CvUnit* pUnit) 
 	bool bVeryVeryEarlyGame = (100 * kGame.getGameTurn() < iTrainHalved * 10);
 	if (kGoody.getExperience() > 0)
 	{
-		if (pUnit == NULL || !pUnit->canAcquirePromotionAny() ||
+		if (pUnit == NULL || !pUnit->canAcquirePromotionAny())
+			// cpn.gath - gatherers need to be able to get xp from turn 1 // ||
 			//(GC.getGame().getElapsedGameTurns() < 10)
-			bVeryVeryEarlyGame) // advc.314
+			//bVeryVeryEarlyGame) // advc.314
 		{
 			return false;
 		}
