@@ -4841,9 +4841,24 @@ void CvPlayer::receiveGoody(CvPlot* pPlot, GoodyTypes eGoody, CvUnit* pUnit,
 	if (pUnit != NULL)
 		pUnit->changeExperience(kGoody.getExperience());
 
+	// cpn.gath3 changing healing to affect nearby units
 	if (pUnit != NULL)
-		pUnit->changeDamage(-(kGoody.getHealing()));
-
+	{
+		if (pUnit->getDamage() <= 0 && kGoody.getHealing() >= 0)
+		{
+			FOR_EACH_UNIT_VAR(pLoopUnit, GET_PLAYER(pUnit->getOwner()))
+			{
+				if (plotDistance(pLoopUnit->plot(), pPlot) < GC.getDefineINT("MIN_GOODY_HEAL_DIST") && pLoopUnit->getDamage() > 0)
+				{
+					pLoopUnit->changeDamage(-(kGoody.getHealing()));
+					break;
+				}
+			}
+		}
+		else
+			pUnit->changeDamage(-(kGoody.getHealing()));
+	}
+	// cpn end
 	if (kGoody.isTech())
 	{
 		TechTypes eBestTech = NO_TECH;

@@ -6193,7 +6193,7 @@ void CvGame::doTurn()
 			if (areaEras[iArea].second.second < (int)GC.getInfo(eLoopImprovement).getSpawnMinAreaEra()) // or if the latest era civ on this continent has not reached this improvement's min
 				iSpawnChance = 0;
 			// Test if the improvement spawns
-			if (SyncRandSuccess1000(iSpawnChance))
+			if (SyncRandSuccess10000(iSpawnChance))
 			{
 				// This means spawn the improvement. For now I'm just going to stop this whole thing at the first one that spawns. 
 				GC.getMap().getPlotByIndex(i).setImprovementType(eLoopImprovement);

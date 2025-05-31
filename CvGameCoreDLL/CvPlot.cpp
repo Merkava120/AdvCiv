@@ -3702,7 +3702,7 @@ void CvPlot::removeGoody()
 // advc: Deprecated; see comment in header.
 bool CvPlot::isCityExternal(bool bCheckImprovement, TeamTypes eForTeam) const
 {
-	FAssertMsg(!bCheckImprovement && eForTeam == NO_TEAM, "Does the EXE ever use those params?");
+	//FAssertMsg(!bCheckImprovement && eForTeam == NO_TEAM, "Does the EXE ever use those params?"); // the answer seems to be yes -cpn
 	if (!bCheckImprovement)
 		return isCity();
 	if (!isImproved() || !GC.getInfo(getImprovementType()).isActsAsCity())
