@@ -4896,36 +4896,61 @@ void CvPlayer::receiveGoody(CvPlot* pPlot, GoodyTypes eGoody, CvUnit* pUnit,
 	CvCivilization const& kCiv = GET_PLAYER(BARBARIAN_PLAYER).getCivilization();
 	/*  When units need to be placed, but no unit class is given.
 		Times 3 b/c MinBarbarians is only a lower bound. */
+	std::vector<UnitTypes> possibleUnits; // cpn.gath3
 	for (int i = 0; i < 3 * kGoody.getMinBarbarians(); i++)
 	{
+		
 		UnitTypes eBestUnit = NO_UNIT;
 		if (kGoody.getUnitClassType() == NO_UNITCLASS &&
 			kGoody.getBarbarianUnitClass() == NO_UNITCLASS)
 		{
-			int iBestValue = 0;
-			for (int j = 0; j < kCiv.getNumUnits(); j++)
+			if (kGoody.isBad()) // cpn.gath3
 			{
-				UnitTypes eUnit = kCiv.unitAt(j);
-				CvUnitInfo const& kUnit = GC.getInfo(eUnit);
-				if (kUnit.getDomainType() != DOMAIN_LAND)
-					continue;
-				if (kUnit.getNumPrereqOrBonuses() <= 0 &&
-					kUnit.getPrereqAndBonus() == NO_BONUS &&
-					kUnit.getCombat() > 0 &&
-					(kUnit.getPrereqAndTech() == NO_TECH ||
-					GC.getInfo(kUnit.getPrereqAndTech()).getEra() <=
-					CvEraInfo::AI_getAgeOfExploration()) &&
-					GET_PLAYER(BARBARIAN_PLAYER).canTrain(eUnit, false, true))
+				int iBestValue = 0;
+				for (int j = 0; j < kCiv.getNumUnits(); j++)
 				{
-					int iValue = kUnit.getCombat() + (kGoody.isBad() ?
-							SyncRandNum(10) : 0); // Randomize hostile units a bit
-					if (iValue > iBestValue)
+					UnitTypes eUnit = kCiv.unitAt(j);
+					CvUnitInfo const& kUnit = GC.getInfo(eUnit);
+					if (kUnit.getDomainType() != DOMAIN_LAND)
+						continue;
+					if (kUnit.getNumPrereqOrBonuses() <= 0 &&
+						kUnit.getPrereqAndBonus() == NO_BONUS &&
+						kUnit.getCombat() > 0 &&
+						(kUnit.getPrereqAndTech() == NO_TECH ||
+							GC.getInfo(kUnit.getPrereqAndTech()).getEra() <=
+							CvEraInfo::AI_getAgeOfExploration()) &&
+						GET_PLAYER(BARBARIAN_PLAYER).canTrain(eUnit, false, true))
 					{
-						iBestValue = iValue;
-						eBestUnit = eUnit;
+						int iValue = kUnit.getCombat() + (kGoody.isBad() ?
+							SyncRandNum(10) : 0); // Randomize hostile units a bit
+						if (iValue > iBestValue)
+						{
+							iBestValue = iValue;
+							eBestUnit = eUnit;
+						}
 					}
 				}
 			}
+			// cpn.gath3 - don't use barbarian player to spawn units for players; find a random one players can train
+			// also don't require it to be a combat unit
+			else
+			{
+				for (int j = 0; j < getCivilization().getNumUnits(); j++)
+				{
+					UnitTypes eUnit = getCivilization().unitAt(j);
+					CvUnitInfo const& kUnit = GC.getInfo(eUnit);
+					if (kUnit.getDomainType() != DOMAIN_LAND)
+						continue;
+					if (kUnit.getNumPrereqOrBonuses() <= 0 && // later will allow nomads to get bonuses somehow
+						kUnit.getPrereqAndBonus() == NO_BONUS)
+					{
+						if (canTrain(eUnit)) // this handles most stuff including techs, not bonuses apparently
+							possibleUnits.push_back(eUnit);
+					}
+				}
+				eBestUnit = possibleUnits[SyncRandNum((int)possibleUnits.size())];
+			}
+			// cpn.gath3 end
 			FAssert(eBestUnit != NO_UNIT);
 			aeBestUnits.push_back(eBestUnit);
 		}
