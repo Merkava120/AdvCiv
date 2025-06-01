@@ -4398,6 +4398,16 @@ void CvTeam::setHasTech(TechTypes eTech, bool bNewValue, PlayerTypes ePlayer,
 	CvGame& kGame = GC.getGame();
 	CvTechInfo const& kTech = GC.getInfo(eTech);
 
+	// cpn.techunit part 1 - get list of all units can currently train
+	std::vector<UnitTypes > prevUnits;
+	for (int i = 0; i < GET_PLAYER(ePlayer).getCivilization().getNumUnits(); i++)
+	{
+		UnitTypes eUnit = GET_PLAYER(ePlayer).getCivilization().unitAt(i);
+		if (GET_PLAYER(ePlayer).canTrain(eUnit))
+			prevUnits.push_back(eUnit);
+	}
+	// cpn.techunit part 1 end
+
 	if (kTech.isRepeat())
 	{
 		m_aiTechCount.add(eTech, 1);
@@ -4443,6 +4453,45 @@ void CvTeam::setHasTech(TechTypes eTech, bool bNewValue, PlayerTypes ePlayer,
 
 		// report event to Python, along with some other key state
 		CvEventReporter::getInstance().techAcquired(eTech, getID(), ePlayer, bAnnounce);
+
+		// cpn.techunit part 2 - now see if we can train any new units not in the previous list
+		int j = 0;
+		for (int i = 0; i < GET_PLAYER(ePlayer).getCivilization().getNumUnits(); i++)
+		{
+			UnitTypes eUnit = GET_PLAYER(ePlayer).getCivilization().unitAt(i);
+			if (GET_PLAYER(ePlayer).canTrain(eUnit))
+			{
+				if (eUnit == prevUnits[j]) // unit already in list
+				{
+					j++;
+					continue;
+				}
+				else
+				{
+					// new unit (if the indexing hasn't been screwed up)
+					// do spawnythings
+					if (GET_PLAYER(ePlayer).isNomad())
+					{
+						// spawn unit on top of random unit we own, because we don't know who discovered the tech (might change that later)
+						int iUnits = GET_PLAYER(ePlayer).getNumUnits();
+						CvUnit* pRandomUnit = GET_PLAYER(ePlayer).getUnit(SyncRandNum(iUnits));
+						GET_PLAYER(ePlayer).initUnit(eUnit, pRandomUnit->getX(), pRandomUnit->getY());
+					}
+					else
+					{
+						// just spawn unit in capital
+						GET_PLAYER(ePlayer).initUnit(eUnit, GET_PLAYER(ePlayer).getCapitalX(NO_TEAM), GET_PLAYER(ePlayer).getCapitalY(NO_TEAM));
+					}
+					// DON'T increase j index - wait until we find that prevUnit to do that
+					// debug failsafe:
+					/*if (!GET_PLAYER(ePlayer).canTrain(prevUnits[j]))
+					{
+						j++;
+					}*/
+				}
+			}
+		}
+		// cpn.techunit END
 
 		bool bReligionFounded = false;
 		bool bFirstPerk = false; // advc: Reneamed from bFirstBonus
@@ -4621,6 +4670,8 @@ void CvTeam::setHasTech(TechTypes eTech, bool bNewValue, PlayerTypes ePlayer,
 				}
 			}
 		}
+
+		
 
 
 		if (bAnnounce && kGame.isFinalInitialized() &&
