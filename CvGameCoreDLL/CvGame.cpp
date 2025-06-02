@@ -7247,7 +7247,8 @@ void CvGame::createBarbarianUnits()
 			land area. Shelves go first b/c units can now spawn in cargo;
 			spawn fewer land units then. No units in unsettled areas.
 			(Need to at least spawn a Barbarian city before that). */
-		if (a.isWater() || a.getNumCities() == 0)
+		// cpn.barb0 - units now allowed in unsettled areas (i.e. the entire world at the beginning)
+		if (a.isWater() /* || a.getNumCities() == 0*/)
 			continue;
 		int iUnowned = 0, iTiles = 0;
 		std::vector<Shelf*> shelves;
@@ -7261,11 +7262,26 @@ void CvGame::createBarbarianUnits()
 		// ... but only half.
 		iUnowned /= 2; iTiles /= 2;
 
+		// cpn.barb0 - preserving advciv functionality while also allowing barbs to spawn when nobody owns tiles
+		// basically, count units as "owned" tiles. Might flesh this out more later but for now it should tick up spawning early on 
+		if (iUnowned + a.getNumUnownedTiles() >= iTiles + a.getNumTiles()) 
+		{
+			FOR_EACH_ENUM(Player)
+			{
+				if (eLoopPlayer == BARBARIAN_PLAYER)
+					continue;
+				iUnowned -= a.getUnitsPerPlayer(eLoopPlayer);
+			}
+		}
+		// cpn end
+
 		/*	For performance -- countOwnedUnownedHabitableTiles isn't cached;
 			goes through the entire map for each land area, and archipelago-type maps
 			can have a lot of those. */
 		int const iTotal = a.getNumTiles() + iTiles;
 		int const iUnownedTotal = a.getNumUnownedTiles() + iUnowned;
+		
+
 		if (iUnownedTotal >= iTotal)
 			continue;
 
@@ -7278,7 +7294,17 @@ void CvGame::createBarbarianUnits()
 		iUnowned += iiOwnedUnowned.second;
 		iTiles += iiOwnedUnowned.first + iiOwnedUnowned.second;
 		// NB: Animals are included in this count
-		int iLandUnits = a.getUnitsPerPlayer(BARBARIAN_PLAYER);
+		// cpn.barb0: and therefore I am replacing it
+		//int iLandUnits = a.getUnitsPerPlayer(BARBARIAN_PLAYER);
+		int iLandUnits = 0;
+		int iAreaID = a.getID();
+		for (int b = 0; b < GET_PLAYER(BARBARIAN_PLAYER).getNumUnits(); b++)
+		{
+			if (GET_PLAYER(BARBARIAN_PLAYER).getUnit(b)->getArea().getID() != iAreaID || GET_PLAYER(BARBARIAN_PLAYER).getUnit(b)->isAnimal())
+				continue;
+			iLandUnits++;
+		}
+		// cpn.barb0 end
 		// Kill a Barbarian unit if the area gets crowded
 		if (killBarbarian(iLandUnits, iTiles,
 			a.getPopulationPerPlayer(BARBARIAN_PLAYER), a, NULL))
@@ -7331,11 +7357,13 @@ void CvGame::createBarbarianUnits()
 			}
 		}
 		/*	Don't spawn Barbarian units on (or on shelves around) continents where
-			civs don't outnumber Barbarians */
-		int const iCivCities = a.getNumCivCities();
-		FAssert(iBarbarianCities >= 0);
-		if (iCivCities > iBarbarianCities && bCreateBarbarians)
+			civs don't outnumber Barbarians */ 
+		// cpn.barb0: absolutely spawn barbarians even if civs don't "outnumber" them
+		//int const iCivCities = a.getNumCivCities();
+		//FAssert(iBarbarianCities >= 0);
+		if (/*iCivCities > iBarbarianCities && */bCreateBarbarians)
 			createBarbarianUnits(iNeededLand, iLandUnits, a, NULL);
+		// cpn.barb0 end
 		/*	Rest of the creation code: moved into functions numBarbariansToCreate and
 			createBarbarians */
 		// </advc.300>
@@ -7750,7 +7778,7 @@ int CvGame::numBarbariansToCreate(int iTilesPerUnit, int iTiles, int iUnowned,
 {
 	int const iOwned = iTiles - iUnowned;
 	scaled const rPeakRatio = barbarianPeakLandRatio();
-	if (iOwned <= 0 || rPeakRatio <= 0)
+	if (/*iOwned <= 0 || */rPeakRatio <= 0) // cpn.barb0 - allowing barbs to spawn before cities
 		return 0;
 	scaled rDivisor = iTilesPerUnit;
 	scaled rDividend;
@@ -7794,7 +7822,7 @@ int CvGame::numBarbariansToCreate(int iTilesPerUnit, int iTiles, int iUnowned,
 
 	scaled r = rTarget - iUnitsPresent;
 	if (r < 1)
-		return 0; // Avoid very small creation probabilities
+		return 0; // Avoid very small creation probabilities 
 	scaled rCreationRate = fixp(0.25); // the BtS rate
 	// Novel: adjusted to game speed
 	rCreationRate /= per100(GC.getInfo(getGameSpeedType()).getBarbPercent());
