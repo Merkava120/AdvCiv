@@ -311,6 +311,8 @@ public:
 	TechTypes getPlotTech() const;
 	// cpn.nupgr
 	UnitTypes getForceUpgradeUnit(TechTypes eSpecificTech) const;
+	// cpn.wartech
+	TechTypes getWarTech(PlayerTypes eResearchPlayer) const;
 	// cpn end
 
 	const wchar* getVisualCivAdjective(TeamTypes eForTeam) const;

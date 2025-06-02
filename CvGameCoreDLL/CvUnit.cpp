@@ -1470,6 +1470,20 @@ void CvUnit::resolveCombat(CvUnit* pDefender, CvPlot* pPlot, bool bVisible)
 		TechTypes eDefenderUpgradeTech = pDefender->getUpgradeTech(); // tech for defender from self
 		TechTypes eAttackerTech = getDynamicTech(pDefender->getOwner()); // tech for defender from attacker
 		TechTypes eAttackerUpgradeTech = getUpgradeTech(); // tech for attacker from self
+		// cpn.wartech
+		TechTypes eDefenderWarTech = getWarTech(pDefender->getOwner()); // tech for defender based on attacker
+		TechTypes eAttackerWarTech = pDefender->getWarTech(getOwner()); // tech for attacker based on defender 
+		if (eAttackerWarTech != NO_TECH) // if found a defender tech, give the attacker some beakers
+		{
+			int iBeakers = GC.getDefineINT("BEAKERS_FROM_COMBAT") + SyncRandNum(2 * GC.getDefineINT("BEAKERS_FROM_COMBAT_RAND")) - GC.getDefineINT("BEAKERS_FROM_COMBAT_RAND");
+			GET_TEAM(getTeam()).changeResearchProgress(eAttackerWarTech, iBeakers, getOwner());
+		}
+		if (eDefenderWarTech != NO_TECH) // if found an attacker tech, give the defender some beakers
+		{
+			int iBeakers = GC.getDefineINT("BEAKERS_FROM_COMBAT") + SyncRandNum(2 * GC.getDefineINT("BEAKERS_FROM_COMBAT_RAND")) - GC.getDefineINT("BEAKERS_FROM_COMBAT_RAND");
+			GET_TEAM(pDefender->getTeam()).changeResearchProgress(eDefenderWarTech, iBeakers, pDefender->getOwner());
+		}
+		// cpn.wartech end
 		if (eDefenderTech != NO_TECH) // if found a defender tech, give the attacker some beakers
 		{
 			int iBeakers = GC.getDefineINT("BEAKERS_FROM_COMBAT") + SyncRandNum(2 * GC.getDefineINT("BEAKERS_FROM_COMBAT_RAND")) - GC.getDefineINT("BEAKERS_FROM_COMBAT_RAND");
@@ -7519,6 +7533,7 @@ TechTypes CvUnit::getDynamicTech(PlayerTypes eResearchPlayer) const
 	// If we got here that means none of the AND prereqs work. 
 	// for now that just means return nothing. 
 	return NO_TECH; 
+
 }
 
 TechTypes CvUnit::getUpgradeTech() const
@@ -7542,8 +7557,8 @@ TechTypes CvUnit::getUpgradeTech() const
 			// for debugging
 			//CvWString szdebug;
 			//szdebug.append(GC.getTechInfo(ePrereqTech).getDescription());
-			bool ishas = GET_TEAM(GET_PLAYER(getOwner()).getTeam()).isHasTech(ePrereqTech);
-			bool isable = GET_PLAYER(getOwner()).isTechResearchable(ePrereqTech, false);
+			//bool ishas = GET_TEAM(GET_PLAYER(getOwner()).getTeam()).isHasTech(ePrereqTech);
+			//bool isable = GET_PLAYER(getOwner()).isTechResearchable(ePrereqTech, false);
 			if (!GET_TEAM(GET_PLAYER(getOwner()).getTeam()).isHasTech(ePrereqTech) && GET_PLAYER(getOwner()).isTechResearchable(ePrereqTech, false))
 				return ePrereqTech;
 			// if nothing yet, search through other prereq techs
@@ -7564,7 +7579,6 @@ TechTypes CvUnit::getUpgradeTech() const
 		// can't upgrade to that unitclass, so move on to next one
 	}
 	// didn't find any upgrade unitclass
-	// for now that just means return nothing. 
 	return NO_TECH;
 }
 // merk.dt3
@@ -7688,7 +7702,6 @@ TechTypes CvUnit::getPlotTech() const
 
 	return NO_TECH;
 }
-// merk.dt end
 // cpn.nupgr
 UnitTypes CvUnit::getForceUpgradeUnit(TechTypes eSpecificTech) const
 {
@@ -7704,8 +7717,9 @@ UnitTypes CvUnit::getForceUpgradeUnit(TechTypes eSpecificTech) const
 			// check the unit's primary prereq tech
 			TechTypes ePrereqTech = GC.getUnitInfo((int)eUpgradeUnit).getPrereqAndTech();
 			bFoundSpecTech = (ePrereqTech == eSpecificTech);
-			bool ishas = GET_TEAM(GET_PLAYER(getOwner()).getTeam()).isHasTech(ePrereqTech);
-			bool isable = GET_PLAYER(getOwner()).isTechResearchable(ePrereqTech, false);
+			// for debugging
+			//bool ishas = GET_TEAM(GET_PLAYER(getOwner()).getTeam()).isHasTech(ePrereqTech);
+			//bool isable = GET_PLAYER(getOwner()).isTechResearchable(ePrereqTech, false);
 			if (!GET_TEAM(GET_PLAYER(getOwner()).getTeam()).isHasTech(ePrereqTech) && GET_PLAYER(getOwner()).isTechResearchable(ePrereqTech, false))
 				continue; // can't do that one 
 			// search through other prereq techs
@@ -7743,6 +7757,68 @@ UnitTypes CvUnit::getForceUpgradeUnit(TechTypes eSpecificTech) const
 		int iUnit = SyncRandNum((int)eligibleUnits.size());
 		return eligibleUnits[iUnit];
 	}
+}
+// cpn.wartech
+TechTypes CvUnit::getWarTech(PlayerTypes eResearchPlayer) const
+{
+	// Note that this is a war tech AGAINST THIS unit
+	// Is there a promotion that would be good against this type of unit? 
+	UnitCombatTypes eUnitCombat = getUnitCombatType();
+	FOR_EACH_ENUM(Promotion)
+	{
+		if (GC.getInfo(eLoopPromotion).getUnitCombatModifierPercent((int)eUnitCombat) > 0)
+		{
+			TechTypes ePrereq = (TechTypes)GC.getInfo(eLoopPromotion).getTechPrereq();
+			if (!GET_TEAM(getOwner()).isHasTech(ePrereq) && GET_PLAYER(getOwner()).isTechResearchable(ePrereq, false))
+			{
+				return ePrereq;
+			}
+		}
+	}
+	
+	// Is there a unit that would be good against this type of unit?
+	FOR_EACH_ENUM(UnitClass)
+	{
+		UnitTypes eCounterUnit = GC.getCivilizationInfo(GET_PLAYER(getOwner()).getCivilizationType()).getCivilizationUnits((int)eLoopUnitClass);
+		if (eCounterUnit == NO_UNIT)
+			continue;
+		if (GET_PLAYER(getOwner()).canTrain(eCounterUnit))
+			continue; 
+
+		CvUnitInfo& kCounterUnit = GC.getUnitInfo(eCounterUnit);
+
+		if (kCounterUnit.getUnitCombatModifier((int)eUnitCombat) <= 0 &&
+			kCounterUnit.getUnitClassAttackModifier((int)getUnitClassType()) <= 0 &&
+			kCounterUnit.getUnitClassDefenseModifier((int)getUnitClassType()) <= 0 &&
+			!kCounterUnit.getTargetUnitCombat((int)eUnitCombat) &&
+			!kCounterUnit.getTargetUnitClass((int)getUnitClassType()))
+			continue;
+		// If passed that, the unit is good against this unit in some way. 
+
+		TechTypes ePrereqTech = kCounterUnit.getPrereqAndTech();
+		// for debugging
+		//CvWString szdebug;
+		//szdebug.append(GC.getTechInfo(ePrereqTech).getDescription());
+		//bool ishas = GET_TEAM(GET_PLAYER(getOwner()).getTeam()).isHasTech(ePrereqTech);
+		//bool isable = GET_PLAYER(getOwner()).isTechResearchable(ePrereqTech, false);
+		if (!GET_TEAM(GET_PLAYER(getOwner()).getTeam()).isHasTech(ePrereqTech) && GET_PLAYER(getOwner()).isTechResearchable(ePrereqTech, false))
+			return ePrereqTech;
+		// if nothing yet, search through other prereq techs
+		for (int k = 0; k < kCounterUnit.getNumPrereqAndTechs(); k++)
+		{
+			ePrereqTech = kCounterUnit.getPrereqAndTechs(k);
+			if (GET_TEAM(GET_PLAYER(getOwner()).getTeam()).isHasTech(ePrereqTech))
+				continue;
+			else if (!GET_PLAYER(getOwner()).isTechResearchable(ePrereqTech, false))
+				continue;
+			else
+			{
+				return ePrereqTech;
+			}
+		}
+	}
+	// No? Well, nothing we can do then. 
+	return NO_TECH;
 }
 // cpn end
 
