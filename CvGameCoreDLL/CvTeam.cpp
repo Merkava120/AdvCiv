@@ -4475,7 +4475,8 @@ void CvTeam::setHasTech(TechTypes eTech, bool bNewValue, PlayerTypes ePlayer,
 						// spawn unit on top of random unit we own, because we don't know who discovered the tech (might change that later)
 						int iUnits = GET_PLAYER(ePlayer).getNumUnits();
 						CvUnit* pRandomUnit = GET_PLAYER(ePlayer).getUnit(SyncRandNum(iUnits));
-						GET_PLAYER(ePlayer).initUnit(eUnit, pRandomUnit->getX(), pRandomUnit->getY());
+						if (pRandomUnit != NULL)
+							GET_PLAYER(ePlayer).initUnit(eUnit, pRandomUnit->getX(), pRandomUnit->getY());
 					}
 					else
 					{

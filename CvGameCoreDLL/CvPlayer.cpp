@@ -4848,6 +4848,8 @@ void CvPlayer::receiveGoody(CvPlot* pPlot, GoodyTypes eGoody, CvUnit* pUnit,
 		{
 			FOR_EACH_UNIT_VAR(pLoopUnit, GET_PLAYER(pUnit->getOwner()))
 			{
+				if (pLoopUnit->isDead())
+					continue;
 				if (plotDistance(pLoopUnit->plot(), pPlot) < GC.getDefineINT("MIN_GOODY_HEAL_DIST") && pLoopUnit->getDamage() > 0)
 				{
 					pLoopUnit->changeDamage(-(kGoody.getHealing()));

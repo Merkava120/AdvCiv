@@ -7300,6 +7300,8 @@ void CvGame::createBarbarianUnits()
 		int iAreaID = a.getID();
 		for (int b = 0; b < GET_PLAYER(BARBARIAN_PLAYER).getNumUnits(); b++)
 		{
+			if (GET_PLAYER(BARBARIAN_PLAYER).getNumUnits() <= 0)
+				break;
 			if (GET_PLAYER(BARBARIAN_PLAYER).getUnit(b)->getArea().getID() != iAreaID || GET_PLAYER(BARBARIAN_PLAYER).getUnit(b)->isAnimal())
 				continue;
 			iLandUnits++;

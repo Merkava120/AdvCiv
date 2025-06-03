@@ -8573,7 +8573,7 @@ int CvPlayerAI::AI_getRankDifferenceAttitude(PlayerTypes ePlayer) const
 		to the relative rank difference. */
 	else
 	{
-		FAssert(rTheirScoreToOurs <= 1);
+		//FAssert(rTheirScoreToOurs <= 1); // cpn - with a nomadic start this gets broken. 
 		iBase = kPers.getBetterRankDifferenceAttitudeChange();
 		if (iBase != 0)
 		{

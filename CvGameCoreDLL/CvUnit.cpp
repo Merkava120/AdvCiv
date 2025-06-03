@@ -1473,37 +1473,44 @@ void CvUnit::resolveCombat(CvUnit* pDefender, CvPlot* pPlot, bool bVisible)
 		// cpn.wartech
 		TechTypes eDefenderWarTech = getWarTech(pDefender->getOwner()); // tech for defender based on attacker
 		TechTypes eAttackerWarTech = pDefender->getWarTech(getOwner()); // tech for attacker based on defender 
-		if (eAttackerWarTech != NO_TECH) // if found a defender tech, give the attacker some beakers
+		if (eAttackerWarTech != NO_TECH) // beakers for tech for attacker based on defender
 		{
 			int iBeakers = GC.getDefineINT("BEAKERS_FROM_COMBAT") + SyncRandNum(2 * GC.getDefineINT("BEAKERS_FROM_COMBAT_RAND")) - GC.getDefineINT("BEAKERS_FROM_COMBAT_RAND");
-			GET_TEAM(getTeam()).changeResearchProgress(eAttackerWarTech, iBeakers, getOwner());
+			if (iBeakers > 0)
+				GET_TEAM(getTeam()).changeResearchProgress(eAttackerWarTech, iBeakers, getOwner());
 		}
-		if (eDefenderWarTech != NO_TECH) // if found an attacker tech, give the defender some beakers
+		if (eDefenderWarTech != NO_TECH && !pDefender->isBarbarian()) // beakers for tech for defender based on attacker
 		{
 			int iBeakers = GC.getDefineINT("BEAKERS_FROM_COMBAT") + SyncRandNum(2 * GC.getDefineINT("BEAKERS_FROM_COMBAT_RAND")) - GC.getDefineINT("BEAKERS_FROM_COMBAT_RAND");
-			GET_TEAM(pDefender->getTeam()).changeResearchProgress(eDefenderWarTech, iBeakers, pDefender->getOwner());
+			if (iBeakers > 0)
+				GET_TEAM(pDefender->getTeam()).changeResearchProgress(eDefenderWarTech, iBeakers, pDefender->getOwner());
 		}
 		// cpn.wartech end
-		if (eDefenderTech != NO_TECH) // if found a defender tech, give the attacker some beakers
+		if (eDefenderTech != NO_TECH) // beakers for attacker based on defender
 		{
 			int iBeakers = GC.getDefineINT("BEAKERS_FROM_COMBAT") + SyncRandNum(2 * GC.getDefineINT("BEAKERS_FROM_COMBAT_RAND")) - GC.getDefineINT("BEAKERS_FROM_COMBAT_RAND");
-			GET_TEAM(getTeam()).changeResearchProgress(eDefenderTech, iBeakers, getOwner());
+			if (iBeakers > 0)
+				GET_TEAM(getTeam()).changeResearchProgress(eDefenderTech, iBeakers, getOwner());
 		}
-		if (eAttackerTech != NO_TECH) // if found an attacker tech, give the defender some beakers
+		if (eAttackerTech != NO_TECH && !pDefender->isBarbarian()) // beakers for defender based on attacker
 		{
 			int iBeakers = GC.getDefineINT("BEAKERS_FROM_COMBAT") + SyncRandNum(2 * GC.getDefineINT("BEAKERS_FROM_COMBAT_RAND")) - GC.getDefineINT("BEAKERS_FROM_COMBAT_RAND");
-			GET_TEAM(pDefender->getTeam()).changeResearchProgress(eAttackerTech, iBeakers, pDefender->getOwner());
+			if (iBeakers > 0)
+				GET_TEAM(pDefender->getTeam()).changeResearchProgress(eAttackerTech, iBeakers, pDefender->getOwner());
+
 		}
 		// merk.dt2
-		if (eAttackerUpgradeTech != NO_TECH)
+		if (eAttackerUpgradeTech != NO_TECH) // beakers for attacker based on themselves
 		{
 			int iBeakers = GC.getDefineINT("BEAKERS_FOR_UPGRADE") + SyncRandNum(2 * GC.getDefineINT("BEAKERS_FOR_UPGRADE_RAND")) - GC.getDefineINT("BEAKERS_FOR_UPGRADE_RAND");
-			GET_TEAM(getTeam()).changeResearchProgress(eAttackerUpgradeTech, iBeakers, getOwner());
+			if (iBeakers > 0)
+				GET_TEAM(getTeam()).changeResearchProgress(eAttackerUpgradeTech, iBeakers, getOwner());
 		}
-		if (eDefenderUpgradeTech != NO_TECH) // if found an attacker tech, give the defender some beakers
+		if (eDefenderUpgradeTech != NO_TECH && !pDefender->isBarbarian()) // beakers for defender based on themselves
 		{
 			int iBeakers = GC.getDefineINT("BEAKERS_FOR_UPGRADE") + SyncRandNum(2 * GC.getDefineINT("BEAKERS_FOR_UPGRADE_RAND")) - GC.getDefineINT("BEAKERS_FOR_UPGRADE_RAND");
-			GET_TEAM(pDefender->getTeam()).changeResearchProgress(eDefenderUpgradeTech, iBeakers, pDefender->getOwner());
+			if (iBeakers > 0)
+				GET_TEAM(pDefender->getTeam()).changeResearchProgress(eDefenderUpgradeTech, iBeakers, pDefender->getOwner());
 		}
 		// cpn.nupgr: the attacker / defender may have unlocked the upgrade tech. If so, force upgrade them IF the player is nomad. 
 		// attacker first
@@ -6817,6 +6824,9 @@ bool CvUnit::build(BuildTypes eBuild)
 
 bool CvUnit::canPromote(PromotionTypes ePromotion, int iLeaderUnitId) const
 {
+	// cpn minor bug fix
+	if (ePromotion == NO_PROMOTION)
+		return false;
 	// merk.dp
 	if (GC.getInfo(ePromotion).isNoDirect())
 		return false;
