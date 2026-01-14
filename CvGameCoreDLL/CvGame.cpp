@@ -6159,6 +6159,9 @@ void CvGame::doTurn()
 			// Improvement spawning check
 			FOR_EACH_ENUM(Improvement)
 			{
+				bool bDebug = false;
+				if (eLoopImprovement == GC.getInfoTypeForString("IMPROVEMENT_FISHING_GOODY"))
+					bDebug = true;
 				if (GC.getInfo(eLoopImprovement).getSpawnMaxAreaEra() == NO_ERA && GC.getInfo(eLoopImprovement).getSpawnMinAreaEra() == NO_ERA)
 					continue;
 				if (!kPlot.canHaveImprovement(eLoopImprovement))
