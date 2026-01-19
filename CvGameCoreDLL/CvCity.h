@@ -335,6 +335,7 @@ public:
 	int iGoverningFaction;
 	std::vector< std::pair< int, int > > aiFactionPopularities;
 	std::vector< std::pair < CivicTypes, int > > aiBeliefPopularities;
+	std::vector< std::pair< BuildingTypes, int > > aiBuildingOwners; // capn.fac
 
 	bool isFactionPresent(int iFaction);
 	bool isBeliefPresent(CivicTypes eBelief);

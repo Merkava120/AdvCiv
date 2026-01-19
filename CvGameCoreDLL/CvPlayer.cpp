@@ -1751,18 +1751,43 @@ void CvPlayer::acquireCity(CvCity* pOldCity, bool bConquest, bool bTrade, bool b
 	CvCityAI& kNewCity = pNewCity->AI(); // advc.003u
 
 	// merk.rfac update factions to new city
-	for (int fac = 0; fac < (int)GC.getGame().aFactions.size(); fac++)
+	//for (int fac = 0; fac < (int)GC.getGame().aFactions.size(); fac++)
+	//{
+	//	int iDx = GC.getGame().isInCity(fac, iOldCityId, eOldOwner);
+	//	if (iDx >= 0)
+	//	{
+	//		GC.getGame().doFactionStrike(fac, iOldCityId, eOldOwner, true); // end strikes
+	//		GC.getGame().aFactions[fac].aaFacCities[iDx][0] = kNewCity.getOwner();
+	//		GC.getGame().aFactions[fac].aaFacCities[iDx][1] = kNewCity.getID();
+	//		// leaving 'emergency' and etc. alone, faction can figure it out next time it thinks about that
+	//	}
+	//}
+	// merk.rfac end
+	// capn.fac - using city variable instead of faction variable
+	if ((int)pOldCity->aiFactionPopularities.size() > 0)
 	{
-		int iDx = GC.getGame().isInCity(fac, iOldCityId, eOldOwner);
-		if (iDx >= 0)
+		std::vector< std::pair < int, int > > aiNewPopularities;
+		for (int i = 0; i < (int)pOldCity->aiFactionPopularities.size(); i++)
 		{
-			GC.getGame().doFactionStrike(fac, iOldCityId, eOldOwner, true); // end strikes
-			GC.getGame().aFactions[fac].aaFacCities[iDx][0] = kNewCity.getOwner();
-			GC.getGame().aFactions[fac].aaFacCities[iDx][1] = kNewCity.getID();
-			// leaving 'emergency' and etc. alone, faction can figure it out next time it thinks about that
+			// aiFactionPopularities is a vector of pairs of ints, first int is faction, second is popularity
+			std::pair< int, int > iFactionPopularity;
+			iFactionPopularity.first = pOldCity->aiFactionPopularities[i].first;
+			iFactionPopularity.second = pOldCity->aiFactionPopularities[i].second;
+			aiNewPopularities.push_back(iFactionPopularity);
 		}
 	}
-	// merk.rfac end
+	// building ownership tracker 
+	std::vector< std::pair < int, int > > aiNewBuildingOwners;
+	for (int b = 0; b < (int)pOldCity->aiBuildingOwners.size(); b++)
+	{
+		std::pair<int, int > iBuilding;
+		iBuilding.first = pOldCity->aiBuildingOwners[b].first;
+		iBuilding.second = pOldCity->aiBuildingOwners[b].second;
+		aiNewBuildingOwners.push_back(iBuilding);
+	}
+
+
+	// capn.fac end
 
 	kNewCity.setPreviousOwner(eOldOwner);
 	kNewCity.setOriginalOwner(eOriginalOwner);
@@ -1932,9 +1957,10 @@ void CvPlayer::acquireCity(CvCity* pOldCity, bool bConquest, bool bTrade, bool b
 			eOldOwner, getID(), &kNewCity, bConquest, bTrade);
 	if (gPlayerLogLevel >= 1) logBBAI("  Player %d (%S) acquires city %S bConq %d bTrade %d", getID(), getCivilizationDescription(0), kNewCity.getName(0).GetCString(), bConquest, bTrade); // BETTER_BTS_AI_MOD, AI logging, 10/02/09, jdog5000
 
+	// capn.fac unnecessary
 	// merk.fac1: add trackers to new city
-	kNewCity.aiBeliefPopularities = oldbeliefstracker;
-	kNewCity.aiFactionPopularities = oldfacstracker;
+	/*kNewCity.aiBeliefPopularities = oldbeliefstracker;
+	kNewCity.aiFactionPopularities = oldfacstracker;*/
 	// merk.fac1 end
 
 	// Allow razing, disbanding
@@ -5210,6 +5236,7 @@ void CvPlayer::found(int iX, int iY)
 	{
 		// this is the first city
 		GC.getGame().spawnFaction(pCity->getID(), pCity->getOwner(), NO_RELIGION, getCivilizationType(), NO_BUILDING, -1, NO_CIVIC, false, true, pCity->getOwner());
+		// capn.fac since factions no longer require cities I might change this 
 	}
 	else
 	{

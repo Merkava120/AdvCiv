@@ -2938,7 +2938,27 @@ void CvCity::processBuilding(BuildingTypes eBuilding, int iChange, bool bObsolet
 			CorporationTypes eCorporation = kBuilding.getFoundsCorporation();
 			if (eCorporation != NO_CORPORATION && !kGame.isCorporationFounded(eCorporation))
 				setHeadquarters(eCorporation);
+
+			// capn.fac - add building to city's building tracker
+			std::pair< int, int > iBuildingOwner;
+			iBuildingOwner.first = (int)eBuilding;
+			iBuildingOwner.second = -1;
+			aiBuildingOwners.push_back(iBuildingOwner);
+			
 		}
+		else
+		{
+			// capn.fac - remove building from city's building tracker
+			for (int bldg = 0; bldg < (int)aiBuildingOwners.size(); bldg++)
+			{
+				if (aiBuildingOwners[bldg].first == (int)eBuilding)
+				{
+					aiBuildingOwners.erase(aiBuildingOwners.begin() + bldg);
+					break;
+				}
+			}
+		}
+		// capn.fac end
 
 		if (kBuilding.getNoBonus() != NO_BONUS)
 			changeNoBonusCount(kBuilding.getNoBonus(), iChange);

@@ -11325,6 +11325,90 @@ void CvGame::doFactionTurn(int iFaction)
 {
 	if (iFaction < 0 || iFaction >(int)aFactions.size())
 		return;
+
+	// capn.fac - first loop through tiles of faction
+	if ((int)aFactions[iFaction].aaFacTiles.size() > 0)
+	{
+		// we'll add these up along the way
+		int iFacHammers = 0;
+		int iFacGold = 0;
+		int iFacFood = 0;
+
+		// list for potential build spots
+		std::vector< int > lBuildTiles;
+		// potential capture spots
+		std::vector< int > lFreeTiles;
+		// tiles we could attack
+		std::vector< int > lTargetTiles;
+		// tiles we could build in but don't own
+		std::vector< int > lLeaseTiles; 
+
+		for (int tile = 0; tile < (int)aFactions[iFaction].aaFacTiles.size(); tile++)
+		{
+			CvPlot const& kPlot = *GC.getMap().plot(aFactions[iFaction].aaFacTiles[tile].first, aFactions[iFaction].aaFacTiles[tile].second);
+			// if tile is empty, add to list of empty tiles we own, we might build something there
+			if (!kPlot.isImproved())
+				lBuildTiles.push_back(tile); // note this is not plot index
+
+			// loop through adjacent tiles
+			// (for now, only doing adjacent - might expand that later)
+			FOR_EACH_ADJ_PLOT(kPlot)
+			{
+				int iOwner = getTileOwnerFaction(pAdj->plotNum());
+				if (iOwner == iFaction)
+					continue; // we own this
+				else if (iOwner >= 0)
+				{
+					// adjacent tile is owned, might attack it
+					lTargetTiles.push_back(pAdj->plotNum());
+					// or build something there
+					if (!pAdj->isImproved())
+						lLeaseTiles.push_back(pAdj->plotNum());
+				}
+				else
+				{
+					// adjacent tile is unowned, might take it
+					lFreeTiles.push_back(pAdj->plotNum());
+				}
+			}
+
+			// city management
+			if (kPlot.isCity())
+			{
+				// adjust popularity
+
+
+				// loop through buildings
+			}
+
+		}
+	}
+	// if tile is city, more stuff to do
+	// adjust popularity
+	// loop through buildings, add unowned to list and owned to another list (2d with city index) - add owned to list for possible attacks
+	// add city to list we'll check later for chances to build stuff
+	// if not city controller and bad relationship with them, chance of attacking them
+	// or chance of striking if popular
+	// if city controller and bad relationship with national, chance of rebelling
+	// or chance of striking if popular
+	// if tile is not city, but has more pop than adjacent tiles, chance of pushing it out
+
+	// chance for taking over an unowned building
+	// choose building
+
+
+
+	// roll for chance of constructing building in city
+	// now roll for chance of building improvement, but only if lists of possible building spots > 0 
+	// find building spot (prioritize our own space first)
+
+	// roll for chance of building unit if didn't do any of the above stuff
+
+	// if didn't build and didn't claim extra territory and didn't push pop, roll for chance of attacking adjacent faction or one in city with building
+	// go through each faction and test chance
+
+	// loop through factions and increase influence with each one that we didn't attack
+
 	// Faction cities act independently even though the faction can exist across many cities. 
 	// So, loop through faction cities
 	for (int i = 0; i < (int)aFactions[iFaction].aaFacCities.size(); i++)
@@ -11768,14 +11852,14 @@ void CvGame::doFactionStrike(int iFaction, int iCityID, PlayerTypes eCityOwner, 
 			{
 				// lower threshold if we are a civic faction. 
 				int iThreshold = iType == 2 ? GC.getDefineINT("CIVIC_FACTION_INF_THRESHOLD_TO_REVOLT") : GC.getDefineINT("RELNAT_FACTION_INF_THRESHOLD_TO_REVOLT");
-				int iOurs = getFactionInfluenceShare(iCityID, eCityOwner, iFaction);
+				int iOurs = getFactionPopularityShare(iCityID, eCityOwner, iFaction);
 				for (int af = 0; af < (int)aFactions.size(); af++)
 				{
 					if (af == iFaction)
 						continue;
 					if (getFactionAllyLevel(iFaction, af) > 1 && isInCity(af, iCityID, eCityOwner) >= 0) // they are here and willing to join revolt with us
 					{
-						iOurs += getFactionInfluenceShare(iCityID, eCityOwner, af); // note that this does not affect whether or not they are striking - it just means our revolt will have their support. 
+						iOurs += getFactionPopularityShare(iCityID, eCityOwner, af); // note that this does not affect whether or not they are striking - it just means our revolt will have their support. 
 					}
 				}
 				if (iOurs >= iThreshold)
@@ -13264,6 +13348,20 @@ bool CvGame::isTradeOpenToFac(int iFac, CvCity const* pCity1, CvCity const* pCit
 
 
 
+void CvGame::initTileMap()
+{
+	for (int i = 0; i < GC.getMap().numPlots(); i++)
+	{
+		std::vector < int > aTileVector;
+		aTileVector.push_back(0); // pop
+		aTileVector.push_back(-1); // religion
+		aTileVector.push_back(-1); // tile faction owner
+		aTileVector.push_back(-1); // improvement faction owner
+		aTileVector.push_back(-1); // pop faction owner
+		aaTileMap.push_back(aTileVector);
+	}
+}
+
 int CvGame::getFactionType(int iFaction) const
 {
 	if (iFaction >= 0 && iFaction < (int)aFactions.size())
@@ -13300,7 +13398,7 @@ int CvGame::getFactionBelief(int iFaction, CivicTypes eCivic) const
 		return 0;
 }
 
-int CvGame::getFactionInfluence(int iCityID, PlayerTypes eCityOwner, int iFaction) const
+int CvGame::getFactionPopularity(int iCityID, PlayerTypes eCityOwner, int iFaction) const
 {
 	if (iFaction >= 0 && iFaction < (int)aFactions.size())
 	{
@@ -13320,16 +13418,16 @@ int CvGame::getFactionInfluence(int iCityID, PlayerTypes eCityOwner, int iFactio
 
 }
 
-int CvGame::getFactionInfluenceShare(int iCityID, PlayerTypes eCityOwner, int iFaction) const
+int CvGame::getFactionPopularityShare(int iCityID, PlayerTypes eCityOwner, int iFaction) const
 {
 	// merk.rlater - should this consider cultural % for nationality factions? 
-	int iOurs = getFactionInfluence(iCityID, eCityOwner, iFaction);
+	int iOurs = getFactionPopularity(iCityID, eCityOwner, iFaction);
 	int iTotal = iOurs;
 	for (int a = 0; a < (int)aFactions.size(); a++)
 	{
 		if (getFactionType(a) == getFactionType(iFaction) && iFaction != a)
 		{
-			iTotal += getFactionInfluence(iCityID, eCityOwner, a);
+			iTotal += getFactionPopularity(iCityID, eCityOwner, a);
 		}
 	}
 	return (100 * iOurs) / iTotal;
@@ -13374,7 +13472,7 @@ int CvGame::getBiggestEnemy(int iCityID, PlayerTypes eCityOwner, int iFaction) c
 			if (getFactionMatch(iFaction, a) >= 0)
 				continue; // if they don't match we will still worry about their influence gain even if they're great friends. 
 		}
-		int iInf = getFactionInfluence(iCityID, eCityOwner, a);
+		int iInf = getFactionPopularity(iCityID, eCityOwner, a);
 		if (iInf > iBiggestInf)
 		{
 			iBiggest = a;
@@ -13639,7 +13737,7 @@ int CvGame::getBuildingInfluence(int iFaction, BuildingTypes eBuilding, int iCit
 	// approvals
 	for (int a = 0; a < (int)aFactions.size(); a++)
 	{
-		int iInf = getFactionInfluenceShare(iCityID, eCityOwner, a); 
+		int iInf = getFactionPopularityShare(iCityID, eCityOwner, a); 
 		if (iInf >= GC.getDefineINT("FACTION_INFLUENCE_IMPORTANT_THRESHOLD"))
 		{
 			int iApproved = isFactionApproved(a, iFaction);
@@ -13752,7 +13850,7 @@ int CvGame::getInfluenceController(int iFactionType, int iCityID, PlayerTypes eC
 	{
 		if (isInCity(i, iCityID, eCityOwner) && getFactionType(i) == iFactionType)
 		{
-			int iInf = getFactionInfluence(iCityID, eCityOwner, i);
+			int iInf = getFactionPopularity(iCityID, eCityOwner, i);
 			if (iInf > iMaxInf)
 			{
 				iMaxInf = iInf;
@@ -13760,7 +13858,7 @@ int CvGame::getInfluenceController(int iFactionType, int iCityID, PlayerTypes eC
 			}
 		}
 	}
-	if (getFactionInfluenceShare(iCityID, eCityOwner, iMaxFac) >= GC.getDefineINT("FACTION_CONTROLLER_THRESHOLD"))
+	if (getFactionPopularityShare(iCityID, eCityOwner, iMaxFac) >= GC.getDefineINT("FACTION_CONTROLLER_THRESHOLD"))
 		return iMaxFac;
 	else
 		return -1;
@@ -13789,7 +13887,7 @@ int CvGame::getLikedInCity(int iFaction, int iCityID, PlayerTypes eCityOwner) co
 		if (isInCity(a, iCityID, eCityOwner) < 0)
 			continue;
 		int iRelationship = getFactionAllyLevel(iFaction, a);
-		int iInfluence = getFactionInfluenceShare(iCityID, eCityOwner, a);
+		int iInfluence = getFactionPopularityShare(iCityID, eCityOwner, a);
 		if (iRelationship > 1)
 			iLikedInf += iInfluence;
 		else if (iRelationship < 0)
@@ -13821,3 +13919,60 @@ int CvGame::getStrikeEvaluation(int iFaction, int iCityID, PlayerTypes eTargetPl
 
 
 // merk.fac end
+
+// capn.fac - tile map functions
+int CvGame::getTilePop(int iTile) const
+{
+	FAssertBounds(0, (int)aaTileMap.size(), iTile);
+	return aaTileMap[iTile][0];
+}
+void CvGame::setTilePop(int iTile, int iPop)
+{
+	FAssertBounds(0, (int)aaTileMap.size(), iTile);
+	aaTileMap[iTile][0] = iPop;
+}
+void CvGame::addTilePop(int iTile, int iChange)
+{
+	FAssertBounds(0, (int)aaTileMap.size(), iTile);
+	aaTileMap[iTile][0] += iChange;
+}
+ReligionTypes CvGame::getTileReligion(int iTile) const
+{
+	FAssertBounds(0, (int)aaTileMap.size(), iTile);
+	return (ReligionTypes)aaTileMap[iTile][1];
+}
+void CvGame::setTileReligion(int iTile, ReligionTypes eReligion)
+{
+	FAssertBounds(0, (int)aaTileMap.size(), iTile);
+	aaTileMap[iTile][1] = (int)eReligion;
+}
+int CvGame::getTileOwnerFaction(int iTile) const
+{
+	FAssertBounds(0, (int)aaTileMap.size(), iTile);
+	return aaTileMap[iTile][2];
+}
+void CvGame::setTileOwnerFaction(int iTile, int iFaction)
+{
+	FAssertBounds(0, (int)aaTileMap.size(), iTile);
+	aaTileMap[iTile][2] = iFaction;
+}
+int CvGame::getImprovementOwnerFaction(int iTile) const
+{
+	FAssertBounds(0, (int)aaTileMap.size(), iTile);
+	return aaTileMap[iTile][3];
+}
+void CvGame::setImprovementOwnerFaction(int iTile, int iFaction)
+{
+	FAssertBounds(0, (int)aaTileMap.size(), iTile);
+	aaTileMap[iTile][3] = iFaction;
+}
+int CvGame::getTilePopFaction(int iTile) const
+{
+	FAssertBounds(0, (int)aaTileMap.size(), iTile);
+	return aaTileMap[iTile][4];
+}
+void CvGame::setTilePopFaction(int iTile, int iFaction)
+{
+	FAssertBounds(0, (int)aaTileMap.size(), iTile);
+	aaTileMap[iTile][4] = iFaction;
+}

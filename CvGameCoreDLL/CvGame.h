@@ -967,31 +967,27 @@ public:
 	// merk.rfac
 
 	// this allows factions who already took their turn to interact with the faction currently taking a turn
-	struct FactionPing {
-		int iType; // 0 = regular request, 1 = attack, 2 = opportunity to respond to an attack that is happening
-		int iTargetType; // -1 is nothing 0 = city 1 = building 2 = unit 3 = power 4 = influence 5 = action against 3rd party
-		std::vector< int > aiTargetIDInfo; // any ints necessary to specify target (amount, city ID, faction ID, whatever)
-		int iOfferType; // same as target type
-		std::vector< int > aiOfferIDInfo; 
-	};
+	// capn.fac - not sure this will be needed 
+	//struct FactionPing {
+	//	int iType; // 0 = regular request, 1 = attack, 2 = opportunity to respond to an attack that is happening
+	//	int iTargetType; // -1 is nothing 0 = city 1 = building 2 = unit 3 = power 4 = influence 5 = action against 3rd party
+	//	std::vector< int > aiTargetIDInfo; // any ints necessary to specify target (amount, city ID, faction ID, whatever)
+	//	int iOfferType; // same as target type
+	//	std::vector< int > aiOfferIDInfo; 
+	//};
 
+	// capn.fac - revised
 	struct Faction {
 		CvString name;
 		int iFacType;
 		/* faction types:
-		0 - city govt faction (abilities come from buildings which can be owned by any; civics determine who can own buildings and which abilities are allowed. They include cheap attacks, bonuses to attacks, and responses to actions in the city)
-		1 - religious faction (unique action: spread religion) 
-		2 - civic / activist faction (unique action: riot - causes temporary anarchy which in turn affects influence for everybody. few uniquely activist buildings but many buildings allow 'spread message' actions to any faction - so they rely on alliances with those building owners.) 
-		3 - labor / peoples' faction (unique action: strike - reduces influence of any or all buildings that require labor. labor factions share ownership of buildings that require labor with whoever 'controls' them and they gain influence through those buildings only.)
-		4 - nationality faction (unique action: attack nationality (reduces their % in the city). this gives influence to any factions of target nationality within their nationality group. No buildings give influence but open borders and trade routes do. Effect depends on whether or not the player matches.)
-		5 - military faction (only allowed controller of military buildings, which provide huge attack bonuses. Gain huge boost from player using them to build units. unique action: flip / strike military units)
-		6+ - industry factions (match industry indices of buildings) */
-
-		// all factions have attack action (spend influence to capture target building or expel faction)
-		// all factions have a strike-against-player action (temporarily turn off stuff they control)
-		// all factions can condemn others but effect only matters in cities where they have controlling influence; that makes it very hard for enemy faction to gain influence
-		// all factions can respond to attacks in their cities with approval or condemnation of the attack, which affects its impact (more condemnation lowers influence) - however, only controlling-influence factions really matter (but civics can change that)
-		// factions can try to take over any building through an attack but some buildings can only be operated by certain types of factions, so a new loyal vassal will spawn to take it over
+		0 - player faction
+		1 - religious faction, spawned when a religion was founded
+		2 - religious belief faction, spawned when a religious belief was discovered
+		3 - political belief faction, spawned when a political belief was discovered
+		4 - national faction, spawned from a nationality (conquest or culture increase)
+		5 - misc / nothing special 
+		 */
 
 		// Faction identities: only one of each. Any faction can have; affects relations with factions that care. 
 		ReligionTypes eFacReligion;
@@ -1002,49 +998,74 @@ public:
 
 		std::vector< std::pair< int, BuildingTypes > > aaFacBuildings; // city index (in our list), building
 
-		std::vector< std::vector< int > > aaFacCities;
+		// capn.fac new stuff
+		std::vector< std::pair< int, int > > aaFacTiles;
+		std::vector< std::pair< int, int > > aaFacImprovements; // doesn't actually store the type of improvement just coords
+
+		// capn.fac - replaced this with city-level variables
+		//std::vector< std::vector< int > > aaFacCities;
 		// vector holds city vectors, each city vector holds these vars:
 		/* 
 		slot 0 - PlayerType
 		slot 1 - city id
-		slot 2 - influence in city
+		slot 2 - popularity in city
 		slot 3 - strike turns left
 		slot 4 - is in emergency mode
 		slot 5 - passed turn / is available for helping others but didn't see any chance to
 		*/
 
-		// whoever has controlling influence in a religion's holy city gives them the "religion controller" abilities. 
-		// However, state religions can be separately controlled by factions which makes things interesting
-		ArrayEnumMap< PlayerTypes, bool > aebStateReligionController;
-
-		// factions can't "be" the national govt even if they flip to a new civ - they install a new govt to interact with
-		// they also don't have tracked opinions of the player, it's entirely based on alliances and civics and stuff
-
 		// relationships: simple int for each other faction
 		std::vector< int > aiFactionRelations;
-		// these are points gained sort of like influence, and a faction can spend their points to use actions the other faction controls. This gives that many + some extra points to the other faction. Getting above a certain number of points allows the faction to start receiving influence from the other factions' buildings. For example, if an oil company and a church get really good friends then the church might start preaching about how good the oil company is. 
+		// these are points gained sort of like influence, and a faction can spend their points to use actions the other faction controls. This gives that many + some extra points to the other faction. 
 		// points can go below 0 and certain actions (condemnations, attacks, spreading propaganda against someone, etc.) bleed relations points really quick. If you have negative points with a faction they will not be willing to give you points for any reason
-		// factions can offer for others to use their stuff as an action; this makes it free for the other person and gives the owning faction a bunch of relations points they could spend next turn
 		// if you have a certain number of points with a faction then any actions against them will also reduce the attacker's points against you, meaning they make multiple enemies at once
 		// in addition, getting points from anyone who has enemies makes us lose points toward their enemies
 		
 		// tracks whether or not a faction has used its official global "you are excommunicated from our influence group" power on another faction so they can't do it multiple times
+		// capn.fac not sure if I'll need this
 		std::vector< int > aiFactionApprovals; 
 
+		// capn.fac
+		int iHQx;
+		int iHQy;
 	};
 	std::vector< Faction > aFactions;
 
-	// Getters
+	// capn.fac - pop and tile tracker
+	// each tile can have pop, religion, nationality, and a faction that owns the tile, the improvement, and the pop. 
+	// Nationality is tracked with culture, the rest needs to be stored in this tracker - 
+	// and not with individual tiles to avoid memory issues.
+	// to avoid too much complexity, beliefs are left to factions. 
+	std::vector< std::vector< int > > aaTileMap;
+
+	// capn.fac tile map functions
+	int getTilePop(int iTile) const;
+	void setTilePop(int iTile, int iPop);
+	void addTilePop(int iTile, int iChange);
+	ReligionTypes getTileReligion(int iTile) const;
+	void setTileReligion(int iTile, ReligionTypes eReligion);
+	int getTileOwnerFaction(int iTile) const;
+	void setTileOwnerFaction(int iTile, int iFaction);
+	int getImprovementOwnerFaction(int iTile) const;
+	void setImprovementOwnerFaction(int iTile, int iFaction);
+	int getTilePopFaction(int iTile) const;
+	void setTilePopFaction(int iTile, int iFaction);
+	void initTileMap();
+
+
+
+	// Getters	
+	// capn.fac updated some of these 
 	int getFactionType(int iFaction) const;
 	ReligionTypes getFactionReligion(int iFaction) const;
 	CivilizationTypes getFactionNationality(int iFaction) const;
 	int getFactionBelief(int iFaction, CivicTypes eCivic) const; // returns -1 if oppose, 1 if hold that belief, and 0 if neither
-	int getFactionInfluence(int iCityID, PlayerTypes eCityOwner, int iFaction) const; // return -1 if not in that city
-	int getFactionInfluenceShare(int iCityID, PlayerTypes eCityOwner, int iFaction) const; // returns a percentage of influence 0 to 100 that the faction enjoys in the city out of all of that faction type in that city. 
-	int getGrowingEnemy(int iCityID, PlayerTypes eCityOwner, int iFaction) const; // returns the biggest enemy found whose influence is growing faster than ours, or -1 if none found
-	int getBiggestEnemy(int iCityID, PlayerTypes eCityOwner, int iFaction) const; // simply biggest influence-wise, a secondary target if the above doesn't exist and we don't have other better stuff to do
-	int getFactionInfGainPerTurn(int iCityID, PlayerTypes eCityOwner, int iFaction, bool bIgnoreCivics = false, CivicTypes eNewCivic = NO_CIVIC, PlayerTypes eNewPlayer = NO_PLAYER) const;
-	int getCityController(int iCityID, PlayerTypes eCityOwner) const; // if a faction could flip the city by striking this returns that faction. This means being a city faction, controlling any government-related buildings, and having controlling influence. 
+	int getFactionPopularity(int iCityID, PlayerTypes eCityOwner, int iFaction) const; // return -1 if not in that city
+	int getFactionPopularityShare(int iCityID, PlayerTypes eCityOwner, int iFaction) const; // returns a percentage of popularity 0 to 100 that the faction enjoys in the city out of all of that faction type in that city. 
+	//int getGrowingEnemy(int iCityID, PlayerTypes eCityOwner, int iFaction) const; // returns the biggest enemy found whose influence is growing faster than ours, or -1 if none found
+	//int getBiggestEnemy(int iCityID, PlayerTypes eCityOwner, int iFaction) const; // simply biggest influence-wise, a secondary target if the above doesn't exist and we don't have other better stuff to do
+	//int getFactionInfGainPerTurn(int iCityID, PlayerTypes eCityOwner, int iFaction, bool bIgnoreCivics = false, CivicTypes eNewCivic = NO_CIVIC, PlayerTypes eNewPlayer = NO_PLAYER) const;
+	//int getCityController(int iCityID, PlayerTypes eCityOwner) const; // if a faction could flip the city by striking this returns that faction. This means being a city faction, controlling any government-related buildings, and having controlling influence. 
 	int isFactionCityLinked(int iFaction, PlayerTypes eCityOwner, int iCityID, PlayerTypes eLinkedCityOwner, int iLinkedCityID) const; // int because leaving it open to specific situations
 	int getFactionRelations(int iFaction, int iWithWhatFaction) const; // literal point value
 	int getMaxLinkDistance(int iCityID, PlayerTypes eCityOwner) const; // finds the building with the highest link distance and returns it
@@ -1052,23 +1073,24 @@ public:
 	int getFactionAllyLevel(int iFaction, int iWithWhatFaction) const; // -1 is enemy, 0 is neutral, 1 is we have enough points to start benefitting from their stuff, 2 is they have enough points to start benefitting from our stuff, 3 is both. (diplomatic effects happen to people attacking you toward other people when other people benefit from your stuff.)
 	int isFactionApproved(int iApprover, int iTarget, bool bDis = false) const; // returns -1 if one of the factions is invalid
 	void setFactionApproved(int iApprover, int iTarget, bool bDis = false);
-	int getInfluenceFromAllies(int iFaction, int iCityID, PlayerTypes eCityOwner, bool bIgnoreCivics = false, CivicTypes eNewCivic = NO_CIVIC, PlayerTypes eNewPlayer = NO_PLAYER) const; // calculates the amount of influence we should get from allies' stuff this turn
-	int getInfluenceFromBuildings(int iFaction, int iCityID, PlayerTypes eCityOwner, bool bIgnoreCivics = false, int iDifferentType = -1, CivicTypes eNewCivic = NO_CIVIC, PlayerTypes eNewPlayer = NO_PLAYER) const; // goes through buildings and gets influence from each (differenttype means calc influence as if faction was a different type)
-	int getBuildingInfluence(int iFaction, BuildingTypes eBuilding, int iCityIndex, bool bIgnoreCivics = false, int iDifferentType = -1, CivicTypes eNewCivic = NO_CIVIC, PlayerTypes eNewPlayer = NO_PLAYER) const; // calculates the influence a building will give to the faction 
-	int getInfluenceFromCivics(int iFaction, int iCityID, PlayerTypes eCityOwner, CivicTypes eNewCivic = NO_CIVIC, PlayerTypes eNewPlayer = NO_PLAYER) const; // returns only the impact that current civics will have on our influence directly. For building effects use the building methods with bIgnoreCivics = true compared to bIgnoreCivics = false
-	int getInfluenceFromNewCivic(int iFaction, int iCityID, PlayerTypes eCityOwner, CivicTypes eNewCivic, PlayerTypes eNewPlayer = NO_PLAYER) const; // returns the DIFFERENCE between current influence per turn and the influence per turn we would get with eNewCivic in place. If eNewPlayer then compares to all their civics (and ignores eNewCivic). 
+	//int getInfluenceFromAllies(int iFaction, int iCityID, PlayerTypes eCityOwner, bool bIgnoreCivics = false, CivicTypes eNewCivic = NO_CIVIC, PlayerTypes eNewPlayer = NO_PLAYER) const; // calculates the amount of influence we should get from allies' stuff this turn
+	//int getInfluenceFromBuildings(int iFaction, int iCityID, PlayerTypes eCityOwner, bool bIgnoreCivics = false, int iDifferentType = -1, CivicTypes eNewCivic = NO_CIVIC, PlayerTypes eNewPlayer = NO_PLAYER) const; // goes through buildings and gets influence from each (differenttype means calc influence as if faction was a different type)
+	//int getBuildingInfluence(int iFaction, BuildingTypes eBuilding, int iCityIndex, bool bIgnoreCivics = false, int iDifferentType = -1, CivicTypes eNewCivic = NO_CIVIC, PlayerTypes eNewPlayer = NO_PLAYER) const; // calculates the influence a building will give to the faction 
+	//int getInfluenceFromCivics(int iFaction, int iCityID, PlayerTypes eCityOwner, CivicTypes eNewCivic = NO_CIVIC, PlayerTypes eNewPlayer = NO_PLAYER) const; // returns only the impact that current civics will have on our influence directly. For building effects use the building methods with bIgnoreCivics = true compared to bIgnoreCivics = false
+	//int getInfluenceFromNewCivic(int iFaction, int iCityID, PlayerTypes eCityOwner, CivicTypes eNewCivic, PlayerTypes eNewPlayer = NO_PLAYER) const; // returns the DIFFERENCE between current influence per turn and the influence per turn we would get with eNewCivic in place. If eNewPlayer then compares to all their civics (and ignores eNewCivic). 
 	int isInCity(int iFaction, int iCityID, PlayerTypes eCityOwner) const; //returns index of city in faction's tracker or -1 if not found
 	bool isOwnBuilding(int iFaction, int iCityIndex, BuildingTypes eBuilding) const; // returns true if the faction owns that building
-	int getCivicBldgInfMult(BuildingTypes eBuilding, CivicTypes eCivic) const; // returns the multiplication effect of this civic, in percent, on the influence output of that building
-	int calculateBldgInfluence(CvBuildingInfo kBuilding, int iFacType) const; // for now this just returns the building influence value from xml. Later I might spice it up by converting building values into influence but not yet.  
-	int getInfluenceController(int iFactionType, int iCityID, PlayerTypes eCityOwner) const; // returns faction that has controlling influence in city in this faction type.
+	//int getCivicBldgInfMult(BuildingTypes eBuilding, CivicTypes eCivic) const; // returns the multiplication effect of this civic, in percent, on the influence output of that building
+	//int calculateBldgInfluence(CvBuildingInfo kBuilding, int iFacType) const; // for now this just returns the building influence value from xml. Later I might spice it up by converting building values into influence but not yet.  
+	//int getInfluenceController(int iFactionType, int iCityID, PlayerTypes eCityOwner) const; // returns faction that has controlling influence in city in this faction type.
 	int getMaxFacType() const; // finds highest fac type so you can loop through them
-	int getLikedInCity(int iFaction, int iCityID, PlayerTypes eCityOwner) const; // returns 1 if allies with majority of influence in city (above global define threshold), -1 if enemy with majority, and 0 if neither
+	//int getLikedInCity(int iFaction, int iCityID, PlayerTypes eCityOwner) const; // returns 1 if allies with majority of influence in city (above global define threshold), -1 if enemy with majority, and 0 if neither
 
 	// actually useful for anything not just factions
 	bool isCitiesConnected(CvCity* pCity, CvCity* isConnectedCity) const;
 
-	// AI functions
+	// Faction behavior functions
+	// capn.fac - changing from attempting a mini AI to just random chances, makes little difference to the player and is 100 times easier on my end
 	std::vector< int > sortFactionTurns(); // put the factions in a vector in turn order. Was planning on this being logical but forgot factions exist across many cities, so...random order. 
 	void doFactionTurns(); // do all the turns
 	void doFactionTurn(int iFaction); // do one faction's turn

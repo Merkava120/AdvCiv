@@ -174,6 +174,9 @@ void CvMapGenerator::addGameElements()
 
 	// Call for Python to make map modifications after it's been generated
 	afterGeneration();
+
+	// capn.fac - this is where the tile map is initialized
+	GC.getGame().initTileMap();
 }
 
 
