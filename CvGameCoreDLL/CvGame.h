@@ -40,7 +40,7 @@ public:
 	DllExport void reset(HandicapTypes eHandicap, bool bConstructorCall = false);
 
 	DllExport void setInitialItems();
-	DllExport void regenerateMap()
+	DllExport void regenerateMap() // call from WorldBuilder
 	{	// <advc.tsl>
 		regenerateMap(false);
 	}
@@ -761,8 +761,8 @@ public:
 	std::string getScriptData() const;																	// Exposed to Python
 	void setScriptData(std::string szNewValue);															// Exposed to Python
 
-	bool isDestroyedCityName(CvWString& szName) const;
-	void addDestroyedCityName(CvWString const& szName);
+	bool isPastCityName(CvWString& szName) const; // advc.005c: was "isDestroyedCityName"
+	void addPastCityName(CvWString const& szName); // advc.005c: was "addDestroyedCityName"
 
 	bool isGreatPersonBorn(CvWString& szName) const;
 	void addGreatPersonBornName(CvWString const& szName);
@@ -876,13 +876,10 @@ public:
 	void changeShrineBuilding(BuildingTypes eBuilding, ReligionTypes eReligion, bool bRemove = false);*/
 
 	bool culturalVictoryValid() const
-	{
+	{	// (advc, note: Important not to call culturalVictoryNumCultureCities here.)
 		return (m_iNumCultureVictoryCities > 0);
 	}
-	int culturalVictoryNumCultureCities() const
-	{
-		return m_iNumCultureVictoryCities;
-	}
+	int culturalVictoryNumCultureCities() const;
 	CultureLevelTypes culturalVictoryCultureLevel() const;
 	int getCultureThreshold(CultureLevelTypes eLevel) const;
 	int freeCityCultureFromTrait(TraitTypes eTrait) const; // advc.908b
@@ -963,6 +960,7 @@ public:
 			bool bAlt, bool bShift, bool bCtrl) const;
 	DllExport void handleMiddleMouse(bool bCtrl, bool bAlt, bool bShift);
 	DllExport void handleDiplomacySetAIComment(DiploCommentTypes eComment) const;
+	void setHelpTextAreaWidth(float fWidth); // advc.092c (exposed to Python)
 
 	scaled goodyHutEffectFactor(bool bSpeedAdjust = true) const; // advc.314
 	// <advc.004m>
@@ -1113,7 +1111,8 @@ protected:
 	IDInfo* m_pLegacyOrgSeatData;
 	//int** m_apaiPlayerVote; // obsoleted by BtS
 	// </advc.enum>
-	std::vector<CvWString> m_aszDestroyedCities;
+	// advc.005c: Renamed from "DestroyedCities"
+	std::vector<CvWString> m_aszPastCities;
 	std::vector<CvWString> m_aszGreatPeopleBorn;
 
 	FFreeListTrashArray<VoteSelectionData> m_voteSelections;
@@ -1204,6 +1203,7 @@ protected:
 
 	void verifyCivics();
 
+	void updateUnprofiled(); // advc.256
 	void updateWar();
 	void updateMoves();
 	void updateTimers();

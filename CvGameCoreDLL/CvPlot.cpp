@@ -392,7 +392,7 @@ void CvPlot::doImprovement()
 				continue;
 			// <advc.rom3>
 			//Afforess: check for valid terrains for this bonus before discovering it
-			if (!canHaveBonus(eLoopBonus), false, /* advc.129: */ true)
+			if (!canHaveBonus(eLoopBonus, false, /* advc.129: */ true))
 				continue; // </advc.rom3>
 			iOdds *= GC.getGame().getSpeedPercent();
 			iOdds /= 100;
@@ -657,23 +657,26 @@ void CvPlot::updateCenterUnit()
 	}
 	if (setCenterUnit(getBestDefender(eActivePlayer)))
 		return;
+	CvUnit const* pHeadSelected = gDLL->UI().getHeadSelectedUnit();
+	// <advc.001> Can occur when loading a Hotseat savegame
+	if (pHeadSelected != NULL && pHeadSelected->getOwner() != eActivePlayer)
+		pHeadSelected = NULL; // </advc.001>
 	{
-		//setCenterUnit(getBestDefender(NO_PLAYER, eActivePlayer, gDLL->UI().getHeadSelectedUnit(), true));
+		//setCenterUnit(getBestDefender(NO_PLAYER, eActivePlayer, pHeadSelected, true));
 		/*	disabled by K-Mod. I don't think it's relevant
 			whether or not the best defender can move. */
 		/*	advc.001: Restored the code (with some changes for advc.028).
 			This is not the code that karadoc had meant to disable. */
 		// <advc.028>
-		DefenderFilters defFilters(eActivePlayer, gDLL->UI().getHeadSelectedUnit(),
-				true);
+		DefenderFilters defFilters(eActivePlayer, pHeadSelected, true);
 		defFilters.m_bTestVisible = true; // advc.061
 		if (setCenterUnit(getBestDefender(NO_PLAYER, defFilters)))
 			return; // </advc.028>
 	}
 	{
-		//setCenterUnit(getBestDefender(NO_PLAYER, eActivePlayer, gDLL->UI().getHeadSelectedUnit()));
+		//setCenterUnit(getBestDefender(NO_PLAYER, eActivePlayer, pHeadSelected));
 		// <advc.028>
-		DefenderFilters defFilters(eActivePlayer, gDLL->UI().getHeadSelectedUnit());
+		DefenderFilters defFilters(eActivePlayer, pHeadSelected);
 		defFilters.m_bTestVisible = true; // advc.061
 		if (setCenterUnit(getBestDefender(NO_PLAYER, defFilters)))
 			return; // </advc.028>
@@ -1499,14 +1502,12 @@ bool CvPlot::isAdjacentSaltWater() const
 }
 
 
-bool CvPlot::isPotentialIrrigation(/* advc: */ bool bIgnoreTeam) const
+bool CvPlot::isPotentialIrrigation(/* advc: */ bool bIgnoreTech) const
 {
-	// advc.opt: Moved up
-	if (!isOwned() || (!GET_TEAM(getTeam()).isIrrigation() &&
-		!bIgnoreTeam)) // advc
-	{
+	if (!isOwned()) // advc.opt: Moved up
 		return false;
-	}
+	if (!GET_TEAM(getTeam()).isIrrigation() && /* advc: */ !bIgnoreTech)
+		return false;
 	// advc: 2nd condition was !isHills. Mods might allow cities on peaks.
 	return ((isCity() && isFlatlands()) ||
 			(isImproved() && GC.getInfo(getImprovementType()).isCarriesIrrigation()));
@@ -3169,7 +3170,8 @@ int CvPlot::defenseModifier(TeamTypes eDefender, bool bIgnoreBuilding,
 
 
 int CvPlot::movementCost(CvUnit const& kUnit, CvPlot const& kFrom,
-	bool bAssumeRevealed) const // advc.001i
+	bool bAssumeRevealed, // advc.001i
+	bool bIgnoresRoute) const // advc.001t
 {
 	// <advc.162>
 	if(kUnit.isInvasionMove(kFrom, *this))
@@ -3241,7 +3243,8 @@ int CvPlot::movementCost(CvUnit const& kUnit, CvPlot const& kFrom,
 	if (kFrom.isValidRoute(&kUnit, bAssumeRevealed) &&
 		isValidRoute(&kUnit, bAssumeRevealed) && // </advc.001i>
 		(GET_TEAM(eTeam).isBridgeBuilding() ||
-		!kFrom.isRiverCrossing(directionXY(kFrom, *this))))
+		!kFrom.isRiverCrossing(directionXY(kFrom, *this))) &&
+		!bIgnoresRoute) // advc.001t
 	{	// <advc.001i>
 		RouteTypes eFromRoute = (bAssumeRevealed ? kFrom.getRouteType() :
 				kFrom.getRevealedRouteType(eTeam));
@@ -4502,10 +4505,14 @@ void CvPlot::setIrrigated(bool bNewValue)
 	if(isIrrigated() == bNewValue)
 		return;
 	m_bIrrigated = bNewValue;
-	FOR_EACH_ADJ_PLOT_VAR(*this)
+	/*	advc (note): When updating the yield, isIrrigationAvailable checks the
+		isIrrigated status of adjacent plots, not just of the plot that is being
+		updated. To be consistent with that, we need to update yields of adjacent
+		plots here, not just of *this plot, whose isIrrigated status has changed. */
+	for (SquareIter itPlot(*this, 1); itPlot.hasNext(); ++itPlot)
 	{
-		pAdj->updateYield();
-		pAdj->setLayoutDirty(true);
+		itPlot->updateYield();
+		itPlot->setLayoutDirty(true);
 	}
 }
 
@@ -4784,7 +4791,11 @@ void CvPlot::setOwner(PlayerTypes eNewValue, bool bCheckUnits, bool bUpdatePlotG
 			for (TeamIter<CIV_ALIVE> it; it.hasNext();++it)
 			{
 				CvTeam& kLoopTeam = *it;
-				if (isVisible(kLoopTeam.getID()))
+				if (//isVisible(kLoopTeam.getID())
+					/*	advc.071b: See plotThatRevealsOwner about the difference.
+						When it matters, not having a meeting is imo confusing. */
+					isRevealed(kLoopTeam.getID()) &&
+					getRevealedOwner(kLoopTeam.getID()) == getOwner())
 				{
 					FirstContactData fcData(this); // advc.071
 					kLoopTeam.meet(getTeam(), true, /* advc.071: */ &fcData);
@@ -5250,7 +5261,7 @@ void CvPlot::setImprovementType(ImprovementTypes eNewValue,
 	bool bUpdateInFoW) // advc.055
 {
 	ImprovementTypes const eOldImprovement = getImprovementType();
-	if(getImprovementType() == eNewValue)
+	if (getImprovementType() == eNewValue)
 		return;
 	// <advc.183>
 	bool const bActedAsCity = (eOldImprovement != NO_IMPROVEMENT &&
@@ -5535,9 +5546,12 @@ void CvPlot::updateWorkingCity()
 		pBestCity = defaultWorkingCity(); // advc: Moved into new function
 
 	CvCity* pOldWorkingCity = getWorkingCity();
-	if (pOldWorkingCity == pBestCity)
+	if (pOldWorkingCity == pBestCity &&
+		// advc.001 (from WtP): Allow proper update upon CvCity::kill
+		(pOldWorkingCity != NULL || !m_workingCity.isIDSet()))
+	{
 		return;
-
+	}
 	if (pOldWorkingCity != NULL)
 		pOldWorkingCity->setWorkingPlot(*this, false);
 
@@ -5596,15 +5610,15 @@ CvCity const* CvPlot::defaultWorkingCity() const
 }
 
 
-void CvPlot::setWorkingCityOverride( const CvCity* pNewValue)
+void CvPlot::setWorkingCityOverride(CvCity* pCity)
 {
-	if (getWorkingCityOverride() == pNewValue)
+	if (getWorkingCityOverride() == pCity)
 		return; // advc
 
-	if (pNewValue != NULL)
+	if (pCity != NULL)
 	{
-		FAssert(pNewValue->getOwner() == getOwner());
-		m_workingCityOverride = pNewValue->getIDInfo();
+		FAssert(pCity->getOwner() == getOwner());
+		m_workingCityOverride = pCity->getIDInfo();
 	}
 	else m_workingCityOverride.reset();
 
@@ -5859,7 +5873,7 @@ int CvPlot::calculateYield(YieldTypes eYield, bool bDisplay) const
 		eImprovement = getImprovementType();
 		eRoute = getRouteType();
 	}
-	int iNatureYield = // advc.908a: Preserve this for later
+	int const iNatureYield = // advc.908a: Preserve this for later
 			calculateNatureYield(eYield,
 			bDisplay ? getActiveTeam() : // advc.182
 			/*	(advc: Note that NO_TEAM means that bonus resources are ignored.
@@ -5917,7 +5931,7 @@ int CvPlot::calculateYield(YieldTypes eYield, bool bDisplay) const
 			int iThresh = GET_PLAYER(ePlayer).getExtraYieldThreshold(eYield);
 			if (iThresh > 0)
 			{
-				if(iYield >= iThresh)
+				if (iYield >= iThresh)
 					iYield += GC.getDefineINT(CvGlobals::EXTRA_YIELD);
 			}
 		}
@@ -6103,7 +6117,11 @@ int CvPlot::getFoundValue(PlayerTypes eIndex, /* advc.052: */ bool bRandomize) c
 	{
 		short iValue = GC.getPythonCaller()->AI_foundValue(eIndex, *this);
 		if (iValue == -1)
+		{
+			// advc: Otherwise bStartingLoc=true probably isn't correct
+			FAssert(GC.getGame().getElapsedGameTurns() <= 0);
 			m_aiFoundValue.set(eIndex, GET_PLAYER(eIndex).AI_foundValue(getX(), getY(), -1, true));
+		}
 		if (m_aiFoundValue.get(eIndex) > getArea().getBestFoundValue(eIndex))
 			getArea().setBestFoundValue(eIndex, m_aiFoundValue.get(eIndex));
 	}
@@ -6405,6 +6423,10 @@ void CvPlot::changeVisibilityCount(TeamTypes eTeam, int iChange,
 			GET_TEAM(getTeam()).meet(eTeam, true, /* advc.071: */ &fcData);
 		}
 		// K-Mod. Meet the owner of any units you can see.
+		/*	advc.071: When border spread grants visibility, any unit spotted
+			could move away before the next graphics update. Confusing, then,
+			to trigger a meeting at this point. */
+		if (pUnit != NULL)
 		{
 			PROFILE("CvPlot::changeVisibility -- meet units"); // (this is new, so I want to time it.)
 			FOR_EACH_UNIT_IN(pLoopUnit, *this)
@@ -6535,22 +6557,24 @@ void CvPlot::setRevealedOwner(TeamTypes eTeam, PlayerTypes eNewValue)
 
 void CvPlot::updateRevealedOwner(TeamTypes eTeam)
 {
-	bool bRevealed = false;
-	if (isVisible(eTeam))
-		bRevealed = true;
-	if (!bRevealed)
-	{
-		FOR_EACH_ADJ_PLOT(*this)
-		{
-			if (pAdj->isVisible(eTeam))
-			{
-				bRevealed = true;
-				break;
-			}
-		}
-	}
-	if (bRevealed)
+	// advc.071: Moved into a const helper function
+	if (plotThatRevealsOwner(eTeam) != NULL)
 		setRevealedOwner(eTeam, getOwner());
+}
+
+/*	advc.071: The const portion from updateRevealedOwner. Returns NULL
+	if the owner is unrevealed, otherwise the visible plot (witness)
+	that causes the owner to be revealed. */
+CvPlot* CvPlot::plotThatRevealsOwner(TeamTypes eTeam) const
+{
+	if (isVisible(eTeam))
+		return const_cast<CvPlot*>(this);
+	FOR_EACH_ADJ_PLOT_VAR(*this)
+	{
+		if (pAdj->isVisible(eTeam))
+			return pAdj;
+	}
+	return NULL;
 }
 
 

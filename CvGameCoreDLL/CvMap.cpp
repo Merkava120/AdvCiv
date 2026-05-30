@@ -727,6 +727,8 @@ CvCity* CvMap::findCity(int iX, int iY, PlayerTypes eOwner, TeamTypes eTeam,
 	}
 	return pBestCity;
 }
+
+
 CvSelectionGroup* CvMap::findSelectionGroup(int iX, int iY, PlayerTypes eOwner,
 	bool bReadyToSelect, bool bWorkers) const
 {
@@ -745,7 +747,7 @@ CvSelectionGroup* CvMap::findSelectionGroup(int iX, int iY, PlayerTypes eOwner,
 
 		FOR_EACH_GROUP_VAR(pLoopSelectionGroup, kLoopPlayer)
 		{
-			bool const bAIControl = pLoopSelectionGroup->AI_isControlled(); // advc.153
+			bool const bAIControl = pLoopSelectionGroup->isAIControlled(); // advc.153
 			if (bReadyToSelect && !pLoopSelectionGroup->readyToSelect(
 				!bAIControl)) // advc.153: was false
 			{
@@ -809,7 +811,7 @@ int CvMap::getMapFractalFlags() const
 }
 
 // Check plots for wetlands or seaWater. Returns true if found
-bool CvMap::findWater(CvPlot const* pPlot, int iRange, bool bFreshWater) // advc: const CvPlot*
+bool CvMap::findWater(CvPlot const* pPlot, int iRange, bool bFreshWater)
 {
 	PROFILE_FUNC();
 
@@ -1130,18 +1132,13 @@ void CvMap::resetPathDistance()
 }
 
 
-// Super Forts begin *canal* *choke*
-int CvMap::calculatePathDistance(CvPlot const* pSource, CvPlot const* pDest, CvPlot *pInvalidPlot) const
-// Super Forts end
+int CvMap::calculatePathDistance(CvPlot const* pSource, CvPlot const* pDest) const
 {
-	if(pSource == NULL || pDest == NULL)
+	if (pSource == NULL || pDest == NULL)
 		return -1;
-	// Super Forts begin *canal* *choke*
-	// 1 must be added because 0 is already being used as the default value for iInfo in GeneratePath()
-	int iInvalidPlot = (pInvalidPlot == NULL) ? 0 : GC.getMap().plotNum(pInvalidPlot->getX(), pInvalidPlot->getY()) + 1;
-
-	if (gDLL->getFAStarIFace()->GeneratePath(&GC.getStepFinder(), pSource->getX(), pSource->getY(), pDest->getX(), pDest->getY(), false, iInvalidPlot, true))
-	// Super Forts end
+	// advc.pf (tbd.): Replace with TeamPathFinder for better performance?
+	if (gDLL->getFAStarIFace()->GeneratePath(&GC.getStepFinder(),
+		pSource->getX(), pSource->getY(), pDest->getX(), pDest->getY(), false, 0, true))
 	{
 		FAStarNode* pNode = gDLL->getFAStarIFace()->GetLastNode(&GC.getStepFinder());
 		if (pNode != NULL)
@@ -1225,28 +1222,6 @@ void CvMap::invalidateBorderDangerCache(TeamTypes eTeam)
 	for(int i = 0; i < numPlots(); i++)
 		getPlotByIndex(i).setBorderDangerCache(eTeam, false);
 } // BETTER_BTS_AI_MOD: END
-
-// Super Forts begin *canal* *choke*
-void CvMap::calculateCanalAndChokePoints()
-{
-	int iI;
-	for(iI = 0; iI < numPlots(); iI++)
-	{
-		plotByIndex(iI)->calculateCanalValue();
-		plotByIndex(iI)->calculateChokeValue();
-		// TEMPORARY HARD CODE for testing purposes
-		/*if((plotByIndexINLINE(iI)->getChokeValue() > 0) || (plotByIndexINLINE(iI)->getCanalValue() > 0))
-		{
-			ImprovementTypes eImprovement = (ImprovementTypes) (plotByIndexINLINE(iI)->isWater() ? GC.getInfoTypeForString("IMPROVEMENT_OFFSHORE_PLATFORM") : GC.getInfoTypeForString("IMPROVEMENT_FORT"));
-			plotByIndexINLINE(iI)->setImprovementType(eImprovement);
-		}
-		else
-		{
-			plotByIndexINLINE(iI)->setImprovementType(NO_IMPROVEMENT);
-		}*/
-	}
-}
-// Super Forts end
 
 // read object from a stream. used during load
 void CvMap::read(FDataStreamBase* pStream)
@@ -1341,6 +1316,7 @@ void CvMap::read(FDataStreamBase* pStream)
 		}
 	} // </advc.106n>
 }
+
 
 void CvMap::write(FDataStreamBase* pStream)
 {
@@ -1452,7 +1428,6 @@ void CvMap::calculateAreas()
 		calculateReprAreas();
 		return;
 	} // </advc.030>
-	int iNumAreas = 0; // merk.rasa
 	for (int i = 0; i < numPlots(); i++)
 	{
 		CvPlot& kLoopPlot = getPlotByIndex(i);
@@ -1499,7 +1474,6 @@ public:
 
 void CvMap::calculateAreas_dfs()
 {
-	int iNumAreas = 0; // merk.rasa
 	for (int iPass = 0; iPass <= 1; iPass++)
 	{
 		FOR_EACH_ENUM(PlotNum)
@@ -1513,8 +1487,6 @@ void CvMap::calculateAreas_dfs()
 				continue;
 			FAssert(iPass == 0 || kPlot.isImpassable());
 			CvArea& kArea = *addArea();
-			//a.setAreaNum(iNumAreas); // merk.rasa
-			iNumAreas++; // merk.rasa
 			kArea.init(kPlot.isWater());
 			CvAreaAggregator aggr(*this, kArea);
 			DepthFirstPlotSearch<CvAreaAggregator> dfs(kPlot, aggr);

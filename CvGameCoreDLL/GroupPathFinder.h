@@ -45,7 +45,9 @@ public:
 /*	static interface so that GroupStepMetric can share code with the
 	FAStar pathfinder in the EXE */
 	static bool isValidStep(CvPlot const& kFrom, CvPlot const& kTo,
-			CvSelectionGroup const& kGroup, MovementFlags eFlags);	
+			CvSelectionGroup const& kGroup, MovementFlags eFlags);
+	static bool canStepThrough(CvPlot const& kFrom, CvSelectionGroup const& kGroup,
+			MovementFlags eFlags);
 	static bool canStepThrough(CvPlot const& kFrom, CvSelectionGroup const& kGroup,
 			MovementFlags eFlags, int iMoves, int iPathTurns);
 	static bool isValidDest(CvPlot const& kPlot, CvSelectionGroup const& kGroup,
@@ -86,6 +88,10 @@ public:
 	bool isValidStep(CvPlot const& kFrom, CvPlot const& kTo) const
 	{
 		return isValidStep(kFrom, kTo, *m_pGroup, m_eFlags);
+	}
+	bool canStepThrough(CvPlot const& kPlot) const
+	{
+		return canStepThrough(kPlot, *m_pGroup, m_eFlags);
 	}
 	bool canStepThrough(CvPlot const& kPlot, GroupPathNode const& kNode) const
 	{
@@ -150,8 +156,8 @@ public:
 		}
 		return m_pEndNode->getMoves();
 	}
-	/*	advc (tbd.): Remove this function so that GroupPathNode is fully encapasulated.
-		Cf. comment in CvUnitAI::AI_considerPathDOW (the only call location). */
+	/*	advc (tbd.): Perhaps this function could be removed. Then GroupPathNode
+		would be fully encapasulated. Cf. comment in CvUnitAI::AI_considerPathDOW. */
 	GroupPathNode* getEndNode() const
 	{	// Note: the returned pointer becomes invalid if the pathfinder is destroyed.
 		FAssert(m_pEndNode != NULL);

@@ -502,6 +502,7 @@ public:
 	int getMilitaryHappiness() const;																			// Exposed to Python
 	int getMilitaryHappinessUnits() const { return m_iMilitaryHappinessUnits; }									// Exposed to Python
 	void changeMilitaryHappinessUnits(int iChange);
+	void updateMilitaryHappinessUnits(); // advc.184
 
 	int getBuildingGoodHappiness() const { return m_iBuildingGoodHappiness; }									// Exposed to Python
 	int getBuildingBadHappiness() const { return m_iBuildingBadHappiness; }										// Exposed to Python
@@ -1529,6 +1530,9 @@ protected:
 	void doGreatPeople();
 	void doMeltdown();
 
+	// <advc>
+	void changeCommerceRateTimes100(CommerceTypes eCommerce, int iChange);
+	void setCommerceRateTimes100(CommerceTypes eCommerce, int iRate); // </advc>
 	int getExtraProductionDifference(int iExtra, UnitTypes eUnit) const
 	{
 		return getExtraProductionDifference(iExtra, getProductionModifier(eUnit));

@@ -873,7 +873,7 @@
 	<TEXT>
 		<Tag>TXT_KEY_HOME_TILE_YIELD</Tag>
 		<English>Tile yield: </English>
-		<French>Produit du case: </French>
+		<French>Produit du case : </French>
 		<German>Gel&#228;ndeertrag: </German>
 		<Italian>Prodotti della casella: </Italian>
 		<Spanish>Rendim. de la casilla: </Spanish>
@@ -1331,7 +1331,7 @@
 		 awful. Originally in CIV4GameText_Misc1.xml. -->
 	<TEXT> <!-- redefine -->
 		<Tag>TXT_KEY_GAME_OPTION_NEW_RANDOM_SEED_HELP</Tag>
-		<English>A new random seed is generated every time a savegame is loaded - which, for example, will lead to different combat results</English>
+		<English>A new random seed is generated every time a savegame is loaded - which, for example, will lead to different combat results.</English>
 		<French>Un nouveau classement al&#233;atoire est g&#233;n&#233;r&#233; chaque fois que le jeu est recharg&#233;, ce qui peut entra&#238;ner diff&#233;rents r&#233;sultats de combat, par exemple.</French>
 		<German>Beim Laden eines Spielstandes wird ein neuer Startwert für den Zufallszahlen-Generator erzeugt, was zum Beispiel zu unterschiedlichen Kampfausg&#228;ngen f&#252;hren kann.</German>
 		<Italian>Ogni volta che ricaricherai il gioco verr&#224; generata una nuova estrazione casuale, portando, per esempio, a diversi risultati di combattimento.</Italian>
@@ -1408,7 +1408,7 @@
 		<Tag>TXT_KEY_HANDICAP_IMMORTAL_HELP</Tag>
 		<English>Very hard. Apart from receiving high ongoing bonuses, the AI players start the game with a Worker, a Scout, two Archers and, in total, up to four technologies. The game starts on turn 10 in order to match this big head start.</English>
 		<French>Peu nombreux sont ceux qui peuvent revendiquer une place parmi les Immortels. C'est l&#224; un d&#233;fi que seuls les plus exp&#233;riment&#233;s sauront relever.</French>
-		<German>Sehr schwierig. Zusätzlich zu hohen andauernden Boni erhalten die KI-Spieler zu Spielbeginn einen Bautrupp, einen Kundschafter, zwei Bogesnchützen und, insgesamt, bis zu fünf Technologien.</German>
+		<German>Sehr schwierig. Zusätzlich zu hohen andauernden Boni erhalten die KI-Spieler zu Spielbeginn einen Bautrupp, einen Kundschafter, zwei Bogenschützen und - insgesamt - bis zu vier Technologien.</German>
 		<Italian>Solo in pochi possono appartenere alla schiera degli Immortali. Una prova molto impegnativa, anche per i pi&#249; esperti.</Italian>
 		<Spanish>Solo unos cuantos pueden contarse entre las filas de los inmortales.  Esto resulta una prueba demoledora para todos, excepto para los m&#225;s experimentados.</Spanish>
 	</TEXT>
@@ -1416,7 +1416,7 @@
 		<Tag>TXT_KEY_HANDICAP_DEITY_HELP</Tag>
 		<English>Extremely hard. The human penalties (30%) and progressive AI bonuses make it so that the AI players get e.g. units at half the human cost toward the end of the game. With the AdvCiv mod, hopefully Immortal is hard enough for nearly everyone. Note, however, that AdvCiv removes the second free Settler that the Deity AI players receive in the original game.</English>
 		<French>L'ultime &#233;preuve, r&#233;serv&#233;e aux meilleurs joueurs. Serez-vous &#224; la hauteur ?</French>
-		<German>Extrem schwierig. Die Mali für menschliche Spieler (30%) und die fortschreitenden Boni der KI führen dazu, dass die KI-Spieler gegen Ende des Spiels z.B. nur noch halb so viel Produktion für eine Einheit aufwenden müssen wie die Menschen. Mit dem AdvCiv-Mod sollte "Unsterblicher" für fast jeden schwierig genug sein. Allerdings ist, im Gegensatz zum Originalspiel, kein zweiter Siedler mehr unter den Starteinheiten der KI.</German>
+		<German>Extrem schwierig. Die Mali für menschliche Spieler (30%) und die fortschreitenden Boni der KI führen dazu, dass die KI-Spieler gegen Ende des Spiels z.B. nur noch halb so viel Produktion für eine Einheit aufwenden müssen wie die Menschen. Mit der AdvCiv-Mod sollte "Unsterblicher" für fast jeden schwierig genug sein. Allerdings ist, im Gegensatz zum Originalspiel, kein zweiter Siedler mehr unter den Starteinheiten der KI.</German>
 		<Italian>La prova definitiva per i migliori giocatori di Civilization. Ce la farai?</Italian>
 		<Spanish>La prueba definitiva, solo para los mejores jugadores del Civi. &#191;Podr&#225; superarla alguien?</Spanish>
 	</TEXT>
@@ -3309,7 +3309,7 @@
 		<Italian>Simile alla Terra (70%% acqua)</Italian>
 		<Spanish>Similar a la Tierra (70%% agua)</Spanish>
 	</TEXT>
-	<TEXT> <!-- redefine -->
+	<TEXT>
 		<Tag>TXT_KEY_MAP_SCRIPT_EARTH_50</Tag>
 		<English>Earthlike (60%% water)</English>
 		<French>Semblable à la Terre (60%% d'eau)</French>
@@ -3326,7 +3326,7 @@
 		<Italian>Mediterraneo (45%% acqua)</Italian>
 		<Spanish>Mediterráneo (45%% agua)</Spanish>
 	</TEXT>
-	<!-- NB: These two only gets used for Tectonics -->
+	<!-- NB: These two only get used for Tectonics -->
 	<TEXT> <!-- redefine -->
 		<Tag>TXT_KEY_MAP_SCRIPT_PANGAEA</Tag>
 		<English>Pangaea (70%% water)</English>
@@ -4264,11 +4264,11 @@
 	<!-- advc.106b -->
 	<TEXT>
 		<Tag>TXT_KEY_END_TURN_MSG</Tag>
-		<English>[COLOR_LIGHT_GREY]----- Older messages:[COLOR_REVERT]</English>
-		<French>[COLOR_LIGHT_GREY]----- Messages plus anciens:[COLOR_REVERT]</French>
-		<German>[COLOR_LIGHT_GREY]----- Ältere Nachrichten:[COLOR_REVERT]</German>
-		<Italian>[COLOR_LIGHT_GREY]----- Messaggi meno recenti:[COLOR_REVERT]</Italian>
-		<Spanish>[COLOR_LIGHT_GREY]----- Mensajes más antiguos:[COLOR_REVERT]</Spanish>
+		<English>----- Older messages:</English>
+		<French>----- Messages plus anciens :</French>
+		<German>----- Ältere Nachrichten:</German>
+		<Italian>----- Messaggi meno recenti:</Italian>
+		<Spanish>----- Mensajes más antiguos:</Spanish>
 	</TEXT>
 	
 	<!-- advc.104v -->
@@ -7048,6 +7048,26 @@
 		<Spanish>&#161;%[s2_UnitName] de %[s1_CivName] ha vencido a %[s4_UnitName] de %[s3_CivName]!</Spanish>
 	</TEXT>
 
-	
+	<!-- advc.004: For Financial Advisor (commerce breakdown) -->
+	<TEXT>
+		<Tag>TXT_KEY_MISC_CIVICS_MULTIPLIERS</Tag>
+		<English>Civics Factor</English>
+		<French>factuer doctrine</French>
+		<German>Staatsform-Faktor</German>
+		<Italian>fattore governo</Italian>
+		<Spanish>factor principios</Spanish>
+	</TEXT>
+
+	<!-- advc.132: The original TXT_KEY_ESPIONAGE_..._MOD texts are defined
+		 in Civ4GameText_BTS.xml. (IT, SP may really need an article, but
+		 that can't be worked around.) -->
+	<TEXT>
+		<Tag>TXT_KEY_ESPIONAGE_CIVIC_RELIGION_MOD</Tag>
+		<English>(increased for not practising %s1_ReligionOrCivic)</English>
+		<French>(augmenté pour ne pas pratiquer %s2_ReligionOrCivic)</French>
+		<German>(erhöht f&#252;r Nichtaus&#252;bung von %s2_ReligionOrCivic)</German>
+		<Italian>(aumentato per non praticare %s2_ReligionOrCivic)</Italian>
+		<Spanish>(aumentado por no practicar %s2_ReligionOrCivic)</Spanish>
+	</TEXT>
 
 </Civ4GameText>

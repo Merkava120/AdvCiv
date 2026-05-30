@@ -45,7 +45,7 @@ public:
 			bool bColorAllegiance = false, // advc.048
 			bool bOmitOwner = false, // advc.061
 			bool bIndicator = false); // advc.007
-	// advc.004 (Exposed to Python, replacing redunant code in CyMainInterface.py)
+	// advc.004 (Exposed to Python, replacing redundant code in CyMainInterface.py)
 	void setHurtUnitStrength(CvWString& szBuffer, CvUnit const& kUnit,
 			int iHP = -1); // advc.048c
 	void setPlotListHelp(CvWStringBuffer &szString, CvPlot const& kPlot, bool bOneLine, bool bShort,
@@ -324,7 +324,7 @@ public:
 	DllExport void getInterfaceCenterText(CvWString& strText);
 	DllExport void getTurnTimerText(CvWString& strText);
 	DllExport void getFontSymbols(std::vector< std::vector<wchar> >& aacSymbols, std::vector<int>& aiMaxNumRows);
-	DllExport void assignFontIds(int iFirstSymbolCode, int iPadAmount);
+	DllExport void assignFontIds(int iFirstSymbolCode, int iRowLen);
 
 	DllExport void getCityDataForAS(std::vector<CvWBData>& mapCityList, std::vector<CvWBData>& mapBuildingList, std::vector<CvWBData>& mapAutomateList);
 	DllExport void getUnitDataForAS(std::vector<CvWBData>& mapUnitList);
@@ -343,6 +343,9 @@ public:
 	DllExport void getImprovementDataForWB(std::vector<CvWBData>& mapImprovementData);
 	DllExport void getReligionDataForWB(bool bHolyCity, std::vector<CvWBData>& mapReligionData);
 	DllExport void getCorporationDataForWB(bool bHeadquarters, std::vector<CvWBData>& mapCorporationData);
+	// <advc.002b>
+	bool isGfcThemeModified() const;
+	int getHelpFontSize() const; // </advc.002b>
 
 private:
 	void eventTechHelp(CvWStringBuffer& szBuffer, EventTypes eEvent, TechTypes eTech, PlayerTypes ePlayer, PlayerTypes eOtherPlayer);

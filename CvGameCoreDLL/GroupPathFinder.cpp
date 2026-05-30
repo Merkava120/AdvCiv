@@ -30,12 +30,9 @@ bool GroupStepMetric::isValidStep(CvPlot const& kFrom, CvPlot const& kTo,
 			kGroup.canMoveAllTerrain());
 }
 
-/*	"pathValid_source" in K-Mod
-	advc.pf (note): Checks based on the path data are problematic in this function.
-	In rare circumstances, the plot danger check can cause the pathfinder to fail;
-	see comment in KmodPathFinder::processChild. */
+// "pathValid_source" in K-Mod
 bool GroupStepMetric::canStepThrough(CvPlot const& kPlot, CvSelectionGroup const& kGroup,
-	MovementFlags eFlags, int iMoves, int iPathTurns)
+	MovementFlags eFlags)
 {
 	//PROFILE_FUNC(); // advc.003o
 
@@ -50,40 +47,17 @@ bool GroupStepMetric::canStepThrough(CvPlot const& kPlot, CvSelectionGroup const
 		if (!kPlot.isRevealed(kGroup.getHeadTeam()))
 			return false;
 	}
-	// <advc.pf> No new AI routes in human territory (but upgrade to railroad OK)
-	if (eFlags & MOVE_ROUTE_TO)
-	{
-		if(kPlot.getRevealedRouteType(kGroup.getHeadTeam()) == NO_ROUTE &&
-			!kGroup.isHuman())
-		{
-			PlayerTypes eOwner = kPlot.getOwner();
-			if(eOwner != NO_PLAYER && GET_PLAYER(eOwner).isHuman())
-				return false;
-		}
-	} // </advc.pf>
 
 	if ((eFlags & MOVE_NO_ENEMY_TERRITORY) && kPlot.isOwned() &&
 		GET_TEAM(kPlot.getTeam()).isAtWar(kGroup.getHeadTeam()))
 	{
 		return false;
 	}
-	bool const bAIControl = kGroup.AI_isControlled();
-	if (bAIControl)
-	{
-		if (iPathTurns > 1 || iMoves == 0)
-		{
-			if (!(eFlags & MOVE_IGNORE_DANGER) &&
-				(!kGroup.canFight() ||
-				(eFlags & MOVE_AVOID_DANGER)) && // advc.031d
-				!kGroup.alwaysInvisible() &&
-				GET_PLAYER(kGroup.getHeadOwner()).AI_isAnyPlotDanger(kPlot))
-			{
-				return false;
-			}
-		}
-	}
 
-	if (bAIControl || kPlot.isRevealed(kGroup.getHeadTeam()))
+	/*	(advc.pf: Danger checks based on path data moved into a
+		separate function) */
+
+	if (kGroup.isAIControlled() || kPlot.isRevealed(kGroup.getHeadTeam()))
 	{
 		if (eFlags & (MOVE_THROUGH_ENEMY /* K-Mod: */ | MOVE_ATTACK_STACK))
 		{
@@ -137,6 +111,25 @@ bool GroupStepMetric::canStepThrough(CvPlot const& kPlot, CvSelectionGroup const
 	return true;
 }
 
+/*	advc.pf: Cut from pathValid_source. Given how the pathfinder uses that function
+	(that is: to close off plots entirely after visiting from only one neighbor),
+	it mustn't take into account path data. Doing so had lead to rare pathfinding
+	failures in K-Mod. */
+bool GroupStepMetric::canStepThrough(CvPlot const& kPlot, CvSelectionGroup const& kGroup,
+	MovementFlags eFlags, int iMoves, int iPathTurns)
+{
+	if ((iPathTurns > 1 || iMoves == 0) &&
+		kGroup.isAIControlled() &&
+		!(eFlags & MOVE_IGNORE_DANGER) &&
+		(!kGroup.canFight() || /* advc.031d: */ (eFlags & MOVE_AVOID_DANGER)) &&
+		!kGroup.alwaysInvisible() &&
+		GET_PLAYER(kGroup.getHeadOwner()).AI_isAnyPlotDanger(kPlot))
+	{
+		return false;
+	}
+	return true;
+}
+
 // "pathDestValid" in BtS/ K-Mod
 bool GroupStepMetric::isValidDest(CvPlot const& kPlot, CvSelectionGroup const& kGroup,
 	MovementFlags eFlags)
@@ -150,7 +143,7 @@ bool GroupStepMetric::isValidDest(CvPlot const& kPlot, CvSelectionGroup const& k
 	if (eDomain == DOMAIN_IMMOBILE)
 		return false;
 
-	bool const bAIControl = kGroup.AI_isControlled();
+	bool const bAIControl = kGroup.isAIControlled();
 
 	if (bAIControl)
 	{	/*  BETTER_BTS_AI_MOD, Efficiency, 11/04/09, jdog5000: START
@@ -245,7 +238,7 @@ bool GroupStepMetric::isValidDest(CvPlot const& kPlot, CvSelectionGroup const& k
 #define PATH_DEFENSE_WEIGHT			(7) // defence bonus
 // advc.pf: Was 5 in K-Mod, 3 in BtS.
 #define PATH_TERRITORY_WEIGHT		(9)
-#define PATH_DOW_WEIGHT				(7) // advc.082
+#define PATH_DOW_WEIGHT				(7) // advc.001t
 // advc.pf: Was 4 in K-Mod, 2 in BtS.
 #define PATH_STEP_WEIGHT			(7)
 #define PATH_STRAIGHT_WEIGHT		(2) // K-Mod: was 1
@@ -321,6 +314,11 @@ int GroupStepMetric::cost(CvPlot const& kFrom, CvPlot const& kTo,
 				if it doesn't always work correctly. */
 		}
 	} // </advc.035>
+	TeamTypes const eToPlotTeam = kTo.getTeam();
+	/*	<advc.001t> Don't plan on using enemy routes when declaring war.
+		(Not bothering with CvUnit::isEnemyRoute. AI won't have a DoW group of those. */
+	bool const bIgnoreRoutes = ((eFlags & MOVE_DECLARE_WAR) && eToPlotTeam != NO_TEAM &&
+			GET_TEAM(eTeam).AI_isSneakAttackReady(eToPlotTeam)); // </advc.001t>
 	int iWorstCost = 0;
 	int iWorstMovesLeft = MAX_INT;
 	//int iWorstMaxMoves = MAX_INT; // advc: unused
@@ -329,7 +327,8 @@ int GroupStepMetric::cost(CvPlot const& kFrom, CvPlot const& kTo,
 		FAssert(pGroupUnit->getDomainType() != DOMAIN_AIR);
 		int const iMaxMoves = (iCurrMoves > 0 ? iCurrMoves : pGroupUnit->maxMoves());
 		int const iMoveCost = kTo.movementCost(*pGroupUnit, kFrom,
-				false); // advc.001i
+				false, // advc.001i
+				bIgnoreRoutes); // advc.001t
 		int const iMovesLeft = std::max(0, iMaxMoves - iMoveCost);
 
 		iWorstMovesLeft = std::min(iWorstMovesLeft, iMovesLeft);
@@ -389,7 +388,7 @@ int GroupStepMetric::cost(CvPlot const& kFrom, CvPlot const& kTo,
 		However, diagonal zig-zags will probably seem unnatural and weird to humans
 		who are just trying to move in a straight line.
 		So let the pathfinding for human groups prefer cardinal movement. */
-	bool const bAIControl = kGroup.AI_isControlled();
+	bool const bAIControl = kGroup.isAIControlled();
 	/*	advc.pf: AI map visibility is generally unimportant and a relatively
 		high weight makes it harder to give routes the proper weight (see below). */
 	if (/*bAIControl*/ iExploreModifier < 3)
@@ -471,16 +470,15 @@ int GroupStepMetric::cost(CvPlot const& kFrom, CvPlot const& kTo,
 		}
 	} //
 
-	// <advc.082>
-	TeamTypes eToPlotTeam = kTo.getTeam();
+	// <advc.001t>
 	/*  The AVOID_ENEMY code in the no-moves-left branch below doesn't stop the AI
 		from trying to move _through_ enemy territory and thus declaring war
 		earlier than necessary */
 	if (bAIControl && (eFlags & MOVE_DECLARE_WAR) && eToPlotTeam != NO_TEAM &&
-		eToPlotTeam != eTeam && GET_TEAM(eTeam).AI_isSneakAttackReady(eToPlotTeam))
+		GET_TEAM(eTeam).AI_isSneakAttackReady(eToPlotTeam))
 	{
 		iWorstCost += PATH_DOW_WEIGHT;
-	} // </advc.082>
+	} // </advc.001t>
 	if (iWorstMovesLeft <= 0)
 	{
 		if (eToPlotTeam != eTeam)
@@ -668,16 +666,22 @@ bool GroupStepMetric::updatePathData(Node& kNode, Node const& kParent,
 				iParentMoves = kGroup.maxMoves();
 			}
 		}
+		// <advc.001t> Consistent with our cost function above
+		bool const bIgnoreRoutes = ((eFlags & MOVE_DECLARE_WAR) && kTo.isOwned() &&
+				GET_TEAM(kGroup.getHeadTeam()).AI_isSneakAttackReady(kTo.getTeam()));
+		// </advc.001t>
 		CLLNode<IDInfo> const* pUnitNode = kGroup.headUnitNode();
 		int iMoveCost = kTo.movementCost(*::getUnit(pUnitNode->m_data), kFrom,
-				false); // advc.001i
+				false, // advc.001i
+				bIgnoreRoutes); // advc.001t
 		bool bUniformCost = true;
 		for (pUnitNode = kGroup.nextUnitNode(pUnitNode);
 			bUniformCost && pUnitNode != NULL; pUnitNode = kGroup.nextUnitNode(pUnitNode))
 		{
 			CvUnit const* pLoopUnit = ::getUnit(pUnitNode->m_data);
 			int iLoopCost = kTo.movementCost(*pLoopUnit, kFrom,
-					false); // advc.001i
+					false, // advc.001i
+					bIgnoreRoutes); // advc.001t
 			if (iLoopCost != iMoveCost)
 				bUniformCost = false;
 		}
@@ -713,7 +717,11 @@ bool GroupStepMetric::updatePathData(Node& kNode, Node const& kParent,
 				for (size_t i = plotList.size() - 1; i > 0; i--)
 				{
 					iUnitMoves -= plotList[i-1]->movementCost(*pLoopUnit, *plotList[i],
-							false); // advc.001i
+							false, // advc.001i
+							// <advc.001t>
+							((eFlags & MOVE_DECLARE_WAR) && plotList[i-1]->isOwned() &&
+							GET_TEAM(kGroup.getHeadTeam()).AI_isSneakAttackReady(
+							plotList[i-1]->getTeam()))); // </advc.001t>
 					FAssert(iUnitMoves > 0 || i == 1);
 				}
 				iUnitMoves = std::max(iUnitMoves, 0);

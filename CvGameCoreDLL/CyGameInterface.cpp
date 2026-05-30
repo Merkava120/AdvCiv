@@ -5,7 +5,7 @@
 
 //
 // published python interface for CyGame
-//
+// advc.mnai: Corrected a couple of documentation strings
 
 void CyGamePythonInterface()
 {
@@ -213,10 +213,10 @@ void CyGamePythonInterface()
 		.def("isSpecialBuildingValid", &CyGame::isSpecialBuildingValid)
 		.def("makeSpecialBuildingValid", &CyGame::makeSpecialBuildingValid)
 
-		.def("isNukesValid", &CyGame::isNukesValid, "bool")
+		.def("isNukesValid", &CyGame::isNukesValid, "bool ()")
 		.def("makeNukesValid", &CyGame::makeNukesValid, " void (bool bValid)")
 
-		.def("isInAdvancedStart", &CyGame::isInAdvancedStart, "bool")
+		.def("isInAdvancedStart", &CyGame::isInAdvancedStart, "bool ()")
 
 		.def("getHolyCity", &CyGame::getHolyCity, python::return_value_policy<python::manage_new_object>(), "CyCity getHolyCity()")
 		.def("setHolyCity", &CyGame::setHolyCity, "void (int eIndex, CyCity *pNewValue, bAnnounce) - Sets holy city for religion eIndex to pNewValue")
@@ -279,6 +279,8 @@ void CyGamePythonInterface()
 		.def("doControl", &CyGame::doControl, "void (int /*ControlTypes*/ iControl)")
 		// advc.095:
 		.def("setCityBarWidth", &CyGame::setCityBarWidth, "void (bool)")
+		// advc.092c:
+		.def("setHelpTextAreaWidth", &CyGame::setHelpTextAreaWidth, "void (float)")
 		// BULL - AutoSave:
 		.def("saveGame", &CyGame::saveGame, "void saveGame(string fullyQualifiedFileName)")
 		// advc.104:

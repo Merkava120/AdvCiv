@@ -16,6 +16,9 @@
 # http://lists.sourceforge.net/lists/listinfo/configobj-develop
 # Comments, suggestions and bug reports welcome.
 
+# advc: One bugfix (see next advc comment). Unsure if the BUG devs had modified
+# this module at all.
+
 from __future__ import generators
 
 """
@@ -2015,6 +2018,9 @@ class ConfigObj(Section):
             output = BOM_UTF8 + output
         if outfile is not None:
             outfile.write(output)
+            # <advc.001> Need to remember filename
+            if self.filename is None:
+                self.filename = outfile.name # </advc.001>
         else:
             h = open(self.filename, 'w')
             h.write(output)

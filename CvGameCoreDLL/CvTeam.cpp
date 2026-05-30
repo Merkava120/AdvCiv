@@ -1101,11 +1101,10 @@ void CvTeam::declareWar(TeamTypes eTarget, bool bNewDiplo, WarPlanTypes eWarPlan
 	{
 		gDLL->UI().setDirty(Score_DIRTY_BIT, true);
 		gDLL->UI().setDirty(CityInfo_DIRTY_BIT, true);
-		// advc.001w: Can now enter each other's territory
-		gDLL->UI().setDirty(Waypoints_DIRTY_BIT, true);
-		// advc.162: DoW increases certain path costs
-		CvSelectionGroup::resetPath();
 	}
+	// advc.001w: Can now enter each other's territory (important for advc.162)
+	updateActivePaths(eTarget);
+	CvSelectionGroup::resetPath(); // advc.162
 	// advc.003j: Obsolete
 	/*for (iI = 0; iI < MAX_PLAYERS; iI++) {
 		if (GET_PLAYER((PlayerTypes)iI).isAlive()) {
@@ -2910,17 +2909,20 @@ CvPlot* CvTeam::makeHasMet(TeamTypes eOther, bool bNewDiplo,
 	if (isActive() || GET_TEAM(eOther).isActive())
 		gDLL->UI().setDirty(Score_DIRTY_BIT, true);
 	// <advc.071>
-	bool bShowMessage = (isHuman() && pData != NULL);
-	if (bShowMessage || bNewDiplo)
+	bool bShowMessage = false;
+	if (bNewDiplo &&
+		((isHuman() || GET_TEAM(eOther).isHuman()))) // save time
 	{
 		int iOnFirstContact = 1;
 		// If met during the placement of free starting units, show only a diplo popup.
-		if(GC.IsGraphicsInitialized())
+		if (GC.IsGraphicsInitialized())
 			iOnFirstContact = BUGOption::getValue("Civ4lerts__OnFirstContact", 2);
-		if(bNewDiplo && iOnFirstContact == 0)
-			bNewDiplo = false;
-		if(bShowMessage && iOnFirstContact == 1)
-			bShowMessage = false;
+		if (iOnFirstContact != 1)
+		{
+			bShowMessage = (pData != NULL && isHuman());
+			if (iOnFirstContact == 0)
+				bNewDiplo = false;
+		}	
 	} // </advc.071>
 	if (isAlwaysWar() && getID() != eOther)
 		declareWar(eOther, false, NO_WARPLAN);
@@ -2973,6 +2975,7 @@ CvPlot* CvTeam::makeHasMet(TeamTypes eOther, bool bNewDiplo,
 	{
 		if (pAt1->isVisible(getID()))
 			pAt = pAt1;
+		else pAt = pAt1->plotThatRevealsOwner(getID());
 		if (ePlayerMet == NO_PLAYER)
 			ePlayerMet = pAt1->getOwner();
 	}
@@ -2980,6 +2983,7 @@ CvPlot* CvTeam::makeHasMet(TeamTypes eOther, bool bNewDiplo,
 	{
 		if (pAt2->isVisible(getID()))
 			pAt = pAt2;
+		else pAt = pAt2->plotThatRevealsOwner(getID());
 		if (ePlayerMet == NO_PLAYER)
 			ePlayerMet = pAt2->getOwner();
 	}
@@ -3004,6 +3008,16 @@ CvPlot* CvTeam::makeHasMet(TeamTypes eOther, bool bNewDiplo,
 			pAt = pUnit2->plot();
 		}
 	}
+	// Don't indicate a plot if we can't tell how it was spotted
+	if ((pAt1 == NULL || pAt2 == NULL) && pUnit1 == NULL && pUnit2 == NULL)
+		pAt = NULL;
+	// Can't generally tell where meetings occur with simultaneous turns
+	// ... But still no harm, I guess, in letting players know?
+	/*if (GC.getGame().isMPOption(MPOPTION_SIMULTANEOUS_TURNS))
+	{
+		pAt = NULL;
+		pUnitMet = NULL;
+	}*/
 	if (!bShowMessage)
 		return pAt;
 	CvWString szMsg = gDLL->getText("TXT_KEY_MISC_TEAM_MET",
@@ -3140,7 +3154,7 @@ bool CvTeam::isFreeTrade(TeamTypes eIndex) const
 
 void CvTeam::setOpenBorders(TeamTypes eIndex, bool bNewValue)
 {
-	if(isOpenBorders(eIndex) == bNewValue)
+	if (isOpenBorders(eIndex) == bNewValue)
 		return; // advc
 	bool bOldFreeTrade = isFreeTrade(eIndex);
 	m_abOpenBorders.set(eIndex, bNewValue);
@@ -3151,9 +3165,10 @@ void CvTeam::setOpenBorders(TeamTypes eIndex, bool bNewValue)
 			itOther->AI_updateAttitude(itMember->getID());
 	} // </advc.130p>
 	AI().AI_setOpenBordersCounter(eIndex, 0);
-
 	GC.getMap().verifyUnitValidPlot();
-
+	// <advc.001w>
+	if (isOpenBorders(eIndex))
+		updateActivePaths(eIndex); // </advc.001w>
 	if (isActive() || GET_TEAM(eIndex).isActive())
 		gDLL->UI().setDirty(Score_DIRTY_BIT, true);
 
@@ -3365,6 +3380,11 @@ void CvTeam::setVassal(TeamTypes eMaster, bool bNewValue, bool bCapitulated)
 
 	for (MemberIter it(getID()); it.hasNext(); ++it)
 		it->updateCitySight(true, false);
+	// advc.001w: (No change in movement rules for the vassal)
+	GET_TEAM(eMaster).updateActivePaths();
+	// <advc.184>
+	updateMilitaryHappinessUnits();
+	GET_TEAM(eMaster).updateMilitaryHappinessUnits(); // </advc.184>
 
 	CvMap const& kMap = GC.getMap();
 	for (int i = 0; i < kMap.numPlots(); ++i)
@@ -4348,15 +4368,29 @@ CvWString const CvTeam::tradeItemString(TradeableItems eItem, int iData, TeamTyp
 	return L"";
 }
 
+// advc (from Taurus):
+bool CvTeam::isTechSplash() const
+{
+	CvGame const& kGame = GC.getGame();
+	// Cut from announceTechToPlayers
+	if (GC.getGame().isNetworkMultiPlayer() || gDLL->UI().noTechSplash())
+		return false;
+	// Never makes sense to show popups to AI teams
+	if (!isHuman())
+		return false;
+	// Queueing them for a (currently) nonactive team in Hot Seat can make sense
+	if (!isActive() && !kGame.isHotSeat())
+		return false;
+	return true;
+}
+
 void CvTeam::announceTechToPlayers(TechTypes eIndex, /* advc.156: */ PlayerTypes eDiscoverPlayer,
 	bool bPartial)
 {
-	CvGame const& kGame = GC.getGame();
-	bool bSound = ((kGame.isNetworkMultiPlayer() ||
+	bool bSound = ((!isTechSplash() ||
 			/*  advc.156: I think HotSeat doesn't play sounds along with messages,
 				but let's try. */
-			kGame.isHotSeat() ||
-			gDLL->UI().noTechSplash()) && !bPartial);
+			GC.getGame().isHotSeat()) && !bPartial);
 	for (MemberIter it(getID()); it.hasNext(); ++it)
 	{
 		CvPlayer const& kPlayer = *it;
@@ -4794,13 +4828,35 @@ void CvTeam::setHasTech(TechTypes eTech, bool bNewValue, PlayerTypes ePlayer,
 		} // </advc.106>
 	}
 
-	if (bNewValue && bAnnounce && kGame.isFinalInitialized() &&
-		!gDLL->GetWorldBuilderMode())
+	if (bNewValue && bAnnounce && /* advc: */ isHuman() &&
+		kGame.isFinalInitialized() && !gDLL->GetWorldBuilderMode())
 	{
-		FAssert(ePlayer != NO_PLAYER);
-		if (GET_PLAYER(ePlayer).isResearch() &&
-			GET_PLAYER(ePlayer).getCurrentResearch() == NO_TECH &&
-			GET_PLAYER(ePlayer).isHuman()) // K-Mod
+		// <advc.001> (from Taurus) Humans always do the choosing in human-AI teams
+		if (!GET_PLAYER(ePlayer).isHuman())
+		{
+			CvPlayer& kLeader = GET_PLAYER(getLeaderID());
+			if (kLeader.isActive() || kGame.isHotSeat()) // Avoid multiple popups
+			{
+				ePlayer = kLeader.getID();
+				/*	Easier to handle the missing tech splash popup here than in
+					CvEventManager.py. Debatable whether this is really a bugfix;
+					also tagging advc.155. */
+				if (isTechSplash())
+				{
+					CvPopupInfo* pTechSplash = new CvPopupInfo();
+					if (pTechSplash != NULL)
+					{
+						pTechSplash->setButtonPopupType(BUTTONPOPUP_PYTHON_SCREEN);
+						pTechSplash->setData1(eTech);
+						pTechSplash->setText(L"showTechSplash");
+						kLeader.addPopup(pTechSplash);
+					}
+				}
+			}
+		} // </advc.001>
+		CvPlayer const& kPlayer = GET_PLAYER(ePlayer);
+		if (kPlayer.isResearch() && kPlayer.getCurrentResearch() == NO_TECH &&
+			kPlayer.isHuman()) // K-Mod
 		{
 			CvWString szBuffer = gDLL->getText("TXT_KEY_MISC_WHAT_TO_RESEARCH_NEXT");
 			GET_PLAYER(ePlayer).chooseTech(0, szBuffer);
@@ -4889,6 +4945,20 @@ bool CvTeam::isAlliedTerritory(TeamTypes eTerritoryOwner, TeamTypes eEnemy) cons
 	if (eEnemy == NO_TEAM || eTerritoryOwner == NO_TEAM)
 		return false;
 	return (isAtWar(eEnemy) && GET_TEAM(eTerritoryOwner).isAtWar(eEnemy));
+}
+
+/*	advc.001w: I think only situations in which the active player may have gained
+	access to new tiles need to be covered */
+void CvTeam::updateActivePaths(TeamTypes eOtherTeam)
+{
+	if (isActive() || (eOtherTeam != NO_TEAM && GET_TEAM(eOtherTeam).isActive()))
+	{
+		gDLL->UI().setDirty(Waypoints_DIRTY_BIT, true);
+		/*	Only thing that'll update waypoints after signing OB.
+			Resetting/ invalidating the K-Mod or original pathfinder
+			doesn't seem to help (and could also cause OOS problems). */
+		gDLL->UI().makeSelectionListDirty();
+	}
 }
 
 /*	advc: Says whether kPlot is a land plot that sea units of this team can enter
@@ -5370,6 +5440,13 @@ void CvTeam::updateTechShare()
 	int const iBestTechShare = calculateBestTechShare(); // </advc.opt>
 	FOR_EACH_ENUM(Tech)
 		updateTechShare(eLoopTech, /* advc.opt: */ iBestTechShare);
+}
+
+// advc.184:
+void CvTeam::updateMilitaryHappinessUnits()
+{
+	for (MemberIter it(getID()); it.hasNext(); ++it)
+		it->updateMilitaryHappinessUnits();
 }
 
 // advc.opt: Cut from updateTechShare(TechTypes)
