@@ -11329,10 +11329,10 @@ void CvGame::doFactionTurn(int iFaction)
 	// capn.fac - first loop through tiles of faction
 	if ((int)aFactions[iFaction].aaFacTiles.size() > 0)
 	{
-		// we'll add these up along the way
-		int iFacHammers = 0;
-		int iFacGold = 0;
-		int iFacFood = 0;
+		// we'll add this up along the way
+		int iFactionPower = 0;
+		// I was originally going to use yields or commerces, but I think one rating per building is good, and iPower already does a similar thing so why not use that?
+		// For tiles it's just total yields, maybe I'll factor in pop too, idk. 
 
 		// list for potential build spots
 		std::vector< int > lBuildTiles;
@@ -11342,6 +11342,12 @@ void CvGame::doFactionTurn(int iFaction)
 		std::vector< int > lTargetTiles;
 		// tiles we could build in but don't own
 		std::vector< int > lLeaseTiles; 
+		// buildings we could capture
+		std::vector< std::pair < int, int > > lFreeBuildings;
+		// buildings we could target
+		std::vector< std::pair< int, int > > lTargetBuildings;
+		// potential city build spots
+		std::vector< int > lBuildCities;
 
 		for (int tile = 0; tile < (int)aFactions[iFaction].aaFacTiles.size(); tile++)
 		{
@@ -11375,524 +11381,109 @@ void CvGame::doFactionTurn(int iFaction)
 			// city management
 			if (kPlot.isCity())
 			{
-				// adjust popularity
+				CvCity const& kCity = *kPlot.getPlotCity();
+
+				// variables for popularity adjustment
+				int iFactionHappiness = 0;
+
+				// calculate characteristic popularities in that city
+
 
 
 				// loop through buildings
+				for (int b = 0; b < (int)kCity.aiBuildingOwners.size(); b++)
+				{
+					BuildingTypes eBuilding = (BuildingTypes)kCity.aiBuildingOwners[b].first;
+					int iOwner = kCity.aiBuildingOwners[b].second;
+					if (iOwner == iFaction)
+					{
+						// we own this building. Add its values to our total
+						CvBuildingInfo kBuilding = GC.getBuildingInfo(eBuilding);
+						iFactionPower += kBuilding.getPowerValue();
+						iFactionHappiness += kCity.getBuildingHappiness(eBuilding);
+						iFactionHappiness += (kCity.getBuildingHealth(eBuilding) * GC.getDefineINT("FACTION_BUILDING_HEALTH_HAPPINESS_PERCENT") / 100);
+
+					}
+					else if (iOwner >= 0)
+					{
+						// building is owned; add to list of potential attack targets
+						std::pair< int, int > lTargetBuilding;
+						lTargetBuilding.first = tile;
+						lTargetBuilding.second = b;
+						lTargetBuildings.push_back(lTargetBuilding);
+					}
+					else
+					{
+						// building is unowned; add to list of potential capture targets
+						std::pair< int, int > lFreeBuilding;
+						lFreeBuilding.first = tile;
+						lFreeBuilding.second = b;
+						lFreeBuildings.push_back(lFreeBuilding);
+					}
+
+				}
+
+				// add to list for places we could build buildings
+				lBuildCities.push_back(tile);
+
+				// are we city controller?
+				if (iFaction = kCity.iGoverningFaction)
+				{
+					// faction happiness tied to happiness of city
+					iFactionHappiness += ((kCity.happyLevel() - kCity.unhappyLevel()) * GC.getDefineINT("FACTION_CITY_HAPPINESS_WEIGHT") / 100);
+
+					// chance of rebelling against national leader or striking, if we are very unhappy with them
+
+					// chance of using city police against faction we don't like 
+				}
+				else
+				{
+					// chance of attacking city controller for control, if we don't like them
+
+					// chance of striking, if we don't like city controller or national leader 
+				}
+
+				// adjust faction popularity
+				kPlot.getPlotCity()->changeFactionPopularity(iFaction, (SyncRandNum(GC.getDefineINT("FACTION_POPULARITY_RAND_1")) - GC.getDefineINT("FACTION_POPULARITY_RAND_2") + (GC.getDefineINT("FACTION_YOUTH_POPULARITY_BONUS") * (getTurnSlice() - aFactions[iFaction].iSpawnTurn < GC.getDefineINT("FACTION_YOUTH_POPULARITY_AGE"))) + (GC.getDefineINT("FACTION_POPULARITY_HAPPINESS_MULT") * iFactionHappiness / 100)));
+				// later I might add some kind of momentum thing but for now this is fine
+				
+			}
+			else
+			{
+				// add tile values to total
+				int iTotalYield = 0;
+				for (int y = 0; y < GC.getNUM_YIELD_TYPES(); y++)
+					iTotalYield += kPlot.getYield((YieldTypes)y);
+				int iTotalPop = getTilePopFaction(kPlot.plotNum()) == iFaction ? getTilePop(kPlot.plotNum()) : 0;
+				iFactionPower += GC.getDefineINT("FACTION_TILE_VALUE_PER_YIELD") * iTotalYield + GC.getDefineINT("FACTION_TILE_VALUE_PER_POP") * iTotalPop;
+				
+				// chance of moving pop to adjacent tiles
 			}
 
 		}
+
+		// chance of building an improvement
+		// find a tile to build in (prioritize our own)
+
+		// chance of building a building
+		// find a place to build it
+
+		// chance of taking over a free tile
+
+		// chance of attempting to take over an owned tile or building
+		// decide between peaceful request, hostile demand, or open attack
+
+		// chance of attacking faction we don't like, for no reason
+
+		// chance of building unit for player (if appropriate civics / at war / etc.)
+
+		// chance of building barbarian unit (basically if we're hostile and not powerful)
+
+
 	}
-	// if tile is city, more stuff to do
-	// adjust popularity
-	// loop through buildings, add unowned to list and owned to another list (2d with city index) - add owned to list for possible attacks
-	// add city to list we'll check later for chances to build stuff
-	// if not city controller and bad relationship with them, chance of attacking them
-	// or chance of striking if popular
-	// if city controller and bad relationship with national, chance of rebelling
-	// or chance of striking if popular
-	// if tile is not city, but has more pop than adjacent tiles, chance of pushing it out
-
-	// chance for taking over an unowned building
-	// choose building
-
-
-
-	// roll for chance of constructing building in city
-	// now roll for chance of building improvement, but only if lists of possible building spots > 0 
-	// find building spot (prioritize our own space first)
-
-	// roll for chance of building unit if didn't do any of the above stuff
-
-	// if didn't build and didn't claim extra territory and didn't push pop, roll for chance of attacking adjacent faction or one in city with building
-	// go through each faction and test chance
 
 	// loop through factions and increase influence with each one that we didn't attack
-
-	// Faction cities act independently even though the faction can exist across many cities. 
-	// So, loop through faction cities
-	for (int i = 0; i < (int)aFactions[iFaction].aaFacCities.size(); i++)
-	{
-		// for each city:
-		// first make sure city has the vars we need
-		if ((int)aFactions[iFaction].aaFacCities[i].size() < 6)
-		{
-			while ((int)aFactions[iFaction].aaFacCities[i].size() < 6)
-				aFactions[iFaction].aaFacCities[i].push_back(-1);
-		}
-		int iCityID = aFactions[iFaction].aaFacCities[i][1];
-		PlayerTypes eCityOwner = (PlayerTypes)aFactions[iFaction].aaFacCities[i][0];
-		int iEmergencyMode = aFactions[iFaction].aaFacCities[i][4];
-		int iPassedTurn = aFactions[iFaction].aaFacCities[i][5];
-
-		// un-pass turn if it was passed for some reason
-		aFactions[iFaction].aaFacCities[i][5] = -1;
 		
-		
-		int iInfluence = aFactions[iFaction].aaFacCities[i][2];
-		int iStrikeTurnsLeft = aFactions[iFaction].aaFacCities[i][3];
-		// first and foremost, see if our faction is striking in this city or others nearby. If in ours, pass turn. If in others nearby, join in. 
-		int iWhoStrike = getNearbyStriking(iCityID, eCityOwner, iFaction, true); // will return allies if they are striking, but searches ALL cities nearby for us and returns us over allies if found. Otherwise just nearest ally. 
-		if (iStrikeTurnsLeft > -1)
-		{
-			if (iStrikeTurnsLeft == 0)
-			{
-				aFactions[iFaction].aaFacCities[i][3] = -1;
-				doFactionStrike(iFaction, iCityID, eCityOwner, true); // end strike
-			}
-			else
-			{
-				aFactions[iFaction].aaFacCities[i][3] -= 1; // decrement strike turns
-				continue; // don't do anything else this turn
-			}
-		}
-		// this is an else if so strikes aren't infinite
-		else if (iWhoStrike > -1)
-		{
-			if (iWhoStrike == iFaction)
-			{
-				// this is us, we should join in:
-				doFactionTurnInf(iFaction, iCityID, eCityOwner); // collect influence one more time real quick
-				doFactionStrike(iFaction, iCityID, eCityOwner);
-				continue; // move on to the next city
-			}
-			else
-			{
-				int iShouldStrike = getStrikeEvaluation(iFaction, iCityID, eCityOwner, true);
-				if (iShouldStrike == 1)
-				{
-					doFactionTurnInf(iFaction, iCityID, eCityOwner); // collect influence one more time real quick
-					doFactionStrike(iFaction, iCityID, eCityOwner);
-					continue;
-				}
-			}
-		}
-		// ok done considering strikes and stuff
-		// adjust influence (if we have no buildings it decreases, otherwise it increases by 1 per turn plus building effects)
-		doFactionTurnInf(iFaction, iCityID, eCityOwner);
-		// See if our influence increase per turn is greater than others we care about. (for nationality factions, they don't care about anyone in their influence area unless those factions have somehow become enemies)
-		int iGrowingEnemy = getGrowingEnemy(iCityID, eCityOwner, iFaction);
-		if (iGrowingEnemy > -1)
-		{
-			// somebody is going to outpace us
-			// civics' fault?
-			int iEnemyCivicsRating = getCivicsRating(eCityOwner, iGrowingEnemy);
-			int iOurCivicsRating = getCivicsRating(eCityOwner, iFaction);
-			int iEnemyGrowth = getFactionInfGainPerTurn(iCityID, eCityOwner, iGrowingEnemy);
-			int iOurGrowth = getFactionInfGainPerTurn(iCityID, eCityOwner, iFaction);
-			if ((iOurGrowth - iOurCivicsRating) >= (iEnemyGrowth - iEnemyCivicsRating))
-			{
-				// this means the civics are causing the other faction to grow faster than us; without them, we would be outpacing them. 
-				if (getStrikeEvaluation(iFaction, iCityID, eCityOwner) == 1)
-				{
-					doFactionStrike(iFaction, iCityID, eCityOwner);
-					continue;
-				}
-				else
-				{
-					// we hate civics but can't strike yet. so,
-					seekMoreStuff(iFaction, iCityID, eCityOwner, -1, false, true);
-				}
-			}
-			else
-			{
-				// civics aren't the problem. whether it's buildings or alliances, we need to balance things out. 
-				doTargetEnemy(iFaction, iGrowingEnemy, iCityID, eCityOwner);
-			}
-		}
-		else
-		{
-			// we are at the highest rate of influence gain in our niche / city so that's good. 
-			// first priority is become controlling influence. That means 
-			if (!isControllingFaction(iFaction, eCityOwner, iCityID))
-			{
-				// note that the threshold is lower for different types of factions, who care less about being "dominant" and more about being able to do their thing. 
-				doSeekControl(iFaction, iCityID, eCityOwner);
-				// this can chain through doTargetEnemy > seekMoreStuff > will pass turn if can't do anything and the enemy isn't growing faster than us (which is the case right here)
-				// but in case we get out of that early here is
-				continue;
-			}
-			else
-			{
-				// first up, if we are a certain type of faction, we might prioritize striking for our beliefs / causing riots. 
-				int iFacType = getFactionType(iFaction);
-				bool bDidTooMuchStuff = false;
-				if (iFacType > 0 && iFacType < 5)
-				{
-					bDidTooMuchStuff = doFacTypeThings(iFaction, iCityID, eCityOwner);
-				}
-				if (bDidTooMuchStuff)
-					continue;
-				//if (iFacType == 1)
-				//{
-				//	// we are religious
-				//	// first check our standing in the overall religion, if we are outside the holy city and have different beliefs + poor relationship we might found our own separate religion
-				//	// next check the state religion in our nation, if ours but owned by different faction, same deal but instead of separating we target them as an enemy
-				//	// otherwise, check civics in terms of religion and consider a strike if they're bad
-				//	// may result in a passed turn
-				//}
-				//else if (iFacType == 2)
-				//{
-				//	// activists:
-				//	// just do a second check for civics in our city, but this time, against our own beliefs. 
-				//	// may result in a passed turn
-				//}
-				//else if (iFacType == 3)
-				//{
-				//	// labor: these are basically a specific type of activist group so do the same thing basically. 
-				//}
-				//else if (iFacType == 4)
-				//{
-				//	// nationality: find out if we are minority or majority in city, and if we are majority, consider doing a special nationality strike against the minority. Also check which one the civ is to inform that decision
-				//	// if we're a minority just move on (will hit the emergency section below)
-				//}
-				//// others - city govt, military, industry - don't have special things they care about, just move on. 
-
-
-				int iEmergency = getNearbyEmergency(iCityID, eCityOwner, iFaction);
-				if (iEmergency > -1)
-				{
-					doHelpCity(iFaction, false, iCityID, eCityOwner, true);
-					continue;
-				}
-				else
-				{
-					// pass turn
-					doFacPassTurn(iFaction, iCityID, eCityOwner); // we'll be back don't worry
-					continue;
-				}
-			}
-		}
-
-		// below is just notes
-		
-		// See if any other cities within range (later define that based on techs and trading and stuff) are in 'emergency mode'
-		// If so, go through all the considerations they would go through for the faction that put them in 'emergency mode' and see if we can do any of those things (there will be a penalty across distance for anything we spend on it)
-		// If not or found no cities, see if civics are limiting us and if so consider a strike
-		// See if we have unique actions we can do (nationalities can spend influence to try to lower enemy nationalities for example)
-		// Pass turn. 
-		
-		// See if we can condemn others or use an ally's building to SpreadMessage against them. 
-		// If not, see if we can use a cheap / powerful attack from a city or military building, or get an ally to do that
-		// If not, see how much an attack would cost and whether or not that would change who has controlling influence against our favor
-		// If it would not, attack (later add aggression ratings to increase willingness to do this)
-		// Otherwise, we need more influence / better attack methods. 
-		
-		// Need more stuff section: Go over controllers of buildings we would like to use
-		// Can we make allies with any of them by making offers (i.e. they don't hate us and we won't lose a lot of points toward others we like if we do that)? If so, do it
-		// If not, can we more easily attack one of them? If so, do that
-		// If not, can we set ourselves up better for an attack by making friends with an enemy of the controller of a target OR set ourselves up better for getting points by making enemies with an enemy of the controller of a target?
-		// If not then we're really in a tough situation. Set our city to 'emergency' and quickly check nearby to see if there are any "passed turn" cities that can immediately help us out (and if so do that and set passed turn to 0)
-
-		
-	}
-	
-	// Okay in that loop we may have passed turn. If we did, we did not yet check for allies in emergency status, so:
-	for (int i = 0; i < (int)aFactions[iFaction].aaFacCities.size(); i++)
-	{
-		// for each city:
-		// might not need this
-		/*if ((int)aFactions[iFaction].aaFacCities[i].size() < 6)
-		{
-			while ((int)aFactions[iFaction].aaFacCities[i].size() < 6)
-				aFactions[iFaction].aaFacCities[i].push_back(-1);
-		}*/
-		int iCityID = aFactions[iFaction].aaFacCities[i][1];
-		PlayerTypes eCityOwner = (PlayerTypes)aFactions[iFaction].aaFacCities[i][0];
-		int iEmergencyMode = aFactions[iFaction].aaFacCities[i][4];
-		int iPassedTurn = aFactions[iFaction].aaFacCities[i][5];
-
-		if (iPassedTurn > -1 && iEmergencyMode == -1)
-		{	
-			aFactions[iFaction].aaFacCities[i][5] = -1; //unpass turn
-
-			int iAllyEmergency = getNearbyEmergency(iCityID, eCityOwner, iFaction, true); // note this will also pick up and prioritize our own cities if they went after us last loop
-			doHelpCity(iFaction, false, iCityID, eCityOwner, true); // this might re-pass turn
-			continue;
-		}
-		else
-			continue;
-	}
-
-	// one more time: we STILL might have passed turn or not changed the status of 'passed turn' 
-	for (int i = 0; i < (int)aFactions[iFaction].aaFacCities.size(); i++)
-	{
-		// for each city:
-		// might not need this
-		/*if ((int)aFactions[iFaction].aaFacCities[i].size() < 6)
-		{
-			while ((int)aFactions[iFaction].aaFacCities[i].size() < 6)
-				aFactions[iFaction].aaFacCities[i].push_back(-1);
-		}*/
-		int iCityID = aFactions[iFaction].aaFacCities[i][1];
-		PlayerTypes eCityOwner = (PlayerTypes)aFactions[iFaction].aaFacCities[i][0];
-		int iEmergencyMode = aFactions[iFaction].aaFacCities[i][4];
-		int iPassedTurn = aFactions[iFaction].aaFacCities[i][5];
-
-		if (iPassedTurn > -1 && iEmergencyMode == -1)
-		{
-			aFactions[iFaction].aaFacCities[i][5] = -1; //un-pass
-			// this time let's just help any freakin nearby city
-			doHelpCity(iFaction, true, iCityID, eCityOwner); // this might re-pass turn if we are unable to help ANY nearby cities. 
-			continue;
-		}
-		else
-			continue;
-	}
-	// and one last time, for those STILL passed turn, because they were unable to help any other cities. 
-	// in that case we A) consider civics and strikes and B) do literally anything else for ourselves. 
-	for (int i = 0; i < (int)aFactions[iFaction].aaFacCities.size(); i++)
-	{
-		// for each city:
-		// might not need this
-		/*if ((int)aFactions[iFaction].aaFacCities[i].size() < 6)
-		{
-			while ((int)aFactions[iFaction].aaFacCities[i].size() < 6)
-				aFactions[iFaction].aaFacCities[i].push_back(-1);
-		}*/
-		int iCityID = aFactions[iFaction].aaFacCities[i][1];
-		PlayerTypes eCityOwner = (PlayerTypes)aFactions[iFaction].aaFacCities[i][0];
-		int iEmergencyMode = aFactions[iFaction].aaFacCities[i][4];
-		int iPassedTurn = aFactions[iFaction].aaFacCities[i][5];
-
-		if (iPassedTurn > -1 && iEmergencyMode == -1)
-		{
-			aFactions[iFaction].aaFacCities]i][5] = -1;
-			// First look at civics:
-			int iCivicRating = getCivicsRating(eCityOwner, iFaction, false, false);
-			if (iCivicRating <= 0)
-			{
-				// let's try to improve that eh?
-				int iStrike = getStrikeEvaluation(iFaction, iCityID, eCityOwner);
-				if (iStrike == 1)
-				{
-					doFactionStrike(iFaction, iCityID, eCityOwner);
-					continue;
-				}
-				else
-				{
-					seekMoreStuff(iFaction, iCityID, eCityOwner, -1, false, true);
-				}
-			}
-			else
-			{
-				// more useful things we might do. 
-				seekMoreStuff(iFaction, iCityID, eCityOwner);
-				// that will NOT pass turn because we don't have any targets / goals with it. Even if we can't do anything at all, we might be able to make offers to literally anyone to upgrade a relationship with them, and if THAT doesn't work, just end the turn. 
-			}
-		}
-		else
-			continue;
-	}
-	
-}
-int CvGame::getFactionAttackCost(int iAttacker, int iDefender, int iCityID, PlayerTypes eCityOwner, int iTarget, int iDistance) const
-{
-	return 0;
-}
-int CvGame::getNearbyStriking(int iCityID, PlayerTypes eCityOwner, int iUsFaction, bool bConsiderStrikingAllies) const
-{
-	CvCity* pCity = GET_PLAYER(eCityOwner).getCity(iCityID);
-	int iX = pCity->getX();
-	int iY = pCity->getY();
-	int iDistance = getMaxLinkDistance(iCityID, eCityOwner);
-	if (iDistance == -1)
-		iDistance = std::max(std::max( iX, GC.getMap().getGridWidth() - iX),std::max( iY, GC.getMap().getGridHeight() - iY ));
-	// loop outward from current city. this structure copied from somewhere in CvPlot
-	std::vector<int> strikers;
-	for (int d = 1; d <= getMaxLinkDistance(iCityID, eCityOwner); d++)
-	{
-		for (int dx = -d; dx <= d; dx++)
-		{
-			for (int dy = -d; dy <= d; dy++)
-			{
-				// Don't process plots repeatedly:
-				if (::abs(dx) < d && ::abs(dy) < d)
-					continue;
-				int iThisX = dx + iX;
-				int iThisY = dy + iY;
-				if (iThisX > GC.getMap().getGridWidth() || iThisY > GC.getMap().getGridHeight() || iThisX * iThisY <= 0)
-					continue; 
-				CvPlot* pPlot = GC.getMap().plot(iThisX, iThisY);
-				if (!pPlot->isCity())
-					continue;
-				CvCity* pThisCity = pPlot->getPlotCity();
-				for (int i = 0; i < (int)aFactions.size(); i++)
-				{
-					if (i != iUsFaction && ((!bConsiderStrikingAllies) || (getFactionAllyLevel(iUsFaction, i) < 3 && getFactionAllyLevel(iUsFaction, i) != 1)))
-						continue;
-					int iCityIdx = isInCity(i, pThisCity->getID(), pThisCity->getOwner());
-					if (iCityIdx >= 0)
-					{
-						if ((int)aFactions[i].aaFacCities[iCityIdx].size() > 3)
-						{
-							if (aFactions[i].aaFacCities[iCityIdx][3] > 0)
-							{
-								if (i == iUsFaction)
-									return iUsFaction; // immediately prioritize striking with our own cities if they are striking
-								strikers.push_back(i);
-							}
-						}
-					}
-				}
-
-
-			}
-		}
-	}
-	// if we found strikers just return the first one -- only saved them so we could prioritize ourselves. 
-	if ((int)strikers.size() > 0)
-		return strikers[0];
-	else
-		return -1;
-}
-void CvGame::doFactionStrike(int iFaction, int iCityID, PlayerTypes eCityOwner, bool bOver)
-{
-	int idx = isInCity(iFaction, iCityID, eCityOwner);
-	if (bOver)
-	{
-		// end strike - 'revolts', flips, flipped units, etc. continue on however long they last in-game, but buildings switch back on now:
-		for (int b = 0; b < (int)aFactions[iFaction].aaFacBuildings.size(); b++)
-		{
-			if (idx == aFactions[iFaction].aaFacBuildings[b].first)
-			{
-				GET_PLAYER(eCityOwner).getCity(iCityID)->processBuilding(aFactions[iFaction].aaFacBuildings[b].second, 1, true); // obsolete set to 'true' so it doesn't change stuff that was already there. 
-			}
-		}
-		// reset labor buildings too
-		if (getFactionType(iFaction) == 3)
-		{
-			FOR_EACH_ENUM(Building)
-			{
-				if (GC.getBuildingInfo(eLoopBuilding).isUsesLabor())
-				{
-					if (GET_PLAYER(eCityOwner).getCity(iCityID)->getNumRealBuilding(eLoopBuilding) > 0) // use real here and not 'active'!
-						GET_PLAYER(eCityOwner).getCity(iCityID)->processBuilding(eLoopBuilding, 1, true); // obsolete set to 'true' so it thinks the building still exists there. 
-				}
-			}
-		}
-	}
-	else
-	{
-		// First things first, set the strike timer. 
-		aFactions[iFaction].aaFacCities[idx][3] = SyncRandNum(GC.getDefineINT("FACTION_MAX_STRIKE_TURNS") - GC.getDefineINT("FACTION_MIN_STRIKE_TURNS")) + GC.getDefineINT("FACTION_MIN_STRIKE_TURNS");
-		// if city govt controller OR military faction and we or allies control enough units in the city to beat player's units, flip city
-		bool bFlipped = false;
-		if (getCityController(iCityID, eCityOwner) == iFaction || getFactionType(iFaction) == 5)
-		{
-			CvPlot* pPlot = GET_PLAYER(eCityOwner).getCity(iCityID)->plot();
-			int iEnemyUnits = 1; // avoid div/0 error
-			int iFriendlyUnits = 0;
-			CLLNode<IDInfo>* pUnitNode = pPlot->headUnitNode();
-
-			while (pUnitNode != NULL)
-			{
-				CvUnit* pLoopUnit = ::getUnit(pUnitNode->m_data);
-				pUnitNode = pPlot->nextUnitNode(pUnitNode);
-				int iOwner = pLoopUnit->m_iFactionOwner;
-				if (iOwner == iFaction)
-				{
-					// this is us. 
-					iFriendlyUnits += pLoopUnit->currFirepower();
-				}
-				else if (iOwner == -1)
-				{
-					// this is the player. 
-					iEnemyUnits += pLoopUnit->currFirepower();
-				}
-				else
-				{
-					int iRelation = getFactionAllyLevel(iFaction, pLoopUnit->m_iFactionOwner);
-					if (iRelation > 1)
-					{
-						// they like us enough to help us out
-						iFriendlyUnits += pLoopUnit->currFirepower();
-					}
-					else if (iRelation < 0)
-					{
-						// they dislike us enough to help the player maintain control
-						iEnemyUnits += pLoopUnit->currFirepower();
-					}
-					// Other units will not do anything. 
-				}
-			}
-			if ((iFriendlyUnits * 100) / iEnemyUnits >= GC.getDefineINT("FACTION_TAKE_CITY_MIN_UNIT_RATIO"))
-			{
-				// save index before flippin city
-				int idx = isInCity(iFaction, iCityID, eCityOwner);
-				doFactionFlipCity(iFaction, iCityID, eCityOwner);
-				bool bFlipped = true;
-				// becoming a new city ends the 'strike' in that city, so we need to manually let our other cities know we striked (otherwise they'll figure it out on their turn)
-				// best way: call this method!
-				for (int i = 0; i < aFactions[iFaction].aaFacCities.size(); i++)
-				{
-					if (aFactions[iFaction].aaFacCities[i][0] == eCityOwner && aFactions[iFaction].aaFacCities[i][3] <= 0)
-					{
-						if (!isFactionCityLinked(iFaction, (PlayerTypes)aFactions[iFaction].aaFacCities[idx][0], aFactions[iFaction].aaFacCities[idx][1], eCityOwner, aFactions[iFaction].aaFacCities[i][1]))
-							continue;
-						// This is another of our cities, it shares the same owner, but it is not currently striking. Make it do so:
-						doFactionStrike(iFaction, aFactions[iFaction].aaFacCities[i][1], eCityOwner);
-						// note that if a faction has gotten city control of ALL your cities this will probably cause you to lose the game, or at least lose most of your empire :3 have fun
-					}
-				}
-			}
-			else
-			{
-				// can't quite take over the city - but we can still flip our units!
-				doFactionFlipUnits(iFaction, iCityID, eCityOwner); // no new player, just make them barbarians. 
-				// note that this will NOT be undone when the strike ends. 
-
-			}
-		}
-		if (!bFlipped)
-		{
-			int iType = getFactionType(iFaction);
-			// religious, civic, and nationality factions can cause revolts. 
-			if (iType == 1 || iType == 2 || iType == 4)
-			{
-				// lower threshold if we are a civic faction. 
-				int iThreshold = iType == 2 ? GC.getDefineINT("CIVIC_FACTION_INF_THRESHOLD_TO_REVOLT") : GC.getDefineINT("RELNAT_FACTION_INF_THRESHOLD_TO_REVOLT");
-				int iOurs = getFactionPopularityShare(iCityID, eCityOwner, iFaction);
-				for (int af = 0; af < (int)aFactions.size(); af++)
-				{
-					if (af == iFaction)
-						continue;
-					if (getFactionAllyLevel(iFaction, af) > 1 && isInCity(af, iCityID, eCityOwner) >= 0) // they are here and willing to join revolt with us
-					{
-						iOurs += getFactionPopularityShare(iCityID, eCityOwner, af); // note that this does not affect whether or not they are striking - it just means our revolt will have their support. 
-					}
-				}
-				if (iOurs >= iThreshold)
-				{
-					GET_PLAYER(eCityOwner).getCity(iCityID)->doRevolt(); // this function has some side effects I'm not sure about but I don't want to recreate the messages and everything right now
-				}
-			}
-			// regardless of what type of faction we are, we will temporarily deactivate buildings we own. 
-			for (int b = 0; b < (int)aFactions[iFaction].aaFacBuildings.size(); b++)
-			{
-				if (idx == aFactions[iFaction].aaFacBuildings[b].first)
-				{
-					GET_PLAYER(eCityOwner).getCity(iCityID)->processBuilding(aFactions[iFaction].aaFacBuildings[b].second, -1, true); // obsolete set to 'true' so it thinks the building still exists there. 
-				}
-			}
-			// for labor factions, also deactivate anything that uses labor, unless civics prevent that (civics part TBD)
-			if (getFactionType(iFaction) == 3)
-			{
-				FOR_EACH_ENUM(Building)
-				{
-					if (GC.getBuildingInfo(eLoopBuilding).isUsesLabor())
-					{
-						if (GET_PLAYER(eCityOwner).getCity(iCityID)->getNumActiveBuilding(eLoopBuilding) > 0)
-							GET_PLAYER(eCityOwner).getCity(iCityID)->processBuilding(eLoopBuilding, -1, true); // obsolete set to 'true' so it thinks the building still exists there. 
-					}
-				}
-			}
-		}
-
-		// for everyone: 'remove' buildings we own and store them (plus some info about when they were built / etc.) in faction tracker so they can be reset. 
-
-
-	}
 }
 void CvGame::doFactionFlipCity(int iFaction, int iCityID, PlayerTypes eCityOwner)
 {
@@ -11931,6 +11522,11 @@ void CvGame::doFactionFlipCity(int iFaction, int iCityID, PlayerTypes eCityOwner
 }
 PlayerTypes CvGame::getNewFactionPlayer(PlayerTypes eCityOwner, int iCityID, int iFaction)
 {
+
+	// capn.fac revising
+	// old method - find any player who meets closeness / similarity / fit criteria
+	// new method - the only time a city would join an existing civ instead of creating a new one would be if there's a particular reason to join that civ. 
+
 	CvCity* pCity = GET_PLAYER(eCityOwner).getCity(iCityID);
 	PlayerTypes eFoundPlayer = NO_PLAYER;
 	FOR_EACH_ENUM(Player)
@@ -11949,7 +11545,8 @@ PlayerTypes CvGame::getNewFactionPlayer(PlayerTypes eCityOwner, int iCityID, int
 			int iDistance = GC.getMap().plotDistance(pCity->plot(), pCity2->plot());
 			int iLink1 = getMaxLinkDistance(iCityID, eCityOwner);
 			int iLink2 = getMaxLinkDistance(i, eLoopPlayer);
-			if ((iLink1 < 0 && iLink2 < 0) || (iDistance <= iLink1 && iDistance <= iLink2))
+			if ((iLink1 < 0 || iDistance <= iLink1) && (iLink2 < 0 || iDistance <= iLink2)) // capn.fac - fixed this
+			//if ((iLink1 < 0 && iLink2 < 0) || (iDistance <= iLink1 && iDistance <= iLink2))
 			{
 				bCloseEnough = true;
 				break;
@@ -11983,7 +11580,10 @@ PlayerTypes CvGame::getNewFactionPlayer(PlayerTypes eCityOwner, int iCityID, int
 		}
 		// I'm not matching religions or etc. - the point is to figure out if we used to be part of that civ or something
 		// would the player's civics improve our situation if we joined them? 
-		int iCivicsBetter = getInfluenceFromNewCivic(iFaction, iCityID, eCityOwner, NO_CIVIC, eLoopPlayer);
+		//int iCivicsBetter = getInfluenceFromNewCivic(iFaction, iCityID, eCityOwner, NO_CIVIC, eLoopPlayer);
+		// capn.fac - influence is gone, so method is deprecated
+		// changing this whole method later but for now just skip this part
+		int iCivicsBetter = 1;
 		bool bCivicsBetter = iCivicsBetter > 0;
 		bool bCivicsSame = iCivicsBetter == 0;
 		// is the player in no relationships with our current player that would prove detrimental to us joining them? 
@@ -13976,3 +13576,4 @@ void CvGame::setTilePopFaction(int iTile, int iFaction)
 	FAssertBounds(0, (int)aaTileMap.size(), iTile);
 	aaTileMap[iTile][4] = iFaction;
 }
+// capn.fac end

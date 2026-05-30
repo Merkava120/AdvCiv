@@ -989,6 +989,19 @@ public:
 		5 - misc / nothing special 
 		 */
 
+		// faction personality/other characteristics (capn.fac)
+		int iCohesion; // if this falls to zero faction splits up
+		int iSpawnTurn; // younger factions grow in popularity faster
+
+		int iAggression; // makes faction more likely to attack others
+		int iZealotry; // makes faction more hostile towards others of different characteristics especially its dominant characteristic
+		int iLikability; // makes faction popularity increase faster
+		int iDiplomacy; // makes faction gain influence faster
+		int iExpansionism; // makes faction more likely to spread
+		int iProductivity; // makes faction more likely to build stuff
+		int iAmbition; // makes faction more likely to attempt to control things like religions / cities / etc. 
+		
+
 		// Faction identities: only one of each. Any faction can have; affects relations with factions that care. 
 		ReligionTypes eFacReligion;
 		CivilizationTypes eFacNationality;

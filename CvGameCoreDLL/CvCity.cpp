@@ -4300,6 +4300,18 @@ void CvCity::setID(int iID)
 {
 	m_iID = iID;
 }
+// capn.fac
+void CvCity::changeFactionPopularity(int iFaction, int iChange)
+{
+	for (int i = 0; i < (int)aiFactionPopularities.size(); i++)
+	{
+		if (aiFactionPopularities[i].first == iFaction)
+		{
+			aiFactionPopularities[i].second += iChange;
+			return; // done
+		}
+	}
+}
 // merk.fac1
 bool CvCity::isFactionPresent(int iFaction)
 {

@@ -104,6 +104,46 @@
 	
 	
 	<!-- FACTIONS -->
+	<!-- capn.fac modified these --> 
+	
+	<Define>
+		<DefineName>FACTION_TILE_VALUE_PER_YIELD</DefineName>
+		<iDefineIntVal>10</iDefineIntVal>
+	</Define>
+	<Define>
+		<DefineName>FACTION_TILE_VALUE_PER_POP</DefineName>
+		<iDefineIntVal>10</iDefineIntVal>
+	</Define>
+	<Define>
+		<DefineName>FACTION_BUILDING_HEALTH_HAPPINESS_PERCENT</DefineName>
+		<iDefineIntVal>50</iDefineIntVal>
+	</Define>
+	<Define>
+		<DefineName>FACTION_CITY_HAPPINESS_WEIGHT</DefineName>
+		<iDefineIntVal>50</iDefineIntVal>
+	</Define>
+	<Define>
+		<DefineName>FACTION_POPULARITY_RAND_1</DefineName>
+		<iDefineIntVal>10</iDefineIntVal>
+	</Define>
+	<Define>
+		<DefineName>FACTION_POPULARITY_RAND_2</DefineName>
+		<iDefineIntVal>5</iDefineIntVal>
+	</Define>
+	<Define>
+		<DefineName>FACTION_POPULARITY_HAPPINESS_MULT</DefineName>
+		<iDefineIntVal>100</iDefineIntVal>
+	</Define>
+	<Define>
+		<DefineName>FACTION_YOUTH_POPULARITY_BONUS</DefineName>
+		<iDefineIntVal>3</iDefineIntVal>
+	</Define>
+	<Define>
+		<DefineName>FACTION_YOUTH_POPULARITY_AGE</DefineName>
+		<iDefineIntVal>30</iDefineIntVal>
+	</Define>
+	
+	
 	<Define>
 		<DefineName>FACTION_DEFAULT_COHESION</DefineName>
 		<iDefineIntVal>10</iDefineIntVal>
