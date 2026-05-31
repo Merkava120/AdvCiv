@@ -473,30 +473,24 @@ void CvGame::setStartTurnYear(int iTurn)
 		iStartTurn /= 100;
 		setGameTurn(iStartTurn);
 	}
-
 	setStartTurn(getGameTurn());
-
 	if (getMaxTurns() == 0 /* advc.250c: */ || iTurn > 0)
 	{
 		int iEstimateEndTurn = 0;
 		for (int i = 0; i < kSpeed.getNumTurnIncrements(); i++)
 			iEstimateEndTurn += kSpeed.getGameTurnInfo(i).iNumGameTurnsPerIncrement;
 		setEstimateEndTurn(iEstimateEndTurn);
-
 		if (getEstimateEndTurn() > getGameTurn())
 		{
-			bool bValid = false;
 			FOR_EACH_ENUM(Victory)
 			{
 				if (isVictoryValid(eLoopVictory) &&
 					GC.getInfo(eLoopVictory).isEndScore())
 				{
-					bValid = true;
+					setMaxTurns(getEstimateEndTurn() - getGameTurn());
 					break;
 				}
 			}
-			if (bValid)
-				setMaxTurns(getEstimateEndTurn() - getGameTurn());
 		}
 	}
 	else setEstimateEndTurn(getGameTurn() + getMaxTurns());
@@ -2845,87 +2839,120 @@ void CvGame::update()
 {
 	startProfilingDLL(false);
 	PROFILE_BEGIN("CvGame::update");
-
-	if (!gDLL->GetWorldBuilderMode() || isInAdvancedStart())
+	// <advc.256> Based on C2C, originally mostly from Rise of Mankind, I think.
+	CvPlayer const& kActivePlayer = GET_PLAYER(getActivePlayer());
+	int iSuccessiveUpdates = 1;
+	if (getTurnSlice() > 0) // Wait for BUG initialization
 	{
-		sendPlayerOptions();
-
-		// sample generic event
-		CyArgsList pyArgs;
-		pyArgs.add(getTurnSlice());
-		/*	advc.210: To prevent BUG alerts from being checked at the start of a
-			game turn. I've tried doing that through BugEventManager.py, but soon
-			gave up. Tagging advc.706 b/c it's especially important to supress
-			the update when R&F is enabled. */
-		if (!isInBetweenTurns())
-		{
-			CvEventReporter::getInstance().genericEvent("gameUpdate", pyArgs.makeFunctionArgs());
-			// <advc.003r>
-			for (int i = 0; i < NUM_UPDATE_TIMER_TYPES; i++)
-				handleUpdateTimer((UpdateTimerTypes)i); // </advc.003r>
-		}
-		if (getTurnSlice() == 0) // advc (note): Implies 0 elapsed game turns
-		{	// <advc.700> Delay initial auto-save until RiseFall is initialized
-			if (!isOption(GAMEOPTION_RISE_FALL) && // </advc.700>
-				m_iTurnLoadedFromSave != m_iElapsedGameTurns && // advc.044
-				// advc: Necessary now that re-gen resets turn slice
-				m_iMapRegens <= 0)
-			{
-				autoSave(true); // advc.106l
-			}
-			/*	<advc.004m> This seems to be the earliest place where plot indicators
-				can be enabled w/o crashing. */
-			if (BUGOption::isEnabled("MainInterface__StartWithResourceIcons", true))
-				gDLL->getEngineIFace()->setResourceLayer(true);
-			// </advc.004m>
-		}
-		if (getNumGameTurnActive() == 0)
-		{
-			if (!isPbem() || !getPbemTurnSent())
-				doTurn();
-		}
-		updateScore();
-		updateWar();
-		updateMoves();
-		updateTimers();
-		updateTurnTimer();
-		AI().AI_updateAssignWork();
-		testAlive();
-		if (getAIAutoPlay() == 0 && !gDLL->GetAutorun() &&
-			getGameState() != GAMESTATE_EXTENDED)
-		{
-			if (countHumanPlayersAlive() == 0 &&
-				!isOption(GAMEOPTION_RISE_FALL)) // advc.707
-			{
-				setGameState(GAMESTATE_OVER);
-			}
-		}
-		changeTurnSlice(1);
-		/*	<advc.104l> Make sure that UI (specifically willing-to-talk indicator)
-			doesn't become outdated throughout a turn. Or at least not for long.
-			advc.085: Invalidating on every turn slice might slightly hurt
-			responsiveness when hovering over the scoreboard. (Not sure.) */
-		if (getTurnSlice() % 4 == 0)
-			AI().uwai().invalidateUICache(); // </advc.104l>
-		/*	<advc.004n> (Disassembly suggests that the EXE caches this info,
-			so this check is fast.) */
-		bool bCityScreenUp = gDLL->UI().isCityScreenUp();
-		if (bCityScreenUp != m_bCityScreenUp)
-		{
-			m_bCityScreenUp = bCityScreenUp;
-			onCityScreenChange();
-		} // </advc004n>
-		if (getActivePlayer() != NO_PLAYER && GET_PLAYER(getActivePlayer()).getAdvancedStartPoints() >= 0 &&
-			!gDLL->UI().isInAdvancedStart())
-		{
-			gDLL->UI().setInAdvancedStart(true);
-			gDLL->UI().setWorldBuilder(true);
-		} // <advc.705>
-		if (isOption(GAMEOPTION_RISE_FALL))
-			m_pRiseFall->restoreDiploText(); // </advc.705>
+		// Needs to match the value range set in XML
+		int const iDefaultGraphicsUpdateRate = 12;
+		int iGraphicsUpdateRate = BUGOption::getValue("MainInterface__GraphicsUpdateRate",
+				iDefaultGraphicsUpdateRate);
+		if (iGraphicsUpdateRate <= 0)
+			iSuccessiveUpdates = 128; // Not quite infinite, but a lot in a row.
+		else iSuccessiveUpdates = iDefaultGraphicsUpdateRate / iGraphicsUpdateRate;
 	}
+	if (isGameMultiPlayer() || !kActivePlayer.isAlive())
+		iSuccessiveUpdates = 1;
+	if (kActivePlayer.isTurnActive() &&
+		(!kActivePlayer.isAutoMoves() ||
+		!kActivePlayer.isOption(PLAYEROPTION_QUICK_MOVES)))
+	{
+		iSuccessiveUpdates = 1;
+	}
+	if (gDLL->GetWorldBuilderMode() && !isInAdvancedStart()) // As in BtS
+		iSuccessiveUpdates = 0;
+	for (int i = 0; i < iSuccessiveUpdates; i++)
+		updateUnprofiled(); // </advc.256>
 	PROFILE_END();
 	stopProfilingDLL(false);
+}
+
+// advc.256: Cut from update
+void CvGame::updateUnprofiled()
+{
+	sendPlayerOptions();
+
+	// sample generic event
+	CyArgsList pyArgs;
+	pyArgs.add(getTurnSlice());
+	/*	advc.210: To prevent BUG alerts from being checked at the start of a
+		game turn. I've tried doing that through BugEventManager.py, but soon
+		gave up. Tagging advc.706 b/c it's especially important to supress
+		the update when R&F is enabled. */
+	if (!isInBetweenTurns())
+	{
+		CvEventReporter::getInstance().genericEvent("gameUpdate", pyArgs.makeFunctionArgs());
+		// <advc.003r>
+		for (int i = 0; i < NUM_UPDATE_TIMER_TYPES; i++)
+			handleUpdateTimer((UpdateTimerTypes)i); // </advc.003r>
+	}
+	if (getTurnSlice() == 0) // advc (note): Implies 0 elapsed game turns
+	{	// <advc.700> Delay initial auto-save until RiseFall is initialized
+		if (!isOption(GAMEOPTION_RISE_FALL) && // </advc.700>
+			m_iTurnLoadedFromSave != m_iElapsedGameTurns && // advc.044
+			// advc: Necessary now that re-gen resets turn slice
+			m_iMapRegens <= 0)
+		{
+			autoSave(true); // advc.106l
+		}
+	}
+	/*	<advc.004m> Slice 0 seems to be the earliest time when plot indicators
+		can be enabled w/o crashing. But it appears that, for some players,
+		the indicators do not actually appear then - race condition? Slice 1
+		doesn't seem to help either. 4 was maybe an improvement. Try 7?
+		(It's a continuous count.) At some point, the delay gets noticeable. */
+	if (getTurnSlice() == 7 &&
+		// Leave it up to the savegame when loading an initial autosave
+		m_iTurnLoadedFromSave != m_iElapsedGameTurns)
+	{
+		if (BUGOption::isEnabled("MainInterface__StartWithResourceIcons", true))
+			gDLL->getEngineIFace()->setResourceLayer(true);
+	} // </advc.004m>
+	if (getNumGameTurnActive() == 0)
+	{
+		if (!isPbem() || !getPbemTurnSent())
+			doTurn();
+	}
+	updateScore();
+	updateWar();
+	updateMoves();
+	updateTimers();
+	updateTurnTimer();
+	AI().AI_updateAssignWork();
+	testAlive();
+	if (getAIAutoPlay() == 0 && !gDLL->GetAutorun() &&
+		getGameState() != GAMESTATE_EXTENDED)
+	{
+		if (countHumanPlayersAlive() == 0 &&
+			!isOption(GAMEOPTION_RISE_FALL)) // advc.707
+		{
+			setGameState(GAMESTATE_OVER);
+		}
+	}
+	changeTurnSlice(1);
+	/*	<advc.104l> Make sure that UI (specifically willing-to-talk indicator)
+		doesn't become outdated throughout a turn. Or at least not for long.
+		advc.085: Invalidating on every turn slice might slightly hurt
+		responsiveness when hovering over the scoreboard. (Not sure.) */
+	if (getTurnSlice() % 4 == 0)
+		AI().uwai().invalidateUICache(); // </advc.104l>
+	/*	<advc.004n> (Disassembly suggests that the EXE caches this info,
+		so this check is fast.) */
+	bool bCityScreenUp = gDLL->UI().isCityScreenUp();
+	if (bCityScreenUp != m_bCityScreenUp)
+	{
+		m_bCityScreenUp = bCityScreenUp;
+		onCityScreenChange();
+	} // </advc004n>
+	if (getActivePlayer() != NO_PLAYER && GET_PLAYER(getActivePlayer()).getAdvancedStartPoints() >= 0 &&
+		!gDLL->UI().isInAdvancedStart())
+	{
+		gDLL->UI().setInAdvancedStart(true);
+		gDLL->UI().setWorldBuilder(true);
+	} // <advc.705>
+	if (isOption(GAMEOPTION_RISE_FALL))
+		m_pRiseFall->restoreDiploText(); // </advc.705>
 }
 
 
@@ -6794,8 +6821,9 @@ void CvGame::doHolyCity()
 		TeamTypes eBestTeam = NO_TEAM;
 		{
 			int iBestValue = MAX_INT;
-			/*	advc.001: Was MAX_TEAMS. Make sure Barbarians can't found a religion
-				somehow. Inspired by Mongoose SDK ReligionMod. */
+			/*	advc.001: Was MAX_TEAMS. Make sure Barbarians don't get a religion
+				here somehow. Inspired by Mongoose SDK ReligionMod. Though they can
+				still get one through CvPlayer::doResearch and CvTeam::setHasTech. */
 			for (TeamIter<CIV_ALIVE> itTeam; itTeam.hasNext(); ++itTeam)
 			{
 				if (!itTeam->isHasTech(GC.getInfo(eReligion).getTechPrereq()) ||
@@ -8510,7 +8538,7 @@ bool CvGame::testVictory(VictoryTypes eVictory, TeamTypes eTeam, bool* pbEndScor
 		{
 			FOR_EACH_CITY(pCity, *itMember)
 			{
-				if (pCity->getCultureLevel() >= kVictory.getCityCulture())
+				if (pCity->getCultureLevel() >= culturalVictoryCultureLevel())
 					iCount++;
 			}
 		}
@@ -9832,6 +9860,12 @@ void CvGame::onAllGameDataRead()
 		}
 		SAFE_DELETE_ARRAY(m_pLegacyOrgSeatData);
 	} // </advc.enum>
+	// <advc.251> Maintenance changed in XML
+	if (m_uiSaveFlag < 25)
+	{
+		for (PlayerIter<ALIVE> itPlayer; itPlayer.hasNext(); ++itPlayer)
+			itPlayer->updateMaintenance();
+	} // </advc.251>
 	// <advc.130w>
 	bool bAttitudeUpdated = false;
 	if (m_uiSaveFlag < 26)
@@ -10198,12 +10232,28 @@ void CvGame::setVoteSourceReligion(VoteSourceTypes eVoteSource,
 	}
 }
 
+// advc.001: For culturalVictoryNumCultureCities. Infinity that doesn't easily overflow.
+namespace
+{
+	enum CultVictCityThresh
+	{
+		CULT_VICT_CITY_TRESH_INFINITE = arithm_traits<short>::max,
+	};
+}
+
+
+int CvGame::culturalVictoryNumCultureCities() const
+{
+	//return m_iNumCultureVictoryCities;
+	/*	advc.001: Easier to return infinity here than to ensure that all
+		call locations check for culturalVictoryValid */
+	return (culturalVictoryValid() ? m_iNumCultureVictoryCities : CULT_VICT_CITY_TRESH_INFINITE);
+}
+
 
 CultureLevelTypes CvGame::culturalVictoryCultureLevel() const
 {
-	if (m_iNumCultureVictoryCities > 0)
-		return m_eCultureVictoryCultureLevel;
-	return NO_CULTURELEVEL;
+	return (culturalVictoryValid() ? m_eCultureVictoryCultureLevel : NO_CULTURELEVEL);
 }
 
 

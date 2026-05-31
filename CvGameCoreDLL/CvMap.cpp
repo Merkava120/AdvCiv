@@ -745,7 +745,7 @@ CvSelectionGroup* CvMap::findSelectionGroup(int iX, int iY, PlayerTypes eOwner,
 
 		FOR_EACH_GROUP_VAR(pLoopSelectionGroup, kLoopPlayer)
 		{
-			bool const bAIControl = pLoopSelectionGroup->AI_isControlled(); // advc.153
+			bool const bAIControl = pLoopSelectionGroup->isAIControlled(); // advc.153
 			if (bReadyToSelect && !pLoopSelectionGroup->readyToSelect(
 				!bAIControl)) // advc.153: was false
 			{
@@ -1134,7 +1134,7 @@ void CvMap::resetPathDistance()
 int CvMap::calculatePathDistance(CvPlot const* pSource, CvPlot const* pDest, CvPlot *pInvalidPlot) const
 // Super Forts end
 {
-	if(pSource == NULL || pDest == NULL)
+	if (pSource == NULL || pDest == NULL)
 		return -1;
 	// Super Forts begin *canal* *choke*
 	// 1 must be added because 0 is already being used as the default value for iInfo in GeneratePath()

@@ -2973,6 +2973,7 @@ CvPlot* CvTeam::makeHasMet(TeamTypes eOther, bool bNewDiplo,
 	{
 		if (pAt1->isVisible(getID()))
 			pAt = pAt1;
+		else pAt = pAt1->plotThatRevealsOwner(getID());
 		if (ePlayerMet == NO_PLAYER)
 			ePlayerMet = pAt1->getOwner();
 	}
@@ -2980,6 +2981,7 @@ CvPlot* CvTeam::makeHasMet(TeamTypes eOther, bool bNewDiplo,
 	{
 		if (pAt2->isVisible(getID()))
 			pAt = pAt2;
+		else pAt = pAt2->plotThatRevealsOwner(getID());
 		if (ePlayerMet == NO_PLAYER)
 			ePlayerMet = pAt2->getOwner();
 	}
@@ -3365,6 +3367,9 @@ void CvTeam::setVassal(TeamTypes eMaster, bool bNewValue, bool bCapitulated)
 
 	for (MemberIter it(getID()); it.hasNext(); ++it)
 		it->updateCitySight(true, false);
+	// <advc.184>
+	updateMilitaryHappinessUnits();
+	GET_TEAM(eMaster).updateMilitaryHappinessUnits(); // </advc.184>
 
 	CvMap const& kMap = GC.getMap();
 	for (int i = 0; i < kMap.numPlots(); ++i)
@@ -5370,6 +5375,13 @@ void CvTeam::updateTechShare()
 	int const iBestTechShare = calculateBestTechShare(); // </advc.opt>
 	FOR_EACH_ENUM(Tech)
 		updateTechShare(eLoopTech, /* advc.opt: */ iBestTechShare);
+}
+
+// advc.184:
+void CvTeam::updateMilitaryHappinessUnits()
+{
+	for (MemberIter it(getID()); it.hasNext(); ++it)
+		it->updateMilitaryHappinessUnits();
 }
 
 // advc.opt: Cut from updateTechShare(TechTypes)

@@ -448,6 +448,10 @@ void CvUnit::kill(bool bDelay, PlayerTypes ePlayer)
 			pLoopUnit->kill(false, ePlayer);
 		}
 	}
+	/*	advc (note - known issue): We're not checking whether this unit was set
+		as the m_missionAIUnit of a CvSelectionGroup. This becomes a problem
+		only if our FFreeList ID gets assigned to a new unit. Unknown if this
+		ever actually happens. Don't want to loop through all groups just in case. */
 
 	CvPlayerAI& kOwner = GET_PLAYER(getOwner()); // advc
 	if (ePlayer != NO_PLAYER)
@@ -3372,14 +3376,13 @@ void CvUnit::move(CvPlot& kPlot, bool bShow, /* advc.163: */ bool bJump, bool bG
 	else changeMoves(kPlot.movementCost(*this, kOldPlot));
 	m_bActuallyMoved = true; // merk.rcs
 	// <advc.162>
-	if(isInvasionMove(kOldPlot, kPlot))
+	if (isInvasionMove(kOldPlot, kPlot))
 	{
 		std::vector<CvUnit*> aCargoUnits;
 		getCargoUnits(aCargoUnits);
-		for(size_t i = 0; i < aCargoUnits.size(); i++)
+		for (size_t i = 0; i < aCargoUnits.size(); i++)
 		{
-			if (!aCargoUnits[i]->isRivalTerritory() && aCargoUnits[i]->getDomainType() != DOMAIN_AIR)
-			{
+			if(!aCargoUnits[i]->isRivalTerritory() && aCargoUnits[i]->getDomainType() != DOMAIN_AIR)
 				aCargoUnits[i]->changeMoves(aCargoUnits[i]->movesLeft());
 				aCargoUnits[i]->m_bActuallyMoved = true; // merk.rcs
 			}
@@ -3390,9 +3393,13 @@ void CvUnit::move(CvPlot& kPlot, bool bShow, /* advc.163: */ bool bJump, bool bG
 			true, bShow && kPlot.isVisibleToWatchingHuman(), bShow);
 
 	FeatureTypes eFeature = kPlot.getFeatureType();
-	if (eFeature != NO_FEATURE) //change feature
+	if (eFeature != NO_FEATURE) 
 	{
-		CvString szFeature(GC.getInfo(eFeature).getOnUnitChangeTo());
+		CvFeatureInfo const& kFeature = GC.getInfo(eFeature);
+		/*	change feature
+			(advc note: This mechanism was apparently added for the bundled
+			Afterworld mod) */
+		CvString szFeature(kFeature.getOnUnitChangeTo());
 		if (!szFeature.IsEmpty())
 		{
 			FeatureTypes eNewFeature = (FeatureTypes)GC.getInfoTypeForString(szFeature);
@@ -3406,13 +3413,14 @@ void CvUnit::move(CvPlot& kPlot, bool bShow, /* advc.163: */ bool bJump, bool bG
 		CvFeatureInfo const& kFeature = GC.getInfo(eFeature);
 		if (GC.getASyncRand().get(100) < kFeature.getEffectProbability())
 		{
-			EffectTypes eEffect = (EffectTypes)GC.getInfoTypeForString(kFeature.getEffectType());
+			EffectTypes eEffect = (EffectTypes)
+					GC.getInfoTypeForString(kFeature.getEffectType());
 			NiPoint3 pt = kPlot.getPoint();
-			gDLL->getEngineIFace()->TriggerEffect(eEffect, pt, (float)GC.getASyncRand().get(360));
+			gDLL->getEngineIFace()->TriggerEffect(eEffect, pt, (float)
+					GC.getASyncRand().get(360));
 			gDLL->UI().playGeneralSound("AS3D_UN_BIRDS_SCATTER", pt);
 		}
 	}
-
 	CvEventReporter::getInstance().unitMove(&kPlot, this, &kOldPlot);
 }
 
@@ -8042,10 +8050,21 @@ bool CvUnit::isNoUnitCapture() const
 
 bool CvUnit::isMilitaryHappiness() const
 {
-	return m_pUnitInfo->isMilitaryHappiness() &&
-			/* <advc.184> */ getPlot().isCity() &&
-			(getPlot().getTeam() == getTeam() ||
-			getPlot().getTeam() == GET_TEAM(getTeam()).getMasterTeam()); // </advc.184>
+	return (m_pUnitInfo->isMilitaryHappiness() &&
+			isGarrisonInTeamCity()); // advc.184
+}
+
+// advc.184: Whether it is available for suppressing unhappiness and revolts
+bool CvUnit::isGarrisonInTeamCity() const
+{
+	if (!getPlot().isCity())
+		return false;
+	CvTeam const& kCityTeam = GET_TEAM(getPlot().getTeam());
+	if (isInvisible(kCityTeam.getID(), false))
+		return false;
+	return (kCityTeam.getID() == getTeam() ||
+			kCityTeam.getMasterTeam() == getTeam() ||
+			kCityTeam.getID() == GET_TEAM(getTeam()).getMasterTeam());
 }
 
 /*	advc.101: Replacing iCultureGarrison in XML, which increases too slowly
@@ -8796,13 +8815,13 @@ bool CvUnit::isBetterDefenderThan(const CvUnit* pDefender, const CvUnit* pAttack
 	{
 		if (pDefender->collateralDamage() > 0)
 		{
-			iOurDefense *= (100 + pDefender->collateralDamage());
+			iOurDefense *= 100 + pDefender->collateralDamage();
 			iOurDefense /= 100;
 		}
 
 		if (pDefender->currInterceptionProbability() > 0)
 		{
-			iOurDefense *= (100 + pDefender->currInterceptionProbability());
+			iOurDefense *= 100 + pDefender->currInterceptionProbability();
 			iOurDefense /= 100;
 		}
 	}
@@ -9539,7 +9558,7 @@ bool CvUnit::isBeforeUnitCycle(CvUnit const& kOther) const
 }
 
 
-bool CvUnit::canJoinGroup(const CvPlot* pPlot, CvSelectionGroup const* pSelectionGroup) const // advc: const pSelectionGroup
+bool CvUnit::canJoinGroup(const CvPlot* pPlot, CvSelectionGroup const* pSelectionGroup) const
 {
 	// do not allow someone to join a group that is about to be split apart
 	// this prevents a case of a never-ending turn
@@ -12047,43 +12066,44 @@ void CvUnit::collateralCombat(CvPlot const* pPlot, CvUnit const* pSkipUnit)
 	{
 		CvUnit& kTargetUnit = *::getUnit(aTargetUnits[i].second);
 
-		if (getUnitCombatType() == NO_UNITCOMBAT ||
-			!kTargetUnit.m_pUnitInfo->getUnitCombatCollateralImmune(getUnitCombatType()))
+		if (getUnitCombatType() != NO_UNITCOMBAT &&
+			kTargetUnit.m_pUnitInfo->getUnitCombatCollateralImmune(getUnitCombatType()))
 		{
-			int iTheirStrength = kTargetUnit.baseCombatStr();
-			int iStrengthFactor = ((iCollateralStrength + iTheirStrength + 1) / 2);
-			/*	advc (note): This makes the damage proportional to (3*r + 1) / (3 + r)
-				where r is the ratio of the attacker's to the defender's base combat str.
-				This ratio is used again a few lines below in the iMaxDamage formula. */
-			int iCollateralDamage = (GC.getDefineINT(CvGlobals::COLLATERAL_COMBAT_DAMAGE) *
-					(iCollateralStrength + iStrengthFactor)) /
-					(iTheirStrength + iStrengthFactor);
-			iCollateralDamage *= 100 + getExtraCollateralDamage();
-			iCollateralDamage *= std::max(0, 100 - kTargetUnit.getCollateralDamageProtection());
+			continue;
+		}
+		int iTheirStrength = kTargetUnit.baseCombatStr();
+		int iStrengthFactor = ((iCollateralStrength + iTheirStrength + 1) / 2);
+		/*	advc (note): This makes the damage proportional to (3*r + 1) / (3 + r)
+			where r is the ratio of the attacker's to the defender's base combat str.
+			This ratio is used again a few lines below in the iMaxDamage formula. */
+		int iCollateralDamage = (GC.getDefineINT(CvGlobals::COLLATERAL_COMBAT_DAMAGE) *
+				(iCollateralStrength + iStrengthFactor)) /
+				(iTheirStrength + iStrengthFactor);
+		iCollateralDamage *= 100 + getExtraCollateralDamage();
+		iCollateralDamage *= std::max(0, 100 - kTargetUnit.getCollateralDamageProtection());
+		iCollateralDamage /= 100;
+		if (pCity != NULL)
+		{
+			iCollateralDamage *= 100 + pCity->getAirModifier();
 			iCollateralDamage /= 100;
-			if (pCity != NULL)
-			{
-				iCollateralDamage *= 100 + pCity->getAirModifier();
-				iCollateralDamage /= 100;
-			}
-			iCollateralDamage = std::max(0, iCollateralDamage/100);
-			int iMaxDamage = std::min(collateralDamageLimit(),
-					(collateralDamageLimit() *
-					(iCollateralStrength + iStrengthFactor)) /
-					(iTheirStrength + iStrengthFactor));
-			int iUnitDamage = std::max(kTargetUnit.getDamage(),
-					std::min(kTargetUnit.getDamage() + iCollateralDamage, iMaxDamage));
-			// merk.rcb begin
-			// this is a bit funky, but if the unit has "flat collateral damage" then all of the previous is tossed out and the damage is reset to that flat number
-			if (getUnitInfo().getFlatCollateralDamage() > 0)
-				iUnitDamage = getUnitInfo().getFlatCollateralDamage();
-			iUnitDamage -= kTargetUnit.getUnitInfo().getCollateralDamageBlock(); // blocking happens either way so be careful
-			// merk.rcb end
-			if (kTargetUnit.getDamage() != iUnitDamage)
-			{
-				kTargetUnit.setDamage(iUnitDamage, getOwner());
-				iDamageCount++;
-			}
+		}
+		iCollateralDamage = std::max(0, iCollateralDamage/100);
+		int iMaxDamage = std::min(collateralDamageLimit(),
+				(collateralDamageLimit() *
+				(iCollateralStrength + iStrengthFactor)) /
+				(iTheirStrength + iStrengthFactor));
+		int iUnitDamage = std::max(kTargetUnit.getDamage(),
+				std::min(kTargetUnit.getDamage() + iCollateralDamage, iMaxDamage));
+		// merk.rcb begin
+		// this is a bit funky, but if the unit has "flat collateral damage" then all of the previous is tossed out and the damage is reset to that flat number
+		if (getUnitInfo().getFlatCollateralDamage() > 0)
+			iUnitDamage = getUnitInfo().getFlatCollateralDamage();
+		iUnitDamage -= kTargetUnit.getUnitInfo().getCollateralDamageBlock(); // blocking happens either way so be careful
+		// merk.rcb end
+		if (kTargetUnit.getDamage() != iUnitDamage)
+		{
+			kTargetUnit.setDamage(iUnitDamage, getOwner());
+			iDamageCount++;
 		}
 	}
 
@@ -13114,7 +13134,9 @@ bool CvUnit::isCombatVisible(CvUnit const* pDefender,
 			else if (pDefender != NULL && pDefender->isHuman())
 			{
 				if (!GET_PLAYER(pDefender->getOwner()).isOption(PLAYEROPTION_QUICK_DEFENSE) &&
-					!gDLL->getEngineIFace()->isGlobeviewUp()) // advc.102
+					!gDLL->getEngineIFace()->isGlobeviewUp() && // advc.102
+					// advc.001: Camera won't catch AI-vs-human combat in Hotseat
+					(isHuman() || !GC.getGame().isHotSeat()))
 				{
 					bVisible = true;
 				}

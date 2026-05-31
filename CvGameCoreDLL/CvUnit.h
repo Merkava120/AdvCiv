@@ -411,6 +411,7 @@ public:
 		return m_pUnitInfo->isRivalTerritory();
 	}
 	bool isMilitaryHappiness() const;																		// Exposed to Python
+	bool isGarrisonInTeamCity() const; // advc.184
 	int garrisonStrength() const; // advc.101
 	bool isInvestigate() const																				// Exposed to Python
 	{
@@ -600,7 +601,7 @@ public:
 	int withdrawalProbability() const;																		// Exposed to Python
 
 	int collateralDamage() const																			// Exposed to Python
-	{
+	{	// advc.159 (note): getExtraCollateralDamage works multiplicatively since BtS 3.17
 		return std::max(0, m_pUnitInfo->getCollateralDamage());
 	}
 	int collateralDamageLimit() const																		// Exposed to Python
@@ -1276,7 +1277,7 @@ protected:
 	// <advc.opt>
 	CvArea* m_pArea;
 	CvPlot* m_pPlot; // </advc.opt>
-
+	// advc (note): These aren't CvUnit pointers b/c of the order of deserialization
 	IDInfo m_combatUnit;
 	IDInfo m_transportUnit;
 	/*	advc.opt (tbd.): string objects take up 28 byte each; replace with pointers.

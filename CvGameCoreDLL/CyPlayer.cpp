@@ -261,7 +261,9 @@ int CyPlayer::countUnimprovedBonuses(CyArea* pArea, CyPlot* pFromPlot)
 
 int CyPlayer::countCityFeatures(int /*FeatureTypes*/ eFeature)
 {
-	return m_pPlayer ? m_pPlayer->countCityFeatures((FeatureTypes) eFeature) : -1;
+	return m_pPlayer ?
+			m_pPlayer->AI().AI_countCityFeatures( // advc.042
+			(FeatureTypes)eFeature) : -1;
 }
 
 int CyPlayer::countNumBuildings(int /*BuildingTypes*/ eBuilding)
@@ -492,6 +494,12 @@ int CyPlayer::getImprovementUpgradeRate() const
 int CyPlayer::calculateTotalYield(int /*YieldTypes*/ eYield)
 {
 	return m_pPlayer ? m_pPlayer->calculateTotalYield((YieldTypes)eYield) : -1;
+}
+
+// advc.001: For Financial Advisor
+int CyPlayer::calculateCurrentTotalYield(int /*YieldTypes*/ eYield)
+{
+	return m_pPlayer ? m_pPlayer->calculateTotalYield((YieldTypes)eYield, true) : -1;
 }
 
 int CyPlayer::calculateTotalExports(int /*YieldTypes*/ eYield)
