@@ -3385,7 +3385,6 @@ void CvUnit::move(CvPlot& kPlot, bool bShow, /* advc.163: */ bool bJump, bool bG
 			if(!aCargoUnits[i]->isRivalTerritory() && aCargoUnits[i]->getDomainType() != DOMAIN_AIR)
 				aCargoUnits[i]->changeMoves(aCargoUnits[i]->movesLeft());
 				aCargoUnits[i]->m_bActuallyMoved = true; // merk.rcs
-			}
 
 		}
 	} // </advc.162>
